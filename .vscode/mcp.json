@@ -1,0 +1,54 @@
+{
+  "servers": {
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "${input:context7_api_key}"
+      }
+    },
+    "atlassian": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.atlassian.com/v1/sse"
+      ],
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "docs/memory.jsonl"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "penpot": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "http://localhost:4401/sse",
+        "--allow-http"
+      ]
+    }
+  },
+  "inputs": [
+    {
+      "id": "context7_api_key",
+      "type": "promptString",
+      "description": "Context7 API key (optional; increases rate limits). Get one at https://context7.com/dashboard",
+      "password": true,
+      "default": "ctx7sk-75320789-20c5-4749-82e2-2420c73118f8"
+    }
+  ]
+}
