@@ -67,6 +67,10 @@
               "@/tests",
               ":BLANK_LINE:",
               "@/bbdd",
+              ":BLANK_LINE:",
+              "./",
+              ":BLANK_LINE:",
+              "../",
               ":BLANK_LINE:"
             ]
           }

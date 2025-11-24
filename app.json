@@ -39,7 +39,9 @@
           }
         }
       ],
-      "@config-plugins/detox"
+      "@config-plugins/detox",
+      "expo-localization",
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,

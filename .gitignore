@@ -57,6 +57,11 @@ app-example
 /ios
 /android
 
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
 # Testing
 coverage/
 .nyc_output/
