@@ -75,10 +75,10 @@ Con una estructura de carpeta organizada de la siguiente forma:
 │   ├── features/     #
 │   └── i18n/     #
 └── test/               # estrategias de prueba unitaria, de integración y de comportamiento.
-│   ├── unit-test/     #
-│   ├── mocks/     #
-│   ├── integration/     #
-│   └── e2e/     #
+    ├── unit-test/     #
+    ├── mocks/     #
+    ├── integration/     #
+    └── e2e/     #
 ```
 
 ## Git Hooks Configuration
