@@ -1,40 +1,45 @@
-import { Tabs } from 'expo-router';
+import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
 import React from 'react';
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+  const tintColor = Colors[colorScheme ?? 'light'].tint;
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
+    <NativeTabs
+      tintColor={tintColor}
+      backgroundColor={null}
+      blurEffect={
+        isDark ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'
+      }
+      labelStyle={{
+        fontSize: 11,
+        fontWeight: '600',
+      }}
+      iconColor={{
+        default: isDark ? '#8E8E93' : '#8E8E93',
+        selected: tintColor,
       }}
     >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+      <NativeTabs.Trigger name="index">
+        <Icon sf="house.fill" />
+        <Label>Home</Label>
+      </NativeTabs.Trigger>
+
+      {/* Hidden tab - navigation handled by FloatingAddButton */}
+      <NativeTabs.Trigger name="add" hidden>
+        <Icon sf="plus.app.fill" />
+        <Label>Add</Label>
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="explore">
+        <Icon sf="chart.bar.fill" />
+        <Label>Stats</Label>
+      </NativeTabs.Trigger>
+    </NativeTabs>
   );
 }

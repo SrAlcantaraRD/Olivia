@@ -7,6 +7,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { FloatingAddButton } from '@/ui/components/floating-add-button';
 import 'react-native-reanimated';
 import '../global.css';
 
@@ -26,6 +27,7 @@ export default function RootLayout() {
           options={{ presentation: 'modal', title: 'Modal' }}
         />
       </Stack>
+      <FloatingAddButton />
       <StatusBar style="auto" />
     </ThemeProvider>
   );
