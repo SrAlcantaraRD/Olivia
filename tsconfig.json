@@ -3,7 +3,9 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@/i18n": ["./ui/i18n/*"],
+      "@/database": ["./ddbb/*"]
     }
   },
   "include": [
