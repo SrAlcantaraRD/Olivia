@@ -2,6 +2,8 @@ import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { Platform, StyleSheet, Text } from 'react-native';
 
+import { TextTranslation } from '@/ui/components/atoms/text-translations.atom';
+import { TypographyCode } from '@/ui/components/atoms/typography.atom';
 import { HelloWave } from '@/ui/components/hello-wave';
 import ParallaxScrollView from '@/ui/components/parallax-scroll-view';
 import { ThemedText } from '@/ui/components/themed-text';
@@ -23,6 +25,9 @@ export default function HomeScreen() {
       </Text>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">PEC I</ThemedText>
+        <TypographyCode>
+          <TextTranslation i18nKey="welcome" />
+        </TypographyCode>
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
@@ -44,6 +49,9 @@ export default function HomeScreen() {
       <ThemedView style={styles.stepContainer}>
         <Link href="/modal">
           <Link.Trigger>
+            <TypographyCode>
+              <TextTranslation i18nKey="welcome" />
+            </TypographyCode>
             <ThemedText type="subtitle">Step 2: Explore</ThemedText>
           </Link.Trigger>
           <Link.Preview />
@@ -68,10 +76,6 @@ export default function HomeScreen() {
             </Link.Menu>
           </Link.Menu>
         </Link>
-
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
