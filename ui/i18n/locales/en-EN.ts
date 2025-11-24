@@ -1,4 +1,10 @@
-export const enEN = {};
+export const enEN = {
+  welcome: 'Welcome',
+  actions: {
+    save: 'Save',
+    cancel: 'Cancel',
+  },
+};
 
 type RecursiveKeyOf<TObj extends object> = {
   [TKey in keyof TObj & (string | number)]: TObj[TKey] extends object

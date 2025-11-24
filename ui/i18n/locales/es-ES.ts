@@ -1,3 +1,7 @@
-import type { Ti18nKeys } from './en-EN';
-
-export const esES = {} satisfies Record<Ti18nKeys, string>;
+export const esES = {
+  welcome: 'Bienvenido',
+  actions: {
+    save: 'Guardar',
+    cancel: 'Cancelar',
+  },
+};
