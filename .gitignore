@@ -56,3 +56,9 @@ app-example
 # generated native folders
 /ios
 /android
+
+# Testing
+coverage/
+.nyc_output/
+test-results/
+playwright-report/

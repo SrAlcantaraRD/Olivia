@@ -7,7 +7,15 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": false
+    "ignoreUnknown": false,
+    "includes": [
+      "**",
+      "!node_modules",
+      "!build",
+      "!dist",
+      "!.vscode",
+      "!coverage"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -52,11 +60,11 @@
               ":PACKAGE_WITH_PROTOCOL:",
               ":NODE:",
               ":BLANK_LINE:",
-              "~/**",
+              "~",
               ":BLANK_LINE:",
-              "../../**",
+              "../..",
               ":BLANK_LINE:",
-              "./**",
+              ".",
               ":BLANK_LINE:"
             ]
           }
