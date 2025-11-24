@@ -60,11 +60,13 @@
               ":PACKAGE_WITH_PROTOCOL:",
               ":NODE:",
               ":BLANK_LINE:",
-              "~",
+              "@/domain",
               ":BLANK_LINE:",
-              "../..",
+              "@/ui",
               ":BLANK_LINE:",
-              ".",
+              "@/tests",
+              ":BLANK_LINE:",
+              "@/bbdd",
               ":BLANK_LINE:"
             ]
           }
