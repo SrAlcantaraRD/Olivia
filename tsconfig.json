@@ -3,9 +3,9 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": ["./*"],
-      "@/i18n": ["./ui/i18n/*"],
-      "@/database": ["./ddbb/*"]
+      "@/*": ["./src/*"],
+      "@/i18n": ["./src/ui/i18n/*"],
+      "@/database": ["./src/ddbb/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]

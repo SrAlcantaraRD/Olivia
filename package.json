@@ -5,9 +5,9 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
+    "android": "expo start --android -c",
+    "ios": "expo start --ios -c",
+    "web": "expo start --web -c",
     "lint": "expo lint",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -24,7 +24,7 @@
     "biome:format": "npx @biomejs/biome format --write ./",
     "biome:lint": "npx @biomejs/biome lint --write ./",
     "biome:check": "npx @biomejs/biome check --write ./",
-    "db:generate": "drizzle-kit generate --config ddbb/drizzle.config.ts",
+    "db:generate": "drizzle-kit generate --config src/ddbb/drizzle.config.ts",
     "prepare": "husky"
   },
   "dependencies": {
@@ -84,6 +84,7 @@
     "@types/react": "~19.1.0",
     "@types/react-test-renderer": "^19.1.0",
     "babel-plugin-inline-import": "^3.0.0",
+    "cz-conventional-changelog": "^3.3.0",
     "detox": "^20.46.0",
     "drizzle-kit": "^0.31.7",
     "eslint": "^9.25.0",
@@ -112,5 +113,10 @@
     "onlyBuiltDependencies": [
       "detox"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

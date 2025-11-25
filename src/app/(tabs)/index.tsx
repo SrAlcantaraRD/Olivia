@@ -40,7 +40,7 @@ export default function HomeScreen() {
         Welcome to Nativewind!
       </Text>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">PEC III</ThemedText>
+        <ThemedText type="title">PEC IV</ThemedText>
         <TypographyCode>
           <TextTranslation i18nKey="welcome" />
         </TypographyCode>

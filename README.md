@@ -67,18 +67,22 @@ A este nivel, necesitaremos implementar los siguientes artefactos:
 Con una estructura de carpeta organizada de la siguiente forma:
 
 ```sh
-├── app/                # Configuración global, layouts, tabs, Context Providers y Route Guards.
-├── bbdd/               # Contiene la definición de la BBDD, los ficheros de migración y los adaptadores.
-├── domain/             # Contiene la lógica de negocio.
-├── ui/                 # Contiene la implementación exacta de los componentes de diseño.
-│   ├── components/     # Implementación de metodología Atomic Design para componentes reutilizables.
-│   ├── features/     #
-│   └── i18n/     #
-└── test/               # estrategias de prueba unitaria, de integración y de comportamiento.
-    ├── unit-test/     #
-    ├── mocks/     #
-    ├── integration/     #
-    └── e2e/     #
+├── src/
+│   ├── app/                # Configuración global, layouts, tabs, Context Providers y Route Guards.
+│   ├── ddbb/               # Contiene la definición de la BBDD, los ficheros de migración y los adaptadores.
+│   ├── domain/             # Contiene la lógica de negocio.
+│   ├── ui/                 # Contiene la implementación exacta de los componentes de diseño.
+│   │   ├── components/     # Implementación de metodología Atomic Design para componentes reutilizables.
+│   │   ├── features/       #
+│   │   └── i18n/           #
+│   ├── hooks/              # Custom React hooks
+│   ├── constants/          # Constantes y configuración
+│   └── assets/             # Recursos estáticos
+└── tests/                  # Estrategias de prueba unitaria, de integración y de comportamiento.
+    ├── unit-test/          #
+    ├── mocks/              #
+    ├── integration/        #
+    └── e2e/                #
 ```
 
 ## Git Hooks Configuration

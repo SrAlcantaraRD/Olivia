@@ -1,0 +1,21 @@
+@import "tailwindcss";
+@import "uniwind";
+@import "heroui-native/styles";
+@import "./themes/olive.css";
+@source "../node_modules/heroui-native/lib";
+
+@layer theme {
+  :root {
+    @variant light {
+      --color-primary: #00a8ff;
+      --color-gray: #f0f0f0;
+      --color-typography: #000;
+    }
+
+    @variant dark {
+      --color-primary: #273c75;
+      --color-gray: #353b48;
+      --color-typography: #fff;
+    }
+  }
+}

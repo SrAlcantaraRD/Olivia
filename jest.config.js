@@ -10,10 +10,12 @@ module.exports = {
   ],
   cache: false,
   collectCoverageFrom: [
-    'app/**/*.{ts,tsx}',
-    'components/**/*.{ts,tsx}',
-    'hooks/**/*.{ts,tsx}',
-    'constants/**/*.{ts,tsx}',
+    'src/app/**/*.{ts,tsx}',
+    'src/ui/components/**/*.{ts,tsx}',
+    'src/hooks/**/*.{ts,tsx}',
+    'src/constants/**/*.{ts,tsx}',
+    'src/domain/**/*.{ts,tsx}',
+    'src/ddbb/**/*.{ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
     '!**/__tests__/**',
@@ -27,7 +29,7 @@ module.exports = {
     },
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
     'expo/src/winter': '<rootDir>/tests/mocks/empty.ts',
   },
 };
