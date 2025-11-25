@@ -40,7 +40,7 @@ export default function HomeScreen() {
         Welcome to Nativewind!
       </Text>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">PEC I</ThemedText>
+        <ThemedText type="title">PEC III</ThemedText>
         <TypographyCode>
           <TextTranslation i18nKey="welcome" />
         </TypographyCode>
@@ -50,7 +50,7 @@ export default function HomeScreen() {
       {/* Sección de Tareas */}
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">📝 Mis Tareas</ThemedText>
-        <ButtonAtom testID="floating-add-button">hola</ButtonAtom>
+        <ButtonAtom testID="test-button-hola">hola</ButtonAtom>
         <SpinnerAtom size="lg" />
         <TextFieldAtom />
 
