@@ -15,6 +15,8 @@ import {
   ThemeProvider,
 } from '@react-navigation/native';
 import { SQLiteProvider } from 'expo-sqlite';
+import { HeroUINativeProvider } from 'heroui-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { BASE_LOGGER, DATABASE_NAME } from '@/domain/core';
 import { FloatingAddButton } from '@/ui/components/floating-add-button';
@@ -33,25 +35,29 @@ export default function RootLayout() {
 
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
-      <SQLiteProvider
-        databaseName={DATABASE_NAME}
-        options={{ enableChangeListener: true }}
-        useSuspense
-      >
-        <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-        >
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="modal"
-              options={{ presentation: 'modal', title: 'Modal' }}
-            />
-          </Stack>
-          <FloatingAddButton />
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </SQLiteProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <HeroUINativeProvider>
+          <SQLiteProvider
+            databaseName={DATABASE_NAME}
+            options={{ enableChangeListener: true }}
+            useSuspense
+          >
+            <ThemeProvider
+              value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+            >
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="modal"
+                  options={{ presentation: 'modal', title: 'Modal' }}
+                />
+              </Stack>
+              <FloatingAddButton />
+              <StatusBar style="auto" />
+            </ThemeProvider>
+          </SQLiteProvider>
+        </HeroUINativeProvider>
+      </GestureHandlerRootView>
     </Suspense>
   );
 }
