@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/expo-sqlite';
-import { useSQLiteContext } from 'expo-sqlite';
 
 import { DrizzleLogger } from '@/ddbb/adapter/drizzle.logger.adapter';
+import { SQLITE_DB } from '@/ddbb/config/database.config';
 import {
   authStageFromString,
   type IAuthPort,
@@ -16,9 +16,7 @@ export class SQLiteAuthAdapter implements IAuthPort {
   private readonly database;
 
   constructor(private readonly logger: TLoggerPort) {
-    const db = useSQLiteContext();
-
-    this.database = drizzle(db, {
+    this.database = drizzle(SQLITE_DB, {
       schema: DB_SCHEMA,
       logger: new DrizzleLogger(this.logger.extend('SQLiteAuthAdapter')),
     });
@@ -43,6 +41,6 @@ export class SQLiteAuthAdapter implements IAuthPort {
 
     if (!entity) return null;
 
-    return PostgresSqlMapPortAdapter.toDomainEntity(entity);
+    return SQLiteAuthAdapter.toDomainEntity(entity);
   }
 }
