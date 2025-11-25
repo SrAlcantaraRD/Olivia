@@ -12,6 +12,9 @@ import {
 
 import { SQLITE_DB } from '@/ddbb/config/database.config';
 import { useTasks } from '@/hooks/use-tasks';
+import { ButtonAtom } from '@/ui/components/atoms/button.atom';
+import { SpinnerAtom } from '@/ui/components/atoms/spinner.atom';
+import { TextFieldAtom } from '@/ui/components/atoms/text-field.atom';
 import { TextTranslation } from '@/ui/components/atoms/text-translations.atom';
 import { TypographyCode } from '@/ui/components/atoms/typography.atom';
 import { HelloWave } from '@/ui/components/hello-wave';
@@ -47,6 +50,9 @@ export default function HomeScreen() {
       {/* Sección de Tareas */}
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">📝 Mis Tareas</ThemedText>
+        <ButtonAtom>hola</ButtonAtom>
+        <SpinnerAtom size="lg" />
+        <TextFieldAtom />
 
         <Pressable style={styles.button} onPress={populateFakeData}>
           <ThemedText style={styles.buttonText}>
