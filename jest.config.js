@@ -8,6 +8,7 @@ module.exports = {
     '<rootDir>/tests/unit-test/**/*.test.{ts,tsx}',
     '<rootDir>/tests/unit-test/**/*.spec.{ts,tsx}',
   ],
+  cache: false,
   collectCoverageFrom: [
     'app/**/*.{ts,tsx}',
     'components/**/*.{ts,tsx}',

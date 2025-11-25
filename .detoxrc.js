@@ -14,7 +14,7 @@ module.exports = {
       type: 'ios.app',
       binaryPath: 'ios/build/Build/Products/Debug-iphonesimulator/TFG.app',
       build:
-        'xcodebuild -workspace ios/TFG.xcworkspace -scheme TFG -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
+        'xcodebuild -workspace ios/TFG.xcworkspace -scheme TFG -configuration Debug -sdk iphonesimulator -arch x86_64 -derivedDataPath ios/build',
     },
     'ios.release': {
       type: 'ios.app',
@@ -39,7 +39,7 @@ module.exports = {
     simulator: {
       type: 'ios.simulator',
       device: {
-        type: 'iPhone 15',
+        type: 'iPhone 16 Pro',
       },
     },
     attached: {
