@@ -1,14 +1,16 @@
 import { drizzle } from 'drizzle-orm/expo-sqlite';
-import { useSQLiteContext } from 'expo-sqlite';
 
 import { DrizzleLogger } from '@/ddbb/adapter/drizzle.logger.adapter';
+import { SQLITE_DB } from '@/ddbb/config/database.config';
 import { STATUS_ENUM, type TLoggerPort } from '@/domain/core';
 import * as DB_SCHEMA from '../schema';
 
-export type TAuhAdapterEntity = typeof DB_SCHEMA.TASK.$inferSelect;
-type TTaskEntity = typeof DB_SCHEMA.TASK.$inferSelect;
-interface ITaskPort {
+export type TTaskAdapterEntity = typeof DB_SCHEMA.TASK.$inferSelect;
+export type TTaskEntity = typeof DB_SCHEMA.TASK.$inferSelect;
+
+export interface ITaskPort {
   getAll(): Promise<TTaskEntity[]>;
+  create(title: string, description: string): Promise<TTaskEntity>;
   populateWithFakeData(): Promise<void>;
 }
 
@@ -16,15 +18,13 @@ export class SQLiteTaskAdapter implements ITaskPort {
   private readonly database;
 
   constructor(private readonly logger: TLoggerPort) {
-    const db = useSQLiteContext();
-
-    this.database = drizzle(db, {
+    this.database = drizzle(SQLITE_DB, {
       schema: DB_SCHEMA,
-      logger: new DrizzleLogger(this.logger.extend('SQLiteAuthAdapter')),
+      logger: new DrizzleLogger(this.logger.extend('SQLiteTaskAdapter')),
     });
   }
 
-  public static toDomainEntity(entity: TAuhAdapterEntity): TTaskEntity {
+  public static toDomainEntity(entity: TTaskAdapterEntity): TTaskEntity {
     return {
       id: entity.id,
       uuid: entity.uuid,
@@ -32,25 +32,55 @@ export class SQLiteTaskAdapter implements ITaskPort {
       description: entity.description,
       status: entity.status,
       createdAt: entity.createdAt,
-      deletedAt: null,
+      deletedAt: entity.deletedAt,
     };
   }
 
   public async getAll(): Promise<TTaskEntity[]> {
-    const entity = await this.database.query.TASK.findMany({
+    const entities = await this.database.query.TASK.findMany({
       where: (row, { eq }) => eq(row.status, STATUS_ENUM.ACTIVE),
+      orderBy: (row, { desc }) => [desc(row.createdAt)],
     });
 
-    if (!entity) return [];
+    if (!entities || entities.length === 0) return [];
 
-    return entity.map(SQLiteTaskAdapter.toDomainEntity);
+    return entities.map(SQLiteTaskAdapter.toDomainEntity);
+  }
+
+  public async create(
+    title: string,
+    description: string
+  ): Promise<TTaskEntity> {
+    const [newTask] = await this.database
+      .insert(DB_SCHEMA.TASK)
+      .values({
+        title,
+        description,
+        status: STATUS_ENUM.ACTIVE,
+      })
+      .returning();
+
+    return SQLiteTaskAdapter.toDomainEntity(newTask);
   }
 
   public async populateWithFakeData(): Promise<void> {
-    this.database.insert(DB_SCHEMA.TASK).values({
-      title: `Task ${Math.floor(Math.random() * 1000)}`,
-      description: `Description ${Math.floor(Math.random() * 1000)}`,
-      status: STATUS_ENUM.ACTIVE,
-    });
+    const tasks = [
+      {
+        title: 'Completar PEC 1',
+        description: 'Implementar la funcionalidad de tareas con SQLite',
+      },
+      {
+        title: 'Revisar documentación',
+        description: 'Leer la documentación de Expo Router',
+      },
+      {
+        title: 'Hacer testing',
+        description: 'Escribir tests unitarios para los adapters',
+      },
+    ];
+
+    for (const task of tasks) {
+      await this.create(task.title, task.description);
+    }
   }
 }
