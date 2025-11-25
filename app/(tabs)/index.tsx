@@ -1,7 +1,17 @@
+import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
-import { Platform, StyleSheet, Text } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
+import { SQLITE_DB } from '@/ddbb/config/database.config';
+import { useTasks } from '@/hooks/use-tasks';
 import { TextTranslation } from '@/ui/components/atoms/text-translations.atom';
 import { TypographyCode } from '@/ui/components/atoms/typography.atom';
 import { HelloWave } from '@/ui/components/hello-wave';
@@ -10,6 +20,9 @@ import { ThemedText } from '@/ui/components/themed-text';
 import { ThemedView } from '@/ui/components/themed-view';
 
 export default function HomeScreen() {
+  const { tasks, loading, error, populateFakeData } = useTasks();
+  useDrizzleStudio(SQLITE_DB);
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -30,6 +43,44 @@ export default function HomeScreen() {
         </TypographyCode>
         <HelloWave />
       </ThemedView>
+
+      {/* Sección de Tareas */}
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">📝 Mis Tareas</ThemedText>
+
+        <Pressable style={styles.button} onPress={populateFakeData}>
+          <ThemedText style={styles.buttonText}>
+            Poblar con datos de prueba
+          </ThemedText>
+        </Pressable>
+
+        {loading ? (
+          <ActivityIndicator size="large" />
+        ) : error ? (
+          <ThemedText style={{ color: 'red' }}>
+            Error: {error.message}
+          </ThemedText>
+        ) : tasks.length === 0 ? (
+          <ThemedText>
+            No hay tareas. Pulsa el botón para añadir datos de prueba.
+          </ThemedText>
+        ) : (
+          <View style={styles.taskList}>
+            {tasks.map((task) => (
+              <View key={task.id} style={styles.taskItem}>
+                <ThemedText type="defaultSemiBold">{task.title}</ThemedText>
+                <ThemedText style={styles.taskDescription}>
+                  {task.description}
+                </ThemedText>
+                <ThemedText style={styles.taskDate}>
+                  {new Date(task.createdAt).toLocaleDateString('es-ES')}
+                </ThemedText>
+              </View>
+            ))}
+          </View>
+        )}
+      </ThemedView>
+
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Entregarla</ThemedText>
         <ThemedText>
@@ -101,7 +152,6 @@ const styles = StyleSheet.create({
   stepContainer: {
     gap: 8,
     marginBottom: 8,
-    height: 0,
   },
   reactLogo: {
     height: 178,
@@ -109,5 +159,37 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  taskList: {
+    gap: 12,
+    marginTop: 8,
+  },
+  taskItem: {
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    gap: 4,
+  },
+  taskDescription: {
+    fontSize: 14,
+    opacity: 0.8,
+  },
+  taskDate: {
+    fontSize: 12,
+    opacity: 0.6,
+    marginTop: 4,
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 8,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
