@@ -50,7 +50,7 @@ export default function HomeScreen() {
       {/* Sección de Tareas */}
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">📝 Mis Tareas</ThemedText>
-        <ButtonAtom>hola</ButtonAtom>
+        <ButtonAtom testID="floating-add-button">hola</ButtonAtom>
         <SpinnerAtom size="lg" />
         <TextFieldAtom />
 
