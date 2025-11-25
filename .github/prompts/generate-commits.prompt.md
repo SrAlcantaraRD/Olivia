@@ -43,10 +43,10 @@ Analyze current git changes and organize them into logical, focused "baby commit
 
 ### Commit Message Guidelines
 - **Use imperative mood** ("add" not "added" or "adds")
-- **Keep first line under 72 characters**
-- **Be descriptive but concise**
+- **Keep messages SHORT and concise** (under 72 characters total)
+- **NO multi-line descriptions** - single line only
 - **Include scope when relevant** (component, feature, module)
-- **Add body for complex changes** explaining what and why
+- **Format:** `<type>(<scope>): <short description>` - nothing more
 
 ## Constraints
 
@@ -99,9 +99,8 @@ Analyze current git changes and organize them into logical, focused "baby commit
 ### Organization Phase
 1. **Create todo list** with planned commits
 2. **Stage files by logical groups** using `git add <specific-files>`
-3. **Commit each group** with appropriate conventional commit message
-4. **Verify each commit** doesn't break build/tests
-5. **Update progress** and move to next group
+3. **Commit each group** with SHORT conventional commit message (single line only)
+4. **Update progress** and move to next group
 
 ### Validation Phase
 1. **Review commit history** with `git log --oneline`
@@ -112,15 +111,15 @@ Analyze current git changes and organize them into logical, focused "baby commit
 ## Example Output
 
 ```bash
-# Example of well-organized commits:
-feat(config): update development environment setup
-feat(domain/core): restructure application architecture
-feat(domain/auth): implement user management domain layer
-feat(app-web/hooks): add authentication system
-feat(app-web/components): implement responsive dashboard layout
-feat(app-web/i18n): add internationalization support
-style(app-web/theme): update color palette and theming
-test(app-tps/setup): configure Jest and testing utilities
+# Example of well-organized commits (SHORT messages only):
+feat(database): add SQLite schema and migrations
+feat(domain/core): add core domain infrastructure
+feat(domain/auth): add authentication domain layer
+feat(i18n): add internationalization support
+feat(ui): add typography and text translation components
+chore(config): update dependencies and configuration
+chore: remove obsolete reset-project script
+feat(app): integrate database and i18n in root layout
 ```
 
 ## Usage Instructions
