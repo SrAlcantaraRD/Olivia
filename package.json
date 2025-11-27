@@ -86,7 +86,7 @@
     "@types/jest": "29.5.14",
     "@types/node": "^24.10.1",
     "@types/react": "~19.1.0",
-    "@types/react-test-renderer": "^19.1.0",
+    "@types/react-test-renderer": "19.1.0",
     "babel-plugin-inline-import": "^3.0.0",
     "cz-conventional-changelog": "^3.3.0",
     "detox": "^20.46.0",
