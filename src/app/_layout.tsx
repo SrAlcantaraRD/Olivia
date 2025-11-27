@@ -6,7 +6,6 @@ import {
   useFonts,
 } from '@expo-google-fonts/inter';
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
-import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Image, Platform, StyleSheet } from 'react-native';
@@ -17,6 +16,7 @@ import '@/ui/i18n/i18n';
 import 'react-native-reanimated';
 import '../global.css';
 
+import { Stack } from 'expo-router';
 import { SQLiteProvider } from 'expo-sqlite';
 import { HeroUINativeProvider } from 'heroui-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -85,6 +85,13 @@ function RootNavigator() {
       }}
     >
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="index" />
+      <Stack.Screen name="(onboarding)/welcome-1" />
+      <Stack.Screen name="select-role" />
+      <Stack.Screen name="(parent-setup)/parent-info" />
+      <Stack.Screen name="(caregiver-setup)/scan-qr" />
+      <Stack.Screen name="(app)/(tabs)/dashboard" />
+      <Stack.Screen name="(modals)/quick-record" />
     </Stack>
   );
 }
