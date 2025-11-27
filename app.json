@@ -8,6 +8,7 @@
     "scheme": "tfg",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "owner": "gabriel-inaldo-alcantara-moreno",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.gabriel-alcantara.TFG",
@@ -44,7 +45,8 @@
       ],
       "@config-plugins/detox",
       "expo-localization",
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

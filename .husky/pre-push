@@ -1,5 +1,4 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+pnpm test
 
 echo "🧪 Running unit tests..."
 pnpm test:ci || exit 1
