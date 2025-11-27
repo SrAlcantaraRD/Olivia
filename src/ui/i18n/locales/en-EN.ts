@@ -1,9 +1,6 @@
 export const enEN = {
   welcome: 'Welcome',
-  actions: {
-    save: 'Save',
-    cancel: 'Cancel',
-  },
+  'add-register': 'Add Register',
 };
 
 type RecursiveKeyOf<TObj extends object> = {
