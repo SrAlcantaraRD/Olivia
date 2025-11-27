@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
@@ -21,21 +20,9 @@ export interface ITextTranslationEntity {
 interface IProps {
   i18nKey: Ti18nKeys;
   values?: ITextTranslationEntity;
-
-  components?: Record<string, ReactNode>;
 }
 
-export function TextTranslation({ i18nKey, values, components }: IProps) {
-  return (
-    <Trans<Ti18nKeys>
-      i18nKey={i18nKey}
-      values={values}
-      components={{
-        italic: <i />,
-        bold: <strong className="text-primary" />,
-        br: <br />,
-        ...components,
-      }}
-    />
-  );
+export function TextTranslation({ i18nKey, values }: IProps) {
+  const { t } = useTranslation();
+  return <>{t(i18nKey, values)}</>;
 }

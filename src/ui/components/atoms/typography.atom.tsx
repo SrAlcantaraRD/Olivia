@@ -1,86 +1,61 @@
-'use client';
-
 import * as React from 'react';
 import { Text, type TextProps } from 'react-native';
 
-// Simple utility to merge class names
-function cn(...classes: (string | undefined | null | false)[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { TextTranslation } from '@/ui/components/atoms/text-translations.atom';
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
+import { cn } from '@/ui/lib/utils';
 
 type TypographyVariant = 'default' | 'primary' | 'light';
 
 type TypographySize =
-  | 'default'
-  | 'xxs'
   | 'xs'
   | 'sm'
-  | 'md'
+  | 'base'
   | 'lg'
   | 'xl'
-  | 'xxl'
-  | 'xxxl';
+  | '2xl'
+  | '3xl'
+  | '4xl';
 
-type TypographyWeight = 'default' | 'thin' | 'base' | 'semi' | 'bold' | 'black';
+type TypographyWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 
-// Responsive font sizing scale based on Tailwind defaults:
-// Mobile → Small baseline; sm breakpoint elevates by 1–2 steps; lg breakpoint for display sizes.
-// Avoids abrupt jumps and removes legacy bespoke values.
+// Simplified size scale for mobile - no responsive breakpoints needed
 const SIZE_CLASS: Record<TypographySize, string> = {
-  // default body/heading hybrid size
-  default: 'text-base',
-  // very small supplemental text
-  xxs: 'text-xs sm:text-sm lg:text-base',
-  // small heading / emphasized inline
-  xs: 'text-base sm:text-lg lg:text-xl',
-  // section heading / mid emphasis
-  sm: 'text-lg sm:text-xl lg:text-2xl',
-  // primary sub-heading
-  md: 'text-xl sm:text-2xl lg:text-3xl',
-  // large heading
-  lg: 'text-2xl sm:text-3xl lg:text-4xl',
-  // hero medium
-  xl: 'text-3xl sm:text-4xl lg:text-5xl',
-  // hero large
-  xxl: 'text-4xl sm:text-5xl lg:text-6xl',
-  // hero extra large / display
-  xxxl: 'text-5xl sm:text-6xl lg:text-7xl',
+  xs: 'text-xs', // 12px - very small text
+  sm: 'text-sm', // 14px - small text, captions
+  base: 'text-base', // 16px - body text
+  lg: 'text-lg', // 18px - emphasized text
+  xl: 'text-xl', // 20px - small headings
+  '2xl': 'text-2xl', // 24px - medium headings
+  '3xl': 'text-3xl', // 30px - large headings
+  '4xl': 'text-4xl', // 36px - hero headings
 };
 
 const WEIGHT_CLASS: Record<TypographyWeight, string> = {
-  default: 'font-bold',
-  thin: 'font-thin',
-  base: 'font-normal',
-  semi: 'font-semibold',
+  normal: 'font-normal',
+  medium: 'font-medium',
+  semibold: 'font-semibold',
   bold: 'font-bold',
-  black: 'font-black',
 };
 
 const VARIANT_CLASS: Record<TypographyVariant, string> = {
-  default:
-    'text-gray-500 dark:text-gray-400 text-foreground dark:text-foreground-300',
-  primary: 'text-primary dark:text-primary-300',
-  light: 'text-gray-400 dark:text-gray-500',
+  default: 'text-foreground',
+  primary: 'text-primary',
+  light: 'text-muted-foreground',
 };
 
-// Base typography styles that can be extended
+// Base typography styles
 const BASE_STYLES = {
-  h1: 'tracking-tight mb-4 text-primary dark:text-primary-300',
-  h2: 'tracking-tight mb-3 text-gray-900 dark:text-gray-200',
-  h3: 'tracking-tight mb-2 text-gray-900 dark:text-gray-200',
-  h4: 'tracking-tight mb-2 text-gray-900 dark:text-gray-200',
-  lead: 'text-gray-700 dark:text-gray-400',
-  code: 'font-mono px-1 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-sm',
-  blockquote:
-    'pl-4 border-l-4 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 italic bg-gray-50 dark:bg-gray-900 rounded-sm p-4',
-  paragraph:
-    'text-muted-foreground text-gray-700 dark:text-gray-400 leading-relaxed',
+  title: 'tracking-tight mb-4',
+  subtitle: 'tracking-tight mb-3',
+  heading: 'tracking-tight mb-2',
+  paragraph: 'leading-relaxed',
 };
 
-function headingVariants({
+function typographyVariants({
   variant = 'default',
-  size = 'default',
-  weight = 'default',
+  size = 'base',
+  weight = 'normal',
 }: Partial<{
   variant: TypographyVariant;
   size: TypographySize;
@@ -90,6 +65,7 @@ function headingVariants({
 }
 
 interface TypographyProps extends TextProps {
+  i18nKey?: Ti18nKeys;
   className?: string;
   variant?: TypographyVariant;
   size?: TypographySize;
@@ -100,10 +76,11 @@ const Typography = React.forwardRef<Text, TypographyProps>(
   (
     {
       variant = 'default',
-      size = 'default',
-      weight = 'default',
+      size = 'base',
+      weight = 'normal',
       className,
       children,
+      i18nKey,
       ...props
     },
     ref
@@ -111,150 +88,15 @@ const Typography = React.forwardRef<Text, TypographyProps>(
     return (
       <Text
         ref={ref}
-        className={cn(headingVariants({ variant, size, weight }), className)}
+        className={cn(typographyVariants({ variant, size, weight }), className)}
         {...props}
       >
-        {children}
+        {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
       </Text>
     );
   }
 );
 Typography.displayName = 'Typography';
-
-const TypographyH1 = React.forwardRef<Text, TypographyProps>(
-  (
-    {
-      className,
-      children,
-      variant = 'primary',
-      size = 'xl',
-      weight = 'bold',
-      ...props
-    },
-    ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        headingVariants({ variant, size, weight }),
-        BASE_STYLES.h1,
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </Text>
-  )
-);
-TypographyH1.displayName = 'TypographyH1';
-
-const TypographyH2 = React.forwardRef<Text, TypographyProps>(
-  (
-    {
-      className,
-      children,
-      variant = 'default',
-      size = 'sm',
-      weight = 'bold',
-      ...props
-    },
-    ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        headingVariants({ variant, size, weight }),
-        BASE_STYLES.h2,
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </Text>
-  )
-);
-TypographyH2.displayName = 'TypographyH2';
-
-const TypographyH3 = React.forwardRef<Text, TypographyProps>(
-  (
-    {
-      className,
-      children,
-      variant = 'default',
-      size = 'xs',
-      weight = 'bold',
-      ...props
-    },
-    ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        headingVariants({ variant, size, weight }),
-        BASE_STYLES.h3,
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </Text>
-  )
-);
-TypographyH3.displayName = 'TypographyH3';
-
-const TypographyH4 = React.forwardRef<Text, TypographyProps>(
-  (
-    {
-      className,
-      children,
-      variant = 'default',
-      size = 'xxs',
-      weight = 'semi',
-      ...props
-    },
-    ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        headingVariants({ variant, size, weight }),
-        BASE_STYLES.h4,
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </Text>
-  )
-);
-TypographyH4.displayName = 'TypographyH4';
-
-const TypographyLead = React.forwardRef<Text, TypographyProps>(
-  (
-    {
-      className,
-      children,
-      variant = 'default',
-      size = 'sm',
-      weight = 'semi',
-      ...props
-    },
-    ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        headingVariants({ variant, size, weight }),
-        BASE_STYLES.lead,
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </Text>
-  )
-);
-TypographyLead.displayName = 'TypographyLead';
 
 const TypographyTitle = React.forwardRef<Text, TypographyProps>(
   (
@@ -262,8 +104,9 @@ const TypographyTitle = React.forwardRef<Text, TypographyProps>(
       className,
       children,
       variant = 'primary',
-      size = 'xxs',
-      weight = 'semi',
+      size = '3xl',
+      weight = 'bold',
+      i18nKey,
       ...props
     },
     ref
@@ -271,17 +114,101 @@ const TypographyTitle = React.forwardRef<Text, TypographyProps>(
     <Text
       ref={ref}
       className={cn(
-        'pb-4',
-        headingVariants({ variant, size, weight }),
+        typographyVariants({ variant, size, weight }),
+        BASE_STYLES.title,
         className
       )}
       {...props}
     >
-      {children}
+      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
     </Text>
   )
 );
-TypographyTitle.displayName = 'TypographyBig';
+TypographyTitle.displayName = 'TypographyTitle';
+
+const TypographySubtitle = React.forwardRef<Text, TypographyProps>(
+  (
+    {
+      className,
+      children,
+      variant = 'default',
+      size = '2xl',
+      weight = 'bold',
+      i18nKey,
+      ...props
+    },
+    ref
+  ) => (
+    <Text
+      ref={ref}
+      className={cn(
+        typographyVariants({ variant, size, weight }),
+        BASE_STYLES.subtitle,
+        className
+      )}
+      {...props}
+    >
+      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
+    </Text>
+  )
+);
+TypographySubtitle.displayName = 'TypographySubtitle';
+
+const TypographyHeading = React.forwardRef<Text, TypographyProps>(
+  (
+    {
+      className,
+      children,
+      variant = 'default',
+      size = 'xl',
+      weight = 'semibold',
+      i18nKey,
+      ...props
+    },
+    ref
+  ) => (
+    <Text
+      ref={ref}
+      className={cn(
+        typographyVariants({ variant, size, weight }),
+        BASE_STYLES.heading,
+        className
+      )}
+      {...props}
+    >
+      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
+    </Text>
+  )
+);
+TypographyHeading.displayName = 'TypographyHeading';
+
+const TypographyParagraph = React.forwardRef<Text, TypographyProps>(
+  (
+    {
+      className,
+      children,
+      variant = 'default',
+      size = 'base',
+      weight = 'normal',
+      i18nKey,
+      ...props
+    },
+    ref
+  ) => (
+    <Text
+      ref={ref}
+      className={cn(
+        typographyVariants({ variant, size, weight }),
+        BASE_STYLES.paragraph,
+        className
+      )}
+      {...props}
+    >
+      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
+    </Text>
+  )
+);
+TypographyParagraph.displayName = 'TypographyParagraph';
 
 const TypographySmall = React.forwardRef<Text, TypographyProps>(
   (
@@ -289,18 +216,19 @@ const TypographySmall = React.forwardRef<Text, TypographyProps>(
       className,
       children,
       variant = 'default',
-      size = 'xxs',
-      weight = 'base',
+      size = 'sm',
+      weight = 'normal',
+      i18nKey,
       ...props
     },
     ref
   ) => (
     <Text
       ref={ref}
-      className={cn(headingVariants({ variant, size, weight }), className)}
+      className={cn(typographyVariants({ variant, size, weight }), className)}
       {...props}
     >
-      {children}
+      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
     </Text>
   )
 );
@@ -312,115 +240,30 @@ const TypographyMuted = React.forwardRef<Text, TypographyProps>(
       className,
       children,
       variant = 'light',
-      size = 'xxs',
-      weight = 'base',
+      size = 'sm',
+      weight = 'normal',
+      i18nKey,
       ...props
     },
     ref
   ) => (
     <Text
       ref={ref}
-      className={cn(headingVariants({ variant, size, weight }), className)}
+      className={cn(typographyVariants({ variant, size, weight }), className)}
       {...props}
     >
-      {children}
+      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
     </Text>
   )
 );
 TypographyMuted.displayName = 'TypographyMuted';
 
-const TypographyCode = React.forwardRef<Text, TypographyProps>(
-  (
-    {
-      className,
-      children,
-      variant = 'default',
-      size = 'xxs',
-      weight = 'base',
-      ...props
-    },
-    ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        headingVariants({ variant, size, weight }),
-        BASE_STYLES.code,
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </Text>
-  )
-);
-TypographyCode.displayName = 'TypographyCode';
-
-const TypographyBlockquote = React.forwardRef<Text, TypographyProps>(
-  (
-    {
-      className,
-      children,
-      variant = 'default',
-      size = 'sm',
-      weight = 'base',
-      ...props
-    },
-    ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        headingVariants({ variant, size, weight }),
-        BASE_STYLES.blockquote,
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </Text>
-  )
-);
-TypographyBlockquote.displayName = 'TypographyBlockquote';
-
-const TypographyParagraph = React.forwardRef<Text, TypographyProps>(
-  (
-    {
-      className,
-      children,
-      variant = 'default',
-      size = 'default',
-      weight = 'base',
-      ...props
-    },
-    ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        headingVariants({ variant, size, weight }),
-        BASE_STYLES.paragraph,
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </Text>
-  )
-);
-TypographyParagraph.displayName = 'TypographyParagraph';
-
 export {
   Typography,
-  TypographyBlockquote,
-  TypographyCode,
-  TypographyH1,
-  TypographyH2,
-  TypographyH3,
-  TypographyH4,
-  TypographyLead,
+  TypographyHeading,
   TypographyMuted,
   TypographyParagraph,
   TypographySmall,
+  TypographySubtitle,
   TypographyTitle,
 };

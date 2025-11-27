@@ -2,14 +2,13 @@ import { useRouter } from 'expo-router';
 import { Platform, Pressable, StyleSheet } from 'react-native';
 
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { IconSymbol } from '@/ui/components/ui/icon-symbol';
+import { useAppTheme } from '@/ui/themes/app-theme-context';
 
 export function FloatingAddButton() {
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const tintColor = Colors[colorScheme ?? 'light'].tint;
-  const isDark = colorScheme === 'dark';
+  const { isDark } = useAppTheme();
+  const tintColor = Colors[isDark ? 'dark' : 'light'].tint;
 
   return (
     <Pressable
