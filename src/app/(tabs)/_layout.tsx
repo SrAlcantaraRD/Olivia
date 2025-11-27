@@ -1,18 +1,18 @@
 import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
-import React from 'react';
+import { useThemeColor } from 'heroui-native';
 
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useAppTheme } from '@/ui/themes/app-theme-context';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
-  const tintColor = Colors[colorScheme ?? 'light'].tint;
+  const { isDark } = useAppTheme();
+
+  const themeColorForeground = useThemeColor('foreground');
+  const themeColorBackground = useThemeColor('background');
 
   return (
     <NativeTabs
-      tintColor={tintColor}
-      backgroundColor={null}
+      tintColor={themeColorForeground}
+      backgroundColor={themeColorBackground}
       blurEffect={
         isDark ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'
       }
@@ -22,10 +22,10 @@ export default function TabLayout() {
       }}
       iconColor={{
         default: isDark ? '#8E8E93' : '#8E8E93',
-        selected: tintColor,
+        selected: themeColorForeground,
       }}
     >
-      <NativeTabs.Trigger name="index">
+      <NativeTabs.Trigger name="home">
         <Icon sf="house.fill" />
         <Label>Home</Label>
       </NativeTabs.Trigger>
@@ -39,6 +39,11 @@ export default function TabLayout() {
       <NativeTabs.Trigger name="explore">
         <Icon sf="chart.bar.fill" />
         <Label>Stats</Label>
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="design-system">
+        <Icon sf="paintbrush.fill" />
+        <Label>Design System</Label>
       </NativeTabs.Trigger>
     </NativeTabs>
   );
