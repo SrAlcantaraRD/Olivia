@@ -234,34 +234,9 @@ const TypographySmall = React.forwardRef<Text, TypographyProps>(
 );
 TypographySmall.displayName = 'TypographySmall';
 
-const TypographyMuted = React.forwardRef<Text, TypographyProps>(
-  (
-    {
-      className,
-      children,
-      variant = 'light',
-      size = 'sm',
-      weight = 'normal',
-      i18nKey,
-      ...props
-    },
-    ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(typographyVariants({ variant, size, weight }), className)}
-      {...props}
-    >
-      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
-    </Text>
-  )
-);
-TypographyMuted.displayName = 'TypographyMuted';
-
 export {
   Typography,
   TypographyHeading,
-  TypographyMuted,
   TypographyParagraph,
   TypographySmall,
   TypographySubtitle,
