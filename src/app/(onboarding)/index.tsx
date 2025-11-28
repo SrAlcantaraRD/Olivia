@@ -1,17 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useThemeColor } from 'heroui-native';
-import { useEffect, useRef, useState } from 'react';
-import { Animated, Pressable, View } from 'react-native';
+import { useState } from 'react';
+import { View } from 'react-native';
 
-import { AtomCircularProgressButton } from '@/ui/components/atoms/circular-progress-button.atom';
-import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
-import { AtomPaginationDots } from '@/ui/components/atoms/pagination-dots.atom';
-import {
-  TypographyParagraph,
-  TypographySmall,
-  TypographySubtitle,
-} from '@/ui/components/atoms/typography.atom';
+import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
+import { FormWizard } from '@/ui/components/molecules/form-wizard.molecule';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface WelcomeSlide {
@@ -75,50 +69,71 @@ const WELCOME_SLIDES: WelcomeSlide[] = [
   },
 ];
 
+function WelcomeSlideContent({ slide }: { slide: WelcomeSlide }) {
+  const mutedColor = useThemeColor('muted');
+  const accentColor = useThemeColor('accent');
+
+  return (
+    <View className="flex-1 justify-center items-center">
+      {/* Illustration */}
+      <View className="bg-[#C8CAE5] rounded-full w-64 h-64 mb-12 items-center justify-center">
+        <View
+          className={`bg-[#9B9FC5] ${slide.illustration.innerShape} p-8 items-center justify-center`}
+        >
+          <Ionicons
+            name={slide.illustration.innerIcon}
+            size={slide.illustration.innerIconSize || 60}
+            color="#7B7FA5"
+          />
+          {slide.illustration.secondaryIcon && (
+            <Ionicons
+              name={slide.illustration.secondaryIcon.name}
+              size={slide.illustration.secondaryIcon.size || 40}
+              color="#7B7FA5"
+              style={{
+                position: 'absolute',
+                ...slide.illustration.secondaryIcon.position,
+              }}
+            />
+          )}
+        </View>
+      </View>
+
+      {/* Description or Bullet Points */}
+      {slide.description && (
+        <TypographyParagraph
+          style={{ color: mutedColor }}
+          className="text-center"
+          i18nKey={slide.description}
+        />
+      )}
+
+      {slide.bulletPoints && (
+        <View className="gap-3 w-full mt-4">
+          {slide.bulletPoints.map((item) => (
+            <View key={item} className="flex-row items-center gap-3">
+              <View
+                style={{ backgroundColor: accentColor }}
+                className="w-1.5 h-1.5 rounded-full"
+              />
+              <TypographyParagraph
+                style={{ color: mutedColor }}
+                i18nKey={item}
+              />
+            </View>
+          ))}
+        </View>
+      )}
+    </View>
+  );
+}
+
 export default function OnboardingIndex() {
   const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Animation values
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-  const slideAnim = useRef(new Animated.Value(0)).current;
-
-  const backgroundColor = useThemeColor('background');
-  const foregroundColor = useThemeColor('foreground');
-  const mutedColor = useThemeColor('muted');
-  const accentColor = useThemeColor('accent');
-
-  const isFirstSlide = currentSlide === 0;
-  const isLastSlide = currentSlide === WELCOME_SLIDES.length - 1;
-  const currentContent = WELCOME_SLIDES[currentSlide];
-
-  // Animate slide changes with slide in effect
-  useEffect(() => {
-    // Reset position for slide in
-    fadeAnim.setValue(0);
-    slideAnim.setValue(30);
-
-    // Slide in new content
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [currentSlide, fadeAnim, slideAnim]);
-
-  const handleSkip = () => {
-    router.push('/(onboarding)/role-selection');
-  };
-
   const handleNext = () => {
-    if (isLastSlide) {
+    if (currentSlide === WELCOME_SLIDES.length - 1) {
       router.push('/(onboarding)/role-selection');
     } else {
       setCurrentSlide((prev) => prev + 1);
@@ -126,134 +141,30 @@ export default function OnboardingIndex() {
   };
 
   const handleBack = () => {
-    if (isFirstSlide) {
+    if (currentSlide === 0) {
       router.back();
     } else {
       setCurrentSlide((prev) => prev - 1);
     }
   };
 
+  const steps = WELCOME_SLIDES.map((slide) => ({
+    id: slide.title,
+    titleKey: slide.title,
+    descriptionKey: undefined, // Description dentro del contenido
+    content: <WelcomeSlideContent slide={slide} />,
+    isValid: true, // Siempre válido en onboarding
+  }));
+
   return (
-    <View style={{ backgroundColor }} className="flex-1 pt-4">
-      {/* Header */}
-      <View className="flex-row items-center justify-between px-6 pt-12 pb-4">
-        {isFirstSlide ? (
-          <View className="w-8" />
-        ) : (
-          <Pressable onPress={handleBack}>
-            <Ionicons name="chevron-back" size={24} color={foregroundColor} />
-          </Pressable>
-        )}
-        <AtomLogoSVG width={40} height={40} />
-        {!isLastSlide ? (
-          <Pressable onPress={handleSkip}>
-            <TypographySmall
-              style={{ color: mutedColor }}
-              className="text-base"
-              i18nKey="skip"
-            />
-          </Pressable>
-        ) : (
-          <View className="w-8" />
-        )}
-      </View>
-
-      {/* Content */}
-      <View className="flex-1 justify-center items-center px-8">
-        {/* Illustration */}
-        <Animated.View
-          style={{
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
-          }}
-          className="bg-[#C8CAE5] rounded-full w-64 h-64 mb-12 items-center justify-center"
-        >
-          <View
-            className={`bg-[#9B9FC5] ${currentContent.illustration.innerShape} p-8 items-center justify-center`}
-          >
-            <Ionicons
-              name={currentContent.illustration.innerIcon}
-              size={currentContent.illustration.innerIconSize || 60}
-              color="#7B7FA5"
-            />
-            {currentContent.illustration.secondaryIcon && (
-              <Ionicons
-                name={currentContent.illustration.secondaryIcon.name}
-                size={currentContent.illustration.secondaryIcon.size || 40}
-                color="#7B7FA5"
-                style={{
-                  position: 'absolute',
-                  ...currentContent.illustration.secondaryIcon.position,
-                }}
-              />
-            )}
-          </View>
-        </Animated.View>
-
-        {/* Content Container with Fixed Height */}
-        <Animated.View
-          style={{
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
-          }}
-          className="h-48 justify-start w-full"
-        >
-          {/* Title */}
-          <TypographySubtitle
-            style={{ color: foregroundColor }}
-            className={`text-center ${currentContent.bulletPoints ? 'mb-6' : 'mb-4'}`}
-            i18nKey={currentContent.title}
-          />
-
-          {/* Description or Bullet Points */}
-          {currentContent.description && (
-            <TypographyParagraph
-              style={{ color: mutedColor }}
-              className="text-center"
-              i18nKey={currentContent.description}
-            />
-          )}
-
-          {currentContent.bulletPoints && (
-            <View className="gap-3 w-full">
-              {currentContent.bulletPoints.map((item) => (
-                <View key={item} className="flex-row items-center gap-3">
-                  <View
-                    style={{ backgroundColor: accentColor }}
-                    className="w-1.5 h-1.5 rounded-full"
-                  />
-                  <TypographyParagraph
-                    style={{ color: mutedColor }}
-                    i18nKey={item}
-                  />
-                </View>
-              ))}
-            </View>
-          )}
-        </Animated.View>
-      </View>
-
-      {/* Footer with Pagination and Next Button */}
-      <View className="px-8 pb-12 gap-6 flex flex-row items-center justify-between">
-        {/* Pagination Dots */}
-        <AtomPaginationDots
-          total={WELCOME_SLIDES.length}
-          currentIndex={currentSlide}
-          activeColor={accentColor}
-          inactiveColor={mutedColor}
-          keys={WELCOME_SLIDES.map((slide) => slide.title)}
-        />
-
-        {/* Next/Finish Button */}
-        <AtomCircularProgressButton
-          onPress={handleNext}
-          progress={(currentSlide + 1) / WELCOME_SLIDES.length}
-          backgroundColor={accentColor}
-          progressColor={accentColor}
-          size={84}
-          iconSize={36}
-        />
-      </View>
-    </View>
+    <FormWizard
+      steps={steps}
+      currentStepIndex={currentSlide}
+      onNext={handleNext}
+      onBack={handleBack}
+      showBackButton={true}
+      showLogo={true}
+      showProgress={true}
+    />
   );
 }

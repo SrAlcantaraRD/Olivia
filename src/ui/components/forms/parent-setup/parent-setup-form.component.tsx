@@ -10,8 +10,6 @@ import { ModulesStep } from './steps/modules-step.component';
 import { ParentInfoStep } from './steps/parent-info-step.component';
 import { SummaryStep } from './steps/summary-step.component';
 
-const TOTAL_STEPS = 5; // 4 steps (parent, child, modules, summary) + confirmation (future)
-
 export function ParentSetupForm() {
   const router = useRouter();
   const {
@@ -102,9 +100,8 @@ export function ParentSetupForm() {
 
   return (
     <FormWizard
-      steps={[steps[currentStep]]}
+      steps={steps}
       currentStepIndex={currentStep}
-      totalSteps={TOTAL_STEPS}
       onNext={handleNext}
       onBack={handleBack}
     />

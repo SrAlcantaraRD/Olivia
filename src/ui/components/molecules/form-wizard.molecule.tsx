@@ -1,6 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useHeaderHeight } from '@react-navigation/elements';
-import { useRouter } from 'expo-router';
 import { useThemeColor } from 'heroui-native';
 import type { ReactNode } from 'react';
 import { Pressable, View } from 'react-native';
@@ -45,16 +43,13 @@ export function FormWizard({
   showLogo = true,
   showProgress = true,
 }: FormWizardProps) {
-  const router = useRouter();
-  const headerHeight = useHeaderHeight();
-
   const backgroundColor = useThemeColor('background');
   const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
   const accentColor = useThemeColor('accent');
 
-  // Usar siempre el primer step ya que cada pantalla define su propio step
-  const currentStep = steps[0];
+  // Usar el step actual basado en el índice
+  const currentStep = steps[currentStepIndex] ?? steps[0];
   const totalSteps = totalStepsProp ?? steps.length;
   const progress = (currentStepIndex + 1) / totalSteps;
 
