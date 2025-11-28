@@ -126,18 +126,21 @@ export function FormWizard({
       </KeyboardAwareScrollView>
 
       {/* Footer with Pagination and Next Button */}
-      <View className="px-8 pb-12 gap-6 flex flex-row items-center justify-between">
-        {/* Pagination Dots */}
+      <View className="px-8 pb-12 gap-6 flex flex-row items-center">
+        {/* Pagination Dots - ocupan el espacio restante */}
         {showProgress && (
-          <AtomPaginationDots
-            total={totalSteps}
-            currentIndex={currentStepIndex}
-            activeColor={accentColor}
-            inactiveColor={mutedColor}
-          />
+          <View className="flex-1">
+            <AtomPaginationDots
+              total={totalSteps}
+              currentIndex={currentStepIndex}
+              activeColor={accentColor}
+              inactiveColor={mutedColor}
+              maxWidth={undefined} // Se calculará automáticamente con flex-1
+            />
+          </View>
         )}
 
-        {/* Next Button */}
+        {/* Next Button - tamaño fijo */}
         <AtomCircularProgressButton
           onPress={handleNext}
           progress={progress}
