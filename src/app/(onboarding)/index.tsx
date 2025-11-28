@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Button, useThemeColor } from 'heroui-native';
-import { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Pressable, View } from 'react-native';
 
 import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
 import { AtomPaginationDots } from '@/ui/components/atoms/pagination-dots.atom';
@@ -78,6 +78,10 @@ export default function OnboardingIndex() {
   const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Animation values
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const slideAnim = useRef(new Animated.Value(0)).current;
+
   const backgroundColor = useThemeColor('background');
   const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
@@ -86,6 +90,27 @@ export default function OnboardingIndex() {
   const isFirstSlide = currentSlide === 0;
   const isLastSlide = currentSlide === WELCOME_SLIDES.length - 1;
   const currentContent = WELCOME_SLIDES[currentSlide];
+
+  // Animate slide changes with slide in effect
+  useEffect(() => {
+    // Reset position for slide in
+    fadeAnim.setValue(0);
+    slideAnim.setValue(30);
+
+    // Slide in new content
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [currentSlide, fadeAnim, slideAnim]);
 
   const handleSkip = () => {
     router.push('/select-role');
@@ -135,7 +160,13 @@ export default function OnboardingIndex() {
       {/* Content */}
       <View className="flex-1 justify-center items-center px-8">
         {/* Illustration */}
-        <View className="bg-[#C8CAE5] rounded-full w-64 h-64 mb-12 items-center justify-center">
+        <Animated.View
+          style={{
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }],
+          }}
+          className="bg-[#C8CAE5] rounded-full w-64 h-64 mb-12 items-center justify-center"
+        >
           <View
             className={`bg-[#9B9FC5] ${currentContent.illustration.innerShape} p-8 items-center justify-center`}
           >
@@ -156,10 +187,16 @@ export default function OnboardingIndex() {
               />
             )}
           </View>
-        </View>
+        </Animated.View>
 
         {/* Content Container with Fixed Height */}
-        <View className="h-48 justify-start w-full">
+        <Animated.View
+          style={{
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }],
+          }}
+          className="h-48 justify-start w-full"
+        >
           {/* Title */}
           <TypographySubtitle
             style={{ color: foregroundColor }}
@@ -192,7 +229,7 @@ export default function OnboardingIndex() {
               ))}
             </View>
           )}
-        </View>
+        </Animated.View>
       </View>
 
       {/* Footer with Pagination and Next Button */}
