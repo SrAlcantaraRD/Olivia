@@ -1,13 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
+import type { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useThemeColor } from 'heroui-native';
 import { useState } from 'react';
-import { View } from 'react-native';
 
-import {
-  TypographyParagraph,
-  TypographySubtitle,
-} from '@/ui/components/atoms/typography.atom';
+import { WelcomeSlideContent } from '@/ui/components/molecules/welcome-slide-content.molecule';
 import {
   Wizard,
   type WizardStep,
@@ -75,73 +70,6 @@ const WELCOME_SLIDES: WelcomeSlide[] = [
   },
 ];
 
-function WelcomeSlideContent({ slide }: { slide: WelcomeSlide }) {
-  const foregroundColor = useThemeColor('foreground');
-  const mutedColor = useThemeColor('muted');
-  const accentColor = useThemeColor('accent');
-
-  return (
-    <View className="flex-1 justify-center items-center">
-      {/* Illustration */}
-      <View className="bg-[#C8CAE5] rounded-full w-64 h-64 mb-12 items-center justify-center">
-        <View
-          className={`bg-[#9B9FC5] ${slide.illustration.innerShape} p-8 items-center justify-center`}
-        >
-          <Ionicons
-            name={slide.illustration.innerIcon}
-            size={slide.illustration.innerIconSize || 60}
-            color="#7B7FA5"
-          />
-          {slide.illustration.secondaryIcon && (
-            <Ionicons
-              name={slide.illustration.secondaryIcon.name}
-              size={slide.illustration.secondaryIcon.size || 40}
-              color="#7B7FA5"
-              style={{
-                position: 'absolute',
-                ...slide.illustration.secondaryIcon.position,
-              }}
-            />
-          )}
-        </View>
-      </View>
-
-      {/* Title */}
-      <TypographySubtitle
-        style={{ color: foregroundColor }}
-        className={`text-center ${slide.bulletPoints ? 'mb-6' : 'mb-4'}`}
-        i18nKey={slide.title}
-      />
-
-      {/* Description or Bullet Points */}
-      {slide.description && (
-        <TypographyParagraph
-          style={{ color: mutedColor }}
-          className="text-center"
-          i18nKey={slide.description}
-        />
-      )}
-
-      {slide.bulletPoints && (
-        <View className="gap-3 w-full mt-4">
-          {slide.bulletPoints.map((item) => (
-            <View key={item} className="flex-row items-center gap-3">
-              <View
-                style={{ backgroundColor: accentColor }}
-                className="w-1.5 h-1.5 rounded-full"
-              />
-              <TypographyParagraph
-                style={{ color: mutedColor }}
-                i18nKey={item}
-              />
-            </View>
-          ))}
-        </View>
-      )}
-    </View>
-  );
-}
-
 export default function OnboardingIndex() {
   const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -164,8 +92,15 @@ export default function OnboardingIndex() {
 
   const steps: WizardStep[] = WELCOME_SLIDES.map((slide) => ({
     id: slide.title,
-    content: <WelcomeSlideContent slide={slide} />,
-    isValid: true, // Siempre válido en onboarding
+    content: (
+      <WelcomeSlideContent
+        illustration={slide.illustration}
+        title={slide.title}
+        description={slide.description}
+        bulletPoints={slide.bulletPoints}
+      />
+    ),
+    isValid: true,
   }));
 
   return (
@@ -176,7 +111,7 @@ export default function OnboardingIndex() {
       onBack={handleBack}
       onSkip={() => router.push('/(onboarding)/role-selection')}
       showBackButton={true}
-      showSkipButton={currentSlide < WELCOME_SLIDES.length - 1}
+      showSkipButton={true}
       showLogo={true}
       showProgress={true}
     />
