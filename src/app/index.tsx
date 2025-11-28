@@ -13,7 +13,7 @@ export default function SplashScreen() {
   useEffect(() => {
     // Auto-navigate to onboarding after 2.5 seconds
     const timer = setTimeout(() => {
-      router.push('/(onboarding)/welcome-1');
+      router.push('/(onboarding)');
     }, 2500);
 
     return () => clearTimeout(timer);
