@@ -107,7 +107,7 @@ export default function RoleSelectionScreen() {
 
   const handleContinue = () => {
     if (selectedRole === 'parent') {
-      router.push('/(parent-setup)/parent-info');
+      router.push('/(onboarding)/parent-setup');
     } else if (selectedRole === 'caregiver') {
       router.push('/(caregiver-setup)/scan-qr');
     }

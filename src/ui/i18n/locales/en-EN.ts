@@ -46,6 +46,8 @@ export const enEN = {
     'Datos básicos del cuidador principal.',
   'parent-setup.parent-info.name-label': 'Nombre:',
   'parent-setup.parent-info.relationship-label': 'Relación:',
+  'parent-setup.parent-info.parent': 'Padre / Madre',
+  'parent-setup.parent-info.guardian': 'Tutor',
   'parent-setup.child-info.title': 'Sobre el niño',
   'parent-setup.child-info.description':
     'Datos básicos del menor para identificarlo.',
@@ -75,6 +77,7 @@ export const enEN = {
   'parent-setup.summary.child-birth-date': 'Fecha de nacimiento',
   'parent-setup.summary.child-diagnosis': 'Diagnóstico',
   'parent-setup.summary.modules-section': 'Módulos Activados',
+  'parent-setup.summary.no-modules': 'No hay módulos seleccionados',
 };
 
 type RecursiveKeyOf<TObj extends object> = {
