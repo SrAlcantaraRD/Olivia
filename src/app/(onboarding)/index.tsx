@@ -2,8 +2,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Button, useThemeColor } from 'heroui-native';
 import { useState } from 'react';
-import { Image, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
+import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
+import { AtomPaginationDots } from '@/ui/components/atoms/pagination-dots.atom';
 import {
   TypographyParagraph,
   TypographySmall,
@@ -116,11 +118,7 @@ export default function OnboardingIndex() {
             <Ionicons name="chevron-back" size={24} color={foregroundColor} />
           </Pressable>
         )}
-        <Image
-          source={require('@/assets/logo-light.png')}
-          style={{ width: 40, height: 40 }}
-          resizeMode="contain"
-        />
+        <AtomLogoSVG width={40} height={40} />
         {!isLastSlide ? (
           <Pressable onPress={handleSkip}>
             <TypographySmall
@@ -160,56 +158,53 @@ export default function OnboardingIndex() {
           </View>
         </View>
 
-        {/* Title */}
-        <TypographySubtitle
-          style={{ color: foregroundColor }}
-          className={`text-center ${currentContent.bulletPoints ? 'mb-6' : 'mb-4'}`}
-          i18nKey={currentContent.title}
-        />
-
-        {/* Description or Bullet Points */}
-        {currentContent.description && (
-          <TypographyParagraph
-            style={{ color: mutedColor }}
-            className="text-center"
-            i18nKey={currentContent.description}
+        {/* Content Container with Fixed Height */}
+        <View className="h-48 justify-start w-full">
+          {/* Title */}
+          <TypographySubtitle
+            style={{ color: foregroundColor }}
+            className={`text-center ${currentContent.bulletPoints ? 'mb-6' : 'mb-4'}`}
+            i18nKey={currentContent.title}
           />
-        )}
 
-        {currentContent.bulletPoints && (
-          <View className="gap-3 w-full">
-            {currentContent.bulletPoints.map((item) => (
-              <View key={item} className="flex-row items-center gap-3">
-                <View
-                  style={{ backgroundColor: accentColor }}
-                  className="w-1.5 h-1.5 rounded-full"
-                />
-                <TypographyParagraph
-                  style={{ color: mutedColor }}
-                  i18nKey={item}
-                />
-              </View>
-            ))}
-          </View>
-        )}
+          {/* Description or Bullet Points */}
+          {currentContent.description && (
+            <TypographyParagraph
+              style={{ color: mutedColor }}
+              className="text-center"
+              i18nKey={currentContent.description}
+            />
+          )}
+
+          {currentContent.bulletPoints && (
+            <View className="gap-3 w-full">
+              {currentContent.bulletPoints.map((item) => (
+                <View key={item} className="flex-row items-center gap-3">
+                  <View
+                    style={{ backgroundColor: accentColor }}
+                    className="w-1.5 h-1.5 rounded-full"
+                  />
+                  <TypographyParagraph
+                    style={{ color: mutedColor }}
+                    i18nKey={item}
+                  />
+                </View>
+              ))}
+            </View>
+          )}
+        </View>
       </View>
 
       {/* Footer with Pagination and Next Button */}
       <View className="px-8 pb-12 gap-6 flex flex-row items-center justify-between">
         {/* Pagination Dots */}
-        <View className="flex-row items-center justify-center gap-2">
-          {WELCOME_SLIDES.map((slide, index) => (
-            <View
-              key={slide.title}
-              style={{
-                backgroundColor:
-                  index === currentSlide ? accentColor : mutedColor,
-                opacity: index === currentSlide ? 1 : 0.3,
-              }}
-              className={`${index === currentSlide ? 'w-8' : 'w-2'} h-2 rounded-full`}
-            />
-          ))}
-        </View>
+        <AtomPaginationDots
+          total={WELCOME_SLIDES.length}
+          currentIndex={currentSlide}
+          activeColor={accentColor}
+          inactiveColor={mutedColor}
+          keys={WELCOME_SLIDES.map((slide) => slide.title)}
+        />
 
         {/* Next/Finish Button */}
         <Button
