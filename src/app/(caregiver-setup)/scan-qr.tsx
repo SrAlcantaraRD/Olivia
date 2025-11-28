@@ -21,7 +21,7 @@ export default function ScanQRScreen() {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <TypographyTitle>ScanQRScreen</TypographyTitle>
         <ButtonAtom
-          title="Next"
+          title="next"
           onPress={() => router.push('/(caregiver-setup)/confirm-link')}
         />
       </View>

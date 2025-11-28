@@ -21,7 +21,7 @@ export default function CaregiverConfirmLinkScreen() {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <TypographyTitle>CaregiverConfirmLinkScreen</TypographyTitle>
         <ButtonAtom
-          title="Finish"
+          title="welcome"
           onPress={() => router.replace('/(app)/(tabs)/dashboard')}
         />
       </View>
