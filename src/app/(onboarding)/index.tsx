@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Button, useThemeColor } from 'heroui-native';
+import { useThemeColor } from 'heroui-native';
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Pressable, View } from 'react-native';
 
+import { AtomCircularProgressButton } from '@/ui/components/atoms/circular-progress-button.atom';
 import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
 import { AtomPaginationDots } from '@/ui/components/atoms/pagination-dots.atom';
 import {
@@ -244,15 +245,14 @@ export default function OnboardingIndex() {
         />
 
         {/* Next/Finish Button */}
-        <Button
-          variant="primary"
-          size="lg"
+        <AtomCircularProgressButton
           onPress={handleNext}
-          className="rounded-full"
-          isIconOnly
-        >
-          <Ionicons name="chevron-forward" size={24} color="white" />
-        </Button>
+          progress={(currentSlide + 1) / WELCOME_SLIDES.length}
+          backgroundColor={accentColor}
+          progressColor={accentColor}
+          size={84}
+          iconSize={36}
+        />
       </View>
     </View>
   );
