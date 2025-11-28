@@ -21,7 +21,7 @@ export default function ModuleSelectionScreen() {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <TypographyTitle>ModuleSelectionScreen</TypographyTitle>
         <ButtonAtom
-          title="Next"
+          title="next"
           onPress={() => router.push('/(parent-setup)/summary')}
         />
       </View>

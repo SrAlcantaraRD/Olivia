@@ -21,7 +21,7 @@ export default function ParentInfoScreen() {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <TypographyTitle>ParentInfoScreen</TypographyTitle>
         <ButtonAtom
-          title="Next"
+          title="next"
           onPress={() => router.push('/(parent-setup)/child-info')}
         />
       </View>

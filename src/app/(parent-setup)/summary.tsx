@@ -21,7 +21,7 @@ export default function SummaryConfirmationScreen() {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <TypographyTitle>SummaryConfirmationScreen</TypographyTitle>
         <ButtonAtom
-          title="Finish"
+          title="welcome"
           onPress={() => router.replace('/(app)/(tabs)/dashboard')}
         />
       </View>
