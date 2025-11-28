@@ -47,3 +47,5 @@ export const SwitchContent = () => {
     </Surface>
   );
 };
+
+export default SwitchContent;

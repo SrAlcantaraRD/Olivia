@@ -57,3 +57,5 @@ export const DialogContent = () => {
     </Dialog>
   );
 };
+
+export default DialogContent;

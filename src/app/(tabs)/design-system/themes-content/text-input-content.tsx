@@ -102,3 +102,5 @@ export const TextInputContent = () => {
     </View>
   );
 };
+
+export default TextInputContent;

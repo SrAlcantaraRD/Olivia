@@ -27,3 +27,5 @@ export const DialogBlurBackdrop = () => {
     />
   );
 };
+
+export default DialogBlurBackdrop;

@@ -45,3 +45,5 @@ export const RadioGroupContent = () => {
     </Surface>
   );
 };
+
+export default RadioGroupContent;

@@ -52,3 +52,5 @@ export const CheckboxContent = () => {
     </View>
   );
 };
+
+export default CheckboxContent;

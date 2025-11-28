@@ -89,3 +89,5 @@ export const CardContent = () => {
     </View>
   );
 };
+
+export default CardContent;

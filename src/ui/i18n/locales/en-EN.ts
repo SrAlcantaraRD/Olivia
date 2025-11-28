@@ -1,5 +1,10 @@
 export const enEN = {
   welcome: 'Welcome',
+  next: 'Next',
+  parent: 'Parent',
+  caregiver: 'Caregiver',
+  finish: 'Finish',
+  'start-onboarding': 'Start onboarding',
   'add-register': 'Add Register',
 };
 
