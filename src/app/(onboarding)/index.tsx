@@ -134,7 +134,7 @@ export default function OnboardingIndex() {
   };
 
   return (
-    <View style={{ backgroundColor, flex: 1 }} className="flex-1">
+    <View style={{ backgroundColor }} className="flex-1 pt-4">
       {/* Header */}
       <View className="flex-row items-center justify-between px-6 pt-12 pb-4">
         {isFirstSlide ? (
