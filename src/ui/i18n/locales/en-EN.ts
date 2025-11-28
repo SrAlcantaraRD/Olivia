@@ -29,6 +29,17 @@ export const enEN = {
     'Your data, under your control.',
   'onboarding-screen.slider.data-control.description':
     'Everything stays on your phone. No cloud. No accounts.\nYou decide who to share with.',
+  // Role Selection Screen
+  'role-selection-screen.title': '¿Cómo quieres empezar?',
+  'role-selection-screen.description': 'Elige tu rol para configurar la app.',
+  'role-selection-screen.parent.title': 'Progenitor / Tutor',
+  'role-selection-screen.parent.subtitle': 'Cuidador principal',
+  'role-selection-screen.parent.description':
+    'Registra y gestiona rutinas y cateterismos para tus hijos.',
+  'role-selection-screen.caregiver.title': 'Cuidador / Profesional',
+  'role-selection-screen.caregiver.subtitle': 'Apoyo o profesional sanitario',
+  'role-selection-screen.caregiver.description':
+    'Conecta con familias y registra intervenciones.',
 };
 
 type RecursiveKeyOf<TObj extends object> = {

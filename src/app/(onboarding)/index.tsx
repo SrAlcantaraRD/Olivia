@@ -114,12 +114,12 @@ export default function OnboardingIndex() {
   }, [currentSlide, fadeAnim, slideAnim]);
 
   const handleSkip = () => {
-    router.push('/select-role');
+    router.push('/(onboarding)/role-selection');
   };
 
   const handleNext = () => {
     if (isLastSlide) {
-      router.push('/select-role');
+      router.push('/(onboarding)/role-selection');
     } else {
       setCurrentSlide((prev) => prev + 1);
     }

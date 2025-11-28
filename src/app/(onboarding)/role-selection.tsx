@@ -1,9 +1,194 @@
-import { Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useThemeColor } from 'heroui-native';
+import { useState } from 'react';
+import { Pressable, View } from 'react-native';
+
+import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
+import {
+  TypographyParagraph,
+  TypographyTitle,
+} from '@/ui/components/atoms/typography.atom';
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
+
+type Role = 'parent' | 'caregiver' | null;
+
+interface RoleCardProps {
+  icon: keyof typeof Ionicons.glyphMap;
+  titleKey: Ti18nKeys;
+  subtitleKey: Ti18nKeys;
+  descriptionKey: Ti18nKeys;
+  isSelected: boolean;
+  onSelect: () => void;
+  accentColor: string;
+  foregroundColor: string;
+  mutedColor: string;
+  cardBgColor: string;
+}
+
+function RoleCard({
+  icon,
+  titleKey,
+  subtitleKey,
+  descriptionKey,
+  isSelected,
+  onSelect,
+  accentColor,
+  foregroundColor,
+  mutedColor,
+  cardBgColor,
+}: RoleCardProps) {
+  return (
+    <Pressable
+      onPress={onSelect}
+      style={{
+        backgroundColor: cardBgColor,
+        borderWidth: 2,
+        borderColor: isSelected ? accentColor : 'transparent',
+      }}
+      className="rounded-3xl p-6 mb-4"
+    >
+      <View className="flex-row items-start gap-4">
+        {/* Icon */}
+        <View
+          style={{ backgroundColor: accentColor }}
+          className="rounded-2xl p-4 w-16 h-16 items-center justify-center"
+        >
+          <Ionicons name={icon} size={32} color="white" />
+        </View>
+
+        {/* Content */}
+        <View className="flex-1">
+          <TypographyTitle
+            style={{ color: foregroundColor }}
+            className="mb-1"
+            size="lg"
+            i18nKey={titleKey}
+          />
+          <TypographyParagraph
+            style={{ color: accentColor }}
+            className="mb-2"
+            size="sm"
+            weight="medium"
+            i18nKey={subtitleKey}
+          />
+          <TypographyParagraph
+            style={{ color: mutedColor }}
+            size="sm"
+            i18nKey={descriptionKey}
+          />
+        </View>
+
+        {/* Selection indicator */}
+        <View
+          style={{
+            borderWidth: 2,
+            borderColor: isSelected ? accentColor : mutedColor,
+            backgroundColor: isSelected ? accentColor : 'transparent',
+          }}
+          className="w-6 h-6 rounded-full items-center justify-center"
+        >
+          {isSelected && <Ionicons name="checkmark" size={16} color="white" />}
+        </View>
+      </View>
+    </Pressable>
+  );
+}
 
 export default function RoleSelectionScreen() {
+  const router = useRouter();
+  const [selectedRole, setSelectedRole] = useState<Role>(null);
+
+  const backgroundColor = useThemeColor('background');
+  const foregroundColor = useThemeColor('foreground');
+  const mutedColor = useThemeColor('muted');
+  const accentColor = useThemeColor('accent');
+  const cardBgColor = useThemeColor('surface');
+
+  const handleContinue = () => {
+    if (selectedRole === 'parent') {
+      router.push('/(parent-setup)/parent-info');
+    } else if (selectedRole === 'caregiver') {
+      router.push('/(caregiver-setup)/scan-qr');
+    }
+  };
+
   return (
-    <View>
-      <Text>Role Selection Screen</Text>
+    <View style={{ backgroundColor }} className="flex-1">
+      {/* Header */}
+      <View className="flex-row items-center justify-between px-6 pt-12 pb-4">
+        <Pressable onPress={() => router.back()}>
+          <Ionicons name="chevron-back" size={24} color={foregroundColor} />
+        </Pressable>
+        <AtomLogoSVG width={40} height={40} />
+        <View className="w-8" />
+      </View>
+
+      {/* Content */}
+      <View className="flex-1 px-6">
+        {/* Title */}
+        <View className="mb-8">
+          <TypographyTitle
+            style={{ color: foregroundColor }}
+            className="mb-2 text-center"
+            i18nKey="role-selection-screen.title"
+          />
+          <TypographyParagraph
+            style={{ color: mutedColor }}
+            className="text-center"
+            i18nKey="role-selection-screen.description"
+          />
+        </View>
+
+        {/* Role Cards */}
+        <View className="mb-8">
+          <RoleCard
+            icon="heart"
+            titleKey="role-selection-screen.parent.title"
+            subtitleKey="role-selection-screen.parent.subtitle"
+            descriptionKey="role-selection-screen.parent.description"
+            isSelected={selectedRole === 'parent'}
+            onSelect={() => setSelectedRole('parent')}
+            accentColor={accentColor}
+            foregroundColor={foregroundColor}
+            mutedColor={mutedColor}
+            cardBgColor={cardBgColor}
+          />
+
+          <RoleCard
+            icon="people"
+            titleKey="role-selection-screen.caregiver.title"
+            subtitleKey="role-selection-screen.caregiver.subtitle"
+            descriptionKey="role-selection-screen.caregiver.description"
+            isSelected={selectedRole === 'caregiver'}
+            onSelect={() => setSelectedRole('caregiver')}
+            accentColor={accentColor}
+            foregroundColor={foregroundColor}
+            mutedColor={mutedColor}
+            cardBgColor={cardBgColor}
+          />
+        </View>
+      </View>
+
+      {/* Footer */}
+      <View className="px-6 pb-12">
+        <Pressable
+          onPress={handleContinue}
+          disabled={!selectedRole}
+          style={{
+            backgroundColor: selectedRole ? accentColor : mutedColor,
+            opacity: selectedRole ? 1 : 0.5,
+          }}
+          className="rounded-full py-4 items-center"
+        >
+          <TypographyParagraph
+            style={{ color: 'white' }}
+            weight="semibold"
+            size="lg"
+            i18nKey="continue"
+          />
+        </Pressable>
+      </View>
     </View>
   );
 }
