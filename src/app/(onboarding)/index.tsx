@@ -4,8 +4,14 @@ import { useThemeColor } from 'heroui-native';
 import { useState } from 'react';
 import { View } from 'react-native';
 
-import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
-import { FormWizard } from '@/ui/components/molecules/form-wizard.molecule';
+import {
+  TypographyParagraph,
+  TypographySubtitle,
+} from '@/ui/components/atoms/typography.atom';
+import {
+  Wizard,
+  type WizardStep,
+} from '@/ui/components/molecules/wizard.molecule';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface WelcomeSlide {
@@ -70,6 +76,7 @@ const WELCOME_SLIDES: WelcomeSlide[] = [
 ];
 
 function WelcomeSlideContent({ slide }: { slide: WelcomeSlide }) {
+  const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
   const accentColor = useThemeColor('accent');
 
@@ -98,6 +105,13 @@ function WelcomeSlideContent({ slide }: { slide: WelcomeSlide }) {
           )}
         </View>
       </View>
+
+      {/* Title */}
+      <TypographySubtitle
+        style={{ color: foregroundColor }}
+        className={`text-center ${slide.bulletPoints ? 'mb-6' : 'mb-4'}`}
+        i18nKey={slide.title}
+      />
 
       {/* Description or Bullet Points */}
       {slide.description && (
@@ -148,21 +162,21 @@ export default function OnboardingIndex() {
     }
   };
 
-  const steps = WELCOME_SLIDES.map((slide) => ({
+  const steps: WizardStep[] = WELCOME_SLIDES.map((slide) => ({
     id: slide.title,
-    titleKey: slide.title,
-    descriptionKey: undefined, // Description dentro del contenido
     content: <WelcomeSlideContent slide={slide} />,
     isValid: true, // Siempre válido en onboarding
   }));
 
   return (
-    <FormWizard
+    <Wizard
       steps={steps}
       currentStepIndex={currentSlide}
       onNext={handleNext}
       onBack={handleBack}
+      onSkip={() => router.push('/(onboarding)/role-selection')}
       showBackButton={true}
+      showSkipButton={currentSlide < WELCOME_SLIDES.length - 1}
       showLogo={true}
       showProgress={true}
     />

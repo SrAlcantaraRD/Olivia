@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import {
   FormWizard,
   type FormWizardStep,
-} from '@/ui/components/molecules/form-wizard.molecule';
+} from '@/ui/components/organisms/form-wizard.organism';
 import { useParentSetupForm } from './hooks/use-parent-setup-form.hook';
 import { ChildInfoStep } from './steps/child-info-step.component';
 import { ModulesStep } from './steps/modules-step.component';
