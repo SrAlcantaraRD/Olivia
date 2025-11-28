@@ -1,6 +1,7 @@
 import { useThemeColor } from 'heroui-native';
-import { TextInput, View } from 'react-native';
+import { View } from 'react-native';
 
+import { TextFieldAtom } from '@/ui/components/atoms/text-field.atom';
 import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
 import { RelationshipCard } from '../components/relationship-card.component';
 import type { Relationship } from '../types';
@@ -22,30 +23,17 @@ export function ParentInfoStep({
   const mutedColor = useThemeColor('muted');
   const accentColor = useThemeColor('accent');
   const cardBgColor = useThemeColor('surface');
-  const inputBgColor = useThemeColor('background-secondary');
 
   return (
     <>
       {/* Name Input */}
       <View className="mb-6">
-        <TypographyParagraph
-          style={{ color: foregroundColor }}
-          className="mb-2"
-          weight="medium"
-          i18nKey="parent-setup.parent-info.name-label"
-        />
-        <TextInput
+        <TextFieldAtom
+          label="parent-setup.parent-info.name-label"
+          placeholder="parent-setup.parent-info.name-placeholder"
+          isRequired
           value={name}
           onChangeText={onNameChange}
-          placeholder="Tu nombre"
-          placeholderTextColor={mutedColor}
-          style={{
-            backgroundColor: inputBgColor,
-            color: foregroundColor,
-            borderWidth: 1,
-            borderColor: mutedColor,
-          }}
-          className="rounded-2xl px-4 py-3 text-base"
         />
       </View>
 

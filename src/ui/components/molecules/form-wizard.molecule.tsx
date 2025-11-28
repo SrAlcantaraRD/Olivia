@@ -5,6 +5,7 @@ import { useThemeColor } from 'heroui-native';
 import type { ReactNode } from 'react';
 import { Pressable, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 
 import { AtomCircularProgressButton } from '@/ui/components/atoms/circular-progress-button.atom';
 import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
@@ -95,7 +96,12 @@ export function FormWizard({
         showsVerticalScrollIndicator={false}
       >
         {/* Title and Description */}
-        <View className="mb-8">
+        <Animated.View
+          key={`header-${currentStepIndex}`}
+          entering={FadeInRight.duration(250)}
+          exiting={FadeOutLeft.duration(200)}
+          className="mb-8"
+        >
           <TypographyTitle
             style={{ color: foregroundColor }}
             className="mb-2"
@@ -107,10 +113,16 @@ export function FormWizard({
               i18nKey={currentStep.descriptionKey}
             />
           )}
-        </View>
+        </Animated.View>
 
         {/* Step Content */}
-        {currentStep.content}
+        <Animated.View
+          key={`content-${currentStepIndex}`}
+          entering={FadeInRight.duration(250)}
+          exiting={FadeOutLeft.duration(200)}
+        >
+          {currentStep.content}
+        </Animated.View>
       </KeyboardAwareScrollView>
 
       {/* Footer with Pagination and Next Button */}

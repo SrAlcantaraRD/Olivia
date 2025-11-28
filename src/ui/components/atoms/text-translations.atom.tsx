@@ -22,7 +22,8 @@ interface IProps {
   values?: ITextTranslationEntity;
 }
 
-export function TextTranslation({ i18nKey, values }: IProps) {
+export function TextTranslation({ i18nKey, values }: IProps): string {
   const { t } = useTranslation();
-  return <>{t(i18nKey, values)}</>;
+
+  return t(i18nKey, values);
 }

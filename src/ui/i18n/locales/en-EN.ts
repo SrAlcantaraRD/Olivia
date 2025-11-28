@@ -45,6 +45,7 @@ export const enEN = {
   'parent-setup.parent-info.description':
     'Datos básicos del cuidador principal.',
   'parent-setup.parent-info.name-label': 'Nombre:',
+  'parent-setup.parent-info.name-placeholder': 'Tu nombre',
   'parent-setup.parent-info.relationship-label': 'Relación:',
   'parent-setup.parent-info.parent': 'Padre / Madre',
   'parent-setup.parent-info.guardian': 'Tutor',
@@ -52,8 +53,11 @@ export const enEN = {
   'parent-setup.child-info.description':
     'Datos básicos del menor para identificarlo.',
   'parent-setup.child-info.name-label': 'Nombre:',
+  'parent-setup.child-info.name-placeholder': 'Nombre del niño/a',
   'parent-setup.child-info.birth-date-label': 'Fecha de nacimiento:',
+  'parent-setup.child-info.birth-date-placeholder': 'DD / MM / AAAA',
   'parent-setup.child-info.diagnosis-label': 'Diagnóstico:',
+  'parent-setup.child-info.diagnosis-placeholder': 'Diagnóstico médico',
   'parent-setup.modules.title': '¿Qué módulos necesitas?',
   'parent-setup.modules.description':
     'Activa los módulos que vas a utilizar. Puedes modificarlos después en el perfil del menor.',
