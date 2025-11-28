@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
+import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
 import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
 
 interface RelationshipCardProps {
@@ -25,15 +26,14 @@ export function RelationshipCard({
   cardBgColor,
 }: RelationshipCardProps) {
   return (
-    <Pressable
-      onPress={onSelect}
-      style={{
-        backgroundColor: cardBgColor,
-        borderWidth: 2,
-        borderColor: isSelected ? accentColor : 'transparent',
-        flex: 1,
-      }}
-      className="rounded-3xl p-4 items-center"
+    <SelectableCard
+      isSelected={isSelected}
+      onSelect={onSelect}
+      accentColor={accentColor}
+      mutedColor={mutedColor}
+      cardBgColor={cardBgColor}
+      className="p-4 items-center"
+      flex
     >
       <View
         style={{ backgroundColor: accentColor }}
@@ -49,18 +49,6 @@ export function RelationshipCard({
       >
         {label}
       </TypographyParagraph>
-
-      <View
-        style={{
-          borderWidth: 2,
-          borderColor: isSelected ? accentColor : mutedColor,
-          backgroundColor: isSelected ? accentColor : 'transparent',
-          marginTop: 8,
-        }}
-        className="w-6 h-6 rounded-full items-center justify-center"
-      >
-        {isSelected && <Ionicons name="checkmark" size={16} color="white" />}
-      </View>
-    </Pressable>
+    </SelectableCard>
   );
 }

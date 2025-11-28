@@ -9,91 +9,9 @@ import {
   TypographyParagraph,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
-import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
+import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
 
 type Role = 'parent' | 'caregiver' | null;
-
-interface RoleCardProps {
-  icon: keyof typeof Ionicons.glyphMap;
-  titleKey: Ti18nKeys;
-  subtitleKey: Ti18nKeys;
-  descriptionKey: Ti18nKeys;
-  isSelected: boolean;
-  onSelect: () => void;
-  accentColor: string;
-  foregroundColor: string;
-  mutedColor: string;
-  cardBgColor: string;
-}
-
-function RoleCard({
-  icon,
-  titleKey,
-  subtitleKey,
-  descriptionKey,
-  isSelected,
-  onSelect,
-  accentColor,
-  foregroundColor,
-  mutedColor,
-  cardBgColor,
-}: RoleCardProps) {
-  return (
-    <Pressable
-      onPress={onSelect}
-      style={{
-        backgroundColor: cardBgColor,
-        borderWidth: 2,
-        borderColor: isSelected ? accentColor : 'transparent',
-      }}
-      className="rounded-3xl p-6 mb-4"
-    >
-      <View className="flex-row items-start gap-4">
-        {/* Icon */}
-        <View
-          style={{ backgroundColor: accentColor }}
-          className="rounded-2xl p-4 w-16 h-16 items-center justify-center"
-        >
-          <Ionicons name={icon} size={32} color="white" />
-        </View>
-
-        {/* Content */}
-        <View className="flex-1">
-          <TypographyTitle
-            style={{ color: foregroundColor }}
-            className="mb-1"
-            size="lg"
-            i18nKey={titleKey}
-          />
-          <TypographyParagraph
-            style={{ color: accentColor }}
-            className="mb-2"
-            size="sm"
-            weight="medium"
-            i18nKey={subtitleKey}
-          />
-          <TypographyParagraph
-            style={{ color: mutedColor }}
-            size="sm"
-            i18nKey={descriptionKey}
-          />
-        </View>
-
-        {/* Selection indicator */}
-        <View
-          style={{
-            borderWidth: 2,
-            borderColor: isSelected ? accentColor : mutedColor,
-            backgroundColor: isSelected ? accentColor : 'transparent',
-          }}
-          className="w-6 h-6 rounded-full items-center justify-center"
-        >
-          {isSelected && <Ionicons name="checkmark" size={16} color="white" />}
-        </View>
-      </View>
-    </Pressable>
-  );
-}
 
 export default function RoleSelectionScreen() {
   const router = useRouter();
@@ -103,7 +21,6 @@ export default function RoleSelectionScreen() {
   const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
   const accentColor = useThemeColor('accent');
-  const cardBgColor = useThemeColor('surface');
 
   const handleContinue = () => {
     if (selectedRole === 'parent') {
@@ -142,30 +59,24 @@ export default function RoleSelectionScreen() {
 
         {/* Role Cards */}
         <View className="mb-8">
-          <RoleCard
+          <CardWithDetails
             icon="heart"
             titleKey="role-selection-screen.parent.title"
             subtitleKey="role-selection-screen.parent.subtitle"
             descriptionKey="role-selection-screen.parent.description"
             isSelected={selectedRole === 'parent'}
             onSelect={() => setSelectedRole('parent')}
-            accentColor={accentColor}
-            foregroundColor={foregroundColor}
-            mutedColor={mutedColor}
-            cardBgColor={cardBgColor}
+            className="p-6 mb-4"
           />
 
-          <RoleCard
+          <CardWithDetails
             icon="people"
             titleKey="role-selection-screen.caregiver.title"
             subtitleKey="role-selection-screen.caregiver.subtitle"
             descriptionKey="role-selection-screen.caregiver.description"
             isSelected={selectedRole === 'caregiver'}
             onSelect={() => setSelectedRole('caregiver')}
-            accentColor={accentColor}
-            foregroundColor={foregroundColor}
-            mutedColor={mutedColor}
-            cardBgColor={cardBgColor}
+            className="p-6 mb-4"
           />
         </View>
       </View>

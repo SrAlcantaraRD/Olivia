@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { TextFieldAtom } from '@/ui/components/atoms/text-field.atom';
 import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
-import { RelationshipCard } from '../components/relationship-card.component';
+import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
 import type { Relationship } from '../types';
 
 interface ParentInfoStepProps {
@@ -20,9 +20,6 @@ export function ParentInfoStep({
   onRelationshipChange,
 }: ParentInfoStepProps) {
   const foregroundColor = useThemeColor('foreground');
-  const mutedColor = useThemeColor('muted');
-  const accentColor = useThemeColor('accent');
-  const cardBgColor = useThemeColor('surface');
 
   return (
     <>
@@ -45,26 +42,22 @@ export function ParentInfoStep({
           weight="medium"
           i18nKey="parent-setup.parent-info.relationship-label"
         />
-        <View className="flex-row gap-4">
-          <RelationshipCard
+        <View className="flex-col gap-4">
+          <CardWithDetails
             icon="heart"
-            label="Padre / Madre"
+            titleKey="parent-setup.parent-info.parent"
             isSelected={relationship === 'parent'}
             onSelect={() => onRelationshipChange('parent')}
-            accentColor={accentColor}
-            foregroundColor={foregroundColor}
-            mutedColor={mutedColor}
-            cardBgColor={cardBgColor}
+            variant="compact"
+            flex
           />
-          <RelationshipCard
+          <CardWithDetails
             icon="shield"
-            label="Tutor"
+            titleKey="parent-setup.parent-info.guardian"
             isSelected={relationship === 'guardian'}
             onSelect={() => onRelationshipChange('guardian')}
-            accentColor={accentColor}
-            foregroundColor={foregroundColor}
-            mutedColor={mutedColor}
-            cardBgColor={cardBgColor}
+            variant="compact"
+            flex
           />
         </View>
       </View>

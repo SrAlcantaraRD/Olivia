@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
+import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
 import {
   TypographyParagraph,
   TypographyTitle,
@@ -31,27 +32,17 @@ export function ModuleCard({
   cardBgColor,
 }: ModuleCardProps) {
   return (
-    <Pressable
-      onPress={onToggle}
-      style={{
-        backgroundColor: cardBgColor,
-        borderWidth: 2,
-        borderColor: isSelected ? accentColor : 'transparent',
-      }}
-      className="rounded-3xl p-4 mb-4"
+    <SelectableCard
+      isSelected={isSelected}
+      onSelect={onToggle}
+      accentColor={accentColor}
+      mutedColor={mutedColor}
+      cardBgColor={cardBgColor}
+      className="p-4 mb-4"
+      indicatorPosition="top-left"
+      indicatorShape="rounded"
     >
-      <View className="flex-row items-start gap-4">
-        <View
-          style={{
-            borderWidth: 2,
-            borderColor: isSelected ? accentColor : mutedColor,
-            backgroundColor: isSelected ? accentColor : 'transparent',
-          }}
-          className="w-6 h-6 rounded items-center justify-center mt-1"
-        >
-          {isSelected && <Ionicons name="checkmark" size={16} color="white" />}
-        </View>
-
+      <View className="flex-row items-start gap-4 pl-8">
         <View
           style={{ backgroundColor: accentColor }}
           className="rounded-2xl p-3 w-12 h-12 items-center justify-center"
@@ -73,6 +64,6 @@ export function ModuleCard({
           />
         </View>
       </View>
-    </Pressable>
+    </SelectableCard>
   );
 }
