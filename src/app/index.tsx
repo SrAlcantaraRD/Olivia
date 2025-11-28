@@ -1,23 +1,47 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useThemeColor } from 'heroui-native';
-import { useEffect } from 'react';
-import { Image, Text, View } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { Animated, Pressable, View } from 'react-native';
+
+import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
+import {
+  TypographyHeading,
+  TypographyParagraph,
+  TypographySmall,
+} from '@/ui/components/atoms/typography.atom';
 
 export default function SplashScreen() {
   const router = useRouter();
   const backgroundColor = useThemeColor('background');
   const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
+  const accentColor = useThemeColor('accent');
+
+  // Animation for the continue button
+  const bounceAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Auto-navigate to onboarding after 2.5 seconds
-    const timer = setTimeout(() => {
-      router.push('/(onboarding)');
-    }, 2500);
+    // Bounce animation loop
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(bounceAnim, {
+          toValue: -15,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+        Animated.timing(bounceAnim, {
+          toValue: 0,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, [bounceAnim]);
 
-    return () => clearTimeout(timer);
-  }, [router]);
+  const handleContinue = () => {
+    router.push('/(onboarding)');
+  };
 
   return (
     <View
@@ -26,25 +50,50 @@ export default function SplashScreen() {
     >
       {/* Logo Section */}
       <View className="items-center mb-16">
-        <View className="bg-[#9B9FC5] rounded-4xl p-12 mb-8 items-center justify-center w-48 h-48">
-          <Image
-            source={require('@/assets/splash-icon.png')}
-            style={{ width: 80, height: 80 }}
-            resizeMode="contain"
-          />
+        <View
+          style={{ backgroundColor: accentColor }}
+          className="rounded-4xl p-12 mb-8 items-center justify-center w-48 h-48"
+        >
+          <AtomLogoSVG width={80} height={80} />
         </View>
 
-        <Text
+        <TypographyHeading
           style={{ color: foregroundColor }}
-          className="text-4xl font-bold mb-2"
-        >
-          Oliva
-        </Text>
+          className="mb-2"
+          size="4xl"
+          i18nKey="splash-screen.app-name"
+        />
 
-        <Text style={{ color: mutedColor }} className="text-lg text-center">
-          Cuidar. Registrar. Respirar.
-        </Text>
+        <TypographyParagraph
+          style={{ color: mutedColor }}
+          className="text-center"
+          i18nKey="splash-screen.tagline"
+        />
       </View>
+
+      {/* Continue Button */}
+      <Pressable
+        onPress={handleContinue}
+        className="absolute bottom-32 items-center"
+      >
+        <Animated.View
+          style={{
+            transform: [{ translateY: bounceAnim }],
+          }}
+          className="mb-3"
+        >
+          <View
+            style={{ backgroundColor: accentColor }}
+            className="rounded-full p-4 w-16 h-16 items-center justify-center"
+          >
+            <AtomLogoSVG width={40} height={40} />
+          </View>
+        </Animated.View>
+        <TypographyParagraph
+          style={{ color: foregroundColor }}
+          i18nKey="continue"
+        />
+      </Pressable>
 
       {/* Privacy Notice */}
       <View className="absolute bottom-12 items-center flex-row gap-2 px-6">
@@ -53,9 +102,11 @@ export default function SplashScreen() {
           size={20}
           color={mutedColor}
         />
-        <Text style={{ color: mutedColor }} className="text-sm text-center">
-          Tus datos se guardan solo en tu móvil
-        </Text>
+        <TypographySmall
+          style={{ color: mutedColor }}
+          className="text-center"
+          i18nKey="splash-screen.privacy-notice"
+        />
       </View>
     </View>
   );

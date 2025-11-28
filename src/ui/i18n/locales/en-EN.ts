@@ -5,8 +5,13 @@ export const enEN = {
   caregiver: 'Caregiver',
   finish: 'Finish',
   skip: 'Skip',
+  continue: 'Continue',
   'start-onboarding': 'Start onboarding',
   'add-register': 'Add Register',
+  // Splash Screen
+  'splash-screen.app-name': 'Oliva',
+  'splash-screen.tagline': 'Cuidar. Registrar. Respirar.',
+  'splash-screen.privacy-notice': 'Tus datos se guardan solo en tu móvil',
   // Onboarding
   'onboarding-screen.slider.care-with-peace.title':
     'We help you care with peace of mind.',
