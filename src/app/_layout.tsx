@@ -60,6 +60,7 @@ function RootNavigator() {
   return (
     <Stack
       screenOptions={{
+        headerShown: false,
         headerTitleAlign: 'center',
         headerTransparent: true,
         headerBlurEffect: isDark ? 'dark' : 'light',

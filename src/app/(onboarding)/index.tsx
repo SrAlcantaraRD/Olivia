@@ -1,9 +1,5 @@
-import { Text, View } from 'react-native';
+import { Redirect } from 'expo-router';
 
-export default function SettingsScreen() {
-  return (
-    <View>
-      <Text>Settings Screen</Text>
-    </View>
-  );
+export default function OnboardingIndex() {
+  return <Redirect href="/(onboarding)/welcome-1" />;
 }

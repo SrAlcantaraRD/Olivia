@@ -14,7 +14,8 @@
       "!build",
       "!dist",
       "!.vscode",
-      "!coverage"
+      "!coverage",
+      "!uniwind.d.ts"
     ]
   },
   "formatter": {
