@@ -23,6 +23,7 @@ export function AtomPaginationDots({
         <PaginationDot
           key={keys?.[index] ?? `dot-${index}`}
           isActive={index === currentIndex}
+          isPassed={index < currentIndex}
           activeColor={activeColor}
           inactiveColor={inactiveColor}
         />
@@ -33,39 +34,50 @@ export function AtomPaginationDots({
 
 interface PaginationDotProps {
   isActive: boolean;
+  isPassed: boolean;
   activeColor: string;
   inactiveColor: string;
 }
 
 function PaginationDot({
   isActive,
+  isPassed,
   activeColor,
   inactiveColor,
 }: PaginationDotProps) {
-  const widthAnim = useRef(new Animated.Value(isActive ? 32 : 8)).current;
-  const opacityAnim = useRef(new Animated.Value(isActive ? 1 : 0.3)).current;
-  const colorAnim = useRef(new Animated.Value(isActive ? 1 : 0)).current;
+  const widthAnim = useRef(new Animated.Value(isActive ? 72 : 24)).current;
+  const heightAnim = useRef(new Animated.Value(isActive ? 24 : 24)).current;
+  const opacityAnim = useRef(new Animated.Value(isActive ? 1 : 0.4)).current;
+  const colorAnim = useRef(
+    new Animated.Value(isActive || isPassed ? 1 : 0)
+  ).current;
 
   useEffect(() => {
     Animated.parallel([
       Animated.spring(widthAnim, {
-        toValue: isActive ? 32 : 8,
+        toValue: isActive ? 84 : 36,
+        useNativeDriver: false,
+        tension: 50,
+        friction: 7,
+      }),
+      Animated.spring(heightAnim, {
+        toValue: 8,
         useNativeDriver: false,
         tension: 50,
         friction: 7,
       }),
       Animated.timing(opacityAnim, {
-        toValue: isActive ? 1 : 0.3,
+        toValue: isActive || isPassed ? 1 : 0.4,
         duration: 300,
         useNativeDriver: false,
       }),
       Animated.timing(colorAnim, {
-        toValue: isActive ? 1 : 0,
+        toValue: isActive || isPassed ? 1 : 0,
         duration: 300,
         useNativeDriver: false,
       }),
     ]).start();
-  }, [isActive, widthAnim, opacityAnim, colorAnim]);
+  }, [isActive, isPassed, widthAnim, heightAnim, opacityAnim, colorAnim]);
 
   const backgroundColor = colorAnim.interpolate({
     inputRange: [0, 1],
@@ -76,7 +88,7 @@ function PaginationDot({
     <Animated.View
       style={{
         width: widthAnim,
-        height: 8,
+        height: heightAnim,
         borderRadius: 9999,
         backgroundColor,
         opacity: opacityAnim,
