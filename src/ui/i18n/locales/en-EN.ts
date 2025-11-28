@@ -40,6 +40,41 @@ export const enEN = {
   'role-selection-screen.caregiver.subtitle': 'Apoyo o profesional sanitario',
   'role-selection-screen.caregiver.description':
     'Conecta con familias y registra intervenciones.',
+  // Parent Setup
+  'parent-setup.parent-info.title': 'Sobre ti',
+  'parent-setup.parent-info.description':
+    'Datos básicos del cuidador principal.',
+  'parent-setup.parent-info.name-label': 'Nombre:',
+  'parent-setup.parent-info.relationship-label': 'Relación:',
+  'parent-setup.child-info.title': 'Sobre el niño',
+  'parent-setup.child-info.description':
+    'Datos básicos del menor para identificarlo.',
+  'parent-setup.child-info.name-label': 'Nombre:',
+  'parent-setup.child-info.birth-date-label': 'Fecha de nacimiento:',
+  'parent-setup.child-info.diagnosis-label': 'Diagnóstico:',
+  'parent-setup.modules.title': '¿Qué módulos necesitas?',
+  'parent-setup.modules.description':
+    'Activa los módulos que vas a utilizar. Puedes modificarlos después en el perfil del menor.',
+  'parent-setup.modules.catheterization.title': 'Cateterismos',
+  'parent-setup.modules.catheterization.description':
+    'Manejo de cateterismos y registros CIC.',
+  'parent-setup.modules.bowel-movements.title': 'Deposiciones',
+  'parent-setup.modules.bowel-movements.description':
+    'Registro de deposiciones y seguimiento.',
+  'parent-setup.modules.enemas.title': 'Enemas',
+  'parent-setup.modules.enemas.description':
+    'Opcional, según necesidades clínicas.',
+  'parent-setup.summary.title': 'Revisa tu información',
+  'parent-setup.summary.description':
+    'Confirma que todo es correcto antes de continuar',
+  'parent-setup.summary.parent-section': 'Información del Tutor',
+  'parent-setup.summary.parent-name': 'Nombre',
+  'parent-setup.summary.parent-relationship': 'Relación',
+  'parent-setup.summary.child-section': 'Información del Menor',
+  'parent-setup.summary.child-name': 'Nombre',
+  'parent-setup.summary.child-birth-date': 'Fecha de nacimiento',
+  'parent-setup.summary.child-diagnosis': 'Diagnóstico',
+  'parent-setup.summary.modules-section': 'Módulos Activados',
 };
 
 type RecursiveKeyOf<TObj extends object> = {

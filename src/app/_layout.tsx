@@ -62,7 +62,7 @@ function RootNavigator() {
       screenOptions={{
         headerShown: false,
         headerTitleAlign: 'center',
-        headerTransparent: true,
+        headerTransparent: false,
         headerBlurEffect: isDark ? 'dark' : 'light',
         headerTintColor: isDark ? '#FFFFFF' : '#000000',
         headerStyle: {
