@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import { ButtonAtom } from '@/ui/components/atoms/button.atom';
 import { TypographyTitle } from '@/ui/components/atoms/typography.atom';
-import ScreenScrollView from './_components/ScreenScrollView';
+import { ScreenScrollView } from '@/ui/components/screen-scroll-view.atom';
 
 export default function SelectRoleScreen() {
   const router = useRouter();
@@ -14,11 +14,11 @@ export default function SelectRoleScreen() {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <TypographyTitle>SelectRoleScreen</TypographyTitle>
         <ButtonAtom
-          title="Parent"
+          title="parent"
           onPress={() => router.push('/(parent-setup)/parent-info')}
         />
         <ButtonAtom
-          title="Caregiver"
+          title="caregiver"
           onPress={() => router.push('/(caregiver-setup)/scan-qr')}
         />
       </View>

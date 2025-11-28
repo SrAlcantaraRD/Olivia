@@ -24,7 +24,7 @@ export const ScreenScrollView: FC<PropsWithChildren<Props>> = ({
   return (
     <AnimatedScrollView
       className={cn('bg-background', className)}
-      contentContainerClassName={cn('px-5', contentContainerClassName)}
+      contentContainerClassName={cn('px-4', contentContainerClassName)}
       contentContainerStyle={{
         paddingTop: headerHeight,
         paddingBottom: insets.bottom + 32,

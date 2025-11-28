@@ -7,7 +7,7 @@ import {
 } from '@expo-google-fonts/inter';
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import * as SplashScreen from 'expo-splash-screen';
-import React, { Suspense, useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Image, Platform, StyleSheet } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
@@ -84,14 +84,9 @@ function RootNavigator() {
         },
       }}
     >
+      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="index" />
-      <Stack.Screen name="(onboarding)/welcome-1" />
-      <Stack.Screen name="select-role" />
-      <Stack.Screen name="(parent-setup)/parent-info" />
-      <Stack.Screen name="(caregiver-setup)/scan-qr" />
-      <Stack.Screen name="(app)/(tabs)/dashboard" />
-      <Stack.Screen name="(modals)/quick-record" />
+      <Stack.Screen name="(onboarding)" />
     </Stack>
   );
 }
