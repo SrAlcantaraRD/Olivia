@@ -53,6 +53,14 @@ Así pues, los diferentes artefactos con el cual se construye la aplicación son
 
 ### Back-end
 
+Para una descripción más detallada del dominio, las entidades y los casos de uso, consulta los siguientes documentos:
+
+- **[Diseño Orientado al Dominio (DDD)](./docs/domain-driven-design.md)**: Explica el lenguaje ubicuo, las entidades principales y los contextos delimitados de la aplicación.
+- **[Casos de Uso Principales](./docs/use-cases.md)**: Detalla los flujos de negocio más importantes y cómo se orquestan.
+- **[Modelo de Datos](./docs/data-model.md)**: Describe la estructura de la base de datos, las tablas y sus relaciones.
+
+### Backend
+
 No vamos a desarrollar una aplicación exclusiva de acceso a los datos, sino que vamos a trabajar directamente con la BBDD utilizando un ORM que facilite la iteración y evolución de la BBDD.
 
 ### Front-end
