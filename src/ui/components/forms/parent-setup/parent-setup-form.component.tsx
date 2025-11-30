@@ -1,9 +1,13 @@
 import { useRouter } from 'expo-router';
 
 import {
-  FormWizard,
-  type FormWizardStep,
-} from '@/ui/components/organisms/form-wizard.organism';
+  FormPage,
+  type FormPageStep,
+} from '@/ui/components/molecules/form-page.molecule';
+import {
+  Wizard,
+  type WizardStep,
+} from '@/ui/components/molecules/wizard.molecule';
 import { useParentSetupForm } from './hooks/use-parent-setup-form.hook';
 import { ChildInfoStep } from './steps/child-info-step.component';
 import { ModulesStep } from './steps/modules-step.component';
@@ -29,7 +33,7 @@ export function ParentSetupForm() {
     goToPreviousStep,
   } = useParentSetupForm();
 
-  const steps: FormWizardStep[] = [
+  const steps: FormPageStep[] = [
     {
       id: 'parent-info',
       titleKey: 'parent-setup.parent-info.title',
@@ -98,9 +102,16 @@ export function ParentSetupForm() {
     }
   };
 
+  // Transform FormPageSteps to WizardSteps using FormPage component
+  const wizardSteps: WizardStep[] = steps.map((step) => ({
+    id: step.id,
+    isValid: step.isValid,
+    content: <FormPage step={step} />,
+  }));
+
   return (
-    <FormWizard
-      steps={steps}
+    <Wizard
+      steps={wizardSteps}
       currentStepIndex={currentStep}
       onNext={handleNext}
       onBack={handleBack}

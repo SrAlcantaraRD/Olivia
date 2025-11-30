@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeColor } from 'heroui-native';
 import type { ReactNode } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 
 import { AtomCircularProgressButton } from '@/ui/components/atoms/circular-progress-button.atom';
@@ -24,8 +25,6 @@ interface WizardProps {
   onSkip?: () => void;
   showBackButton?: boolean;
   showSkipButton?: boolean;
-  showLogo?: boolean;
-  showProgress?: boolean;
 }
 
 export function Wizard({
@@ -37,8 +36,6 @@ export function Wizard({
   onSkip,
   showBackButton = true,
   showSkipButton = false,
-  showLogo = true,
-  showProgress = true,
 }: WizardProps) {
   const backgroundColor = useThemeColor('background');
   const foregroundColor = useThemeColor('foreground');
@@ -48,7 +45,6 @@ export function Wizard({
   const currentStep = steps[currentStepIndex] ?? steps[0];
   const totalSteps = totalStepsProp ?? steps.length;
   const progress = (currentStepIndex + 1) / totalSteps;
-  const isFirstSlide = currentStepIndex === 0;
 
   const handleNext = () => {
     if (currentStep?.isValid) {
@@ -68,15 +64,14 @@ export function Wizard({
     <View style={{ backgroundColor, flex: 1 }}>
       {/* Header */}
       <View className="flex-row items-center justify-between px-6 pt-12 pb-4">
-        {showBackButton && !isFirstSlide ? (
+        {showBackButton ? (
           <Pressable onPress={handleBack}>
             <Ionicons name="chevron-back" size={24} color={foregroundColor} />
           </Pressable>
         ) : (
           <View className="w-8" />
         )}
-        {showLogo && <AtomLogoSVG width={40} height={40} />}
-        {!showLogo && <View className="w-8" />}
+        <AtomLogoSVG width={40} height={40} />
         {showSkipButton && onSkip ? (
           <Pressable onPress={handleSkip}>
             <TypographySmall
@@ -91,12 +86,14 @@ export function Wizard({
       </View>
 
       {/* Content */}
-      <ScrollView
-        className="flex-1 px-6"
+      <KeyboardAwareScrollView
+        className="flex-1"
+        contentContainerClassName="px-6"
         contentContainerStyle={{
           paddingTop: 0,
           paddingBottom: 140,
         }}
+        bottomOffset={60}
         showsVerticalScrollIndicator={false}
       >
         {/* Step Content */}
@@ -107,22 +104,19 @@ export function Wizard({
         >
           {currentStep.content}
         </Animated.View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       {/* Footer with Pagination and Next Button */}
       <View className="px-8 pb-12 gap-6 flex flex-row items-center">
-        {/* Pagination Dots - ocupan el espacio restante */}
-        {showProgress && (
-          <View className="flex-1">
-            <AtomPaginationDots
-              total={totalSteps}
-              currentIndex={currentStepIndex}
-              activeColor={accentColor}
-              inactiveColor={mutedColor}
-              maxWidth={undefined}
-            />
-          </View>
-        )}
+        <View className="flex-1">
+          <AtomPaginationDots
+            total={totalSteps}
+            currentIndex={currentStepIndex}
+            activeColor={accentColor}
+            inactiveColor={mutedColor}
+            maxWidth={undefined}
+          />
+        </View>
 
         {/* Next Button - tamaño fijo */}
         <AtomCircularProgressButton

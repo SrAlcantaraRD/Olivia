@@ -112,8 +112,6 @@ export default function OnboardingIndex() {
       onSkip={() => router.push('/(onboarding)/role-selection')}
       showBackButton={true}
       showSkipButton={true}
-      showLogo={true}
-      showProgress={true}
     />
   );
 }

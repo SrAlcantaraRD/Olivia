@@ -22,7 +22,7 @@ export function ParentInfoStep({
   const foregroundColor = useThemeColor('foreground');
 
   return (
-    <>
+    <View>
       {/* Name Input */}
       <View className="mb-6">
         <TextFieldAtom
@@ -61,6 +61,6 @@ export function ParentInfoStep({
           />
         </View>
       </View>
-    </>
+    </View>
   );
 }
