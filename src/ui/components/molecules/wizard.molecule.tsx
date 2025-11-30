@@ -2,8 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useThemeColor } from 'heroui-native';
 import type { ReactNode } from 'react';
 import { Pressable, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 
 import { AtomCircularProgressButton } from '@/ui/components/atoms/circular-progress-button.atom';
 import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
@@ -61,9 +59,9 @@ export function Wizard({
   };
 
   return (
-    <View style={{ backgroundColor, flex: 1 }}>
+    <View style={{ backgroundColor }} className="px-8 flex-1">
       {/* Header */}
-      <View className="flex-row items-center justify-between px-6 pt-12 pb-4">
+      <View className="flex-row items-center justify-between pt-12 pb-4">
         {showBackButton ? (
           <Pressable onPress={handleBack}>
             <Ionicons name="chevron-back" size={24} color={foregroundColor} />
@@ -86,28 +84,12 @@ export function Wizard({
       </View>
 
       {/* Content */}
-      <KeyboardAwareScrollView
-        className="flex-1"
-        contentContainerClassName="px-6"
-        contentContainerStyle={{
-          paddingTop: 0,
-          paddingBottom: 140,
-        }}
-        bottomOffset={60}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Step Content */}
-        <Animated.View
-          key={`content-${currentStepIndex}`}
-          entering={FadeInRight.duration(250)}
-          exiting={FadeOutLeft.duration(200)}
-        >
-          {currentStep.content}
-        </Animated.View>
-      </KeyboardAwareScrollView>
+      <View key={`content-${currentStepIndex}`} className="flex-1">
+        {currentStep.content}
+      </View>
 
       {/* Footer with Pagination and Next Button */}
-      <View className="px-8 pb-12 gap-6 flex flex-row items-center">
+      <View className="pb-12 gap-6 flex flex-row items-center">
         <View className="flex-1">
           <AtomPaginationDots
             total={totalSteps}

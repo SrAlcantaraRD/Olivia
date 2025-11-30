@@ -22,7 +22,7 @@ export function ParentInfoStep({
   const foregroundColor = useThemeColor('foreground');
 
   return (
-    <View>
+    <View className="flex-1">
       {/* Name Input */}
       <View className="mb-6">
         <TextFieldAtom
@@ -35,14 +35,14 @@ export function ParentInfoStep({
       </View>
 
       {/* Relationship Selection */}
-      <View className="mb-6">
+      <View className="mb-6 flex-1">
         <TypographyParagraph
           style={{ color: foregroundColor }}
-          className="mb-3"
+          className="mb-4"
           weight="medium"
           i18nKey="parent-setup.parent-info.relationship-label"
         />
-        <View className="flex-col gap-4">
+        <View className="flex-1 flex-col gap-4">
           <CardWithDetails
             icon="heart"
             titleKey="parent-setup.parent-info.parent"
