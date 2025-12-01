@@ -10,9 +10,9 @@ import { ThemedView } from '@/ui/components/themed-view';
 export default function ModalScreen() {
   return (
     <ThemedView style={styles.container}>
-      <TypographyTitle>This is a modal</TypographyTitle>
-      <Link href="/(tabs)/home" dismissTo style={styles.link}>
-        <TypographySubtitle>Go to home screen</TypographySubtitle>
+      <TypographyTitle i18nKey="modal.title" />
+      <Link href="/(tabs)/register" dismissTo style={styles.link}>
+        <TypographySubtitle i18nKey="modal.go-home" />
       </Link>
     </ThemedView>
   );

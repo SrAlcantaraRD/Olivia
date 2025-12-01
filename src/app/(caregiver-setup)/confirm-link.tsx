@@ -18,10 +18,10 @@ export default function CaregiverConfirmLinkScreen() {
       bottomOffset={60}
     >
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <TypographyTitle>CaregiverConfirmLinkScreen</TypographyTitle>
+        <TypographyTitle i18nKey="caregiver-setup.confirm-link.title" />
         <ButtonAtom
           title="welcome"
-          onPress={() => router.replace('/(app)/(tabs)/dashboard')}
+          onPress={() => router.replace('/(tabs)/register')}
         />
       </View>
     </KeyboardAwareScrollView>

@@ -1,8 +1,11 @@
+import { useThemeColor } from 'heroui-native';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, Text, TextInput, View } from 'react-native';
+import { ScrollView, TextInput, View } from 'react-native';
 
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import {
+  TypographyHeading,
+  TypographyParagraph,
   TypographySmall,
   TypographySubtitle,
 } from '@/ui/components/atoms/typography.atom';
@@ -18,6 +21,7 @@ export function SummaryStep({
   onAdditionalNotesChange,
 }: SummaryStepProps) {
   const { t } = useTranslation();
+  const foregroundColor = useThemeColor('foreground');
 
   const summaryItems = [
     {
@@ -73,9 +77,13 @@ export function SummaryStep({
                 className="font-medium mb-1"
                 variant="light"
               />
-              <Text className="text-lg font-semibold text-foreground">
+              <TypographyHeading
+                style={{ color: foregroundColor }}
+                size="lg"
+                weight="semibold"
+              >
                 {item.value}
-              </Text>
+              </TypographyHeading>
             </CardAtom>
           ))}
 
@@ -86,9 +94,9 @@ export function SummaryStep({
                 i18nKey="page.cic_register.discomfort.note_label"
                 className="font-medium text-warning mb-1"
               />
-              <Text className="text-base text-foreground">
+              <TypographyParagraph style={{ color: foregroundColor }}>
                 {formData.discomfortNote}
-              </Text>
+              </TypographyParagraph>
             </CardAtom>
           )}
         </View>

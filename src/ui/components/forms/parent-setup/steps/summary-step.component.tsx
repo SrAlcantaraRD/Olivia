@@ -1,12 +1,12 @@
 import { useThemeColor } from 'heroui-native';
-import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import {
+  TypographyHeading,
   TypographyParagraph,
   TypographySmall,
-  TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 import type { ParentSetupFormData } from '../types';
 import { MODULE_IDS } from '../types';
 
@@ -15,21 +15,31 @@ interface SummaryStepProps {
 }
 
 interface SummaryRowProps {
-  label: string;
+  label: Ti18nKeys;
   value: string;
   backgroundColor: string;
 }
 
 function SummaryRow({ label, value, backgroundColor }: SummaryRowProps) {
+  const foregroundColor = useThemeColor('foreground');
+  const mutedColor = useThemeColor('muted');
+
   return (
     <View
       style={{ backgroundColor }}
       className="flex-row justify-between items-center px-4 py-3 rounded-xl mb-2"
     >
-      <TypographySmall className="text-muted flex-1 mr-4">
-        {label}
-      </TypographySmall>
-      <TypographyParagraph className="text-foreground font-semibold shrink">
+      <TypographySmall
+        style={{ color: mutedColor }}
+        className="flex-1 mr-4"
+        variant="light"
+        i18nKey={label}
+      />
+      <TypographyParagraph
+        style={{ color: foregroundColor }}
+        className="shrink"
+        weight="semibold"
+      >
         {value}
       </TypographyParagraph>
     </View>
@@ -37,48 +47,53 @@ function SummaryRow({ label, value, backgroundColor }: SummaryRowProps) {
 }
 
 interface SummarySectionProps {
-  title: string;
+  title: Ti18nKeys;
   children: React.ReactNode;
 }
 
 function SummarySection({ title, children }: SummarySectionProps) {
+  const foregroundColor = useThemeColor('foreground');
+
   return (
-    <View className="mb-6">
-      <TypographyTitle className="text-foreground mb-3 text-lg font-semibold">
-        {title}
-      </TypographyTitle>
+    <View>
+      <TypographyHeading
+        style={{ color: foregroundColor }}
+        size="lg"
+        i18nKey={title}
+      />
       {children}
     </View>
   );
 }
 
 export function SummaryStep({ formData }: SummaryStepProps) {
-  const { t } = useTranslation();
   const cardBgColor = useThemeColor('background-secondary');
   const accentColor = useThemeColor('accent');
+  const foregroundColor = useThemeColor('foreground');
+  const mutedColor = useThemeColor('muted');
 
   // Map module IDs to translated names
-  const getModuleName = (moduleId: string): string => {
+  const getModuleName = (moduleId: string): Ti18nKeys => {
     switch (moduleId) {
       case MODULE_IDS.CATHETERIZATION:
-        return t('parent-setup.modules.catheterization.title');
+        return 'parent-setup.modules.catheterization.title';
       case MODULE_IDS.BOWEL_MOVEMENTS:
-        return t('parent-setup.modules.bowel-movements.title');
+        return 'parent-setup.modules.bowel-movements.title';
       case MODULE_IDS.ENEMAS:
-        return t('parent-setup.modules.enemas.title');
+        return 'parent-setup.modules.enemas.title';
       default:
-        return moduleId;
+        throw new Error(`Unknown module ID: ${moduleId}`);
     }
   };
 
   // Map relationship to translated text
   const getRelationshipText = (
     relationship: 'parent' | 'guardian' | null
-  ): string => {
-    if (relationship === 'parent') return t('parent-setup.parent-info.parent');
-    if (relationship === 'guardian')
-      return t('parent-setup.parent-info.guardian');
-    return '-';
+  ): Ti18nKeys => {
+    if (relationship === 'parent') return 'parent-setup.parent-info.parent';
+    if (relationship === 'guardian') return 'parent-setup.parent-info.guardian';
+
+    throw new Error(`Unknown relationship: "${relationship}"`);
   };
 
   const moduleNames = Array.from(formData.selectedModules).map(getModuleName);
@@ -86,34 +101,34 @@ export function SummaryStep({ formData }: SummaryStepProps) {
   return (
     <>
       {/* Parent Info Section */}
-      <SummarySection title={t('parent-setup.summary.parent-section')}>
+      <SummarySection title="parent-setup.summary.parent-section">
         <SummaryRow
-          label={t('parent-setup.summary.parent-name')}
-          value={formData.parentName || '-'}
+          label="parent-setup.summary.parent-name"
+          value={formData.parentName}
           backgroundColor={cardBgColor}
         />
         <SummaryRow
-          label={t('parent-setup.summary.parent-relationship')}
+          label="parent-setup.summary.parent-relationship"
           value={getRelationshipText(formData.relationship)}
           backgroundColor={cardBgColor}
         />
       </SummarySection>
 
       {/* Child Info Section */}
-      <SummarySection title={t('parent-setup.summary.child-section')}>
+      <SummarySection title="parent-setup.summary.child-section">
         <SummaryRow
-          label={t('parent-setup.summary.child-name')}
-          value={formData.childName || '-'}
+          label="parent-setup.summary.child-name"
+          value={formData.childName}
           backgroundColor={cardBgColor}
         />
         <SummaryRow
-          label={t('parent-setup.summary.child-birth-date')}
-          value={formData.birthDate || '-'}
+          label="parent-setup.summary.child-birth-date"
+          value={formData.birthDate}
           backgroundColor={cardBgColor}
         />
         {formData.diagnosis && (
           <SummaryRow
-            label={t('parent-setup.summary.child-diagnosis')}
+            label="parent-setup.summary.child-diagnosis"
             value={formData.diagnosis}
             backgroundColor={cardBgColor}
           />
@@ -121,7 +136,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
       </SummarySection>
 
       {/* Modules Section */}
-      <SummarySection title={t('parent-setup.summary.modules-section')}>
+      <SummarySection title="parent-setup.summary.modules-section">
         <View
           style={{ backgroundColor: cardBgColor }}
           className="px-4 py-3 rounded-xl"
@@ -136,15 +151,18 @@ export function SummaryStep({ formData }: SummaryStepProps) {
                   style={{ backgroundColor: accentColor }}
                   className="w-1.5 h-1.5 rounded-full mr-3"
                 />
-                <TypographyParagraph className="text-foreground">
-                  {moduleName}
-                </TypographyParagraph>
+                <TypographyParagraph
+                  style={{ color: foregroundColor }}
+                  i18nKey={moduleName}
+                />
               </View>
             ))
           ) : (
-            <TypographyParagraph className="text-muted">
-              {t('parent-setup.summary.no-modules')}
-            </TypographyParagraph>
+            <TypographyParagraph
+              style={{ color: mutedColor }}
+              i18nKey="parent-setup.summary.no-modules"
+              variant="light"
+            />
           )}
         </View>
       </SummarySection>

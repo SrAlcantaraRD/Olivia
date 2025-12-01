@@ -1,4 +1,5 @@
 import { Link } from 'expo-router';
+import { useThemeColor } from 'heroui-native';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { CardAtom } from '@/ui/components/atoms/card.atom';
@@ -11,6 +12,8 @@ import {
 } from '@/ui/components/atoms/typography.atom';
 
 export default function ReportScreen() {
+  const foregroundColor = useThemeColor('foreground');
+
   return (
     <View className="flex-1 bg-background">
       <ScrollView
@@ -72,7 +75,13 @@ export default function ReportScreen() {
                   className="font-medium text-primary"
                 />
               </View>
-              <Text className="text-3xl font-bold text-foreground">0</Text>
+              <Text
+                style={{ color: foregroundColor }}
+                className="text-3xl font-bold"
+                accessibilityLabel="0 CIC records today"
+              >
+                0
+              </Text>
               <TypographySmall
                 i18nKey="component.stat_card.today"
                 variant="light"
@@ -89,7 +98,13 @@ export default function ReportScreen() {
                   className="font-medium text-secondary"
                 />
               </View>
-              <Text className="text-3xl font-bold text-foreground">0</Text>
+              <Text
+                style={{ color: foregroundColor }}
+                className="text-3xl font-bold"
+                accessibilityLabel="0 stool records today"
+              >
+                0
+              </Text>
               <TypographySmall
                 i18nKey="component.stat_card.today"
                 variant="light"
@@ -106,7 +121,13 @@ export default function ReportScreen() {
                   className="font-medium text-success"
                 />
               </View>
-              <Text className="text-3xl font-bold text-foreground">0</Text>
+              <Text
+                style={{ color: foregroundColor }}
+                className="text-3xl font-bold"
+                accessibilityLabel="0 medication records today"
+              >
+                0
+              </Text>
               <TypographySmall
                 i18nKey="component.stat_card.today"
                 variant="light"

@@ -238,6 +238,19 @@ export const enEN = {
   'a11y.hint.opens_app_settings': 'Opens the app settings screen',
   'a11y.hint.opens_about': 'Opens the about screen',
   'a11y.hint.logout_action': 'Logs out your current session',
+  // Modal Screen
+  'modal.title': 'This is a modal',
+  'modal.go-home': 'Go to home screen',
+  // Caregiver Setup
+  'caregiver-setup.scan-qr.title': 'Scan QR Code',
+  'caregiver-setup.confirm-link.title': 'Confirm Link',
+  // Modals
+  'modal.add-carer.title': 'Add Carer Modal (QR Generation)',
+  'modal.filter-history.title': 'Filter History Modal',
+  'modal.quick-record.title': 'Quick Record Modal',
+  'modal.reminders.title': 'Reminders Modal',
+  'modal.switch-account.title': 'Switch Account Modal',
+  'modal.symptom-alert.title': 'Symptom Alert Modal',
 };
 
 type RecursiveKeyOf<TObj extends object> = {

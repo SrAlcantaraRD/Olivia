@@ -167,6 +167,19 @@ export const esES = {
     'Abre la pantalla de ajustes de la aplicación',
   'a11y.hint.opens_about': 'Abre la pantalla acerca de',
   'a11y.hint.logout_action': 'Cierra tu sesión actual',
+  // Modal Screen
+  'modal.title': 'Esto es un modal',
+  'modal.go-home': 'Ir a la pantalla principal',
+  // Caregiver Setup
+  'caregiver-setup.scan-qr.title': 'Escanear código QR',
+  'caregiver-setup.confirm-link.title': 'Confirmar enlace',
+  // Modals
+  'modal.add-carer.title': 'Añadir Cuidador (Generar QR)',
+  'modal.filter-history.title': 'Filtrar Historial',
+  'modal.quick-record.title': 'Registro Rápido',
+  'modal.reminders.title': 'Recordatorios',
+  'modal.switch-account.title': 'Cambiar de Cuenta',
+  'modal.symptom-alert.title': 'Alerta de Síntomas',
 
   // Onboarding (legacy keys - keeping for backward compatibility)
   'onboarding-slide1-title': 'Te ayudamos a cuidar con tranquilidad.',

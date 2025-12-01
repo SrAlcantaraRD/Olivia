@@ -1,9 +1,11 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+
+import { TypographyTitle } from '@/ui/components/atoms/typography.atom';
 
 export default function SymptomAlertModal() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>SymptomAlertModal</Text>
+      <TypographyTitle i18nKey="modal.symptom-alert.title" />
     </View>
   );
 }

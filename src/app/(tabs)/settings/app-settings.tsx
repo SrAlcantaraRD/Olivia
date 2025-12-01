@@ -1,9 +1,11 @@
-import { useTranslation } from 'react-i18next';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+
+import {
+  TypographyParagraph,
+  TypographyTitle,
+} from '@/ui/components/atoms/typography.atom';
 
 export default function AppSettingsScreen() {
-  const { t } = useTranslation();
-
   return (
     <View className="flex-1 bg-background">
       <ScrollView
@@ -12,17 +14,18 @@ export default function AppSettingsScreen() {
         contentInsetAdjustmentBehavior="automatic"
       >
         <View className="gap-6">
-          <Text
-            className="text-3xl font-semibold text-foreground"
+          <TypographyTitle
+            i18nKey="page.app_settings.title"
             accessibilityRole="header"
-          >
-            {t('page.app_settings.title')}
-          </Text>
+          />
 
           <View className="p-4 bg-default-100 rounded-lg">
-            <Text className="text-sm text-default-500 text-center">
-              {t('page.app_settings.placeholder')}
-            </Text>
+            <TypographyParagraph
+              i18nKey="page.app_settings.placeholder"
+              variant="light"
+              size="sm"
+              className="text-center"
+            />
           </View>
         </View>
       </ScrollView>
