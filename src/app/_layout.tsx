@@ -32,7 +32,7 @@ import LogoDark from '../assets/logo-dark.png';
 import LogoLight from '../assets/logo-light.png';
 
 export const unstable_settings = {
-  initialRouteName: '(tabs)',
+  initialRouteName: '(tabs)/register',
 };
 
 configureReanimatedLogger({

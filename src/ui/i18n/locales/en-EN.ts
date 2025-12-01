@@ -82,6 +82,147 @@ export const enEN = {
   'parent-setup.summary.child-diagnosis': 'Diagnóstico',
   'parent-setup.summary.modules-section': 'Módulos Activados',
   'parent-setup.summary.no-modules': 'No hay módulos seleccionados',
+
+  // Common
+  common: {
+    back: 'Back',
+    next: 'Next',
+    cancel: 'Cancel',
+    save: 'Save',
+    edit: 'Edit',
+    delete: 'Delete',
+    confirm: 'Confirm',
+    loading: 'Loading...',
+    error: 'Error',
+    success: 'Success',
+    optional: 'Optional',
+    required: 'Required',
+    view_all: 'View all',
+  },
+
+  // Tab navigation
+  tab: {
+    register: 'Register',
+    report: 'Report',
+    settings: 'Settings',
+  },
+
+  // Register Tab
+  page: {
+    register: {
+      title: 'Register',
+      subtitle: 'Record catheterizations, stools, and medication',
+      quick_actions: 'Quick actions',
+      recent_activity: 'Recent activity',
+      no_recent_activity: 'No recent activity',
+    },
+
+    // Report Tab
+    report: {
+      title: 'Report',
+      subtitle: 'View statistics and history',
+      filters: 'Filters',
+      statistics: 'Statistics',
+      history: 'History',
+      no_history: 'No records in history',
+    },
+
+    // History Detail
+    history_detail: {
+      title: 'History Detail',
+      placeholder: 'Detailed history content coming soon',
+    },
+
+    // Settings Tab
+    settings: {
+      title: 'Settings',
+      subtitle: 'Manage profile, carers, and app settings',
+      section_child: 'Child',
+      section_carers: 'Carers',
+      section_app: 'Application',
+      section_danger: 'Danger zone',
+
+      child_profile: 'Child profile',
+      child_profile_desc: 'Personal data and diagnosis',
+
+      manage_carers: 'Manage carers',
+      manage_carers_desc: 'Add or remove carers',
+
+      app_settings: 'App settings',
+      app_settings_desc: 'Theme, language, and privacy',
+
+      about: 'About',
+      about_desc: 'Version and legal information',
+
+      logout: 'Log out',
+    },
+
+    // Settings Detail Screens
+    child_profile: {
+      title: 'Child Profile',
+      placeholder: 'Profile form coming soon',
+    },
+
+    carer_management: {
+      title: 'Carer Management',
+      placeholder: 'Carer list coming soon',
+    },
+
+    app_settings: {
+      title: 'Application Settings',
+      placeholder: 'App settings coming soon',
+    },
+  },
+
+  // Components
+  component: {
+    register_cic_button: {
+      label: 'Register Catheterization (CIC)',
+    },
+    register_stool_button: {
+      label: 'Register Stool',
+    },
+    register_medication_button: {
+      label: 'Register Medication',
+    },
+    filter_button: {
+      label: 'Filters',
+      all_types: 'All types',
+    },
+    stat_card: {
+      cic_label: 'Catheterizations',
+      stool_label: 'Stools',
+      medication_label: 'Medication',
+      today: 'Today',
+    },
+  },
+
+  // Accessibility
+  a11y: {
+    button: {
+      register_cic: 'Button to register catheterization',
+      register_stool: 'Button to register stool',
+      register_medication: 'Button to register medication',
+      open_filters: 'Open filters',
+      view_all_history: 'View all history',
+      child_profile: 'View child profile',
+      manage_carers: 'Manage carers',
+      app_settings: 'App settings',
+      about: 'About',
+      logout: 'Log out',
+    },
+    hint: {
+      opens_cic_form: 'Opens the catheterization registration form',
+      opens_stool_form: 'Opens the stool registration form',
+      opens_medication_form: 'Opens the medication registration form',
+      opens_filter_modal: 'Opens the filters modal',
+      opens_child_profile: 'Opens the child profile screen',
+      opens_carer_management: 'Opens the carer management screen',
+      opens_app_settings: 'Opens the app settings screen',
+      opens_about: 'Opens the about screen',
+      logout_action: 'Logs out of your current session',
+    },
+  },
 };
 
 type RecursiveKeyOf<TObj extends object> = {

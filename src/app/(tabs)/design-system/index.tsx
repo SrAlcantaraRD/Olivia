@@ -19,7 +19,7 @@ export default function TabThreeScreen() {
 
   return (
     <KeyboardAwareScrollView
-      className="flex-1"
+      className="flex-1 gap-4"
       contentContainerClassName="px-4"
       contentContainerStyle={{
         paddingTop: headerHeight,
