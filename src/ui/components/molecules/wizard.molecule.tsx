@@ -84,9 +84,7 @@ export function Wizard({
       </View>
 
       {/* Content */}
-      <View key={`content-${currentStepIndex}`} className="flex-1">
-        {currentStep.content}
-      </View>
+      <View className="flex-1">{currentStep.content}</View>
 
       {/* Footer with Pagination and Next Button */}
       <View className="pb-12 gap-6 flex flex-row items-center">
