@@ -60,6 +60,8 @@ export const enEN = {
   'parent-setup.child-info.birth-date-placeholder': 'DD / MM / AAAA',
   'parent-setup.child-info.diagnosis-label': 'Diagnóstico:',
   'parent-setup.child-info.diagnosis-placeholder': 'Diagnóstico médico',
+  'parent-setup.child-info.diagnosis-hint':
+    'Opcional: Puedes añadirlo más tarde si lo prefieres.',
   'parent-setup.modules.title': '¿Qué módulos necesitas?',
   'parent-setup.modules.description':
     'Activa los módulos que vas a utilizar. Puedes modificarlos después en el perfil del menor.',
@@ -76,7 +78,7 @@ export const enEN = {
   'parent-setup.summary.description':
     'Confirma que todo es correcto antes de continuar',
   'parent-setup.summary.parent-section': 'Información del Tutor',
-  'parent-setup.summary.parent-name': 'Nombre',
+  'parent-setup.summary.parent-name': 'Nombre: <bold>{{value}}</bold>',
   'parent-setup.summary.parent-relationship': 'Relación',
   'parent-setup.summary.child-section': 'Información del Menor',
   'parent-setup.summary.child-name': 'Nombre',

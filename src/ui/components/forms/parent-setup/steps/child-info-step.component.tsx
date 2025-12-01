@@ -53,9 +53,11 @@ export function ChildInfoStep({
           value={diagnosis}
           onChangeText={onDiagnosisChange}
         />
-        <TypographySmall className="text-muted ml-1 mt-1">
-          (opcional)
-        </TypographySmall>
+        <TypographySmall
+          className="text-muted ml-1 mt-1"
+          i18nKey="parent-setup.child-info.diagnosis-hint"
+          variant="light"
+        />
       </View>
     </>
   );

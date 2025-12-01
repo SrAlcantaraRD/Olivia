@@ -21,7 +21,6 @@ interface SummaryRowProps {
 }
 
 function SummaryRow({ label, value, backgroundColor }: SummaryRowProps) {
-  const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
 
   return (
@@ -34,14 +33,10 @@ function SummaryRow({ label, value, backgroundColor }: SummaryRowProps) {
         className="flex-1 mr-4"
         variant="light"
         i18nKey={label}
+        values={{
+          value,
+        }}
       />
-      <TypographyParagraph
-        style={{ color: foregroundColor }}
-        className="shrink"
-        weight="semibold"
-      >
-        {value}
-      </TypographyParagraph>
     </View>
   );
 }

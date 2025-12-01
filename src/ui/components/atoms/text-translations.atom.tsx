@@ -1,4 +1,6 @@
-import { useTranslation } from 'react-i18next';
+import type React from 'react';
+import { Trans } from 'react-i18next';
+import { Text } from 'react-native';
 
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
@@ -17,13 +19,32 @@ export interface ITextTranslationEntity {
     | unknown;
 }
 
-interface IProps {
+export interface ITextTranslationProps {
   i18nKey: Ti18nKeys;
   values?: ITextTranslationEntity;
+  components?: Record<string, React.ReactElement>;
 }
 
-export function TextTranslation({ i18nKey, values }: IProps): string {
-  const { t } = useTranslation();
-
-  return t(i18nKey, values);
+export function TextTranslation({
+  i18nKey,
+  values,
+  components,
+}: ITextTranslationProps): React.ReactElement {
+  return (
+    <Trans<Ti18nKeys>
+      i18nKey={i18nKey}
+      values={values}
+      components={{
+        // Default components available in all translations (React Native)
+        // Use react-native `Text` with tailwind `className` so callers
+        // can style consistently with uniwind/ tailwind tokens.
+        italic: <Text className="italic" />,
+        bold: <Text className="font-semibold text-primary" />,
+        // `br` maps to a Text containing a newline in React Native
+        br: <Text>{'\n'}</Text>,
+        // Custom components passed by the caller (they should be React Native elements)
+        ...components,
+      }}
+    />
+  );
 }

@@ -2,8 +2,10 @@ import { useThemeColor } from 'heroui-native';
 import * as React from 'react';
 import { Text, type TextProps } from 'react-native';
 
-import { TextTranslation } from '@/ui/components/atoms/text-translations.atom';
-import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
+import {
+  type ITextTranslationProps,
+  TextTranslation,
+} from '@/ui/components/atoms/text-translations.atom';
 import { cn } from '@/ui/lib/utils';
 
 type TypographyVariant = 'default' | 'primary' | 'light';
@@ -65,8 +67,7 @@ function typographyVariants({
   return cn(SIZE_CLASS[size], WEIGHT_CLASS[weight], VARIANT_CLASS[variant]);
 }
 
-interface TypographyProps extends TextProps {
-  i18nKey: Ti18nKeys;
+interface TypographyProps extends TextProps, ITextTranslationProps {
   className?: string;
   variant?: TypographyVariant;
   size?: TypographySize;
@@ -82,6 +83,8 @@ const TypographyTitle = React.forwardRef<Text, TypographyProps>(
       weight = 'bold',
       i18nKey,
       style,
+      values,
+      components,
       ...props
     },
     ref
@@ -107,7 +110,11 @@ const TypographyTitle = React.forwardRef<Text, TypographyProps>(
         )}
         {...props}
       >
-        <TextTranslation i18nKey={i18nKey} />
+        <TextTranslation
+          i18nKey={i18nKey}
+          values={values}
+          components={components}
+        />
       </Text>
     );
   }
@@ -123,6 +130,8 @@ const TypographySubtitle = React.forwardRef<Text, TypographyProps>(
       weight = 'bold',
       i18nKey,
       style,
+      values,
+      components,
       ...props
     },
     ref
@@ -148,7 +157,11 @@ const TypographySubtitle = React.forwardRef<Text, TypographyProps>(
         )}
         {...props}
       >
-        <TextTranslation i18nKey={i18nKey} />
+        <TextTranslation
+          i18nKey={i18nKey}
+          values={values}
+          components={components}
+        />
       </Text>
     );
   }
@@ -164,6 +177,8 @@ const TypographyHeading = React.forwardRef<Text, TypographyProps>(
       weight = 'semibold',
       i18nKey,
       style,
+      values,
+      components,
       ...props
     },
     ref
@@ -189,7 +204,11 @@ const TypographyHeading = React.forwardRef<Text, TypographyProps>(
         )}
         {...props}
       >
-        <TextTranslation i18nKey={i18nKey} />
+        <TextTranslation
+          i18nKey={i18nKey}
+          values={values}
+          components={components}
+        />
       </Text>
     );
   }
@@ -205,6 +224,8 @@ const TypographyParagraph = React.forwardRef<Text, TypographyProps>(
       weight = 'normal',
       i18nKey,
       style,
+      values,
+      components,
       ...props
     },
     ref
@@ -230,7 +251,11 @@ const TypographyParagraph = React.forwardRef<Text, TypographyProps>(
         )}
         {...props}
       >
-        <TextTranslation i18nKey={i18nKey} />
+        <TextTranslation
+          i18nKey={i18nKey}
+          values={values}
+          components={components}
+        />
       </Text>
     );
   }
@@ -247,6 +272,8 @@ const TypographySmall = React.forwardRef<Text, TypographyProps>(
       weight = 'normal',
       i18nKey,
       style,
+      values,
+      components,
       ...props
     },
     ref
@@ -268,7 +295,11 @@ const TypographySmall = React.forwardRef<Text, TypographyProps>(
         className={cn(typographyVariants({ variant, size, weight }), className)}
         {...props}
       >
-        <TextTranslation i18nKey={i18nKey} />
+        <TextTranslation
+          i18nKey={i18nKey}
+          values={values}
+          components={components}
+        />
       </Text>
     );
   }
