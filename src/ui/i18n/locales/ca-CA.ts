@@ -1,4 +1,5 @@
 export const caCA = {
+  // Legacy keys (keeping for backward compatibility)
   welcome: 'Benvingut',
   next: 'Següent',
   parent: 'Progenitor',
@@ -7,7 +8,8 @@ export const caCA = {
   skip: 'Saltar',
   'start-onboarding': 'Començar',
   'add-register': 'Afegir registre',
-  // Onboarding
+
+  // Onboarding (legacy keys)
   'onboarding-slide1-title': "T'ajudem a cuidar amb tranquil·litat.",
   'onboarding-slide1-description':
     'Registra cateterismes i rutines de forma ràpida, clara i sense connexió.',
@@ -18,8 +20,8 @@ export const caCA = {
   'onboarding-slide3-title': 'Les teves dades, sota el teu control.',
   'onboarding-slide3-description':
     'Tot queda al teu mòbil. Sense núvol. Sense comptes.\nTu decideixes amb qui compartir.',
-  actions: {
-    save: 'Desa',
-    cancel: 'Cancel·la',
-  },
+
+  // Actions (legacy keys)
+  'actions.save': 'Desa',
+  'actions.cancel': 'Cancel·la',
 };
