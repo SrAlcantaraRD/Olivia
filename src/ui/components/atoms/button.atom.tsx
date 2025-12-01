@@ -11,7 +11,7 @@ type ButtonAtomProps = React.ComponentProps<typeof Button> & {
 export const ButtonAtom = ({ children, ...props }: ButtonAtomProps) => {
   return (
     <Button className="rounded-lg" {...props}>
-      <TypographyParagraph className="text-white" i18nKey={props.title} />
+      <TypographyParagraph i18nKey={props.title} />
     </Button>
   );
 };

@@ -72,7 +72,7 @@ export default function ReportScreen() {
                 <IconAtom name="water" />
                 <TypographySmall
                   i18nKey="component.stat_card.cic_label"
-                  className="font-medium text-primary"
+                  className="font-medium"
                 />
               </View>
               <Text
@@ -95,7 +95,7 @@ export default function ReportScreen() {
                 <IconAtom name="nutrition" />
                 <TypographySmall
                   i18nKey="component.stat_card.stool_label"
-                  className="font-medium text-secondary"
+                  className="font-medium"
                 />
               </View>
               <Text
@@ -118,7 +118,7 @@ export default function ReportScreen() {
                 <IconAtom name="medical" />
                 <TypographySmall
                   i18nKey="component.stat_card.medication_label"
-                  className="font-medium text-success"
+                  className="font-medium"
                 />
               </View>
               <Text

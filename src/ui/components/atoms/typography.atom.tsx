@@ -41,11 +41,9 @@ const WEIGHT_CLASS: Record<TypographyWeight, string> = {
   bold: 'font-bold',
 };
 
-const VARIANT_CLASS: Record<TypographyVariant, string> = {
-  default: 'text-foreground',
-  primary: 'text-primary',
-  light: 'text-muted-foreground',
-};
+// Color is resolved at render-time using `useThemeColor` so we don't
+// include variant color classes here. This keeps color theming centralized
+// and avoids duplication between Tailwind classes and runtime theme colors.
 
 // Base typography styles
 const BASE_STYLES = {
@@ -64,7 +62,7 @@ function typographyVariants({
   size: TypographySize;
   weight: TypographyWeight;
 }> = {}): string {
-  return cn(SIZE_CLASS[size], WEIGHT_CLASS[weight], VARIANT_CLASS[variant]);
+  return cn(SIZE_CLASS[size], WEIGHT_CLASS[weight]);
 }
 
 interface TypographyProps extends TextProps, ITextTranslationProps {

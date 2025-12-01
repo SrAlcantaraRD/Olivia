@@ -79,10 +79,12 @@ export const enEN = {
     'Confirma que todo es correcto antes de continuar',
   'parent-setup.summary.parent-section': 'Información del Tutor',
   'parent-setup.summary.parent-name': 'Nombre: <bold>{{value}}</bold>',
-  'parent-setup.summary.parent-relationship': 'Relación',
+  'parent-setup.summary.parent-relationship':
+    'Relación: <bold>{{value}}</bold>',
   'parent-setup.summary.child-section': 'Información del Menor',
-  'parent-setup.summary.child-name': 'Nombre',
-  'parent-setup.summary.child-birth-date': 'Fecha de nacimiento',
+  'parent-setup.summary.child-name': 'Nombre: <bold>{{value}}</bold>',
+  'parent-setup.summary.child-birth-date':
+    'Fecha de nacimiento: <bold>{{value}}</bold>',
   'parent-setup.summary.child-diagnosis': 'Diagnóstico',
   'parent-setup.summary.modules-section': 'Modules Activated',
   'parent-setup.summary.no-modules': 'No modules selected',

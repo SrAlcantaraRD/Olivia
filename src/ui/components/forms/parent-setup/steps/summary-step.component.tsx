@@ -1,4 +1,5 @@
 import { useThemeColor } from 'heroui-native';
+import { t } from 'i18next';
 import { View } from 'react-native';
 
 import {
@@ -104,7 +105,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
         />
         <SummaryRow
           label="parent-setup.summary.parent-relationship"
-          value={getRelationshipText(formData.relationship)}
+          value={t(getRelationshipText(formData.relationship))}
           backgroundColor={cardBgColor}
         />
       </SummarySection>
@@ -146,7 +147,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
                   style={{ backgroundColor: accentColor }}
                   className="w-1.5 h-1.5 rounded-full mr-3"
                 />
-                <TypographyParagraph
+                <TypographySmall
                   style={{ color: foregroundColor }}
                   i18nKey={moduleName}
                 />
