@@ -1,3 +1,5 @@
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
+
 export const esES = {
   welcome: 'Bienvenido',
   next: 'Siguiente',
@@ -171,4 +173,4 @@ export const esES = {
   // Actions (legacy keys - keeping for backward compatibility)
   'actions.save': 'Guardar',
   'actions.cancel': 'Cancelar',
-};
+} satisfies Ti18nKeys;

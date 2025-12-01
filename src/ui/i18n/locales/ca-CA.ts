@@ -1,3 +1,5 @@
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
+
 export const caCA = {
   // Legacy keys (keeping for backward compatibility)
   welcome: 'Benvingut',
@@ -24,4 +26,4 @@ export const caCA = {
   // Actions (legacy keys)
   'actions.save': 'Desa',
   'actions.cancel': 'Cancel·la',
-};
+} satisfies Ti18nKeys;
