@@ -26,6 +26,7 @@ interface CardWithDetailsProps {
   iconSize?: IconSize;
   flex?: boolean;
   className?: string;
+  showIndicator?: boolean;
   indicatorPosition?: 'top-right' | 'top-left';
 }
 
@@ -40,6 +41,7 @@ export function CardWithDetails({
   layout,
   iconSize,
   flex = false,
+  showIndicator = true,
   className,
   indicatorPosition,
 }: CardWithDetailsProps) {
@@ -65,9 +67,9 @@ export function CardWithDetails({
 
   // Calculate padding based on indicator position
   const contentPadding =
-    finalIndicatorPosition === 'top-left' && isHorizontal
+    finalIndicatorPosition === 'top-left' && isHorizontal && showIndicator
       ? 'pl-8'
-      : finalIndicatorPosition === 'top-right' && isHorizontal
+      : finalIndicatorPosition === 'top-right' && isHorizontal && showIndicator
         ? 'pr-8'
         : '';
 
@@ -82,6 +84,7 @@ export function CardWithDetails({
       flex={flex}
       indicatorPosition={finalIndicatorPosition}
       indicatorShape="rounded"
+      showIndicator={showIndicator}
     >
       <View
         className={`${isHorizontal ? 'flex-row items-start gap-4' : 'items-center'} ${contentPadding} ${!isHorizontal ? 'mb-3' : ''}`}

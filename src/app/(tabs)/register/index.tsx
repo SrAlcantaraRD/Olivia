@@ -1,16 +1,35 @@
-import { Link } from 'expo-router';
-import { Pressable, ScrollView, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { ScrollView, View } from 'react-native';
 
-import { CardAtom } from '@/ui/components/atoms/card.atom';
-import { IconAtom } from '@/ui/components/atoms/icon.atom';
 import {
   TypographyHeading,
-  TypographyParagraph,
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
+import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
 
 export default function RegisterScreen() {
+  const router = useRouter();
+  const [selectedAction, setSelectedAction] = useState<
+    'cic' | 'stool' | 'medication' | null
+  >(null);
+
+  const handleCicSelect = () => {
+    setSelectedAction('cic');
+    router.push('/(modals)/modal-register-cic');
+  };
+
+  const handleStoolSelect = () => {
+    setSelectedAction('stool');
+    router.push('/(modals)/modal-filter-history');
+  };
+
+  const handleMedicationSelect = () => {
+    setSelectedAction('medication');
+    // TODO: Navigate to medication registration when implemented
+  };
+
   return (
     <View className="flex-1 bg-background">
       <ScrollView
@@ -36,68 +55,43 @@ export default function RegisterScreen() {
             />
 
             {/* CIC Button */}
-            <Link href="/(modals)/modal-register-cic" asChild>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="a11y.button.register_cic"
-                accessibilityHint="a11y.hint.opens_cic_form"
-              >
-                <CardAtom className="flex-row items-center gap-3 p-4 bg-primary">
-                  <IconAtom name="water" variant="contained" />
-                  <TypographyParagraph
-                    i18nKey="component.register_cic_button.label"
-                    className="text-lg font-semibold text-primary-foreground flex-1"
-                  />
-                </CardAtom>
-              </Pressable>
-            </Link>
+            <CardWithDetails
+              icon="water"
+              titleKey="component.register_cic_button.label"
+              subtitleKey="component.register_cic_button.subtitle"
+              descriptionKey="component.register_cic_button.description"
+              isSelected={selectedAction === 'cic'}
+              onSelect={handleCicSelect}
+              variant="module"
+              layout="horizontal"
+              showIndicator={false}
+            />
 
             {/* Stool Button */}
-            <Link href="/(modals)/modal-filter-history" asChild>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="a11y.button.register_stool"
-                accessibilityHint="a11y.hint.opens_stool_form"
-              >
-                <CardAtom className="flex-row items-center gap-3 p-4 bg-secondary">
-                  <IconAtom name="nutrition" variant="outlined" />
-                  <TypographyParagraph
-                    i18nKey="component.register_stool_button.label"
-                    className="text-lg font-semibold text-secondary-foreground flex-1"
-                  />
-                </CardAtom>
-              </Pressable>
-            </Link>
+            <CardWithDetails
+              icon="nutrition"
+              titleKey="component.register_stool_button.label"
+              subtitleKey="component.register_stool_button.subtitle"
+              descriptionKey="component.register_stool_button.description"
+              isSelected={selectedAction === 'stool'}
+              onSelect={handleStoolSelect}
+              variant="module"
+              layout="horizontal"
+              showIndicator={false}
+            />
 
             {/* Medication Button */}
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="a11y.button.register_medication"
-              accessibilityHint="a11y.hint.opens_medication_form"
-            >
-              <CardAtom className="flex-row items-center gap-3 p-4s">
-                <IconAtom name="medical" variant="outlined" />
-                <TypographyParagraph
-                  i18nKey="component.register_medication_button.label"
-                  className="text-lg font-semibold text-success-foreground flex-1"
-                />
-              </CardAtom>
-            </Pressable>
-          </View>
-
-          {/* Recent Activity Placeholder */}
-          <View className="gap-4 mt-4">
-            <TypographyHeading
-              i18nKey="page.register.recent_activity"
-              accessibilityRole="header"
+            <CardWithDetails
+              icon="medical"
+              titleKey="component.register_medication_button.label"
+              subtitleKey="component.register_medication_button.subtitle"
+              descriptionKey="component.register_medication_button.description"
+              isSelected={selectedAction === 'medication'}
+              onSelect={handleMedicationSelect}
+              variant="module"
+              layout="horizontal"
+              showIndicator={false}
             />
-            <CardAtom className="p-4 bg-default-100">
-              <TypographySmall
-                i18nKey="page.register.no_recent_activity"
-                variant="light"
-                className="text-center"
-              />
-            </CardAtom>
           </View>
         </View>
       </ScrollView>

@@ -125,8 +125,18 @@ export const esES = {
 
   // Components
   'component.register_cic_button.label': 'Registrar Cateterismo (CIC)',
+  'component.register_cic_button.subtitle': 'Cateterismo Intermitente Limpio',
+  'component.register_cic_button.description':
+    'Registra volumen, color e incomodidad',
   'component.register_stool_button.label': 'Registrar Deposición',
+  'component.register_stool_button.subtitle': 'Movimiento Intestinal',
+  'component.register_stool_button.description':
+    'Seguimiento de consistencia y frecuencia',
   'component.register_medication_button.label': 'Registrar Medicación',
+  'component.register_medication_button.subtitle':
+    'Administración de Medicinas',
+  'component.register_medication_button.description':
+    'Registra medicación y dosis',
   'component.filter_button.label': 'Filtros',
   'component.filter_button.all_types': 'Todos los tipos',
   'component.stat_card.cic_label': 'Cateterismos',

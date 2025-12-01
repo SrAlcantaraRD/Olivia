@@ -199,8 +199,18 @@ export const enEN = {
 
   // Components
   'component.register_cic_button.label': 'Register Catheterization (CIC)',
+  'component.register_cic_button.subtitle':
+    'Clean Intermittent Catheterization',
+  'component.register_cic_button.description':
+    'Record volume, color, and discomfort',
   'component.register_stool_button.label': 'Register Stool',
+  'component.register_stool_button.subtitle': 'Bowel Movement',
+  'component.register_stool_button.description':
+    'Track consistency and frequency',
   'component.register_medication_button.label': 'Register Medication',
+  'component.register_medication_button.subtitle': 'Medicine Administration',
+  'component.register_medication_button.description':
+    'Log medication and dosage',
   'component.filter_button.label': 'Filters',
   'component.filter_button.all_types': 'All types',
   'component.stat_card.cic_label': 'Catheterizations',
