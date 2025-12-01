@@ -1,7 +1,16 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, TextInput, View } from 'react-native';
+import { withUniwind } from 'uniwind';
 
+import {
+  Typography,
+  TypographySmall,
+  TypographySubtitle,
+} from '@/ui/components/atoms/typography.atom';
 import { CicDiscomfort } from '../types';
+
+const StyledIonicons = withUniwind(Ionicons);
 
 interface DiscomfortStepProps {
   selectedDiscomfort: CicDiscomfort | null;
@@ -21,18 +30,21 @@ export function DiscomfortStep({
   const discomfortOptions = [
     {
       value: CicDiscomfort.NONE,
-      emoji: '✅',
-      labelKey: 'page.cic_register.discomfort.none',
+      icon: 'checkmark-circle' as const,
+      color: '#10B981' as const,
+      labelKey: 'page.cic_register.discomfort.none' as const,
     },
     {
       value: CicDiscomfort.SLIGHT,
-      emoji: '😐',
-      labelKey: 'page.cic_register.discomfort.slight',
+      icon: 'alert-circle' as const,
+      color: '#F59E0B' as const,
+      labelKey: 'page.cic_register.discomfort.slight' as const,
     },
     {
       value: CicDiscomfort.PAIN,
-      emoji: '😣',
-      labelKey: 'page.cic_register.discomfort.pain',
+      icon: 'warning' as const,
+      color: '#EF4444' as const,
+      labelKey: 'page.cic_register.discomfort.pain' as const,
     },
   ];
 
@@ -42,15 +54,14 @@ export function DiscomfortStep({
     <View className="flex-1 gap-6 p-4">
       {/* Header */}
       <View className="gap-2">
-        <Text
-          className="text-2xl font-semibold text-foreground"
+        <TypographySubtitle
+          i18nKey="page.cic_register.discomfort.title"
           accessibilityRole="header"
-        >
-          {t('page.cic_register.discomfort.title')}
-        </Text>
-        <Text className="text-base text-default-500">
-          {t('page.cic_register.discomfort.description')}
-        </Text>
+        />
+        <TypographySmall
+          i18nKey="page.cic_register.discomfort.description"
+          variant="light"
+        />
       </View>
 
       {/* Discomfort Options */}
@@ -63,7 +74,7 @@ export function DiscomfortStep({
               onPress={() => onDiscomfortSelect(option.value)}
               accessibilityRole="radio"
               accessibilityState={{ checked: isSelected }}
-              accessibilityLabel={t(option.labelKey)}
+              accessibilityLabel={option.labelKey}
             >
               <View
                 className={`flex-row items-center gap-4 p-4 rounded-xl border-2 ${
@@ -72,17 +83,22 @@ export function DiscomfortStep({
                     : 'bg-default-100 border-default-200'
                 }`}
               >
-                <Text className="text-3xl">{option.emoji}</Text>
-                <Text
+                <StyledIonicons
+                  name={option.icon}
+                  size={32}
+                  style={{ color: option.color }}
+                />
+                <Typography
+                  i18nKey={option.labelKey}
                   className={`text-lg font-medium flex-1 ${
                     isSelected ? 'text-primary' : 'text-foreground'
                   }`}
-                >
-                  {t(option.labelKey)}
-                </Text>
+                />
                 {isSelected && (
                   <View className="w-6 h-6 rounded-full bg-primary items-center justify-center">
-                    <Text className="text-primary-foreground text-xs">✓</Text>
+                    <Typography className="text-primary-foreground text-xs">
+                      ✓
+                    </Typography>
                   </View>
                 )}
               </View>
@@ -94,9 +110,10 @@ export function DiscomfortStep({
       {/* Conditional Note Input for Pain */}
       {showNoteInput && (
         <View className="gap-2">
-          <Text className="text-sm font-medium text-foreground">
-            {t('page.cic_register.discomfort.note_label')}
-          </Text>
+          <TypographySmall
+            i18nKey="page.cic_register.discomfort.note_label"
+            className="font-medium"
+          />
           <TextInput
             value={discomfortNote}
             onChangeText={onDiscomfortNoteChange}

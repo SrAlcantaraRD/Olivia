@@ -1,7 +1,15 @@
-import { useTranslation } from 'react-i18next';
-import { Pressable, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Pressable, View } from 'react-native';
+import { withUniwind } from 'uniwind';
 
+import {
+  Typography,
+  TypographySmall,
+  TypographySubtitle,
+} from '@/ui/components/atoms/typography.atom';
 import { CicColor } from '../types';
+
+const StyledIonicons = withUniwind(Ionicons);
 
 interface ColorStepProps {
   selectedColor: CicColor | null;
@@ -9,28 +17,29 @@ interface ColorStepProps {
 }
 
 export function ColorStep({ selectedColor, onColorSelect }: ColorStepProps) {
-  const { t } = useTranslation();
-
   const colorOptions = [
     {
       value: CicColor.TRANSPARENT,
-      emoji: '💎',
-      labelKey: 'page.cic_register.color.transparent',
+      icon: 'water' as const,
+      labelKey: 'page.cic_register.color.transparent' as const,
     },
     {
       value: CicColor.LIGHT_YELLOW,
-      emoji: '🟡',
-      labelKey: 'page.cic_register.color.light_yellow',
+      icon: 'ellipse' as const,
+      color: '#FCD34D' as const,
+      labelKey: 'page.cic_register.color.light_yellow' as const,
     },
     {
       value: CicColor.DARK_YELLOW,
-      emoji: '🟠',
-      labelKey: 'page.cic_register.color.dark_yellow',
+      icon: 'ellipse' as const,
+      color: '#F59E0B' as const,
+      labelKey: 'page.cic_register.color.dark_yellow' as const,
     },
     {
       value: CicColor.ABNORMAL,
-      emoji: '🔴',
-      labelKey: 'page.cic_register.color.abnormal',
+      icon: 'warning' as const,
+      color: '#EF4444' as const,
+      labelKey: 'page.cic_register.color.abnormal' as const,
     },
   ];
 
@@ -38,15 +47,14 @@ export function ColorStep({ selectedColor, onColorSelect }: ColorStepProps) {
     <View className="flex-1 gap-6 p-4">
       {/* Header */}
       <View className="gap-2">
-        <Text
-          className="text-2xl font-semibold text-foreground"
+        <TypographySubtitle
+          i18nKey="page.cic_register.color.title"
           accessibilityRole="header"
-        >
-          {t('page.cic_register.color.title')}
-        </Text>
-        <Text className="text-base text-default-500">
-          {t('page.cic_register.color.description')}
-        </Text>
+        />
+        <TypographySmall
+          i18nKey="page.cic_register.color.description"
+          variant="light"
+        />
       </View>
 
       {/* Color Options */}
@@ -59,7 +67,7 @@ export function ColorStep({ selectedColor, onColorSelect }: ColorStepProps) {
               onPress={() => onColorSelect(option.value)}
               accessibilityRole="radio"
               accessibilityState={{ checked: isSelected }}
-              accessibilityLabel={t(option.labelKey)}
+              accessibilityLabel={option.labelKey}
             >
               <View
                 className={`flex-row items-center gap-4 p-4 rounded-xl border-2 ${
@@ -68,17 +76,23 @@ export function ColorStep({ selectedColor, onColorSelect }: ColorStepProps) {
                     : 'bg-default-100 border-default-200'
                 }`}
               >
-                <Text className="text-3xl">{option.emoji}</Text>
-                <Text
+                <StyledIonicons
+                  name={option.icon}
+                  size={32}
+                  className={isSelected ? 'text-primary' : 'text-foreground'}
+                  style={option.color ? { color: option.color } : undefined}
+                />
+                <Typography
+                  i18nKey={option.labelKey}
                   className={`text-lg font-medium flex-1 ${
                     isSelected ? 'text-primary' : 'text-foreground'
                   }`}
-                >
-                  {t(option.labelKey)}
-                </Text>
+                />
                 {isSelected && (
                   <View className="w-6 h-6 rounded-full bg-primary items-center justify-center">
-                    <Text className="text-primary-foreground text-xs">✓</Text>
+                    <Typography className="text-primary-foreground text-xs">
+                      ✓
+                    </Typography>
                   </View>
                 )}
               </View>

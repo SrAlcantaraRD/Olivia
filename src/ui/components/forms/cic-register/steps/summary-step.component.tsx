@@ -1,6 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { ScrollView, Text, TextInput, View } from 'react-native';
+import { ScrollView, TextInput, View } from 'react-native';
 
+import { CardAtom } from '@/ui/components/atoms/card.atom';
+import {
+  Typography,
+  TypographySmall,
+  TypographySubtitle,
+} from '@/ui/components/atoms/typography.atom';
 import type { CicRegisterFormData } from '../types';
 
 interface SummaryStepProps {
@@ -16,25 +22,25 @@ export function SummaryStep({
 
   const summaryItems = [
     {
-      labelKey: 'page.cic_register.summary.volume_label',
+      labelKey: 'page.cic_register.summary.volume_label' as const,
       value: formData.volume
         ? t(`page.cic_register.volume.${formData.volume}` as const)
         : '-',
     },
     {
-      labelKey: 'page.cic_register.summary.color_label',
+      labelKey: 'page.cic_register.summary.color_label' as const,
       value: formData.color
         ? t(`page.cic_register.color.${formData.color}` as const)
         : '-',
     },
     {
-      labelKey: 'page.cic_register.summary.turbidity_label',
+      labelKey: 'page.cic_register.summary.turbidity_label' as const,
       value: formData.turbidity
         ? t(`page.cic_register.turbidity.${formData.turbidity}` as const)
         : '-',
     },
     {
-      labelKey: 'page.cic_register.summary.discomfort_label',
+      labelKey: 'page.cic_register.summary.discomfort_label' as const,
       value: formData.discomfort
         ? t(`page.cic_register.discomfort.${formData.discomfort}` as const)
         : '-',
@@ -46,51 +52,54 @@ export function SummaryStep({
       <View className="gap-6">
         {/* Header */}
         <View className="gap-2">
-          <Text
-            className="text-2xl font-semibold text-foreground"
+          <TypographySubtitle
+            i18nKey="page.cic_register.summary.title"
             accessibilityRole="header"
-          >
-            {t('page.cic_register.summary.title')}
-          </Text>
-          <Text className="text-base text-default-500">
-            {t('page.cic_register.summary.description')}
-          </Text>
+          />
+          <TypographySmall
+            i18nKey="page.cic_register.summary.description"
+            variant="light"
+          />
         </View>
 
         {/* Summary Cards */}
         <View className="gap-3">
           {summaryItems.map((item) => (
-            <View
+            <CardAtom
               key={item.labelKey}
-              className="p-4 bg-default-100 rounded-xl border border-default-200"
+              className="p-4 bg-default-100 border border-default-200"
             >
-              <Text className="text-sm font-medium text-default-500 mb-1">
-                {t(item.labelKey)}
-              </Text>
-              <Text className="text-lg font-semibold text-foreground">
+              <TypographySmall
+                i18nKey={item.labelKey}
+                className="font-medium mb-1"
+                variant="light"
+              />
+              <Typography className="text-lg font-semibold text-foreground">
                 {item.value}
-              </Text>
-            </View>
+              </Typography>
+            </CardAtom>
           ))}
 
           {/* Show discomfort note if pain was reported */}
           {formData.discomfort === 'pain' && formData.discomfortNote && (
-            <View className="p-4 bg-warning/10 rounded-xl border border-warning/20">
-              <Text className="text-sm font-medium text-warning mb-1">
-                {t('page.cic_register.discomfort.note_label')}
-              </Text>
-              <Text className="text-base text-foreground">
+            <CardAtom className="p-4 bg-warning/10 border border-warning/20">
+              <TypographySmall
+                i18nKey="page.cic_register.discomfort.note_label"
+                className="font-medium text-warning mb-1"
+              />
+              <Typography className="text-base text-foreground">
                 {formData.discomfortNote}
-              </Text>
-            </View>
+              </Typography>
+            </CardAtom>
           )}
         </View>
 
         {/* Additional Notes */}
         <View className="gap-2">
-          <Text className="text-sm font-medium text-foreground">
-            {t('page.cic_register.summary.notes_label')}
-          </Text>
+          <TypographySmall
+            i18nKey="page.cic_register.summary.notes_label"
+            className="font-medium"
+          />
           <TextInput
             value={formData.additionalNotes}
             onChangeText={onAdditionalNotesChange}

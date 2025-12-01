@@ -1,7 +1,15 @@
-import { useTranslation } from 'react-i18next';
-import { Pressable, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Pressable, View } from 'react-native';
+import { withUniwind } from 'uniwind';
 
+import {
+  Typography,
+  TypographySmall,
+  TypographySubtitle,
+} from '@/ui/components/atoms/typography.atom';
 import { CicVolume } from '../types';
+
+const StyledIonicons = withUniwind(Ionicons);
 
 interface VolumeStepProps {
   selectedVolume: CicVolume | null;
@@ -12,23 +20,21 @@ export function VolumeStep({
   selectedVolume,
   onVolumeSelect,
 }: VolumeStepProps) {
-  const { t } = useTranslation();
-
   const volumeOptions = [
     {
       value: CicVolume.LOW,
-      emoji: '🔽',
-      labelKey: 'page.cic_register.volume.low',
+      icon: 'arrow-down-circle' as const,
+      labelKey: 'page.cic_register.volume.low' as const,
     },
     {
       value: CicVolume.NORMAL,
-      emoji: '✓',
-      labelKey: 'page.cic_register.volume.normal',
+      icon: 'checkmark-circle' as const,
+      labelKey: 'page.cic_register.volume.normal' as const,
     },
     {
       value: CicVolume.HIGH,
-      emoji: '🔼',
-      labelKey: 'page.cic_register.volume.high',
+      icon: 'arrow-up-circle' as const,
+      labelKey: 'page.cic_register.volume.high' as const,
     },
   ];
 
@@ -36,15 +42,14 @@ export function VolumeStep({
     <View className="flex-1 gap-6 p-4">
       {/* Header */}
       <View className="gap-2">
-        <Text
-          className="text-2xl font-semibold text-foreground"
+        <TypographySubtitle
+          i18nKey="page.cic_register.volume.title"
           accessibilityRole="header"
-        >
-          {t('page.cic_register.volume.title')}
-        </Text>
-        <Text className="text-base text-default-500">
-          {t('page.cic_register.volume.description')}
-        </Text>
+        />
+        <TypographySmall
+          i18nKey="page.cic_register.volume.description"
+          variant="light"
+        />
       </View>
 
       {/* Volume Options */}
@@ -57,7 +62,7 @@ export function VolumeStep({
               onPress={() => onVolumeSelect(option.value)}
               accessibilityRole="radio"
               accessibilityState={{ checked: isSelected }}
-              accessibilityLabel={t(option.labelKey)}
+              accessibilityLabel={option.labelKey}
             >
               <View
                 className={`flex-row items-center gap-4 p-4 rounded-xl border-2 ${
@@ -66,17 +71,22 @@ export function VolumeStep({
                     : 'bg-default-100 border-default-200'
                 }`}
               >
-                <Text className="text-3xl">{option.emoji}</Text>
-                <Text
+                <StyledIonicons
+                  name={option.icon}
+                  size={32}
+                  className={isSelected ? 'text-primary' : 'text-foreground'}
+                />
+                <Typography
+                  i18nKey={option.labelKey}
                   className={`text-lg font-medium flex-1 ${
                     isSelected ? 'text-primary' : 'text-foreground'
                   }`}
-                >
-                  {t(option.labelKey)}
-                </Text>
+                />
                 {isSelected && (
                   <View className="w-6 h-6 rounded-full bg-primary items-center justify-center">
-                    <Text className="text-primary-foreground text-xs">✓</Text>
+                    <Typography className="text-primary-foreground text-xs">
+                      ✓
+                    </Typography>
                   </View>
                 )}
               </View>

@@ -1,10 +1,15 @@
 import { Link } from 'expo-router';
-import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
+
+import { CardAtom } from '@/ui/components/atoms/card.atom';
+import {
+  Typography,
+  TypographyHeading,
+  TypographySmall,
+  TypographyTitle,
+} from '@/ui/components/atoms/typography.atom';
 
 export default function ReportScreen() {
-  const { t } = useTranslation();
-
   return (
     <View className="flex-1 bg-background">
       <ScrollView
@@ -15,111 +20,120 @@ export default function ReportScreen() {
         <View className="gap-6">
           {/* Header */}
           <View className="gap-2">
-            <Text
-              className="text-3xl font-semibold text-foreground"
+            <TypographyTitle
+              i18nKey="page.report.title"
               accessibilityRole="header"
-            >
-              {t('page.report.title')}
-            </Text>
-            <Text className="text-base text-default-500">
-              {t('page.report.subtitle')}
-            </Text>
+            />
+            <TypographySmall i18nKey="page.report.subtitle" variant="light" />
           </View>
 
           {/* Filter Section */}
           <View className="gap-4">
-            <Text
-              className="text-lg font-medium text-foreground"
+            <TypographyHeading
+              i18nKey="page.report.filters"
               accessibilityRole="header"
-            >
-              {t('page.report.filters')}
-            </Text>
+            />
 
             <Link href="/(modals)/modal-filter-history" asChild>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={t('a11y.button.open_filters')}
-                accessibilityHint={t('a11y.hint.opens_filter_modal')}
+                accessibilityLabel="a11y.button.open_filters"
+                accessibilityHint="a11y.hint.opens_filter_modal"
               >
-                <View className="flex-row items-center gap-3 p-4 bg-default-100 rounded-xl">
-                  <Text className="text-xl">🔍</Text>
-                  <Text className="text-base font-medium text-foreground flex-1">
-                    {t('component.filter_button.label')}
-                  </Text>
-                  <Text className="text-sm text-default-400">
-                    {t('component.filter_button.all_types')}
-                  </Text>
-                </View>
+                <CardAtom className="flex-row items-center gap-3 p-4 bg-default-100">
+                  <Typography className="text-xl">🔍</Typography>
+                  <Typography
+                    i18nKey="component.filter_button.label"
+                    className="text-base font-medium text-foreground flex-1"
+                  />
+                  <TypographySmall
+                    i18nKey="component.filter_button.all_types"
+                    variant="light"
+                  />
+                </CardAtom>
               </Pressable>
             </Link>
           </View>
 
           {/* Statistics Cards */}
           <View className="gap-4">
-            <Text
-              className="text-lg font-medium text-foreground"
+            <TypographyHeading
+              i18nKey="page.report.statistics"
               accessibilityRole="header"
-            >
-              {t('page.report.statistics')}
-            </Text>
+            />
 
             {/* Stat Card 1 - CIC */}
-            <View className="p-4 bg-primary/10 rounded-xl border border-primary/20">
+            <CardAtom className="p-4 bg-primary/10 border border-primary/20">
               <View className="flex-row items-center gap-2 mb-2">
-                <Text className="text-xl">💧</Text>
-                <Text className="text-sm font-medium text-primary">
-                  {t('component.stat_card.cic_label')}
-                </Text>
+                <Typography className="text-xl">💧</Typography>
+                <TypographySmall
+                  i18nKey="component.stat_card.cic_label"
+                  className="font-medium text-primary"
+                />
               </View>
-              <Text className="text-3xl font-bold text-foreground">0</Text>
-              <Text className="text-sm text-default-500 mt-1">
-                {t('component.stat_card.today')}
-              </Text>
-            </View>
+              <Typography className="text-3xl font-bold text-foreground">
+                0
+              </Typography>
+              <TypographySmall
+                i18nKey="component.stat_card.today"
+                variant="light"
+                className="mt-1"
+              />
+            </CardAtom>
 
             {/* Stat Card 2 - Stool */}
-            <View className="p-4 bg-secondary/10 rounded-xl border border-secondary/20">
+            <CardAtom className="p-4 bg-secondary/10 border border-secondary/20">
               <View className="flex-row items-center gap-2 mb-2">
-                <Text className="text-xl">💩</Text>
-                <Text className="text-sm font-medium text-secondary">
-                  {t('component.stat_card.stool_label')}
-                </Text>
+                <Typography className="text-xl">💩</Typography>
+                <TypographySmall
+                  i18nKey="component.stat_card.stool_label"
+                  className="font-medium text-secondary"
+                />
               </View>
-              <Text className="text-3xl font-bold text-foreground">0</Text>
-              <Text className="text-sm text-default-500 mt-1">
-                {t('component.stat_card.today')}
-              </Text>
-            </View>
+              <Typography className="text-3xl font-bold text-foreground">
+                0
+              </Typography>
+              <TypographySmall
+                i18nKey="component.stat_card.today"
+                variant="light"
+                className="mt-1"
+              />
+            </CardAtom>
 
             {/* Stat Card 3 - Medication */}
-            <View className="p-4 bg-success/10 rounded-xl border border-success/20">
+            <CardAtom className="p-4 bg-success/10 border border-success/20">
               <View className="flex-row items-center gap-2 mb-2">
-                <Text className="text-xl">💊</Text>
-                <Text className="text-sm font-medium text-success">
-                  {t('component.stat_card.medication_label')}
-                </Text>
+                <Typography className="text-xl">💊</Typography>
+                <TypographySmall
+                  i18nKey="component.stat_card.medication_label"
+                  className="font-medium text-success"
+                />
               </View>
-              <Text className="text-3xl font-bold text-foreground">0</Text>
-              <Text className="text-sm text-default-500 mt-1">
-                {t('component.stat_card.today')}
-              </Text>
-            </View>
+              <Typography className="text-3xl font-bold text-foreground">
+                0
+              </Typography>
+              <TypographySmall
+                i18nKey="component.stat_card.today"
+                variant="light"
+                className="mt-1"
+              />
+            </CardAtom>
           </View>
 
           {/* History Section */}
           <View className="gap-4 mt-4">
-            <Text
-              className="text-lg font-medium text-foreground"
+            <TypographyHeading
+              i18nKey="page.report.history"
               accessibilityRole="header"
-            >
-              {t('page.report.history')}
-            </Text>
+            />
 
-            <View className="p-4 bg-default-100 rounded-lg">
-              <Text className="text-sm text-default-500 text-center">
-                {t('page.report.no_history')}
-              </Text>
-            </View>
+            <CardAtom className="p-4 bg-default-100">
+              <TypographySmall
+                i18nKey="page.report.no_history"
+                variant="light"
+                className="text-center"
+              />
+            </CardAtom>
           </View>
         </View>
       </ScrollView>

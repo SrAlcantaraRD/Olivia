@@ -103,17 +103,65 @@ export function useTasks() {
 ### UI Layer (src/ui/)
 - **Atomic Design**: atoms/ → molecules/ → organisms/
 - **Naming**: Component suffix pattern (`.atom.tsx`, `.molecule.tsx`, `.organism.tsx`)
-- **Theming**: `heroui-native` + TailwindCSS (uniwind integration)
-- **i18n**: All text via i18next keys (use `i18nKey` props, never hardcode strings)
+- **Theming**: `heroui-native` base components + TailwindCSS (uniwind integration)
+- **Atoms Pattern**: Wrapper components around heroui-native for consistent styling
+  - `Typography*` variants: Pre-styled text components with i18n support
+    - `Typography`: Base text with variant/size/weight props
+    - `TypographyTitle`: Large headings (3xl, bold)
+    - `TypographySubtitle`: Medium headings (2xl, semibold)
+    - `TypographyHeading`: Small headings (xl, semibold)
+    - `TypographyParagraph`: Body text (base, normal)
+    - `TypographySmall`: Small text (sm) with optional variant="light" for muted appearance
+  - `ButtonAtom`: Wraps heroui Button with default rounded-lg styling
+  - `CardAtom`: Wraps heroui Card for consistent card styling
+  - `TextFieldAtom`: Enhanced TextField with icon support and i18n labels
+  - `SpinnerAtom`: Wraps heroui Spinner with size variants
+- **heroui-native patterns**:
+  - Compound components: `Button.Label`, `TextField.Input`, `Card.Body`, `Card.Header`, `Card.Footer`
+  - Props: `variant`, `size`, `isDisabled`, `isRequired`, `color`
+  - Slot-based composition: `TextField.InputStartContent`, `TextField.InputEndContent`
+  - Examples:
+    ```tsx
+    // Button with compound components
+    <Button variant="primary" size="lg">
+      <Spinner size="sm" />
+      <Button.Label>Loading...</Button.Label>
+    </Button>
+
+    // TextField with icons
+    <TextField isRequired>
+      <TextField.Label>Password</TextField.Label>
+      <TextField.Input secureTextEntry>
+        <TextField.InputStartContent>
+          <StyledIonicons name="lock-closed-outline" size={16} />
+        </TextField.InputStartContent>
+      </TextField.Input>
+    </TextField>
+
+    // Card with structured sections
+    <Card>
+      <Card.Header>...</Card.Header>
+      <Card.Body>
+        <Card.Title>Title</Card.Title>
+        <Card.Description>Description</Card.Description>
+      </Card.Body>
+      <Card.Footer>...</Card.Footer>
+    </Card>
+    ```
+- **Direct heroui imports**: Only use in atoms layer, never in screens/molecules/organisms
+- **Uniwind integration**: Use `withUniwind(Component)` for applying TailwindCSS to non-RN components (e.g., Ionicons)
+- **i18n**: All text via i18next keys (use `i18nKey` props on Typography variants)
+  - Format: Flat dictionary with dot notation (e.g., `'page.register.title'`)
+  - Never hardcode strings in components
 - **Accessibility**:
   - All interactive elements have `accessibilityLabel` and `accessibilityRole`
   - Use `accessibilityHint` for complex interactions
+  - Use `accessibilityState` for checkboxes, radios, toggles
   - Test with VoiceOver (iOS) / TalkBack (Android)
   - Minimum touch targets: 44x44pt (iOS), 48x48dp (Android)
 - **UX Excellence**:
   - Haptic feedback on interactions (`expo-haptics`)
   - Smooth animations with `react-native-reanimated`
-  - Glass morphism effects where appropriate (`expo-glass-effect`)
   - Loading states, error boundaries, optimistic updates
   - Form validation with real-time feedback
 
@@ -206,29 +254,37 @@ Migrations in `src/ddbb/migrations/`. Auto-run on app init via `useInitDb()` hoo
 
 ### Component Pattern (Atomic Design)
 ```tsx
-// atoms/button.atom.tsx
-import * as Haptics from 'expo-haptics';
+// atoms/button.atom.tsx - Wrapper around heroui-native
+import { Button } from 'heroui-native';
+import { TypographyParagraph } from './typography.atom';
 
-export function ButtonAtom({ onPress, i18nKey, isLoading }: ButtonAtomProps) {
-  const { t } = useTranslation();
-
-  const handlePress = async () => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    onPress();
-  };
-
+export const ButtonAtom = ({ title, ...props }: ButtonAtomProps) => {
   return (
-    <Pressable
-      onPress={handlePress}
-      accessibilityRole="button"
-      accessibilityLabel={t(i18nKey)}
-      accessibilityState={{ disabled: isLoading }}
-      disabled={isLoading}
-    >
-      {isLoading ? <SpinnerAtom /> : <Text>{t(i18nKey)}</Text>}
-    </Pressable>
+    <Button className="rounded-lg" {...props}>
+      <TypographyParagraph className="text-white" i18nKey={title} />
+    </Button>
+  );
+};
+
+// screens/register.tsx - Use atoms, not raw components
+import { TypographyTitle, TypographyParagraph } from '@/ui/components/atoms/typography.atom';
+import { CardAtom } from '@/ui/components/atoms/card.atom';
+
+export default function RegisterScreen() {
+  return (
+    <View className="flex-1 bg-background">
+      <TypographyTitle i18nKey="page.register.title" />
+      <TypographyParagraph
+        i18nKey="page.register.subtitle"
+        className="text-default-500"
+      />
+      <CardAtom className="p-4 gap-3">
+        {/* Card content */}
+      </CardAtom>
+    </View>
   );
 }
+```
 ```
 
 ### Domain Entity Pattern
@@ -278,12 +334,12 @@ Steps are pure components receiving props from hook: `ParentInfoStep`, `ChildInf
 1. **Never put business logic in UI components** - move to hooks → use-cases → adapters
 2. **Don't bypass the Port/Adapter pattern** - domain must stay tech-agnostic
 3. **Always use i18n keys** - no hardcoded Spanish/English strings in UI
-4. **Respect Atomic Design boundaries** - atoms don't import molecules
-5. **Test domain logic in isolation** - mock adapters in unit tests
-6. **Follow Zod schema pattern** - all entities validated with `z.infer<typeof Schema>`
-7. **Never skip accessibility props** - every interactive element needs `accessibilityLabel`, `accessibilityRole`
-8. **Add haptic feedback** - use `expo-haptics` for buttons, selections, and important interactions
-9. **Show loading states** - never leave users wondering if something is happening
+4. **Use atoms wrapper components** - import Typography/CardAtom/ButtonAtom, not raw Text/Card/Button from heroui-native in screens
+5. **Respect Atomic Design boundaries** - atoms don't import molecules, screens don't import heroui-native directly
+6. **Test domain logic in isolation** - mock adapters in unit tests
+7. **Follow Zod schema pattern** - all entities validated with `z.infer<typeof Schema>`
+8. **Never skip accessibility props** - every interactive element needs `accessibilityLabel`, `accessibilityRole`
+9. **Typography atoms for all text** - use TypographyTitle/Subtitle/Heading/Paragraph/Small instead of raw Text components
 10. **Validate forms in real-time** - provide immediate, helpful feedback
 
 ## When Adding New Features

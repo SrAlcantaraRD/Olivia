@@ -1,9 +1,13 @@
-import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
+
+import { CardAtom } from '@/ui/components/atoms/card.atom';
+import {
+  Typography,
+  TypographySmall,
+  TypographyTitle,
+} from '@/ui/components/atoms/typography.atom';
 
 export default function SettingsScreen() {
-  const { t } = useTranslation();
-
   return (
     <View className="flex-1 bg-background">
       <ScrollView
@@ -14,150 +18,151 @@ export default function SettingsScreen() {
         <View className="gap-6">
           {/* Header */}
           <View className="gap-2">
-            <Text
-              className="text-3xl font-semibold text-foreground"
+            <TypographyTitle
+              i18nKey="page.settings.title"
               accessibilityRole="header"
-            >
-              {t('page.settings.title')}
-            </Text>
-            <Text className="text-base text-default-500">
-              {t('page.settings.subtitle')}
-            </Text>
+            />
+            <TypographySmall i18nKey="page.settings.subtitle" variant="light" />
           </View>
 
           {/* Child Profile Section */}
           <View className="gap-3">
-            <Text
-              className="text-sm font-semibold text-default-400 uppercase"
+            <TypographySmall
+              i18nKey="page.settings.section_child"
+              className="font-semibold text-default-400 uppercase"
               accessibilityRole="header"
-            >
-              {t('page.settings.section_child')}
-            </Text>
+            />
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={t('a11y.button.child_profile')}
-              accessibilityHint={t('a11y.hint.opens_child_profile')}
+              accessibilityLabel="a11y.button.child_profile"
+              accessibilityHint="a11y.hint.opens_child_profile"
             >
-              <View className="flex-row items-center justify-between p-4 bg-default-100 rounded-xl">
+              <CardAtom className="flex-row items-center justify-between p-4 bg-default-100">
                 <View className="flex-row items-center gap-3">
-                  <Text className="text-xl">👶</Text>
+                  <Typography className="text-xl">👶</Typography>
                   <View>
-                    <Text className="text-base font-medium text-foreground">
-                      {t('page.settings.child_profile')}
-                    </Text>
-                    <Text className="text-sm text-default-500">
-                      {t('page.settings.child_profile_desc')}
-                    </Text>
+                    <Typography
+                      i18nKey="page.settings.child_profile"
+                      className="text-base font-medium text-foreground"
+                    />
+                    <TypographySmall
+                      i18nKey="page.settings.child_profile_desc"
+                      variant="light"
+                    />
                   </View>
                 </View>
-                <Text className="text-default-400">›</Text>
-              </View>
+                <Typography className="text-default-400">›</Typography>
+              </CardAtom>
             </Pressable>
           </View>
 
           {/* Carers Section */}
           <View className="gap-3">
-            <Text
-              className="text-sm font-semibold text-default-400 uppercase"
+            <TypographySmall
+              i18nKey="page.settings.section_carers"
+              className="font-semibold text-default-400 uppercase"
               accessibilityRole="header"
-            >
-              {t('page.settings.section_carers')}
-            </Text>
+            />
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={t('a11y.button.manage_carers')}
-              accessibilityHint={t('a11y.hint.opens_carer_management')}
+              accessibilityLabel="a11y.button.manage_carers"
+              accessibilityHint="a11y.hint.opens_carer_management"
             >
-              <View className="flex-row items-center justify-between p-4 bg-default-100 rounded-xl">
+              <CardAtom className="flex-row items-center justify-between p-4 bg-default-100">
                 <View className="flex-row items-center gap-3">
-                  <Text className="text-xl">👥</Text>
+                  <Typography className="text-xl">👥</Typography>
                   <View>
-                    <Text className="text-base font-medium text-foreground">
-                      {t('page.settings.manage_carers')}
-                    </Text>
-                    <Text className="text-sm text-default-500">
-                      {t('page.settings.manage_carers_desc')}
-                    </Text>
+                    <Typography
+                      i18nKey="page.settings.manage_carers"
+                      className="text-base font-medium text-foreground"
+                    />
+                    <TypographySmall
+                      i18nKey="page.settings.manage_carers_desc"
+                      variant="light"
+                    />
                   </View>
                 </View>
-                <Text className="text-default-400">›</Text>
-              </View>
+                <Typography className="text-default-400">›</Typography>
+              </CardAtom>
             </Pressable>
           </View>
 
           {/* App Settings Section */}
           <View className="gap-3">
-            <Text
-              className="text-sm font-semibold text-default-400 uppercase"
+            <TypographySmall
+              i18nKey="page.settings.section_app"
+              className="font-semibold text-default-400 uppercase"
               accessibilityRole="header"
-            >
-              {t('page.settings.section_app')}
-            </Text>
+            />
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={t('a11y.button.app_settings')}
-              accessibilityHint={t('a11y.hint.opens_app_settings')}
+              accessibilityLabel="a11y.button.app_settings"
+              accessibilityHint="a11y.hint.opens_app_settings"
             >
-              <View className="flex-row items-center justify-between p-4 bg-default-100 rounded-xl">
+              <CardAtom className="flex-row items-center justify-between p-4 bg-default-100">
                 <View className="flex-row items-center gap-3">
-                  <Text className="text-xl">⚙️</Text>
+                  <Typography className="text-xl">⚙️</Typography>
                   <View>
-                    <Text className="text-base font-medium text-foreground">
-                      {t('page.settings.app_settings')}
-                    </Text>
-                    <Text className="text-sm text-default-500">
-                      {t('page.settings.app_settings_desc')}
-                    </Text>
+                    <Typography
+                      i18nKey="page.settings.app_settings"
+                      className="text-base font-medium text-foreground"
+                    />
+                    <TypographySmall
+                      i18nKey="page.settings.app_settings_desc"
+                      variant="light"
+                    />
                   </View>
                 </View>
-                <Text className="text-default-400">›</Text>
-              </View>
+                <Typography className="text-default-400">›</Typography>
+              </CardAtom>
             </Pressable>
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={t('a11y.button.about')}
-              accessibilityHint={t('a11y.hint.opens_about')}
+              accessibilityLabel="a11y.button.about"
+              accessibilityHint="a11y.hint.opens_about"
             >
-              <View className="flex-row items-center justify-between p-4 bg-default-100 rounded-xl">
+              <CardAtom className="flex-row items-center justify-between p-4 bg-default-100">
                 <View className="flex-row items-center gap-3">
-                  <Text className="text-xl">ℹ️</Text>
+                  <Typography className="text-xl">ℹ️</Typography>
                   <View>
-                    <Text className="text-base font-medium text-foreground">
-                      {t('page.settings.about')}
-                    </Text>
-                    <Text className="text-sm text-default-500">
-                      {t('page.settings.about_desc')}
-                    </Text>
+                    <Typography
+                      i18nKey="page.settings.about"
+                      className="text-base font-medium text-foreground"
+                    />
+                    <TypographySmall
+                      i18nKey="page.settings.about_desc"
+                      variant="light"
+                    />
                   </View>
                 </View>
-                <Text className="text-default-400">›</Text>
-              </View>
+                <Typography className="text-default-400">›</Typography>
+              </CardAtom>
             </Pressable>
           </View>
 
           {/* Danger Zone */}
           <View className="gap-3 mt-4">
-            <Text
-              className="text-sm font-semibold text-danger uppercase"
+            <TypographySmall
+              i18nKey="page.settings.section_danger"
+              className="font-semibold text-danger uppercase"
               accessibilityRole="header"
-            >
-              {t('page.settings.section_danger')}
-            </Text>
+            />
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={t('a11y.button.logout')}
-              accessibilityHint={t('a11y.hint.logout_action')}
+              accessibilityLabel="a11y.button.logout"
+              accessibilityHint="a11y.hint.logout_action"
             >
-              <View className="flex-row items-center justify-center p-4 bg-danger/10 rounded-xl border border-danger/20">
-                <Text className="text-base font-semibold text-danger">
-                  {t('page.settings.logout')}
-                </Text>
-              </View>
+              <CardAtom className="flex-row items-center justify-center p-4 bg-danger/10 border border-danger/20">
+                <Typography
+                  i18nKey="page.settings.logout"
+                  className="text-base font-semibold text-danger"
+                />
+              </CardAtom>
             </Pressable>
           </View>
         </View>

@@ -1,7 +1,15 @@
-import { useTranslation } from 'react-i18next';
-import { Pressable, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Pressable, View } from 'react-native';
+import { withUniwind } from 'uniwind';
 
+import {
+  Typography,
+  TypographySmall,
+  TypographySubtitle,
+} from '@/ui/components/atoms/typography.atom';
 import { CicTurbidity } from '../types';
+
+const StyledIonicons = withUniwind(Ionicons);
 
 interface TurbidityStepProps {
   selectedTurbidity: CicTurbidity | null;
@@ -12,23 +20,21 @@ export function TurbidityStep({
   selectedTurbidity,
   onTurbiditySelect,
 }: TurbidityStepProps) {
-  const { t } = useTranslation();
-
   const turbidityOptions = [
     {
       value: CicTurbidity.CLEAR,
-      emoji: '✨',
-      labelKey: 'page.cic_register.turbidity.clear',
+      icon: 'sparkles' as const,
+      labelKey: 'page.cic_register.turbidity.clear' as const,
     },
     {
       value: CicTurbidity.SLIGHT,
-      emoji: '🌫️',
-      labelKey: 'page.cic_register.turbidity.slight',
+      icon: 'partly-sunny' as const,
+      labelKey: 'page.cic_register.turbidity.slight' as const,
     },
     {
       value: CicTurbidity.HIGH,
-      emoji: '☁️',
-      labelKey: 'page.cic_register.turbidity.high',
+      icon: 'cloudy' as const,
+      labelKey: 'page.cic_register.turbidity.high' as const,
     },
   ];
 
@@ -36,15 +42,14 @@ export function TurbidityStep({
     <View className="flex-1 gap-6 p-4">
       {/* Header */}
       <View className="gap-2">
-        <Text
-          className="text-2xl font-semibold text-foreground"
+        <TypographySubtitle
+          i18nKey="page.cic_register.turbidity.title"
           accessibilityRole="header"
-        >
-          {t('page.cic_register.turbidity.title')}
-        </Text>
-        <Text className="text-base text-default-500">
-          {t('page.cic_register.turbidity.description')}
-        </Text>
+        />
+        <TypographySmall
+          i18nKey="page.cic_register.turbidity.description"
+          variant="light"
+        />
       </View>
 
       {/* Turbidity Options */}
@@ -57,7 +62,7 @@ export function TurbidityStep({
               onPress={() => onTurbiditySelect(option.value)}
               accessibilityRole="radio"
               accessibilityState={{ checked: isSelected }}
-              accessibilityLabel={t(option.labelKey)}
+              accessibilityLabel={option.labelKey}
             >
               <View
                 className={`flex-row items-center gap-4 p-4 rounded-xl border-2 ${
@@ -66,17 +71,22 @@ export function TurbidityStep({
                     : 'bg-default-100 border-default-200'
                 }`}
               >
-                <Text className="text-3xl">{option.emoji}</Text>
-                <Text
+                <StyledIonicons
+                  name={option.icon}
+                  size={32}
+                  className={isSelected ? 'text-primary' : 'text-foreground'}
+                />
+                <Typography
+                  i18nKey={option.labelKey}
                   className={`text-lg font-medium flex-1 ${
                     isSelected ? 'text-primary' : 'text-foreground'
                   }`}
-                >
-                  {t(option.labelKey)}
-                </Text>
+                />
                 {isSelected && (
                   <View className="w-6 h-6 rounded-full bg-primary items-center justify-center">
-                    <Text className="text-primary-foreground text-xs">✓</Text>
+                    <Typography className="text-primary-foreground text-xs">
+                      ✓
+                    </Typography>
                   </View>
                 )}
               </View>

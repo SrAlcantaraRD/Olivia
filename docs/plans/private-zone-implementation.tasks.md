@@ -182,6 +182,12 @@
   - Organized by: common, tab, page, component, a11y
   - **Result:** Comprehensive English translations added
 
+- [x] **Task 8.4** - Refactor i18n structure to flat dictionary ✅ *Completed: 2025-12-01*
+  - Files: `es-ES.ts`, `en-EN.ts`, `ca-CA.ts`
+  - Converted from nested objects to flat dictionary with dot notation
+  - Example: `common: { back: 'Atrás' }` → `'common.back': 'Atrás'`
+  - **Result:** i18n structure now matches react-i18next flat key expectations
+
 ### Phase 9: Testing and Validation
 - [ ] **Task 9.1** - Manual testing checklist
   - Tab navigation works with register as default
@@ -199,19 +205,21 @@
   - Verify focus management in modals
 
 - [x] **Task 9.3** - Code quality checks ✅ *Completed: 2025-12-01*
-  - Ran `pnpm biome:check` - 8 files auto-fixed
-  - Removed unused React imports
+  - Ran `pnpm biome:check` twice (standard + unsafe)
+  - Fixed 36 files total (27 i18n refactor + 9 unused imports)
+  - Refactored i18n structure from nested objects to flat dictionary
+  - Removed unused React imports from modals and layouts
   - All new code passes linting (except pre-existing CSS/test issues)
-  - No broken imports in new components
-  - **Result:** Code quality maintained
+  - **Result:** Code quality maintained, i18n structure corrected
 
 ---
 
 ## Progress Summary
-- **Total Tasks:** 26 completed / 41 total (63.4%)
-- **Current Phase:** Phase 9 - Testing and Validation
+- **Total Tasks:** 27 completed / 41 total (65.9%)
+- **Current Phase:** Phase 9 - Testing and Validation (1 task complete, 2 remaining)
 - **Completed Phases:** Phase 1, 2, 3, 4 (partial), 5, 6, 7 (partial), 8
 - **Last Updated:** 2025-12-01
+- **Critical Fix:** i18n structure refactored to flat dictionary format (Task 8.4)
 - **Next Steps:** Manual testing of CIC wizard flow, accessibility testing
 - **Estimated Completion:** Ready for testing phase
 
