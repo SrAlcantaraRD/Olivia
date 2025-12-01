@@ -27,16 +27,16 @@ export default function TabLayout() {
         selected: themeColorForeground,
       }}
     >
-      {/* Register Tab - Default landing page */}
-      <NativeTabs.Trigger name="register">
-        <Icon sf="plus.circle.fill" />
-        <Label>{t('tab.register')}</Label>
-      </NativeTabs.Trigger>
-
       {/* Report Tab */}
       <NativeTabs.Trigger name="report">
         <Icon sf="chart.bar.doc.horizontal" />
         <Label>{t('tab.report')}</Label>
+      </NativeTabs.Trigger>
+
+      {/* Register Tab - Default landing page */}
+      <NativeTabs.Trigger name="register">
+        <Icon sf="plus.circle.fill" />
+        <Label>{t('tab.register')}</Label>
       </NativeTabs.Trigger>
 
       {/* Settings Tab */}

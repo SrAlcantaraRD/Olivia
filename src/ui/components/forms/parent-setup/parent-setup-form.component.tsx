@@ -89,8 +89,8 @@ export function ParentSetupForm() {
     if (currentStep < steps.length - 1) {
       goToNextStep();
     } else {
-      // Último paso confirmado: navegar a home o siguiente pantalla
-      router.replace('/(tabs)/home');
+      // Último paso confirmado: navegar a register tab
+      router.replace('/(tabs)/register');
     }
   };
 

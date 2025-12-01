@@ -1,5 +1,5 @@
 export {
   AUTH_STAGE,
-  authStageFromString,
   AuthStageSchema,
+  authStageFromString,
 } from './auth-stage.enum';
