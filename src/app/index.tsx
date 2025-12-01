@@ -40,7 +40,7 @@ export default function SplashScreen() {
   }, [bounceAnim]);
 
   const handleContinue = () => {
-    router.push('/(tabs)/register');
+    router.push('/role-selection');
   };
 
   return (

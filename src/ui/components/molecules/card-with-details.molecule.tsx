@@ -10,8 +10,6 @@ import {
 } from '@/ui/components/atoms/typography.atom';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
-type Layout = 'horizontal' | 'vertical';
-type IconSize = 'sm' | 'md' | 'lg';
 type Variant = 'default' | 'module' | 'compact';
 
 interface CardWithDetailsProps {
@@ -22,12 +20,8 @@ interface CardWithDetailsProps {
   isSelected: boolean;
   onSelect: () => void;
   variant?: Variant;
-  layout?: Layout;
-  iconSize?: IconSize;
-  flex?: boolean;
   className?: string;
-  showIndicator?: boolean;
-  indicatorPosition?: 'top-right' | 'top-left';
+  hideIndicator?: boolean;
 }
 
 export function CardWithDetails({
@@ -38,39 +32,21 @@ export function CardWithDetails({
   isSelected,
   onSelect,
   variant = 'default',
-  layout,
-  iconSize,
-  flex = false,
-  showIndicator = true,
+  hideIndicator = false,
   className,
-  indicatorPosition,
 }: CardWithDetailsProps) {
   const mutedColor = useThemeColor('muted');
   const accentColor = useThemeColor('accent');
   const cardBgColor = useThemeColor('surface');
 
   // Apply variant defaults
-  const finalLayout =
-    layout ?? (variant === 'compact' ? 'vertical' : 'horizontal');
   const finalClassName =
     className ??
     (variant === 'module'
       ? 'p-4 mb-4'
       : variant === 'compact'
-        ? 'p-4 items-center'
+        ? 'p-4'
         : 'p-6 mb-4');
-  const finalIndicatorPosition =
-    indicatorPosition ?? (variant === 'module' ? 'top-left' : 'top-right');
-
-  const isHorizontal = finalLayout === 'horizontal';
-
-  // Calculate padding based on indicator position
-  const contentPadding =
-    finalIndicatorPosition === 'top-left' && isHorizontal && showIndicator
-      ? 'pl-8'
-      : finalIndicatorPosition === 'top-right' && isHorizontal && showIndicator
-        ? 'pr-8'
-        : '';
 
   return (
     <SelectableCard
@@ -80,25 +56,16 @@ export function CardWithDetails({
       mutedColor={mutedColor}
       cardBgColor={cardBgColor}
       className={finalClassName}
-      flex={flex}
-      indicatorPosition={finalIndicatorPosition}
-      indicatorShape="rounded"
-      showIndicator={showIndicator}
+      showIndicator={!hideIndicator}
     >
-      <View
-        className={`${isHorizontal ? 'flex-row items-start gap-4' : 'items-center'} ${contentPadding} ${!isHorizontal ? 'mb-3' : ''}`}
-      >
+      <View className="flex-row items-center gap-4">
         {/* Icon */}
         <IconAtom name={icon} variant="contained" />
 
         {/* Content */}
-        <View className={`flex-1 ${!isHorizontal ? 'items-center' : ''}`}>
+        <View className="flex-1">
           {titleKey && (
-            <TypographyTitle
-              className={`mb-1 ${!isHorizontal ? 'text-center' : ''}`}
-              size="lg"
-              i18nKey={titleKey}
-            />
+            <TypographyTitle className="mb-2" size="lg" i18nKey={titleKey} />
           )}
 
           {subtitleKey && (
@@ -114,7 +81,6 @@ export function CardWithDetails({
           {descriptionKey && (
             <TypographyParagraph
               variant="default"
-              className={!isHorizontal ? 'text-center' : ''}
               size="sm"
               i18nKey={descriptionKey}
             />

@@ -63,8 +63,7 @@ export default function RegisterScreen() {
               isSelected={selectedAction === 'cic'}
               onSelect={handleCicSelect}
               variant="module"
-              layout="horizontal"
-              showIndicator={false}
+              hideIndicator={false}
             />
 
             {/* Stool Button */}
@@ -76,8 +75,7 @@ export default function RegisterScreen() {
               isSelected={selectedAction === 'stool'}
               onSelect={handleStoolSelect}
               variant="module"
-              layout="horizontal"
-              showIndicator={false}
+              hideIndicator={false}
             />
 
             {/* Medication Button */}
@@ -89,8 +87,7 @@ export default function RegisterScreen() {
               isSelected={selectedAction === 'medication'}
               onSelect={handleMedicationSelect}
               variant="module"
-              layout="horizontal"
-              showIndicator={false}
+              hideIndicator={false}
             />
           </View>
         </View>

@@ -11,11 +11,14 @@ import {
 } from '@/ui/components/atoms/typography.atom';
 import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
 
-type Role = 'parent' | 'caregiver' | null;
+enum ROLE_ENUM {
+  PARENT = 'parent',
+  CAREGIVER = 'caregiver',
+}
 
 export default function RoleSelectionScreen() {
   const router = useRouter();
-  const [selectedRole, setSelectedRole] = useState<Role>(null);
+  const [selectedRole, setSelectedRole] = useState<ROLE_ENUM | null>(null);
 
   const backgroundColor = useThemeColor('background');
   const foregroundColor = useThemeColor('foreground');
@@ -64,9 +67,10 @@ export default function RoleSelectionScreen() {
             titleKey="role-selection-screen.parent.title"
             subtitleKey="role-selection-screen.parent.subtitle"
             descriptionKey="role-selection-screen.parent.description"
-            isSelected={selectedRole === 'parent'}
-            onSelect={() => setSelectedRole('parent')}
+            isSelected={selectedRole === ROLE_ENUM.PARENT}
+            onSelect={() => setSelectedRole(ROLE_ENUM.PARENT)}
             className="p-6 mb-4"
+            hideIndicator
           />
 
           <CardWithDetails
@@ -74,9 +78,10 @@ export default function RoleSelectionScreen() {
             titleKey="role-selection-screen.caregiver.title"
             subtitleKey="role-selection-screen.caregiver.subtitle"
             descriptionKey="role-selection-screen.caregiver.description"
-            isSelected={selectedRole === 'caregiver'}
-            onSelect={() => setSelectedRole('caregiver')}
+            isSelected={selectedRole === ROLE_ENUM.CAREGIVER}
+            onSelect={() => setSelectedRole(ROLE_ENUM.CAREGIVER)}
             className="p-6 mb-4"
+            hideIndicator
           />
         </View>
       </View>
