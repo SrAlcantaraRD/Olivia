@@ -65,44 +65,17 @@ function typographyVariants({
 }
 
 interface TypographyProps extends TextProps {
-  i18nKey?: Ti18nKeys;
+  i18nKey: Ti18nKeys;
   className?: string;
   variant?: TypographyVariant;
   size?: TypographySize;
   weight?: TypographyWeight;
 }
 
-const Typography = React.forwardRef<Text, TypographyProps>(
-  (
-    {
-      variant = 'default',
-      size = 'base',
-      weight = 'normal',
-      className,
-      children,
-      i18nKey,
-      ...props
-    },
-    ref
-  ) => {
-    return (
-      <Text
-        ref={ref}
-        className={cn(typographyVariants({ variant, size, weight }), className)}
-        {...props}
-      >
-        {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
-      </Text>
-    );
-  }
-);
-Typography.displayName = 'Typography';
-
 const TypographyTitle = React.forwardRef<Text, TypographyProps>(
   (
     {
       className,
-      children,
       variant = 'primary',
       size = '3xl',
       weight = 'bold',
@@ -120,7 +93,7 @@ const TypographyTitle = React.forwardRef<Text, TypographyProps>(
       )}
       {...props}
     >
-      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
+      <TextTranslation i18nKey={i18nKey} />
     </Text>
   )
 );
@@ -130,7 +103,6 @@ const TypographySubtitle = React.forwardRef<Text, TypographyProps>(
   (
     {
       className,
-      children,
       variant = 'default',
       size = '2xl',
       weight = 'bold',
@@ -148,7 +120,7 @@ const TypographySubtitle = React.forwardRef<Text, TypographyProps>(
       )}
       {...props}
     >
-      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
+      <TextTranslation i18nKey={i18nKey} />
     </Text>
   )
 );
@@ -158,7 +130,6 @@ const TypographyHeading = React.forwardRef<Text, TypographyProps>(
   (
     {
       className,
-      children,
       variant = 'default',
       size = 'xl',
       weight = 'semibold',
@@ -176,7 +147,7 @@ const TypographyHeading = React.forwardRef<Text, TypographyProps>(
       )}
       {...props}
     >
-      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
+      <TextTranslation i18nKey={i18nKey} />
     </Text>
   )
 );
@@ -186,7 +157,6 @@ const TypographyParagraph = React.forwardRef<Text, TypographyProps>(
   (
     {
       className,
-      children,
       variant = 'default',
       size = 'base',
       weight = 'normal',
@@ -204,7 +174,7 @@ const TypographyParagraph = React.forwardRef<Text, TypographyProps>(
       )}
       {...props}
     >
-      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
+      <TextTranslation i18nKey={i18nKey} />
     </Text>
   )
 );
@@ -214,7 +184,6 @@ const TypographySmall = React.forwardRef<Text, TypographyProps>(
   (
     {
       className,
-      children,
       variant = 'default',
       size = 'sm',
       weight = 'normal',
@@ -228,14 +197,13 @@ const TypographySmall = React.forwardRef<Text, TypographyProps>(
       className={cn(typographyVariants({ variant, size, weight }), className)}
       {...props}
     >
-      {i18nKey ? <TextTranslation i18nKey={i18nKey} /> : children}
+      <TextTranslation i18nKey={i18nKey} />
     </Text>
   )
 );
 TypographySmall.displayName = 'TypographySmall';
 
 export {
-  Typography,
   TypographyHeading,
   TypographyParagraph,
   TypographySmall,

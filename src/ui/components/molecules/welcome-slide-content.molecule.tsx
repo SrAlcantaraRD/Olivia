@@ -1,8 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
+import type { Ionicons } from '@expo/vector-icons';
 import { useThemeColor } from 'heroui-native';
 import { View } from 'react-native';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 
+import { IllustrationAtom } from '@/ui/components/atoms/illustration.atom';
 import {
   TypographyParagraph,
   TypographySubtitle,
@@ -11,10 +12,9 @@ import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface WelcomeSlideContentProps {
   illustration: {
-    outerIcon?: keyof typeof Ionicons.glyphMap;
-    innerIcon: keyof typeof Ionicons.glyphMap;
-    innerIconSize?: number;
-    innerShape?: 'rounded-full' | 'rounded-3xl';
+    icon: keyof typeof Ionicons.glyphMap;
+    iconSize?: number;
+    shape?: 'rounded-full' | 'rounded-3xl';
     secondaryIcon?: {
       name: keyof typeof Ionicons.glyphMap;
       size?: number;
@@ -45,27 +45,14 @@ export function WelcomeSlideContent({
     >
       <View className="flex-1 justify-center items-center">
         {/* Illustration */}
-        <View className="bg-[#C8CAE5] rounded-full w-64 h-64 my-12 items-center justify-center">
-          <View
-            className={`bg-[#9B9FC5] ${illustration.innerShape} p-8 items-center justify-center`}
-          >
-            <Ionicons
-              name={illustration.innerIcon}
-              size={illustration.innerIconSize || 60}
-              color="#7B7FA5"
-            />
-            {illustration.secondaryIcon && (
-              <Ionicons
-                name={illustration.secondaryIcon.name}
-                size={illustration.secondaryIcon.size || 40}
-                color="#7B7FA5"
-                style={{
-                  position: 'absolute',
-                  ...illustration.secondaryIcon.position,
-                }}
-              />
-            )}
-          </View>
+        <View className="my-12">
+          <IllustrationAtom
+            icon={illustration.icon}
+            iconSize={illustration.iconSize}
+            shape={illustration.shape}
+            secondaryIcon={illustration.secondaryIcon}
+            size="lg"
+          />
         </View>
 
         {/* Title */}

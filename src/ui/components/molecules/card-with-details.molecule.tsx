@@ -1,7 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
+import type { Ionicons } from '@expo/vector-icons';
 import { useThemeColor } from 'heroui-native';
 import { View } from 'react-native';
 
+import { IconAtom } from '@/ui/components/atoms/icon.atom';
 import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
 import {
   TypographyParagraph,
@@ -28,12 +29,6 @@ interface CardWithDetailsProps {
   indicatorPosition?: 'top-right' | 'top-left';
 }
 
-const ICON_SIZE_MAP = {
-  sm: { size: 24, container: 'w-12 h-12 p-3' },
-  md: { size: 28, container: 'w-14 h-14 p-3' },
-  lg: { size: 32, container: 'w-16 h-16 p-4' },
-};
-
 export function CardWithDetails({
   icon,
   titleKey,
@@ -56,7 +51,6 @@ export function CardWithDetails({
   // Apply variant defaults
   const finalLayout =
     layout ?? (variant === 'compact' ? 'vertical' : 'horizontal');
-  const finalIconSize = iconSize ?? (variant === 'module' ? 'sm' : 'lg');
   const finalClassName =
     className ??
     (variant === 'module'
@@ -67,7 +61,6 @@ export function CardWithDetails({
   const finalIndicatorPosition =
     indicatorPosition ?? (variant === 'module' ? 'top-left' : 'top-right');
 
-  const { size, container } = ICON_SIZE_MAP[finalIconSize];
   const isHorizontal = finalLayout === 'horizontal';
 
   // Calculate padding based on indicator position
@@ -91,15 +84,10 @@ export function CardWithDetails({
       indicatorShape="rounded"
     >
       <View
-        className={`${isHorizontal ? 'flex-row items-start gap-4' : 'items-center'} ${contentPadding}`}
+        className={`${isHorizontal ? 'flex-row items-start gap-4' : 'items-center'} ${contentPadding} ${!isHorizontal ? 'mb-3' : ''}`}
       >
         {/* Icon */}
-        <View
-          style={{ backgroundColor: accentColor }}
-          className={`rounded-2xl items-center justify-center ${container} ${!isHorizontal ? 'mb-3' : ''}`}
-        >
-          <Ionicons name={icon} size={size} color="white" />
-        </View>
+        <IconAtom name={icon} variant="contained" />
 
         {/* Content */}
         <View className={`flex-1 ${!isHorizontal ? 'items-center' : ''}`}>

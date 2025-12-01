@@ -11,10 +11,9 @@ import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface WelcomeSlide {
   illustration: {
-    outerIcon?: keyof typeof Ionicons.glyphMap;
-    innerIcon: keyof typeof Ionicons.glyphMap;
-    innerIconSize?: number;
-    innerShape?: 'rounded-full' | 'rounded-3xl';
+    icon: keyof typeof Ionicons.glyphMap;
+    iconSize?: number;
+    shape?: 'rounded-full' | 'rounded-3xl';
     secondaryIcon?: {
       name: keyof typeof Ionicons.glyphMap;
       size?: number;
@@ -29,18 +28,18 @@ interface WelcomeSlide {
 const WELCOME_SLIDES: WelcomeSlide[] = [
   {
     illustration: {
-      innerIcon: 'heart',
-      innerIconSize: 80,
-      innerShape: 'rounded-full',
+      icon: 'heart',
+      iconSize: 80,
+      shape: 'rounded-full',
     },
     title: 'onboarding-screen.slider.care-with-peace.title',
     description: 'onboarding-screen.slider.care-with-peace.description',
   },
   {
     illustration: {
-      innerIcon: 'time-outline',
-      innerIconSize: 60,
-      innerShape: 'rounded-3xl',
+      icon: 'time-outline',
+      iconSize: 60,
+      shape: 'rounded-3xl',
       secondaryIcon: {
         name: 'checkmark-done-outline',
         size: 40,
@@ -56,9 +55,9 @@ const WELCOME_SLIDES: WelcomeSlide[] = [
   },
   {
     illustration: {
-      innerIcon: 'cloud-outline',
-      innerIconSize: 60,
-      innerShape: 'rounded-3xl',
+      icon: 'cloud-outline',
+      iconSize: 60,
+      shape: 'rounded-3xl',
       secondaryIcon: {
         name: 'lock-closed',
         size: 40,

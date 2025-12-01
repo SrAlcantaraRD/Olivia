@@ -2,9 +2,10 @@ import { Link } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { CardAtom } from '@/ui/components/atoms/card.atom';
+import { IconAtom } from '@/ui/components/atoms/icon.atom';
 import {
-  Typography,
   TypographyHeading,
+  TypographyParagraph,
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
@@ -42,8 +43,8 @@ export default function RegisterScreen() {
                 accessibilityHint="a11y.hint.opens_cic_form"
               >
                 <CardAtom className="flex-row items-center gap-3 p-4 bg-primary">
-                  <Typography className="text-2xl">💧</Typography>
-                  <Typography
+                  <IconAtom name="water" variant="contained" />
+                  <TypographyParagraph
                     i18nKey="component.register_cic_button.label"
                     className="text-lg font-semibold text-primary-foreground flex-1"
                   />
@@ -59,8 +60,8 @@ export default function RegisterScreen() {
                 accessibilityHint="a11y.hint.opens_stool_form"
               >
                 <CardAtom className="flex-row items-center gap-3 p-4 bg-secondary">
-                  <Typography className="text-2xl">💩</Typography>
-                  <Typography
+                  <IconAtom name="nutrition" variant="outlined" />
+                  <TypographyParagraph
                     i18nKey="component.register_stool_button.label"
                     className="text-lg font-semibold text-secondary-foreground flex-1"
                   />
@@ -74,9 +75,9 @@ export default function RegisterScreen() {
               accessibilityLabel="a11y.button.register_medication"
               accessibilityHint="a11y.hint.opens_medication_form"
             >
-              <CardAtom className="flex-row items-center gap-3 p-4 bg-success">
-                <Typography className="text-2xl">💊</Typography>
-                <Typography
+              <CardAtom className="flex-row items-center gap-3 p-4s">
+                <IconAtom name="medical" variant="outlined" />
+                <TypographyParagraph
                   i18nKey="component.register_medication_button.label"
                   className="text-lg font-semibold text-success-foreground flex-1"
                 />

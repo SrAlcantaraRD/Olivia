@@ -1,8 +1,9 @@
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { CardAtom } from '@/ui/components/atoms/card.atom';
+import { IconAtom } from '@/ui/components/atoms/icon.atom';
 import {
-  Typography,
+  TypographyParagraph,
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
@@ -40,11 +41,11 @@ export default function SettingsScreen() {
             >
               <CardAtom className="flex-row items-center justify-between p-4 bg-default-100">
                 <View className="flex-row items-center gap-3">
-                  <Typography className="text-xl">👶</Typography>
+                  <IconAtom name="person" />
                   <View>
-                    <Typography
+                    <TypographyParagraph
                       i18nKey="page.settings.child_profile"
-                      className="text-base font-medium text-foreground"
+                      className="font-medium"
                     />
                     <TypographySmall
                       i18nKey="page.settings.child_profile_desc"
@@ -52,7 +53,7 @@ export default function SettingsScreen() {
                     />
                   </View>
                 </View>
-                <Typography className="text-default-400">›</Typography>
+                <IconAtom name="chevron-forward" />
               </CardAtom>
             </Pressable>
           </View>
@@ -72,11 +73,11 @@ export default function SettingsScreen() {
             >
               <CardAtom className="flex-row items-center justify-between p-4 bg-default-100">
                 <View className="flex-row items-center gap-3">
-                  <Typography className="text-xl">👥</Typography>
+                  <IconAtom name="people" />
                   <View>
-                    <Typography
+                    <TypographyParagraph
                       i18nKey="page.settings.manage_carers"
-                      className="text-base font-medium text-foreground"
+                      className="font-medium"
                     />
                     <TypographySmall
                       i18nKey="page.settings.manage_carers_desc"
@@ -84,7 +85,7 @@ export default function SettingsScreen() {
                     />
                   </View>
                 </View>
-                <Typography className="text-default-400">›</Typography>
+                <IconAtom name="chevron-forward" />
               </CardAtom>
             </Pressable>
           </View>
@@ -104,11 +105,11 @@ export default function SettingsScreen() {
             >
               <CardAtom className="flex-row items-center justify-between p-4 bg-default-100">
                 <View className="flex-row items-center gap-3">
-                  <Typography className="text-xl">⚙️</Typography>
+                  <IconAtom name="settings" />
                   <View>
-                    <Typography
+                    <TypographyParagraph
                       i18nKey="page.settings.app_settings"
-                      className="text-base font-medium text-foreground"
+                      className="font-medium"
                     />
                     <TypographySmall
                       i18nKey="page.settings.app_settings_desc"
@@ -116,7 +117,7 @@ export default function SettingsScreen() {
                     />
                   </View>
                 </View>
-                <Typography className="text-default-400">›</Typography>
+                <IconAtom name="chevron-forward" />
               </CardAtom>
             </Pressable>
 
@@ -127,11 +128,11 @@ export default function SettingsScreen() {
             >
               <CardAtom className="flex-row items-center justify-between p-4 bg-default-100">
                 <View className="flex-row items-center gap-3">
-                  <Typography className="text-xl">ℹ️</Typography>
+                  <IconAtom name="information-circle" />
                   <View>
-                    <Typography
+                    <TypographyParagraph
                       i18nKey="page.settings.about"
-                      className="text-base font-medium text-foreground"
+                      className="font-medium"
                     />
                     <TypographySmall
                       i18nKey="page.settings.about_desc"
@@ -139,7 +140,7 @@ export default function SettingsScreen() {
                     />
                   </View>
                 </View>
-                <Typography className="text-default-400">›</Typography>
+                <IconAtom name="chevron-forward" />
               </CardAtom>
             </Pressable>
           </View>
@@ -158,9 +159,9 @@ export default function SettingsScreen() {
               accessibilityHint="a11y.hint.logout_action"
             >
               <CardAtom className="flex-row items-center justify-center p-4 bg-danger/10 border border-danger/20">
-                <Typography
+                <TypographyParagraph
                   i18nKey="page.settings.logout"
-                  className="text-base font-semibold text-danger"
+                  className="font-semibold text-danger"
                 />
               </CardAtom>
             </Pressable>

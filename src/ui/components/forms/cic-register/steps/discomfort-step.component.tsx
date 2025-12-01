@@ -4,7 +4,7 @@ import { Pressable, TextInput, View } from 'react-native';
 import { withUniwind } from 'uniwind';
 
 import {
-  Typography,
+  TypographyParagraph,
   TypographySmall,
   TypographySubtitle,
 } from '@/ui/components/atoms/typography.atom';
@@ -88,18 +88,18 @@ export function DiscomfortStep({
                   size={32}
                   style={{ color: option.color }}
                 />
-                <Typography
+                <TypographyParagraph
                   i18nKey={option.labelKey}
                   className={`text-lg font-medium flex-1 ${
-                    isSelected ? 'text-primary' : 'text-foreground'
+                    isSelected ? 'text-primary' : ''
                   }`}
                 />
                 {isSelected && (
-                  <View className="w-6 h-6 rounded-full bg-primary items-center justify-center">
-                    <Typography className="text-primary-foreground text-xs">
-                      ✓
-                    </Typography>
-                  </View>
+                  <StyledIonicons
+                    name="checkmark-circle"
+                    size={24}
+                    className="text-primary"
+                  />
                 )}
               </View>
             </Pressable>

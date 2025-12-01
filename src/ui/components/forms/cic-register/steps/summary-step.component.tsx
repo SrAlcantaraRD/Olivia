@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { ScrollView, TextInput, View } from 'react-native';
+import { ScrollView, Text, TextInput, View } from 'react-native';
 
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import {
-  Typography,
   TypographySmall,
   TypographySubtitle,
 } from '@/ui/components/atoms/typography.atom';
@@ -74,9 +73,9 @@ export function SummaryStep({
                 className="font-medium mb-1"
                 variant="light"
               />
-              <Typography className="text-lg font-semibold text-foreground">
+              <Text className="text-lg font-semibold text-foreground">
                 {item.value}
-              </Typography>
+              </Text>
             </CardAtom>
           ))}
 
@@ -87,9 +86,9 @@ export function SummaryStep({
                 i18nKey="page.cic_register.discomfort.note_label"
                 className="font-medium text-warning mb-1"
               />
-              <Typography className="text-base text-foreground">
+              <Text className="text-base text-foreground">
                 {formData.discomfortNote}
-              </Typography>
+              </Text>
             </CardAtom>
           )}
         </View>
