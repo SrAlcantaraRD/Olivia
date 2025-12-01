@@ -36,7 +36,7 @@ export default function RegisterScreen() {
             </Text>
 
             {/* CIC Button */}
-            <Link href="/(modals)/modal-add-carer" asChild>
+            <Link href="/(modals)/modal-register-cic" asChild>
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={t('a11y.button.register_cic')}

@@ -172,6 +172,59 @@ export const enEN = {
       title: 'Application Settings',
       placeholder: 'App settings coming soon',
     },
+
+    // CIC Registration Wizard
+    cic_register: {
+      // Volume step
+      volume: {
+        title: 'Urine Volume',
+        description: 'Select the observed volume',
+        low: 'Low',
+        normal: 'Normal',
+        high: 'High',
+      },
+      // Color step
+      color: {
+        title: 'Urine Color',
+        description: 'Select the observed color',
+        transparent: 'Transparent',
+        light_yellow: 'Light yellow',
+        dark_yellow: 'Dark yellow',
+        abnormal: 'Abnormal',
+      },
+      // Turbidity step
+      turbidity: {
+        title: 'Turbidity',
+        description: 'Select the observed turbidity',
+        clear: 'Clear',
+        slight: 'Slight',
+        high: 'High',
+      },
+      // Discomfort step
+      discomfort: {
+        title: 'Any discomfort?',
+        description: 'Indicate if the child experienced discomfort',
+        none: 'None',
+        slight: 'Slight',
+        pain: 'Pain',
+        note_label: 'Describe the pain (optional)',
+        note_placeholder: 'E.g.: Pain at the beginning of catheterization',
+      },
+      // Summary step
+      summary: {
+        title: 'Registration Summary',
+        description: 'Confirm everything is correct before saving',
+        volume_label: 'Volume',
+        color_label: 'Color',
+        turbidity_label: 'Turbidity',
+        discomfort_label: 'Discomfort',
+        notes_label: 'Additional notes (optional)',
+        notes_placeholder: 'Add additional notes if desired',
+        save_button: 'Save record',
+        success: 'Record saved successfully',
+        error: 'Error saving record',
+      },
+    },
   },
 
   // Components

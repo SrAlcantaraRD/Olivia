@@ -97,6 +97,59 @@ export const esES = {
       title: 'Ajustes de la Aplicación',
       placeholder: 'Ajustes de la aplicación próximamente',
     },
+
+    // CIC Registration Wizard
+    cic_register: {
+      // Volume step
+      volume: {
+        title: 'Volumen de orina',
+        description: 'Selecciona el volumen observado',
+        low: 'Bajo',
+        normal: 'Normal',
+        high: 'Alto',
+      },
+      // Color step
+      color: {
+        title: 'Color de la orina',
+        description: 'Selecciona el color observado',
+        transparent: 'Transparente',
+        light_yellow: 'Amarillo claro',
+        dark_yellow: 'Amarillo oscuro',
+        abnormal: 'Anómalo',
+      },
+      // Turbidity step
+      turbidity: {
+        title: 'Turbidez',
+        description: 'Selecciona la turbidez observada',
+        clear: 'Clara',
+        slight: 'Leve',
+        high: 'Alta',
+      },
+      // Discomfort step
+      discomfort: {
+        title: '¿Hubo molestias?',
+        description: 'Indica si el niño/a presentó molestias',
+        none: 'No',
+        slight: 'Leve',
+        pain: 'Dolor',
+        note_label: 'Describe el dolor (opcional)',
+        note_placeholder: 'Ej: Dolor al inicio del cateterismo',
+      },
+      // Summary step
+      summary: {
+        title: 'Resumen del registro',
+        description: 'Confirma que todo es correcto antes de guardar',
+        volume_label: 'Volumen',
+        color_label: 'Color',
+        turbidity_label: 'Turbidez',
+        discomfort_label: 'Molestias',
+        notes_label: 'Notas adicionales (opcional)',
+        notes_placeholder: 'Añade notas adicionales si lo deseas',
+        save_button: 'Guardar registro',
+        success: 'Registro guardado correctamente',
+        error: 'Error al guardar el registro',
+      },
+    },
   },
 
   // Components
