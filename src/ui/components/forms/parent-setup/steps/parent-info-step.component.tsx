@@ -48,16 +48,12 @@ export function ParentInfoStep({
             titleKey="parent-setup.parent-info.parent"
             isSelected={relationship === 'parent'}
             onSelect={() => onRelationshipChange('parent')}
-            variant="compact"
-            flex
           />
           <CardWithDetails
             icon="shield"
             titleKey="parent-setup.parent-info.guardian"
             isSelected={relationship === 'guardian'}
             onSelect={() => onRelationshipChange('guardian')}
-            variant="compact"
-            flex
           />
         </View>
       </View>

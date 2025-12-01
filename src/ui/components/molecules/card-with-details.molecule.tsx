@@ -1,5 +1,4 @@
 import type { Ionicons } from '@expo/vector-icons';
-import { useThemeColor } from 'heroui-native';
 import { View } from 'react-native';
 
 import { IconAtom } from '@/ui/components/atoms/icon.atom';
@@ -10,8 +9,6 @@ import {
 } from '@/ui/components/atoms/typography.atom';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
-type Variant = 'default' | 'module' | 'compact';
-
 interface CardWithDetailsProps {
   icon: keyof typeof Ionicons.glyphMap;
   titleKey?: Ti18nKeys;
@@ -19,9 +16,6 @@ interface CardWithDetailsProps {
   descriptionKey?: Ti18nKeys;
   isSelected: boolean;
   onSelect: () => void;
-  variant?: Variant;
-  className?: string;
-  hideIndicator?: boolean;
 }
 
 export function CardWithDetails({
@@ -31,32 +25,12 @@ export function CardWithDetails({
   descriptionKey,
   isSelected,
   onSelect,
-  variant = 'default',
-  hideIndicator = false,
-  className,
 }: CardWithDetailsProps) {
-  const mutedColor = useThemeColor('muted');
-  const accentColor = useThemeColor('accent');
-  const cardBgColor = useThemeColor('surface');
-
-  // Apply variant defaults
-  const finalClassName =
-    className ??
-    (variant === 'module'
-      ? 'p-4 mb-4'
-      : variant === 'compact'
-        ? 'p-4'
-        : 'p-6 mb-4');
-
   return (
     <SelectableCard
       isSelected={isSelected}
       onSelect={onSelect}
-      accentColor={accentColor}
-      mutedColor={mutedColor}
-      cardBgColor={cardBgColor}
-      className={finalClassName}
-      showIndicator={!hideIndicator}
+      className="p-4 mb-4"
     >
       <View className="flex-row items-center gap-4">
         {/* Icon */}

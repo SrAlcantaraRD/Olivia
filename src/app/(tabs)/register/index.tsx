@@ -62,8 +62,6 @@ export default function RegisterScreen() {
               descriptionKey="component.register_cic_button.description"
               isSelected={selectedAction === 'cic'}
               onSelect={handleCicSelect}
-              variant="module"
-              hideIndicator={false}
             />
 
             {/* Stool Button */}
@@ -74,8 +72,6 @@ export default function RegisterScreen() {
               descriptionKey="component.register_stool_button.description"
               isSelected={selectedAction === 'stool'}
               onSelect={handleStoolSelect}
-              variant="module"
-              hideIndicator={false}
             />
 
             {/* Medication Button */}
@@ -86,8 +82,6 @@ export default function RegisterScreen() {
               descriptionKey="component.register_medication_button.description"
               isSelected={selectedAction === 'medication'}
               onSelect={handleMedicationSelect}
-              variant="module"
-              hideIndicator={false}
             />
           </View>
         </View>

@@ -69,8 +69,6 @@ export default function RoleSelectionScreen() {
             descriptionKey="role-selection-screen.parent.description"
             isSelected={selectedRole === ROLE_ENUM.PARENT}
             onSelect={() => setSelectedRole(ROLE_ENUM.PARENT)}
-            className="p-6 mb-4"
-            hideIndicator
           />
 
           <CardWithDetails
@@ -80,8 +78,6 @@ export default function RoleSelectionScreen() {
             descriptionKey="role-selection-screen.caregiver.description"
             isSelected={selectedRole === ROLE_ENUM.CAREGIVER}
             onSelect={() => setSelectedRole(ROLE_ENUM.CAREGIVER)}
-            className="p-6 mb-4"
-            hideIndicator
           />
         </View>
       </View>

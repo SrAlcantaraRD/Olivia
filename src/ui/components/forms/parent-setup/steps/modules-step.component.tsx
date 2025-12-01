@@ -20,7 +20,6 @@ export function ModulesStep({
         descriptionKey="parent-setup.modules.catheterization.description"
         isSelected={selectedModules.has(MODULE_IDS.CATHETERIZATION)}
         onSelect={() => onToggleModule(MODULE_IDS.CATHETERIZATION)}
-        variant="module"
       />
 
       <CardWithDetails
@@ -29,7 +28,6 @@ export function ModulesStep({
         descriptionKey="parent-setup.modules.bowel-movements.description"
         isSelected={selectedModules.has(MODULE_IDS.BOWEL_MOVEMENTS)}
         onSelect={() => onToggleModule(MODULE_IDS.BOWEL_MOVEMENTS)}
-        variant="module"
       />
 
       <CardWithDetails
@@ -38,7 +36,6 @@ export function ModulesStep({
         descriptionKey="parent-setup.modules.enemas.description"
         isSelected={selectedModules.has(MODULE_IDS.ENEMAS)}
         onSelect={() => onToggleModule(MODULE_IDS.ENEMAS)}
-        variant="module"
       />
     </View>
   );
