@@ -13,9 +13,8 @@ interface ModuleCardProps {
   titleKey: Ti18nKeys;
   descriptionKey: Ti18nKeys;
   isSelected: boolean;
-  onToggle: () => void;
+  onSelect: () => void;
   accentColor: string;
-  foregroundColor: string;
   mutedColor: string;
   cardBgColor: string;
 }
@@ -25,16 +24,15 @@ export function ModuleCard({
   titleKey,
   descriptionKey,
   isSelected,
-  onToggle,
+  onSelect,
   accentColor,
-  foregroundColor,
   mutedColor,
   cardBgColor,
 }: ModuleCardProps) {
   return (
     <SelectableCard
       isSelected={isSelected}
-      onSelect={onToggle}
+      onSelect={onSelect}
       accentColor={accentColor}
       mutedColor={mutedColor}
       cardBgColor={cardBgColor}
@@ -52,14 +50,14 @@ export function ModuleCard({
 
         <View className="flex-1">
           <TypographyTitle
-            style={{ color: foregroundColor }}
             className="mb-1"
             size="lg"
+            variant="default"
             i18nKey={titleKey}
           />
           <TypographyParagraph
-            style={{ color: mutedColor }}
             size="sm"
+            variant="light"
             i18nKey={descriptionKey}
           />
         </View>

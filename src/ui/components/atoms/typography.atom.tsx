@@ -1,3 +1,4 @@
+import { useThemeColor } from 'heroui-native';
 import * as React from 'react';
 import { Text, type TextProps } from 'react-native';
 
@@ -80,22 +81,36 @@ const TypographyTitle = React.forwardRef<Text, TypographyProps>(
       size = '3xl',
       weight = 'bold',
       i18nKey,
+      style,
       ...props
     },
     ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        typographyVariants({ variant, size, weight }),
-        BASE_STYLES.title,
-        className
-      )}
-      {...props}
-    >
-      <TextTranslation i18nKey={i18nKey} />
-    </Text>
-  )
+  ) => {
+    const accentColor = useThemeColor('accent');
+    const foregroundColor = useThemeColor('foreground');
+    const mutedColor = useThemeColor('muted');
+
+    const colorMap = {
+      default: foregroundColor,
+      primary: accentColor,
+      light: mutedColor,
+    };
+
+    return (
+      <Text
+        ref={ref}
+        style={[{ color: colorMap[variant] }, style]}
+        className={cn(
+          typographyVariants({ variant, size, weight }),
+          BASE_STYLES.title,
+          className
+        )}
+        {...props}
+      >
+        <TextTranslation i18nKey={i18nKey} />
+      </Text>
+    );
+  }
 );
 TypographyTitle.displayName = 'TypographyTitle';
 
@@ -107,22 +122,36 @@ const TypographySubtitle = React.forwardRef<Text, TypographyProps>(
       size = '2xl',
       weight = 'bold',
       i18nKey,
+      style,
       ...props
     },
     ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        typographyVariants({ variant, size, weight }),
-        BASE_STYLES.subtitle,
-        className
-      )}
-      {...props}
-    >
-      <TextTranslation i18nKey={i18nKey} />
-    </Text>
-  )
+  ) => {
+    const accentColor = useThemeColor('accent');
+    const foregroundColor = useThemeColor('foreground');
+    const mutedColor = useThemeColor('muted');
+
+    const colorMap = {
+      default: foregroundColor,
+      primary: accentColor,
+      light: mutedColor,
+    };
+
+    return (
+      <Text
+        ref={ref}
+        style={[{ color: colorMap[variant] }, style]}
+        className={cn(
+          typographyVariants({ variant, size, weight }),
+          BASE_STYLES.subtitle,
+          className
+        )}
+        {...props}
+      >
+        <TextTranslation i18nKey={i18nKey} />
+      </Text>
+    );
+  }
 );
 TypographySubtitle.displayName = 'TypographySubtitle';
 
@@ -134,22 +163,36 @@ const TypographyHeading = React.forwardRef<Text, TypographyProps>(
       size = 'xl',
       weight = 'semibold',
       i18nKey,
+      style,
       ...props
     },
     ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        typographyVariants({ variant, size, weight }),
-        BASE_STYLES.heading,
-        className
-      )}
-      {...props}
-    >
-      <TextTranslation i18nKey={i18nKey} />
-    </Text>
-  )
+  ) => {
+    const accentColor = useThemeColor('accent');
+    const foregroundColor = useThemeColor('foreground');
+    const mutedColor = useThemeColor('muted');
+
+    const colorMap = {
+      default: foregroundColor,
+      primary: accentColor,
+      light: mutedColor,
+    };
+
+    return (
+      <Text
+        ref={ref}
+        style={[{ color: colorMap[variant] }, style]}
+        className={cn(
+          typographyVariants({ variant, size, weight }),
+          BASE_STYLES.heading,
+          className
+        )}
+        {...props}
+      >
+        <TextTranslation i18nKey={i18nKey} />
+      </Text>
+    );
+  }
 );
 TypographyHeading.displayName = 'TypographyHeading';
 
@@ -161,23 +204,38 @@ const TypographyParagraph = React.forwardRef<Text, TypographyProps>(
       size = 'base',
       weight = 'normal',
       i18nKey,
+      style,
       ...props
     },
     ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(
-        typographyVariants({ variant, size, weight }),
-        BASE_STYLES.paragraph,
-        className
-      )}
-      {...props}
-    >
-      <TextTranslation i18nKey={i18nKey} />
-    </Text>
-  )
+  ) => {
+    const accentColor = useThemeColor('accent');
+    const foregroundColor = useThemeColor('foreground');
+    const mutedColor = useThemeColor('muted');
+
+    const colorMap = {
+      default: foregroundColor,
+      primary: accentColor,
+      light: mutedColor,
+    };
+
+    return (
+      <Text
+        ref={ref}
+        style={[{ color: colorMap[variant] }, style]}
+        className={cn(
+          typographyVariants({ variant, size, weight }),
+          BASE_STYLES.paragraph,
+          className
+        )}
+        {...props}
+      >
+        <TextTranslation i18nKey={i18nKey} />
+      </Text>
+    );
+  }
 );
+
 TypographyParagraph.displayName = 'TypographyParagraph';
 
 const TypographySmall = React.forwardRef<Text, TypographyProps>(
@@ -188,18 +246,32 @@ const TypographySmall = React.forwardRef<Text, TypographyProps>(
       size = 'sm',
       weight = 'normal',
       i18nKey,
+      style,
       ...props
     },
     ref
-  ) => (
-    <Text
-      ref={ref}
-      className={cn(typographyVariants({ variant, size, weight }), className)}
-      {...props}
-    >
-      <TextTranslation i18nKey={i18nKey} />
-    </Text>
-  )
+  ) => {
+    const accentColor = useThemeColor('accent');
+    const foregroundColor = useThemeColor('foreground');
+    const mutedColor = useThemeColor('muted');
+
+    const colorMap = {
+      default: foregroundColor,
+      primary: accentColor,
+      light: mutedColor,
+    };
+
+    return (
+      <Text
+        ref={ref}
+        style={[{ color: colorMap[variant] }, style]}
+        className={cn(typographyVariants({ variant, size, weight }), className)}
+        {...props}
+      >
+        <TextTranslation i18nKey={i18nKey} />
+      </Text>
+    );
+  }
 );
 TypographySmall.displayName = 'TypographySmall';
 

@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
-import { View } from 'react-native';
+import { useThemeColor } from 'heroui-native';
+import { Text, View } from 'react-native';
 
 import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
-import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
 
 interface RelationshipCardProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -10,7 +10,6 @@ interface RelationshipCardProps {
   isSelected: boolean;
   onSelect: () => void;
   accentColor: string;
-  foregroundColor: string;
   mutedColor: string;
   cardBgColor: string;
 }
@@ -21,10 +20,11 @@ export function RelationshipCard({
   isSelected,
   onSelect,
   accentColor,
-  foregroundColor,
   mutedColor,
   cardBgColor,
 }: RelationshipCardProps) {
+  const foregroundColor = useThemeColor('foreground');
+
   return (
     <SelectableCard
       isSelected={isSelected}
@@ -42,13 +42,12 @@ export function RelationshipCard({
         <Ionicons name={icon} size={32} color="white" />
       </View>
 
-      <TypographyParagraph
+      <Text
         style={{ color: foregroundColor }}
-        className="text-center"
-        weight="medium"
+        className="text-center text-base font-medium"
       >
         {label}
-      </TypographyParagraph>
+      </Text>
     </SelectableCard>
   );
 }

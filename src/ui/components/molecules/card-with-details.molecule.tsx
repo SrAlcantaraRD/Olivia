@@ -45,7 +45,6 @@ export function CardWithDetails({
   className,
   indicatorPosition,
 }: CardWithDetailsProps) {
-  const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
   const accentColor = useThemeColor('accent');
   const cardBgColor = useThemeColor('surface');
@@ -96,7 +95,6 @@ export function CardWithDetails({
         <View className={`flex-1 ${!isHorizontal ? 'items-center' : ''}`}>
           {titleKey && (
             <TypographyTitle
-              style={{ color: foregroundColor }}
               className={`mb-1 ${!isHorizontal ? 'text-center' : ''}`}
               size="lg"
               i18nKey={titleKey}
@@ -105,7 +103,7 @@ export function CardWithDetails({
 
           {subtitleKey && (
             <TypographyParagraph
-              style={{ color: accentColor }}
+              variant="light"
               className="mb-2"
               size="sm"
               weight="medium"
@@ -115,7 +113,7 @@ export function CardWithDetails({
 
           {descriptionKey && (
             <TypographyParagraph
-              style={{ color: mutedColor }}
+              variant="default"
               className={!isHorizontal ? 'text-center' : ''}
               size="sm"
               i18nKey={descriptionKey}
