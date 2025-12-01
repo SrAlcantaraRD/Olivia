@@ -8,13 +8,14 @@ export default function TabLayout() {
   const { isDark } = useAppTheme();
   const { t } = useTranslation();
 
-  const themeColorForeground = useThemeColor('foreground');
-  const themeColorBackground = useThemeColor('background');
+  const accentColor = useThemeColor('accent');
+  const mutedColor = useThemeColor('muted');
+  const backgroundColor = useThemeColor('background');
 
   return (
     <NativeTabs
-      tintColor={themeColorForeground}
-      backgroundColor={themeColorBackground}
+      tintColor={accentColor}
+      backgroundColor={backgroundColor}
       blurEffect={
         isDark ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'
       }
@@ -23,20 +24,20 @@ export default function TabLayout() {
         fontWeight: '600',
       }}
       iconColor={{
-        default: isDark ? '#8E8E93' : '#8E8E93',
-        selected: themeColorForeground,
+        default: mutedColor,
+        selected: accentColor,
       }}
     >
-      {/* Register Tab - Default landing page (first tab) */}
-      <NativeTabs.Trigger name="register">
-        <Icon sf="plus.circle.fill" />
-        <Label>{t('tab.register')}</Label>
-      </NativeTabs.Trigger>
-
       {/* Report Tab */}
       <NativeTabs.Trigger name="report">
         <Icon sf="chart.bar.doc.horizontal" />
         <Label>{t('tab.report')}</Label>
+      </NativeTabs.Trigger>
+
+      {/* Register Tab - Default landing page (first tab) */}
+      <NativeTabs.Trigger name="register">
+        <Icon sf="plus.circle.fill" />
+        <Label>{t('tab.register')}</Label>
       </NativeTabs.Trigger>
 
       {/* Settings Tab */}
