@@ -1,4 +1,4 @@
-import { BaseError } from '@/domain/core/entity';
+import { BaseError } from '@/domain/core/entity/base-error';
 
 export class ErrorCannotParseSchema extends BaseError {
   constructor(schemaName: string, message: string) {

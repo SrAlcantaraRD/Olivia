@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 import { statusSchema } from '@/domain/core/enum/status.enum';
-import { IDSchema, UUIDSchema } from '../schemas';
+import { IDSchema } from '@/domain/core/schemas/id.schema';
+import { UUIDSchema } from '@/domain/core/schemas/uuid.schema';
 
 export const BaseEntitySchema = z.object({
   id: IDSchema,
