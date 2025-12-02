@@ -2,14 +2,14 @@ import z from 'zod';
 
 import { ErrorCannotParseSchema } from '@/domain/core/error/cannot-parse-schema.error';
 
-export enum CARER_TYPE {
+export enum CARER_TYPE_ENUM {
   ADMIN = 'ADMIN',
   SECONDARY = 'SECUNDARIO',
   HEALTH = 'SANITARIO',
 }
 
-export const getCarerTypeFromValue = (value: string): CARER_TYPE => {
-  const types: CARER_TYPE[] = Object.values(CARER_TYPE);
+export const getCarerTypeFromValue = (value: string): CARER_TYPE_ENUM => {
+  const types: CARER_TYPE_ENUM[] = Object.values(CARER_TYPE_ENUM);
 
   const type = types.find((column) => column === value);
 
@@ -23,4 +23,4 @@ export const getCarerTypeFromValue = (value: string): CARER_TYPE => {
   return type;
 };
 
-export const CarerTypeSchema = z.enum(CARER_TYPE);
+export const CarerTypeSchema = z.enum(CARER_TYPE_ENUM);

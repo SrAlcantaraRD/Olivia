@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { ErrorCannotParseSchema } from '@/domain/core/error/cannot-parse-schema.error';
 
-export enum MODULE_FIELD_TYPE {
+export enum MODULE_FIELD_TYPE_ENUM {
   TEXT = 'TEXT',
   NUMBER = 'NUMBER',
   SELECT = 'SELECT',
@@ -13,12 +13,12 @@ export enum MODULE_FIELD_TYPE {
   TEXTAREA = 'TEXTAREA',
 }
 
-export const ModuleFieldTypeSchema = z.enum(MODULE_FIELD_TYPE);
+export const ModuleFieldTypeSchema = z.enum(MODULE_FIELD_TYPE_ENUM);
 
 export const getModuleFieldTypeFromValue = (
   value: string
-): MODULE_FIELD_TYPE => {
-  const types: MODULE_FIELD_TYPE[] = Object.values(MODULE_FIELD_TYPE);
+): MODULE_FIELD_TYPE_ENUM => {
+  const types: MODULE_FIELD_TYPE_ENUM[] = Object.values(MODULE_FIELD_TYPE_ENUM);
 
   const type = types.find((column) => column === value);
 

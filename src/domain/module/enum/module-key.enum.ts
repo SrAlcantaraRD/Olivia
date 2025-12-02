@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { ErrorCannotParseSchema } from '@/domain/core/error/cannot-parse-schema.error';
 
-export enum MODULE_KEY {
+export enum MODULE_KEY_ENUM {
   CIC = 'CIC',
   URINE = 'URINE',
   STOOL = 'STOOL',
@@ -10,10 +10,10 @@ export enum MODULE_KEY {
   ENEMA = 'ENEMA',
 }
 
-export const ModuleKeySchema = z.enum(MODULE_KEY);
+export const ModuleKeySchema = z.enum(MODULE_KEY_ENUM);
 
-export const getModuleKeyFromValue = (value: string): MODULE_KEY => {
-  const types: MODULE_KEY[] = Object.values(MODULE_KEY);
+export const getModuleKeyFromValue = (value: string): MODULE_KEY_ENUM => {
+  const types: MODULE_KEY_ENUM[] = Object.values(MODULE_KEY_ENUM);
 
   const type = types.find((column) => column === value);
 

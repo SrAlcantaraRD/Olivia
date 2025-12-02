@@ -1,7 +1,7 @@
 /// <reference types="jest" />
 
 import type { TCarerEntity } from '@/domain/carer/entity/carer.entity';
-import { CARER_TYPE } from '@/domain/carer/enum/carer-type.enums';
+import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
 
 export const mockCarerEntity = (
   overrides: Partial<TCarerEntity> = {}
@@ -9,7 +9,7 @@ export const mockCarerEntity = (
   id: 1,
   uuid: 'carer-uuid-123',
   name: 'John Doe',
-  type: CARER_TYPE.ADMIN,
+  type: CARER_TYPE_ENUM.ADMIN,
   isPrimary: true,
   pinHash: 'hashed-pin-123',
   status: true,
