@@ -11,7 +11,6 @@ import { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Image, Platform, StyleSheet } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
-import { useInitDb } from '@/ddbb';
 import '@/ui/i18n/i18n';
 import 'react-native-reanimated';
 import '../global.css';
@@ -25,6 +24,7 @@ import {
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
 
+import { useInitDb } from '@/database/execute-migrations';
 import { BASE_LOGGER, DATABASE_NAME } from '@/domain/core';
 import { ThemeToggle } from '@/ui/components/atoms/theme-toggle.atom';
 import { AppThemeProvider, useAppTheme } from '@/ui/themes/app-theme-context';
