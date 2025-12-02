@@ -9,7 +9,7 @@ export const CarerEntitySchema = z.object({
   name: z.string().min(1),
   type: CarerTypeSchema,
   isPrimary: z.boolean(),
-  pinHash: z.string().optional(),
+  pinHash: z.string(),
 });
 
 export const CarerCreateEntitySchema =

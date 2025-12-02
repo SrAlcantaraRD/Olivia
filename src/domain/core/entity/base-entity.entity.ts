@@ -6,9 +6,9 @@ export const BaseEntitySchema = z.object({
   id: IDSchema,
   uuid: UUIDSchema,
   status: z.boolean(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date().optional(),
-  deletedAt: z.coerce.date().optional(),
+  createdAt: z.string(),
+  updatedAt: z.string().optional(),
+  deletedAt: z.string().optional(),
 });
 
 export type TBaseEntity = z.infer<typeof BaseEntitySchema>;

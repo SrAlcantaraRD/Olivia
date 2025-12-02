@@ -11,9 +11,9 @@ export const mockCarerEntity = (
   name: 'John Doe',
   type: CARER_TYPE.ADMIN,
   isPrimary: true,
-  pinHash: undefined,
+  pinHash: 'hashed-pin-123',
   status: true,
-  createdAt: new Date('2024-01-01T00:00:00Z'),
+  createdAt: new Date('2024-01-01T00:00:00Z').getTime().toString(),
   deletedAt: undefined,
   ...overrides,
 });

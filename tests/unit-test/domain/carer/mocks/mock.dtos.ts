@@ -9,6 +9,6 @@ export const mockCarerCreateDTO = (
   name: 'John Doe',
   type: CARER_TYPE.SECONDARY,
   isPrimary: true,
-  pinHash: undefined,
+  pinHash: 'hashed-pin-123',
   ...overrides,
 });

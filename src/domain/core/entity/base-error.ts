@@ -1,6 +1,6 @@
 export interface IErrorDetails {
   code: string;
-  messages: string[];
+  messages: string[]; //TODO: use Ti18nKeys
 }
 
 export class BaseError extends Error {
