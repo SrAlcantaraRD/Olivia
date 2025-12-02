@@ -18,4 +18,4 @@ export const PatientCreateEntitySchema =
 
 export type TPatientEntity = z.infer<typeof PatientEntitySchema>;
 
-export type TPatientCreateDTO = z.infer<typeof PatientCreateEntitySchema>;
+export type TPatientCreateEntity = z.infer<typeof PatientCreateEntitySchema>;
