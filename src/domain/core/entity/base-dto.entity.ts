@@ -12,13 +12,10 @@ export type ZodDTOSchema<T extends z.ZodTypeAny> = z.ZodType<
   Omit<z.infer<T>, 'id' | 'status' | 'deletedAt'>
 >;
 
-export const GenerateDTOSchema = <T extends z.ZodTypeAny>(
+export const GenerateDTOSchema = <T extends z.ZodObject>(
   schema: T
 ): ZodDTOSchema<T> => {
-  const asObject = schema as unknown as z.ZodObject<
-    Record<string, z.ZodTypeAny>
-  >;
-  return asObject.omit({
+  return schema.omit({
     id: true,
     status: true,
     deletedAt: true,
@@ -40,13 +37,10 @@ export type ZodCreateDTOSchema<T extends z.ZodTypeAny> = z.ZodType<
   >
 >;
 
-export const GenerateCreateDTOSchema = <T extends z.ZodTypeAny>(
+export const GenerateCreateDTOSchema = <T extends z.ZodObject>(
   schema: T
 ): ZodCreateDTOSchema<T> => {
-  const asObject = schema as unknown as z.ZodObject<
-    Record<string, z.ZodTypeAny>
-  >;
-  return asObject.omit({
+  return schema.omit({
     id: true,
     uuid: true,
     status: true,
@@ -73,16 +67,10 @@ export type ZodCreateSchema<T extends z.ZodTypeAny> = z.ZodType<CreateFrom<T>>;
  * fields. The returned schema is typed as `ZodCreateSchema<T>` so TypeScript understands
  * the shape (`CreateFrom<T>`) even though `schema.omit(...)` returns a generic ZodObject.
  */
-export const GenerateCreateEntitySchema = <T extends z.ZodTypeAny>(
+export const GenerateCreateEntitySchema = <T extends z.ZodObject>(
   schema: T
 ): ZodCreateSchema<T> => {
-  // runtime `.omit` is only available on ZodObject but we accept any Zod type here
-  // and cast the result to the strongly-typed `ZodCreateSchema<T>` so callers get
-  // accurate CreateFrom<T> inference.
-  const asObject = schema as unknown as z.ZodObject<
-    Record<string, z.ZodTypeAny>
-  >;
-  return asObject.omit({
+  return schema.omit({
     id: true,
     uuid: true,
     status: true,

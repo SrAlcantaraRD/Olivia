@@ -7,6 +7,7 @@ export const BaseEntitySchema = z.object({
   uuid: UUIDSchema,
   status: z.boolean(),
   createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date().optional(),
   deletedAt: z.coerce.date().optional(),
 });
 

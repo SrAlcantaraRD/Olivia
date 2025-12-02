@@ -1,3 +1,3 @@
 export enum ERROR_CODE {
-  CARER_CREATE_ERROR = 'carer-001',
+  WHEN_SETUP_PARENT = 'carer-001',
 }

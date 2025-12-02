@@ -1,5 +1,19 @@
+import type { TLoggerPort } from '@/domain/core/adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 
 export abstract class BaseUseCase<BaseRequest, BaseResponse> {
   abstract execute(args: BaseRequest): Promise<IBaseResponse<BaseResponse>>;
+
+  constructor(
+    private readonly useCaseName: string,
+    private readonly loggerAdapter: TLoggerPort
+  ) {}
+
+  protected logInfo(message: string, details?: unknown): void {
+    this.loggerAdapter.info(message, details);
+  }
+
+  protected logError(message: string, details?: unknown): void {
+    this.loggerAdapter.error(this.useCaseName, message, details);
+  }
 }
