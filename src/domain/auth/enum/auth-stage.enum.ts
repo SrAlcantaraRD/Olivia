@@ -6,7 +6,7 @@ export enum AUTH_STAGE {
   PASSWORD_SETTED = '3',
 }
 
-export const AuthStageSchema = z.nativeEnum(AUTH_STAGE);
+export const AuthStageSchema = z.enum(AUTH_STAGE);
 
 export const authStageFromString = (stage: string): AUTH_STAGE => {
   switch (stage) {
