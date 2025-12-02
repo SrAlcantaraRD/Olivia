@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { moduleMapper } from '@/domain/module/mapper/module.mapper';
-import { mockModuleEntity } from '../__test__/mock.entities';
+import { mockModuleEntity } from '../mocks/mock.entities';
 
 describe('[Mapper] - Module', () => {
   it('moduleMapper.toDTO maps base fields excluding id', () => {
