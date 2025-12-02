@@ -9,8 +9,8 @@ export const PatientEntitySchema = z.object({
   ...BaseEntitySchema.shape,
   name: z.string().min(1),
   birthDate: z.number().int(),
-  sex: SexSchema.optional(),
-  autonomyLevel: AutonomyLevelSchema.optional(),
+  sex: SexSchema,
+  autonomyLevel: AutonomyLevelSchema,
 });
 
 export const PatientCreateEntitySchema =

@@ -8,10 +8,10 @@ import { ModuleKeySchema } from '@/domain/module/enum/module-key.enum';
 export const ModuleEntitySchema = z.object({
   ...BaseEntitySchema.shape,
   name: z.string().min(1),
-  description: z.string().optional(),
-  key: ModuleKeySchema.optional(),
-  active: z.boolean().optional(),
-  ord: z.number().int().optional(),
+  description: z.string(),
+  key: ModuleKeySchema,
+  active: z.boolean(),
+  order: z.number().int(),
 });
 
 export const ModuleCreateEntitySchema =

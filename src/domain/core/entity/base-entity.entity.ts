@@ -1,11 +1,12 @@
 import { z } from 'zod';
 
+import { statusSchema } from '@/domain/core/enum/status.enum';
 import { IDSchema, UUIDSchema } from '../schemas';
 
 export const BaseEntitySchema = z.object({
   id: IDSchema,
   uuid: UUIDSchema,
-  status: z.boolean(),
+  status: statusSchema,
   createdAt: z.string(),
   updatedAt: z.string().optional(),
   deletedAt: z.string().optional(),

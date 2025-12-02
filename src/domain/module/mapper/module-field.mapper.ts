@@ -1,6 +1,7 @@
 import type { TBaseMapper } from '@/domain/core';
 import type { TModuleFieldDTO } from '@/domain/module/dto/module-field.dto';
 import type { TModuleFieldEntity } from '@/domain/module/entity/module-field.entity';
+import { moduleMapper } from '@/domain/module/mapper/module.mapper';
 
 export const moduleFieldMapper: TBaseMapper<
   TModuleFieldEntity,
@@ -12,13 +13,15 @@ export const moduleFieldMapper: TBaseMapper<
       createdAt: entity.createdAt,
       moduleId: entity.moduleId,
       title: entity.title,
-      ...(entity.description !== undefined && {
-        description: entity.description,
+      description: entity.description,
+      type: entity.type,
+      values: entity.values,
+      required: entity.required,
+      order: entity.order,
+
+      ...(entity.module && {
+        module: moduleMapper.toDTO(entity.module),
       }),
-      ...(entity.type !== undefined && { type: entity.type }),
-      ...(entity.values !== undefined && { values: entity.values }),
-      ...(entity.required !== undefined && { required: entity.required }),
-      ...(entity.ord !== undefined && { ord: entity.ord }),
-    } as unknown as TModuleFieldDTO;
+    };
   },
 };
