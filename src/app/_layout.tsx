@@ -10,6 +10,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Image, Platform, StyleSheet } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import Toast from 'react-native-toast-message';
 
 import '@/ui/i18n/i18n';
 import 'react-native-reanimated';
@@ -27,6 +28,7 @@ import {
 import { useInitDb } from '@/database/execute-migrations';
 import { BASE_LOGGER, DATABASE_NAME } from '@/domain/core';
 import { ThemeToggle } from '@/ui/components/atoms/theme-toggle.atom';
+import { toastConfig } from '@/ui/components/particles/toast-design.particle';
 import { AppThemeProvider, useAppTheme } from '@/ui/themes/app-theme-context';
 import LogoDark from '../assets/logo-dark.png';
 import LogoLight from '../assets/logo-light.png';
@@ -131,6 +133,7 @@ export default function RootLayout() {
                 useSuspense
               >
                 <RootNavigator />
+                <Toast config={toastConfig} />
               </SQLiteProvider>
             </HeroUINativeProvider>
           </AppThemeProvider>
