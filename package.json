@@ -24,7 +24,7 @@
     "biome:format": "npx @biomejs/biome format --write ./",
     "biome:lint": "npx @biomejs/biome lint --write ./",
     "biome:check": "npx @biomejs/biome check --write ./",
-    "db:generate": "drizzle-kit generate --config src/ddbb/drizzle.config.ts",
+    "db:generate": "drizzle-kit generate --config src/database/drizzle.config.ts",
     "prepare": "husky"
   },
   "dependencies": {
