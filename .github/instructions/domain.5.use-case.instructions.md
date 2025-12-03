@@ -1,44 +1,48 @@
 ---
-applyTo: "**/*.use-case.ts,**/*.use-case.spec.ts,**/*.use-case.test.ts"
-description: "Template & rules for Domain Use Cases (copied from existing instruction artifact)."
----
-````instructions
-# Use Cases — Consolidated
-
-This artifact has been consolidated into the canonical architecture guide.
-
-See: `docs/architecture/condensed-copilot-guide.md` — section "Domain: Use Cases" for canonical use-case structure, input validation, and orchestration patterns.
-
-Original content archived at: `.github/artifacts/archive/1.domain__5.use-case.instructions.md`
-
-If you need the original full text, open the archive file above or check Git history.
----
-applyTo: "**/*.use-case.ts,**/*.use-case.spec.ts"
-description: "Template & rules for generating or modifying Domain Use Cases and their tests. (Supersedes combined use-case.md sections)"
+applyTo: 'src/domain/**/*.use-case.ts'
+description: "Rules for generating or modifying Domain Use Cases and their tests"
 ---
 
-# Use Case Generation Instructions
+# Domain Use Case Instructions
 
 ## Purpose
-Encapsulate a single business action: validate input, orchestrate ports, apply domain rules, map entities to DTOs (via mappers), return standardized response.
+- Encapsulate single business actions: validate input, orchestrate ports, apply rules, map to DTOs.
 
 ## Artifacts
-- `<action>.use-case.ts`
-- `<action>.use-case.spec.ts`
+- `src/domain/**/use-case/<action>.use-case.ts`
 
 ## Naming
-- File: `kebab-case` (`create-map-movement.use-case.ts`)
-- Class: PascalCase + `UseCase` (`CreateMapMovementUseCase`)
-- Test: same base + `.spec.ts`
+- Class: `<Action>UseCase`
+- File: `<action>.use-case.ts`
+- Request/Response: `T<Action>Request`, `T<Action>Response`
 
-## Implementation Rules
-- Extend `BaseUseCase<TRequest, TResponse>`
-- Validate with `checkSchemaOrThrow(Request<Action>Schema, request)`
-- Inject only required ports via constructor (private readonly)
-- NO framework / DB / logging logic (delegate through ports)
+## Rules
+### Basic Structure
+- Extend `BaseUseCase<TRequest, TResponse>`.
+- Inject required ports via constructor.
+- Implement `execute(request: TRequest): Promise<IBaseResponse<TResponse>>`.
 - Keep `execute` readable; extract helpers for branching logic
 - When entity not found, throw `ErrorEntityNotFoundBy` if applicable
 
+### Validation
+- Validate input with `checkSchemaOrThrow(Request<Action>Schema, request)`.
+- Throw domain errors when invariants are broken.
+
+### Execution
+- Orchestrate ports for data access.
+- No framework/DB/logging logic.
+- Keep execute readable; extract helpers if needed.
+- Apply business rules.
+
+### Response
+- Return `IBaseResponse<TResponse>` with success, status, message, details.
+
+### Quality Gates
+- 100% branch coverage.
+- No `any` or `unkown` usage.
+- Codacy scan after edits.
+
+### Example
 ```typescript
 export class <Action>UseCase extends BaseUseCase<TRequest<Action>, TResponse<Action>> {
   constructor(
@@ -58,71 +62,9 @@ export class <Action>UseCase extends BaseUseCase<TRequest<Action>, TResponse<Act
 
     return {
       success: true,
-      status: HTTP_STATUS_CODE.OK_200,
       message: '<action>.success',
       details: { /* item|items */ },
     } satisfies IBaseResponse<TResponse<Action>>;
   }
 }
 ```
-
-## Response Contract
-Always return `IBaseResponse<TResponse<Action>>` with: `success | status | message | details?`.
-Negative paths prefer throwing domain errors (mapped by controller/middleware).
-
-## Tests
-### Required Cases
-1. Happy path (all port calls asserted, response shape correct)
-2. Each negative path: not found / validation / conflict / unauthorized (where applicable)
-3. Early exit branches (if any) covered
-4. Assert the response shape and values.
-
-## Kafka Integration Pattern
-When a use case needs to publish events to Kafka:
-
-### Port Injection
-```typescript
-export class <Action>UseCase extends BaseUseCase<TReq, TRes> {
-  constructor(
-    private readonly <entity>Adapter: I<Entity>Port,
-    private readonly messageAdapter: IMessagePort, // ← Inject for Kafka
-  ) { super(); }
-
-  async execute(request: TReq): Promise<IBaseResponse<TRes>> {
-    // ... domain logic
-
-    // Publish event after successful operation
-    const message: T<Event>KafkaMessage = {
-      correlationId: entity.uuid,
-      eventId: generateUUID(),
-      occurredAt: new Date().toISOString(),
-      producer: {
-        application: APPLICATION.TPS,
-        service: SERVICE.TPS_DICTATOR,
-      },
-      payload: {
-        entityUUID: entity.uuid,
-        // event-specific data
-      },
-    };
-
-    // Validate before producing
-    checkSchemaOrThrow(<Event>KafkaMessageSchema, message);
-
-    await this.messageAdapter.produce(
-      KAFKA_TOPICS.<CONTEXT>.<EVENT>,
-      message
-    );
-
-    return { success: true, status: HTTP_STATUS_CODE.OK_200, details: { ... } };
-  }
-}
-```
-
-## Quality Gates
-- 100% branch coverage of conditional branches
-- No adapter / database imports
-- No `any` / suppressions
-- Codacy scan after edits
-
-````
