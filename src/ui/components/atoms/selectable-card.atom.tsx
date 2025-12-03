@@ -12,6 +12,7 @@ interface SelectableCardProps {
   onSelect: () => void;
   children: React.ReactNode;
   className?: string;
+  testID: string;
 }
 
 export function SelectableCard({
@@ -19,6 +20,7 @@ export function SelectableCard({
   onSelect,
   children,
   className = '',
+  testID,
 }: SelectableCardProps) {
   const accentColor = useThemeColor('accent');
   const cardBgColor = useThemeColor('surface');
@@ -44,6 +46,7 @@ export function SelectableCard({
         backgroundColor: cardBgColor,
       }}
       className={`rounded-3xl relative ${className}`}
+      testID={testID}
     >
       {/* Animated border */}
       <Animated.View

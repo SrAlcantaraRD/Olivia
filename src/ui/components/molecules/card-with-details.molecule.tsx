@@ -16,6 +16,7 @@ interface CardWithDetailsProps {
   descriptionKey?: Ti18nKeys;
   isSelected: boolean;
   onSelect: () => void;
+  testID: string;
 }
 
 export function CardWithDetails({
@@ -25,12 +26,14 @@ export function CardWithDetails({
   descriptionKey,
   isSelected,
   onSelect,
+  testID,
 }: CardWithDetailsProps) {
   return (
     <SelectableCard
       isSelected={isSelected}
       onSelect={onSelect}
       className="p-4 mb-4"
+      testID={testID}
     >
       <View className="flex-row items-center gap-4">
         {/* Icon */}

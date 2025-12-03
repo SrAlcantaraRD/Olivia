@@ -12,6 +12,7 @@ interface CircularProgressButtonProps {
   backgroundColor: string;
   progressColor: string;
   iconColor?: string;
+  testID: string;
 }
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -25,6 +26,7 @@ export function AtomCircularProgressButton({
   backgroundColor,
   progressColor,
   iconColor = 'white',
+  testID,
 }: CircularProgressButtonProps) {
   const animatedProgress = useRef(new Animated.Value(progress)).current;
 
@@ -101,6 +103,7 @@ export function AtomCircularProgressButton({
             justifyContent: 'center',
             alignItems: 'center',
           }}
+          testID={testID}
         >
           <Ionicons name={iconName} size={iconSize} color={iconColor} />
         </Pressable>

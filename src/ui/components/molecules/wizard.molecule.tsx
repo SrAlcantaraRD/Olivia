@@ -106,6 +106,11 @@ export function Wizard({
           progressColor={accentColor}
           size={84}
           iconSize={36}
+          testID={
+            currentStepIndex === steps.length - 1
+              ? 'summary-save-button'
+              : 'next-button'
+          }
         />
       </View>
     </View>
