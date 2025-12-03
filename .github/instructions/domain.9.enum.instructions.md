@@ -1,0 +1,109 @@
+---
+applyTo: "**/*.enum.ts,**/*.enum.spec.ts"
+description: "Template & rules for Domain Enums (copied from existing instruction artifact)."
+---
+````instructions
+# Domain Enums — Consolidated
+
+This artifact has been consolidated into the canonical architecture guide.
+
+See: `docs/architecture/condensed-copilot-guide.md` — section "Domain: Enums & Constants" for canonical enum patterns and naming conventions.
+
+Original content archived at: `.github/artifacts/archive/1.domain__9.enum.instructions.md`
+
+If you need the original full text, open the archive file above or check Git history.
+---
+applyTo: "**/*.enum.ts"
+description: "Template & rules for generating Domain Enums and their usage patterns."
+---
+
+# Enum Generation Instructions
+
+## Purpose
+Provide constrained, self-documenting sets of allowed symbolic values that encode stable business concepts (states, categories, roles) used by entities, DTOs, schemas, and use cases.
+
+## Artifacts
+- `<root>.enum.ts`
+- (Optional) `__test__/enums/<root>.enum.spec.ts` (only if non-trivial helper logic)
+
+## Naming
+- File: `kebab-case` `<root>.enum.ts`
+- Enum: `<Root>_<DOMAIN>_ENUM` (ALL_CAPS with underscores inside the enum members)
+- Schema: `<Root><Domain>Schema` via `z.enum`
+- Helper (optional): `<Root><Domain>FromValue`
+
+## Implementation Rules
+- Keep enum members semantic & stable; avoid transient operational states (prefer domain status logic instead).
+- Provide schema wrapper using `z.enum` with description, message & examples.
+- Expose a normalization helper ONLY if converting from external string inputs.
+- Do not throw framework errors inside helper; use domain error types when needed (see `error.instructions`).
+- When mapping from external sources (DB rows, HTTP payload), normalize early (adapter or controller layer) before reaching core domain logic.
+
+```typescript
+export enum <Entity>_<Kind>_ENUM {
+  // MEMBERS: e.g. ACTIVE = 'ACTIVE', INACTIVE = 'INACTIVE'
+}
+
+export const <Entity><Kind>Schema = z.enum(<Entity>_<Kind>_ENUM, {
+  description: '<describe enum functionality>',
+  message: '<descriptive message when error>',
+  examples: [<Entity>_<Kind>_ENUM.<EXAMPLE_ONE>],
+});
+
+export function <Entity><Kind>FromValue(value: string): <Entity>_<Kind>_ENUM {
+  const values: <Entity>_<Kind>_ENUM[] = Object.values(<Entity>_<Kind>_ENUM);
+  const found = values.find((v) => v === value as <Entity>_<Kind>_ENUM);
+  if (!found) {
+    // Optionally: throw new ErrorInvalid<Entity><Kind>(value); // see domain error patterns
+    // Or return a safe default if specification allows
+  }
+  return found!;
+}
+```
+
+## Usage Guidelines
+| Layer | Usage |
+|-------|-------|
+| Entity Schema | Reference via `z.enum` or embed value union if very small (prefer enum for reuse) |
+| DTO Schema | Mirror entity enum (never rename values) |
+| Mapper | Pass through unchanged; never transform to different casing |
+| Use Case | Branching logic allowed but keep minimal; consider strategy pattern if >3 conditional blocks |
+| Controller | Validate via schema; reject unknown value before use case |
+
+## Evolving Enums
+- Additive changes (new value): backward-compatible if consumers ignore unknowns.
+- Renaming value: BREAKING — create migration path (accept old, map to new) and document.
+- Removal: deprecate first (mark in code comment) then remove after consumer update.
+
+## Do / Avoid
+| Do | Avoid |
+|----|-------|
+| Use explicit semantic names | Obscure abbreviations |
+| Provide schema for validation | Inlining magic strings everywhere |
+| Centralize normalization | Scattering `toUpperCase()` conversions |
+| Document meaning in description | Empty description field |
+
+## Testing (Optional)
+Add tests only when:
+- Normalization helper logic (mapping / fallback) exists.
+- Value transformation or backward compatibility shim is implemented.
+
+Example test skeleton:
+```ts
+describe('<Entity>_<Kind>_ENUM', () => {
+  it('normalizes valid value', () => {
+    expect(<Entity><Kind>FromValue('<EXPECTED>')).toBe(<Entity>_<Kind>_ENUM.<EXPECTED_ENUM_MEMBER>);
+  });
+
+  it('handles invalid value', () => {
+    // expect(() => <Entity><Kind>FromValue('bad')).toThrow(ErrorInvalid<Entity><Kind>);
+  });
+});
+```
+
+## Quality Gates
+- No duplicate string literals across enum members.
+- Enum values remain stable across refactors (avoid unnecessary churn).
+- Codacy scan after creation/modification (note: markdown/tooling may skip pure enum file if unsupported).
+
+````

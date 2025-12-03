@@ -1,0 +1,170 @@
+[
+  {
+    "path": "README.md",
+    "area": "index",
+    "priority": "high",
+    "summary": "Top-level index with TOC, quick start, architecture overview and reading order for AI and devs.",
+    "lines": null
+  },
+  {
+    "path": "0.project-overview/tech-stack.md",
+    "area": "project-overview",
+    "priority": "high",
+    "summary": "Comprehensive technology inventory, version snapshot (Dec 2025) and development scripts/workflow.",
+    "lines": null
+  },
+  {
+    "path": "1.domain/1.entity.instructions.md",
+    "area": "domain",
+    "priority": "medium",
+    "summary": "Zod schema patterns and BaseEntity conventions for domain entities.",
+    "lines": null
+  },
+  {
+    "path": "1.domain/2.dto.instructions.md",
+    "area": "domain",
+    "priority": "medium",
+    "summary": "DTO generation patterns and helpers to decouple domain from transport shapes.",
+    "lines": null
+  },
+  {
+    "path": "1.domain/3.mapper.instructions.md",
+    "area": "domain",
+    "priority": "medium",
+    "summary": "Mapper patterns (Entity ↔ DTO) and the `TBaseMapper` interface.",
+    "lines": null
+  },
+  {
+    "path": "1.domain/4.port.instructions.md",
+    "area": "domain",
+    "priority": "medium",
+    "summary": "Guidelines to design minimal ports (interfaces) that return domain entities.",
+    "lines": null
+  },
+  {
+    "path": "1.domain/5.use-case.instructions.md",
+    "area": "domain",
+    "priority": "medium",
+    "summary": "Use-case structure, orchestration rules and error handling patterns.",
+    "lines": null
+  },
+  {
+    "path": "1.domain/6.use-case-schema.instructions.md",
+    "area": "domain",
+    "priority": "medium",
+    "summary": "Zod validation and schema patterns for use-case inputs/outputs.",
+    "lines": null
+  },
+  {
+    "path": "1.domain/6.use-case-spec.instructions.md",
+    "area": "domain",
+    "priority": "medium",
+    "summary": "Behavior-driven specifications for use-cases and expected outcomes.",
+    "lines": null
+  },
+  {
+    "path": "1.domain/7.error.instructions.md",
+    "area": "domain",
+    "priority": "medium",
+    "summary": "Domain error types, `BaseError` extension and `IErrorDetails` contract.",
+    "lines": null
+  },
+  {
+    "path": "1.domain/8.hook.instructions.md",
+    "area": "domain",
+    "priority": "medium",
+    "summary": "Hook patterns that wrap use-cases, adapter injection and caching rules.",
+    "lines": null
+  },
+  {
+    "path": "1.domain/9.enum.instructions.md",
+    "area": "domain",
+    "priority": "low",
+    "summary": "Enum conventions and helper mappers (e.g., status, sex, autonomy level).",
+    "lines": null
+  },
+  {
+    "path": "2.database/1.schema.instructions.md",
+    "area": "database",
+    "priority": "medium",
+    "summary": "Drizzle schema conventions, snake_case vs camelCase mapping, and migration notes.",
+    "lines": null
+  },
+  {
+    "path": "2.database/2.adapter.instructions.md",
+    "area": "database",
+    "priority": "medium",
+    "summary": "Adapter class template (Postgres/SQLite) and `toDomainEntity` mapping rules.",
+    "lines": null
+  },
+  {
+    "path": "2.database/3.adapter-test.instructions.md",
+    "area": "database",
+    "priority": "medium",
+    "summary": "Testing patterns for adapters: mapping tests and DB query validation.",
+    "lines": null
+  },
+  {
+    "path": "3.adapters/0.adapter-pattern.instructions.md",
+    "area": "adapters",
+    "priority": "high",
+    "summary": "Ports & Adapters (Hexagonal) guide, `useAdapters` factory and examples (SQLite, Toast).",
+    "lines": null
+  },
+  {
+    "path": "4.heroui/0.core-native.instructions.md",
+    "area": "ui",
+    "priority": "high",
+    "summary": "heroui-native mobile guidelines: wrapper atoms, `useThemeColor`, compound components and a11y.",
+    "lines": null
+  },
+  {
+    "path": "4.heroui/0.core.instructions.md",
+    "area": "ui",
+    "priority": "low",
+    "summary": "Legacy web-focused heroui core docs (kept for reference).",
+    "lines": null
+  },
+  {
+    "path": "4.heroui/1.hook-port-adapter.instructions.md",
+    "area": "ui",
+    "priority": "medium",
+    "summary": "How hooks should orchestrate port adapters inside UI context.",
+    "lines": null
+  },
+  {
+    "path": "4.heroui/2.page.instructions.md",
+    "area": "ui",
+    "priority": "medium",
+    "summary": "Page-level composition patterns and SafeArea/ScrollView best practices.",
+    "lines": null
+  },
+  {
+    "path": "4.testing/integration-test.instructions.md",
+    "area": "testing",
+    "priority": "medium",
+    "summary": "Integration & unit test patterns, Expo module mocks and Jest setup notes.",
+    "lines": null
+  },
+  {
+    "path": "5.ui-components/0.toast-system.instructions.md",
+    "area": "ui-components",
+    "priority": "high",
+    "summary": "Toast system: BaseToast, AuraSVG (radial gradient), `ToastUINotifyPortAdapter` and design tokens.",
+    "lines": null
+  },
+  {
+    "path": "5.ui-components/1.atomic-design.instructions.md",
+    "area": "ui-components",
+    "priority": "high",
+    "summary": "Atomic Design guide for the app: atoms, molecules, organisms, particles + examples and naming rules.",
+    "lines": null
+  },
+  {
+    "path": "6.i18n/0.internationalization.instructions.md",
+    "area": "i18n",
+    "priority": "high",
+    "summary": "i18next configuration, `Ti18nKeys` type-safety, `TextTranslation` component and workflow for adding keys.",
+    "lines": null
+  }
+]
