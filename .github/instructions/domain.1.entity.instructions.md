@@ -8,6 +8,14 @@ description: "Rules for defining domain entities with Zod schemas"
 ## Purpose
 - Define domain entities that are technology-agnostic, with robust Zod schemas for data validation and security.
 
+## Artifacts
+- `src/domain/**/entity/<root>.entity.ts`
+- `test/unit-test/domain/**/mock/entity/<root>.entity.mock.ts`
+
+## Naming
+- Schema: `<Root>EntitySchema`, `<Root>CreateEntitySchema`
+- Types: `T<Root>Entity`, `T<Root>CreateEntity`
+
 ## Rules
 ### Basic Structure
 - Entities must use Zod schemas extending BaseEntitySchema.
@@ -22,6 +30,23 @@ description: "Rules for defining domain entities with Zod schemas"
 - Chain constraints for incremental validation (e.g., z.string().min(3).max(50).regex(/^[a-zA-Z\s]+$/)).
 - Use i18n keys for error messages in the format "validation.<root>.<field>.<constraint>.<type>" (e.g., "validation.task.name.min.error").
 
+## Do / Avoid
+| Do | Avoid |
+|----|-------|
+| Use zod for schema | Re-declaring entity fields manually |
+| Keep pure (no side effects) | Importing adapters/framework |
+| Reuse common fragments | Duplicating scalar definitions |
+| Document field meaning | Leaving ambiguous optional fields |
+
+# Tests
+- Entity itself usually doesn't need direct tests unless complex derived logic (rare)
+- Ensure mock factory provides complete valid object
+
+## Quality Gates
+- No `any`/`unknown`
+- No leaking DB-only columns (except `id` internally allowed; omitted from DTO later)
+- Run Codacy after edits
+
 ### Refinements
 - Apply .refine() for custom logic, e.g., passwords with numbers or complex rules.
 - Ensure refinements enhance security without exposing sensitive logic.
@@ -35,6 +60,10 @@ description: "Rules for defining domain entities with Zod schemas"
 - Always use z.infer to derive TypeScript types from schemas.
 - Ensure types stay synchronized with validation rules.
 
+## Relations
+- Lists: `<RelatedEntity>List? : TRelatedEntity[]`
+- Single: `<RelatedEntity>? : TRelatedEntity`
+
 ### Example
   ```typescript
   export const <Root>EntitySchema = z.object({
@@ -47,6 +76,21 @@ description: "Rules for defining domain entities with Zod schemas"
 
   export const <Root>CreateEntitySchema = GenerateCreateEntitySchema(<Root>EntitySchema);
 
-  export type T<Root>Entity = z.infer<typeof <Root>EntitySchema>;
+  export type T<Root>Entity = z.infer<typeof <Root>EntitySchema>  & {
+    // reference to other entities.
+    <RelatedEntity>?: T<RelatedEntity>Entity;
+    <RelatedEntity>List?: T<RelatedEntity>Entity[];
+  };
+
   export type T<Root>CreateEntity = z.infer<typeof <Root>CreateEntitySchema>;
   ```
+
+### Mock Factories
+```ts
+export function mock<Root>Entity(overrides: Partial<T<Root>Entity> = {}): T<Root>Entity {
+  /* build deterministic mock */
+  id: 1,
+  // other fields...
+  ...overrides,
+  }
+```
