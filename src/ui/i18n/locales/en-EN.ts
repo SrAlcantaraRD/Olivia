@@ -255,6 +255,11 @@ export const enEN = {
   'modal.reminders.title': 'Reminders Modal',
   'modal.switch-account.title': 'Switch Account Modal',
   'modal.symptom-alert.title': 'Symptom Alert Modal',
+
+  'hook.setup-parent.title': 'Setting up parent',
+  'hook.setup-parent.description': 'Please wait while we set up your account.',
+  'hook.setup-parent.error-title': 'Setup Failed',
+  'hook.setup-parent.success-title': 'Setup Successful',
 };
 
 type RecursiveKeyOf<TObj extends object> = {
