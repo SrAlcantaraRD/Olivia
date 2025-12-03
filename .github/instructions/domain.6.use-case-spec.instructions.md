@@ -1,35 +1,30 @@
 ---
-applyTo: "**/*.use-case.spec.ts,**/*.use-case.test.ts"
-description: "Template & rules for Domain Use Case spec files (copied from existing artifact)."
----
-````instructions
-# Use-Case Specs — Consolidated
-
-This artifact has been consolidated into the canonical architecture guide.
-
-See: `docs/architecture/condensed-copilot-guide.md` — section "Testing: Use Case Specs" for canonical spec patterns and examples.
-
-Original content archived at: `.github/artifacts/archive/1.domain__6.use-case-spec.instructions.md`
-
-If you need the original full text, open the archive file above or check Git history.
----
-applyTo: "**/*.use-case.spec.ts"
-description: "Template & rules for writing Domain Use Case spec files. Standardizes Arrange/Act/Assert and coverage requirements."
+applyTo: 'src/domain/**/*.use-case.spec.ts'
+description: "Rules for writing Domain Use Case spec files with Arrange/Act/Assert"
 ---
 
-# Use Case Spec Instructions
+# Domain Use Case Spec Instructions
 
 ## Purpose
-Standardize test writing for domain use cases. Ensure all business logic, port orchestration, and error paths are covered with clear Arrange/Act/Assert structure.
+- Standardize test writing for domain use cases. Ensure all business logic, port orchestration, and error paths are covered.
 
-## Required Structure
-- Use `describe` for context and scenario grouping.
-- Each `it` block must use:
-  - `// Arrange` (setup mocks, data, use case)
-  - `// Act` (invoke use case method)
-  - `// Assert` (verify result, port calls, error handling)
+## Artifacts
+- `test/unit-test/domain/**/use-case/<action>.use-case.spec.ts`
 
-## Coverage Checklist
+## Naming
+- File: `<action>.use-case.spec.ts`
+- Describe: `[UseCase] - <Action>`
+
+## Rules
+### Structure
+- Use describe for context, it for scenarios.
+- Each it: Arrange (setup mocks/data/use case), Act (invoke), Assert (verify result, calls, errors).
+- Always use mocks for entity, port, and DTO to ensure isolated testing.
+
+### Coverage
+- Happy path (all ports called, response correct), negative paths (not found, validation, early exit).
+- Port assertions: toHaveBeenCalledWith for args, toHaveBeenCalledTimes for counts.
+- Error handling: expect(...).rejects.toThrow for thrown errors.
 1. **Happy Path:**
    - All required ports called with correct arguments.
    - Response shape and values asserted.
@@ -47,7 +42,16 @@ Standardize test writing for domain use cases. Ensure all business logic, port o
    - Use `await expect(...).rejects.toThrow(<DomainError>)` for thrown errors.
    - Assert error message/code if mapped.
 
-## Example Skeleton
+### Required Cases
+- Happy path (all port calls asserted, response shape correct).
+- Each negative path: not found / validation / conflict / unauthorized (where applicable).
+- Early exit branches (if any) covered.
+- Assert the response shape and values.
+
+### Quality Gates
+- 100% branch coverage, no magic numbers, Codacy scan.
+
+### Example
 ```typescript
 describe('[UseCase] - <Action>', () => {
   const prepareSuiteCase = () => {
@@ -86,12 +90,3 @@ describe('[UseCase] - <Action>', () => {
   });
 });
 ```
-
-## Quality Gates
-- 100% branch coverage for all business logic.
-- No magic numbers for port call counts.
-- No framework, DB, or logging logic in tests.
-- Codacy scan after edits.
-- Use only domain mocks and helpers.
-
-````

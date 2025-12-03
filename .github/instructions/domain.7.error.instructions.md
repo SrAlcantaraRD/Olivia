@@ -1,60 +1,41 @@
 ---
-applyTo: "**/*.error.ts,**/*.error.spec.ts"
-description: "Template & rules for Domain Errors (copied from existing instruction artifact)."
----
-````instructions
-# Domain Errors — Consolidated
-
-This artifact has been consolidated into the canonical architecture guide.
-
-See: `docs/architecture/condensed-copilot-guide.md` — section "Domain: Errors & BaseError" for canonical error patterns and mapping from adapter errors to domain errors.
-
-Original content archived at: `.github/artifacts/archive/1.domain__7.error.instructions.md`
-
-If you need the original full text, open the archive file above or check Git history.
----
-applyTo: "**/*.error.ts"
-description: "Template & rules for generating or modifying Domain Error classes."
+applyTo: 'src/domain/**/*.error.ts'
+description: "Rules for generating or modifying Domain Error classes"
 ---
 
-# Domain Error Generation Instructions
+# Domain Error Instructions
 
 ## Purpose
-Represent domain-level failure states with typed, code-bearing errors enabling consistent HTTP mapping & observability.
+- Represent domain-level failure states with typed, code-bearing errors for consistent HTTP mapping & observability.
 
 ## Artifacts
-- `errors/<domain-concern>.error.ts`
+- `src/domain/**/error/<error>.error.ts`
 
 ## Naming
-- Class: `Error<Root><Condition>` (e.g., `ErrorUserNotFound`)
-- File: `<root>-<condition>.error.ts`
+- Class: `Error<Action>` or specific name like `ErrorEntityNotFound`
+- File: `<error>.error.ts`
 
-## Implementation Rules
-- Extend `BaseError`
-- Provide `code` (SCREAMING_SNAKE) and human-centric default message (i18n key if applicable)
-- Include contextual metadata fields if helpful (readonly)
+## Rules
+### Basic Structure
+- Extend BaseError.
+- Provide code (SCREAMING_SNAKE) and human-centric message (i18n key if applicable).
+- Include contextual metadata if helpful (readonly).
 
-```typescript
-export class Error<Action> extends BaseError {
-  public readonly code = 'ENTITY_NOT_FOUND';
-  constructor(public readonly uuid: TUUID) {
-    super(
-      AuthErrorCodes.FORBIDDEN_ACCESS,
-      HTTP_STATUS_CODE.FORBIDDEN_403,
-      message
-    );
+### Usage
+- Throw from use cases when invariant broken before side-effects.
+- Use ErrorEntityNotFoundBy for not found errors.
+- Check existing errors before creating new ones.
+
+### Constraints
+- No external side-effects, minimal surface.
+- Codacy scan after edits.
+
+### Example
+  ```typescript
+  export class Error<Action> extends BaseError {
+    public readonly code = 'ENTITY_NOT_FOUND';
+    constructor(public readonly uuid: TUUID) {
+      super('error.entity-not-found', HTTP_STATUS_CODE.NOT_FOUND_404);
+    }
   }
-}
-```
-
-## Usage
-Throw from use cases when invariant broken before side-effects.
-
-## Quality Gates
-- No external side-effects
-- Minimal surface (avoid utility methods)
-- Codacy scan after edits
-- Use ErrorEntityNotFoundBy for not found errors
-- Check `libs/domain/core/src/errors` for existing errors before creating new ones
-
-````
+  ```

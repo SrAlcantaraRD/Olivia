@@ -23,6 +23,8 @@ description: "Rules for generating or modifying Domain Use Cases and their tests
 - Implement `execute(request: TRequest): Promise<IBaseResponse<TResponse>>`.
 - Keep `execute` readable; extract helpers for branching logic
 - When entity not found, throw `ErrorEntityNotFoundBy` if applicable
+- Always generate/update a spec-file following `domain.6.use-case-spec.instructions.md`
+- Always thrown error with domain errors following `domain.7.error.instructions.md`
 
 ### Validation
 - Validate input with `checkSchemaOrThrow(Request<Action>Schema, request)`.
@@ -41,6 +43,9 @@ description: "Rules for generating or modifying Domain Use Cases and their tests
 - 100% branch coverage.
 - No `any` or `unkown` usage.
 - Codacy scan after edits.
+
+### Integration Notes
+- Adjust `domain.6.use-case-schema.instructions.md`, `domain.6.use-case-spec.instructions.md`, and `domain.7.error.instructions.md` accordingly when implementing use cases.
 
 ### Example
 ```typescript
