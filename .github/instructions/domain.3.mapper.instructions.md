@@ -33,7 +33,7 @@ description: "Rules for implementing mappers between entities and DTOs"
 
 ## Quality Gates
 - 100% branch coverage for conditional relation mapping.
-- No `any` usage.
+- No `any`/`unknown`
 - Satisfies TypeScript type checks without casts (except localized test assertions).
 - Codacy scan after edits.
 

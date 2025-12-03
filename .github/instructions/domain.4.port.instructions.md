@@ -1,56 +1,43 @@
 ---
-applyTo: "**/*.port.ts,**/*.port.spec.ts"
-description: "Template & rules for Domain Ports (copied from existing instruction artifact)."
----
-````instructions
-# Domain Ports — Consolidated
-
-This artifact has been consolidated into the canonical architecture guide.
-
-See: `docs/architecture/condensed-copilot-guide.md` — section "Domain: Ports & Interfaces" for canonical port contracts and best practices.
-
-Original content archived at: `.github/artifacts/archive/1.domain__4.port.instructions.md`
-
-If you need the original full text, open the archive file above or check Git history.
----
-applyTo: "**/*.port.ts"
-description: "Template & rules for generating or modifying Domain Ports (abstractions over external persistence/services)."
+applyTo: 'src/domain/**/*.port.ts'
+description: "Rules for defining domain ports as abstractions over external capabilities"
 ---
 
-# Port Interface Generation Instructions
+# Domain Port Instructions
 
 ## Purpose
-Define the minimal abstraction that a use case needs for an external capability (persistence, external API, messaging). Enables adapter substitution and isolates side-effects.
+- Define minimal abstractions for external capabilities needed by use cases, ensuring domain remains technology-agnostic.
 
 ## Artifacts
-- `ports/<root>.port.ts`
-- `__test__/ports/mock-<root>.port.ts`
+- `src/domain/**/port/<root>.port.ts`
+- `test/unit-test/domain/**/mock/<root>.port.mock.ts`
 
 ## Naming
 - Interface: `I<Root>Port`
 - File: `<root>.port.ts`
+- Mock File: `<root>.port.mock.ts`
 
-## Design Rules
-- Return domain entities (`T<Root>Entity`), NEVER DTOs
-- Keep interface minimal & cohesive (only methods used by active use cases)
-- Prefer explicit methods (`findByUUID`, `create`) over generic ones (`save`)
-- Use `T<Root>CreateEntity` for creation inputs
+## Rules
+### Basic Structure
+- Define port as interface `I<Root>Port`.
+- Return domain entities, never DTOs.
+- Use `T<Root>CreateEntity` for creation inputs.
 
-```typescript
-export interface I<Root>Port /* extends IBasePort<T<Root>Entity, T<Root>CreateEntity> */ {
-  findByUUID(uuid: TUUID): Promise<T<Root>Entity | null>;
-  create(data: T<Root>CreateEntity): Promise<T<Root>Entity>;
-  // add only when needed: update(data), delete(uuid), list(): Promise<T<Root>Entity[]>;
-}
-```
+### Method Naming
+- Prefer explicit methods like `findByUUID`, `create`, `findById`, `getAll`.
+- Keep interface minimal and cohesive.
+- Add methods only when required by use cases.
 
-## Evolution
-- Add new methods ONLY when a new use case requires them.
-- Removing methods: deprecate (comment) then clean after refactors.
+### Constraints
+- No implementation logic or adapter imports.
+- Ensure type safety with domain types.
+- Codacy scan after edits.
 
-## Quality Gates
-- No implementation logic
-- No imports from adapters / database
-- Codacy scan after edits
-
-````
+### Example
+  ```typescript
+  export interface I<Root>Port {
+    create(data: T<Root>CreateEntity): Promise<T<Root>Entity>;
+    findByID(id: TID): Promise<T<Root>Entity | null>;
+    getAll(): Promise<T<Root>Entity[]>;
+  }
+  ```
