@@ -23,7 +23,7 @@ export function ChildInfoStep({
   return (
     <>
       {/* Name Input */}
-      <View className="mb-6">
+      <View className="mb-6" testID="child-name-input">
         <TextFieldAtom
           label="parent-setup.child-info.name-label"
           placeholder="parent-setup.child-info.name-placeholder"
@@ -34,7 +34,7 @@ export function ChildInfoStep({
       </View>
 
       {/* Birth Date Input */}
-      <View className="mb-6">
+      <View className="mb-6" testID="child-birthdate-input">
         <TextFieldAtom
           label="parent-setup.child-info.birth-date-label"
           placeholder="parent-setup.child-info.birth-date-placeholder"
@@ -46,7 +46,7 @@ export function ChildInfoStep({
       </View>
 
       {/* Diagnosis Input (Optional) */}
-      <View className="mb-6">
+      <View className="mb-6" testID="child-diagnosis-input">
         <TextFieldAtom
           label="parent-setup.child-info.diagnosis-label"
           placeholder="parent-setup.child-info.diagnosis-placeholder"

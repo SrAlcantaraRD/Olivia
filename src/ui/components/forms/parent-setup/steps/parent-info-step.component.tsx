@@ -24,7 +24,7 @@ export function ParentInfoStep({
   return (
     <View className="flex-1">
       {/* Name Input */}
-      <View className="mb-6">
+      <View className="mb-6" testID="parent-name-input">
         <TextFieldAtom
           label="parent-setup.parent-info.name-label"
           placeholder="parent-setup.parent-info.name-placeholder"
@@ -48,12 +48,14 @@ export function ParentInfoStep({
             titleKey="parent-setup.parent-info.parent"
             isSelected={relationship === 'parent'}
             onSelect={() => onRelationshipChange('parent')}
+            testID="parent-relationship-parent"
           />
           <CardWithDetails
             icon="shield"
             titleKey="parent-setup.parent-info.guardian"
             isSelected={relationship === 'guardian'}
             onSelect={() => onRelationshipChange('guardian')}
+            testID="parent-relationship-guardian"
           />
         </View>
       </View>

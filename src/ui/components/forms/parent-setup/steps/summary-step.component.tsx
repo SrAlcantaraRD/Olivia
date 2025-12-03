@@ -2,6 +2,7 @@ import { useThemeColor } from 'heroui-native';
 import { t } from 'i18next';
 import { View } from 'react-native';
 
+import type { TID } from '@/domain/core/schemas/id.schema';
 import {
   TypographyHeading,
   TypographyParagraph,
@@ -69,8 +70,9 @@ export function SummaryStep({ formData }: SummaryStepProps) {
   const mutedColor = useThemeColor('muted');
 
   // Map module IDs to translated names
-  const getModuleName = (moduleId: string): Ti18nKeys => {
-    switch (moduleId) {
+  // FIXME: Modify for TUUID
+  const getModuleName = (moduleID: TID): Ti18nKeys => {
+    switch (moduleID) {
       case MODULE_IDS.CATHETERIZATION:
         return 'parent-setup.modules.catheterization.title';
       case MODULE_IDS.BOWEL_MOVEMENTS:
@@ -78,7 +80,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
       case MODULE_IDS.ENEMAS:
         return 'parent-setup.modules.enemas.title';
       default:
-        throw new Error(`Unknown module ID: ${moduleId}`);
+        throw new Error(`Unknown module ID: ${moduleID}`);
     }
   };
 

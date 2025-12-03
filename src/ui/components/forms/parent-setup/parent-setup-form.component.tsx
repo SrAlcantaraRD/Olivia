@@ -31,6 +31,7 @@ export function ParentSetupForm() {
     isStep4Valid,
     goToNextStep,
     goToPreviousStep,
+    save,
   } = useParentSetupForm();
 
   const steps: FormPageStep[] = [
@@ -89,8 +90,11 @@ export function ParentSetupForm() {
     if (currentStep < steps.length - 1) {
       goToNextStep();
     } else {
-      // Último paso confirmado: navegar a register tab
-      router.replace('/(tabs)/register');
+      // Último paso confirmado: persistir datos y navegar a register tab
+      (async () => {
+        await save();
+        router.replace('/(tabs)/register');
+      })();
     }
   };
 

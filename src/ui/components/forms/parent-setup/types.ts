@@ -1,3 +1,5 @@
+import type { TID } from '@/domain/core/schemas/id.schema';
+
 export type Relationship = 'parent' | 'guardian';
 
 export interface ParentSetupFormData {
@@ -11,7 +13,7 @@ export interface ParentSetupFormData {
   diagnosis: string;
 
   // Step 3: Modules
-  selectedModules: Set<string>;
+  selectedModules: Set<TID>; //FIXME: Modify for TUUID
 }
 
 export const INITIAL_FORM_DATA: ParentSetupFormData = {
@@ -24,7 +26,7 @@ export const INITIAL_FORM_DATA: ParentSetupFormData = {
 };
 
 export const MODULE_IDS = {
-  CATHETERIZATION: 'catheterization',
-  BOWEL_MOVEMENTS: 'bowel-movements',
-  ENEMAS: 'enemas',
+  CATHETERIZATION: 1,
+  BOWEL_MOVEMENTS: 2,
+  ENEMAS: 3,
 } as const;

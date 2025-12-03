@@ -1,9 +1,26 @@
 import { useState } from 'react';
 
+import { useAdapters } from '@/adapter';
+import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
+import { useSetupParent } from '@/domain/carer/hook/setup-parent.hook';
+import type { TRequestSetupParent } from '@/domain/carer/use-case-schema/setup-parent.use-case-schema';
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
+import { AUTONOMY_LEVEL_ENUM } from '@/domain/patient/enum/autonomy-level.enum';
+import { SEX_ENUM } from '@/domain/patient/enum/sex.enum';
 import type { ParentSetupFormData, Relationship } from '../types';
 import { INITIAL_FORM_DATA } from '../types';
 
 export function useParentSetupForm() {
+  const { carerAdapter, patientAdapter, moduleAdapter, notifyAdapter } =
+    useAdapters();
+  const { execute, isExecuting } = useSetupParent(
+    BASE_LOGGER,
+    notifyAdapter,
+    carerAdapter,
+    patientAdapter,
+    moduleAdapter
+  );
+
   const [formData, setFormData] =
     useState<ParentSetupFormData>(INITIAL_FORM_DATA);
   const [currentStep, setCurrentStep] = useState(0);
@@ -44,7 +61,7 @@ export function useParentSetupForm() {
   };
 
   // Step 3: Modules
-  const toggleModule = (moduleId: string) => {
+  const toggleModule = (moduleId: number) => {
     setFormData((prev) => {
       const newModules = new Set(prev.selectedModules);
       if (newModules.has(moduleId)) {
@@ -79,9 +96,30 @@ export function useParentSetupForm() {
     setCurrentStep(0);
   };
 
+  const handlerOnSave = async () => {
+    const payload: TRequestSetupParent = {
+      parent: {
+        name: formData.parentName,
+        isPrimary: formData.relationship === 'parent',
+        pinHash: '', // Pin will be set later
+        type: CARER_TYPE_ENUM.ADMIN,
+      },
+      patient: {
+        name: formData.childName,
+        birthDate: new Date(formData.birthDate).getTime(),
+        autonomyLevel: AUTONOMY_LEVEL_ENUM.HIGH,
+        sex: SEX_ENUM.MALE,
+      },
+      moduleList: [...formData.selectedModules],
+    };
+
+    await execute(payload);
+  };
+
   return {
     formData,
     currentStep,
+    isSaving: isExecuting,
     setParentName,
     setRelationship,
     setChildName,
@@ -95,5 +133,6 @@ export function useParentSetupForm() {
     goToNextStep,
     goToPreviousStep,
     resetForm,
+    save: handlerOnSave,
   };
 }
