@@ -1,124 +1,175 @@
 ---
-applyTo: "**/*.adapter.spec.ts,**/*.adapter.test.ts,**/database/**/*.adapter.spec.ts"
-description: "Adapter tests guidance (copied from existing instruction artifact)."
----
-````instructions
-# Adapter Tests Guidance (Canonicalized)
-
-This artifact has been consolidated into the canonical architecture guide.
-
-See: `docs/architecture/condensed-copilot-guide.md` — section "Testing: Adapters & DB" for canonical test patterns, mocking strategies, and examples for adapter entity unit tests.
-
-Original content archived at: `.github/artifacts/archive/2.database__3.adapter-test.instructions.md`
-
-If you need the original full text, open the archive file above or check Git history.
----
-applyTo: "**/database/**/*.adapter.spec.ts"
-description: "Instructions for writing database adapter tests (unit-ish with Drizzle mocks or integration)."
+applyTo: 'src/database/**/*.adapter.spec.ts'
+description: "Instructions for writing database adapter tests with Drizzle mocks or integration"
 ---
 
 # Database Adapter Test Instructions
 
 ## Purpose
-Validate adapter logic: correct Drizzle queries, mapping, soft-delete filters, error propagation.
+Validate adapter logic including correct Drizzle queries, entity mapping, soft-delete filters, and error propagation through comprehensive unit and integration tests.
 
 ## Artifacts
-- `<root>.adapter.spec.ts`
+- `test/unit-test/database/adapter/<root>.adapter.spec.ts`
+- `test/integration/database/adapter/<tech>.<root>.adapter.spec.ts`
+- Mock factories for database entities and domain objects.
 
-## Test Types
-| Type | When |
-|------|------|
-| Mock-based (fast) | Default for unit CI; mock drizzle client methods |
-| Integration (optional) | When complex transactions or performance-critical logic |
+## Naming
+- Unit tests: `<root>.adapter.spec.ts` (e.g., `task.adapter.spec.ts`)
+- Integration tests: `<tech>.<root>.adapter.spec.ts` (e.g., `sqlite.task.adapter.spec.ts`)
 
-## Required Cases Per Public Method
-1. Happy path (entity returned/mapped)
-2. Not found (returns null / empty list)
-3. Error path (mock throws → domain error or rethrow)
-4. Relation preload (when relations expected)
+## Rules
 
-## Setup Pattern
-```ts
-const insertMock = jest.fn();
-const findFirstMock = jest.fn();
+### Test Types
+- **Unit tests**: Mock-based tests for `toDomainEntity` function and isolated logic
+- **Integration tests**: Real database tests for full adapter functionality
+- Separate unit and integration tests into different files
 
-jest.mock('drizzle-orm/postgres-js', () => ({
-  drizzle: () => ({
-    insert: () => ({ values: () => ({ returning: insertMock }) }),
-    query: { <ENTITY>: { findFirst: findFirstMock } },
-  }),
-}));
-```
+### Unit Tests (toDomainEntity focus)
+- Test static `toDomainEntity` method with various entity states
+- Verify enum conversions and field mappings
+- Test edge cases (null/undefined values, date conversions)
+- Mock all external dependencies
 
-## Example Skeleton
+### Integration Tests (Full adapter functionality)
+- Test complete adapter methods with real database
+- Verify query execution, filtering, and data persistence
+- Test error scenarios with actual database constraints
+- Include performance and load testing for critical paths
+
+### Setup
+- Unit tests: Mock Drizzle client and database connections
+- Integration tests: Use test database with proper cleanup
+- Create mock factories for consistent test data
+- Use Jest's mocking capabilities for external dependencies
+
+### Test Cases
+- **Unit**: Entity mapping accuracy, enum conversions, null handling
+- **Integration**: CRUD operations, query filtering, transaction handling
+- Happy path, error path, and edge cases for both levels
+
+### Assertions
+- **Unit**: Correct entity transformation and type safety
+- **Integration**: Proper database state changes and query results
+- Verify logging and error propagation in both contexts
+
+### Quality Gates
+- No use of `any` type in tests
+- Minimal mocking in unit tests; prefer real objects where possible
+- Pass Codacy static analysis scans
+- Maintain high test coverage (>80%) across both test levels
+
+### Example
+
+#### Unit Test Example (`test/unit-test/database/adapter/task.adapter.spec.ts`)
 ```typescript
-describe('[Port Adapter][PostgresSql] - <Entity>', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
+import { SQLiteTaskAdapter } from '@/database/adapter/sqlite.task.adapter';
+import { getTaskStatusFromValue } from '@/domain/task/enum/task-status.enum';
+import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 
-    // Prepare DB_CLIENT mock for each test. Ex:
-    const insertMock = jest.fn();
-    const findManyMock = jest.fn();
-
-    jest.mock('drizzle-orm/postgres-js', () => {
-      return {
-        drizzle: () => ({
-          insert: () => ({ values: () => ({ returning: insertMock }) }),
-          query: {
-            PLC: {
-              findMany: findManyMock,
-            },
-          },
-        }),
+describe('SQLiteTaskAdapter - Unit Tests', () => {
+  describe('toDomainEntity', () => {
+    it('should map database entity to domain entity correctly', () => {
+      const dbEntity = {
+        id: 1,
+        uuid: 'uuid-123',
+        title: 'Test Task',
+        description: 'Test Description',
+        status: 'ACTIVE',
+        createdAt: 1234567890,
+        updatedAt: 1234567890,
+        deletedAt: null,
       };
-    });
 
-  });
+      const result = SQLiteTaskAdapter.toDomainEntity(dbEntity);
 
-  describe('Create', () => {
-    it('Entity is created successfully', async () => {
-      const toCreateEntity = mock<Entity>CreateEntity();
-      const dbEntity = mock<Entity>Entity({
-        [main-field]: toCreateEntity[main-field],
-        // other important fields
+      expect(result).toEqual({
+        id: 1,
+        uuid: 'uuid-123',
+        title: 'Test Task',
+        description: 'Test Description',
+        status: getTaskStatusFromValue('ACTIVE'),
+        createdAt: new Date(1234567890),
+        updatedAt: new Date(1234567890),
+        deletedAt: undefined,
       });
-
-      insertMock.mockResolvedValueOnce([dbEntity]);
-
-      const spyAdapter = jest.spyOn(<adapter-name>PortAdapter, 'toDomainEntity');
-
-      const createdEntity = await adapter.create(toCreateEntity);
-
-      // expect DB_CLIENT mocks are called
-      expect(insertMock).toHaveBeenCalledTimes(1);
-      // expect spyAdapter called with correct params
-      expect(spyAdapter).toHaveBeenCalledWith(dbEntity);
-      // expect createdEntity shape and values
-      expect(createdEntity.<main-field>).toEqual(dbEntity);
     });
 
-    // Other happy paths...
+    it('should handle null deletedAt as undefined', () => {
+      const dbEntity = {
+        id: 1,
+        uuid: 'uuid-123',
+        title: 'Test Task',
+        description: null,
+        status: 'COMPLETED',
+        createdAt: 1234567890,
+        updatedAt: null,
+        deletedAt: null,
+      };
 
-    it('<Fail Path> - database error', async () => {
-      const adapter = buildAdapter();
-      // mock DB_CLIENT.query to return empty
-      const fetched = await adapter.<function>(/* params */);
-      expect(fetched).toBeNull();
+      const result = SQLiteTaskAdapter.toDomainEntity(dbEntity);
+
+      expect(result.deletedAt).toBeUndefined();
+      expect(result.updatedAt).toBeUndefined();
+      expect(result.description).toBeUndefined();
     });
-
-    // Other fail paths...
   });
 });
 ```
 
-## Assertions
-- Query mocks called with soft-delete filter
-- `toDomainEntity` invoked exactly once per row
-- Returned entity shape and values correct
+#### Integration Test Example (`test/integration/database/adapter/sqlite.task.adapter.spec.ts`)
+```typescript
+import { SQLiteTaskAdapter } from '@/database/adapter/sqlite.task.adapter';
+import { TTaskCreateDTO } from '@/domain/task/dto/task.dto';
+import { cleanupTestDatabase, setupTestDatabase } from '@/test/utils/database';
 
-## Quality Gates
-- No `any`
-- Minimal mocking surface (only used Drizzle methods)
-- Codacy scan after edits
+describe('SQLiteTaskAdapter - Integration Tests', () => {
+  let adapter: SQLiteTaskAdapter;
 
-````
+  beforeAll(async () => {
+    await setupTestDatabase();
+    adapter = new SQLiteTaskAdapter();
+  });
+
+  afterAll(async () => {
+    await cleanupTestDatabase();
+  });
+
+  beforeEach(async () => {
+    // Clean up data between tests
+    await adapter.deleteAll(); // Assuming this method exists
+  });
+
+  describe('create and getById', () => {
+    it('should create and retrieve a task', async () => {
+      const createDto: TTaskCreateDTO = {
+        title: 'Integration Test Task',
+        description: 'Created in integration test',
+        status: 'ACTIVE',
+      };
+
+      const created = await adapter.create(createDto);
+      expect(created.title).toBe(createDto.title);
+      expect(created.status).toBeDefined();
+
+      const retrieved = await adapter.getById(created.id);
+      expect(retrieved).toEqual(created);
+    });
+  });
+
+  describe('getAll', () => {
+    it('should return only active tasks', async () => {
+      // Create multiple tasks
+      await adapter.create({ title: 'Active Task 1', status: 'ACTIVE' });
+      await adapter.create({ title: 'Active Task 2', status: 'ACTIVE' });
+      const completedTask = await adapter.create({ title: 'Completed Task', status: 'COMPLETED' });
+
+      // Soft delete one task
+      await adapter.delete(completedTask.id);
+
+      const allTasks = await adapter.getAll();
+      expect(allTasks).toHaveLength(2);
+      expect(allTasks.every(task => task.status !== 'DELETED')).toBe(true);
+    });
+  });
+});
+```
