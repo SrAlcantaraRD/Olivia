@@ -1,4 +1,5 @@
 import type { TID } from '@/domain/core/schemas/id.schema';
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 type INotifyType = 'info' | 'success' | 'warning' | 'error';
 
@@ -7,21 +8,21 @@ export interface ILoggerNotify extends INotifyParams {
 }
 
 export interface INotifyAction {
-  text: string;
+  text: Ti18nKeys;
   onPress(): void;
 }
 
 export interface INotifyParams {
-  title: string;
-  description: string;
+  title: Ti18nKeys;
+  description: Ti18nKeys;
   actions?: INotifyAction[];
 }
 
 interface INotifyHandlerParams {
-  description: string;
+  description: Ti18nKeys;
   id: TID;
   isAutoDismiss: boolean;
-  title: string;
+  title: Ti18nKeys;
   type: INotifyType;
   actions?: INotifyAction[];
 }

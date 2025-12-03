@@ -1,4 +1,4 @@
-import type { TID } from '@/domain/core';
+import type { TID } from '@/domain/core/schemas/id.schema';
 import type {
   TPatientCreateEntity,
   TPatientEntity,

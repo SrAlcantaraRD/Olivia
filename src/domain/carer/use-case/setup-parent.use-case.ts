@@ -28,6 +28,11 @@ export class SetupParentUseCase extends BaseUseCase<
   public async execute(
     request: TRequestSetupParent
   ): Promise<IBaseResponse<TResponseSetupParent>> {
+    this.logInfo(
+      'SetupParentUseCase',
+      `Starting setup parent process with data: ${JSON.stringify(request)}`
+    );
+
     const parse = RequestSetupParentSchema.safeParse(request);
 
     if (!parse.success) {

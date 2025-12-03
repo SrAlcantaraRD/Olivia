@@ -1,7 +1,7 @@
 import z from 'zod';
 
 import { CarerCreateDTOSchema } from '@/domain/carer/dto/carer.dto';
-import { IDSchema } from '@/domain/core';
+import { IDSchema } from '@/domain/core/schemas/id.schema';
 import { PatientCreateDTOSchema } from '@/domain/patient/dto/patient.dto';
 
 export const RequestSetupParentSchema = z.object({
