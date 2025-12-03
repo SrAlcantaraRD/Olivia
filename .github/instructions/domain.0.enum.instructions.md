@@ -79,29 +79,21 @@ description: "Rules for generating Domain Enums and their usage patterns"
 
 ### Example
   ```typescript
-  export enum <ROOT>_ENUM = {
-    ACTIVE: 'active',
-    INACTIVE: 'inactive',
-  };
-
-  export const StatusSchema = z.enum(<ROOT>_ENUM, {
-    description: 'Entity status',
-    errorMap: () => ({ message: 'Invalid status' }),
-  });
-
-  export const get<Root>FromValue = (value: string): SEX_ENUM => {
-  const types: <ROOT>_ENUM[] = Object.values(<ROOT>_ENUM);
-
-  const type = types.find((column) => column === value);
-
-  if (!type) {
-    throw new ErrorCannotParseSchema(
-      '<ROOT>_ENUM',
-      `Value "${value}" is not a valid <root>.`
-    );
+  export enum StatusEnum {
+    ACTIVE = 'active',
+    INACTIVE = 'inactive',
   }
 
-  return type;
-};
+  export const StatusSchema = z.enum(StatusEnum);
 
+  export const getStatusFromValue = (value: string): StatusEnum => {
+    const statuses: StatusEnum[] = Object.values(StatusEnum);
+    const status = statuses.find(s => s === value);
+    if (!status) {
+      throw new ErrorCannotParseSchema('StatusEnum', `Value "${value}" is not a valid status.`);
+    }
+    return status;
+  };
+
+  export type TStatus = z.infer<typeof StatusSchema>;
   ```

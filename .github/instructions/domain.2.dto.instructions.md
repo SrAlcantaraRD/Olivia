@@ -34,6 +34,10 @@ description: "Rules for defining domain DTOs for decoupling"
 - DTOs must decouple domain from infrastructure; avoid exposing internal details.
 - Never use DTOs for business logic; only for data transfer.
 
+### Relations
+- Lists: `<RelatedEntity>List? : TRelatedEntity[]`
+- Single: `<RelatedEntity>? : TRelatedEntity`
+
 ### Do / Avoid
 | Do | Avoid |
 |----|-------|
@@ -41,19 +45,13 @@ description: "Rules for defining domain DTOs for decoupling"
 | Keep contract minimal | Exposing DB identifiers |
 | Use optional nested DTOs | Eagerly embedding large graphs |
 
-### Relations
-- Lists: `<RelatedEntity>List? : TRelatedEntity[]`
-- Single: `<RelatedEntity>? : TRelatedEntity`
-
-## Quality Gates
+### Quality Gates
 - No `any`/`unknown`
 - No internal `id`
 - Must export schemas + types
 - Run Codacy after edits
 
-## Examples
-
-### Entity
+### Example
   ```typescript
   export const <Root>CreateDTOSchema = GenerateCreateDTOSchema(<Root>EntitySchema);
   export const <Root>DTOSchema = GenerateDTOSchema(<Root>EntitySchema, {

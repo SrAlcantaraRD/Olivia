@@ -30,23 +30,6 @@ description: "Rules for defining domain entities with Zod schemas"
 - Chain constraints for incremental validation (e.g., z.string().min(3).max(50).regex(/^[a-zA-Z\s]+$/)).
 - Use i18n keys for error messages in the format "validation.<root>.<field>.<constraint>.<type>" (e.g., "validation.task.name.min.error").
 
-## Do / Avoid
-| Do | Avoid |
-|----|-------|
-| Use zod for schema | Re-declaring entity fields manually |
-| Keep pure (no side effects) | Importing adapters/framework |
-| Reuse common fragments | Duplicating scalar definitions |
-| Document field meaning | Leaving ambiguous optional fields |
-
-# Tests
-- Entity itself usually doesn't need direct tests unless complex derived logic (rare)
-- Ensure mock factory provides complete valid object
-
-## Quality Gates
-- No `any`/`unknown`
-- No leaking DB-only columns (except `id` internally allowed; omitted from DTO later)
-- Run Codacy after edits
-
 ### Refinements
 - Apply .refine() for custom logic, e.g., passwords with numbers or complex rules.
 - Ensure refinements enhance security without exposing sensitive logic.
@@ -60,9 +43,26 @@ description: "Rules for defining domain entities with Zod schemas"
 - Always use z.infer to derive TypeScript types from schemas.
 - Ensure types stay synchronized with validation rules.
 
-## Relations
+### Relations
 - Lists: `<RelatedEntity>List? : TRelatedEntity[]`
 - Single: `<RelatedEntity>? : TRelatedEntity`
+
+### Do / Avoid
+| Do | Avoid |
+|----|-------|
+| Use zod for schema | Re-declaring entity fields manually |
+| Keep pure (no side effects) | Importing adapters/framework |
+| Reuse common fragments | Duplicating scalar definitions |
+| Document field meaning | Leaving ambiguous optional fields |
+
+### Testing
+- Entity itself usually doesn't need direct tests unless complex derived logic (rare)
+- Ensure mock factory provides complete valid object
+
+### Quality Gates
+- No `any`/`unknown`
+- No leaking DB-only columns (except `id` internally allowed; omitted from DTO later)
+- Run Codacy after edits
 
 ### Example
   ```typescript

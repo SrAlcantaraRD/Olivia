@@ -9,8 +9,13 @@ description: "Rules for implementing mappers between entities and DTOs"
 - Implement mappers to transform between Entity and DTO, ensuring clean separation and type safety.
 
 ## Artifacts
-- `src/domain/**/dto/<root>.dto.ts`
+- `src/domain/**/mapper/<root>.mapper.ts`
 - `test/unit-test/domain/**/mapper/<root>.mapper.spec.ts`
+
+## Naming
+- Mapper: `<root>Mapper`
+- Interface: `TBaseMapper<T<Root>Entity, T<Root>DTO>`
+- File: `<root>.mapper.ts`
 
 ## Rules
 ### Basic Structure
@@ -31,7 +36,13 @@ description: "Rules for implementing mappers between entities and DTOs"
 - Use mappers in adapters or use-cases for data transformation.
 - Never mutate input entity or DTO.
 
-## Quality Gates
+### Testing
+- Always create `<root>.mapper.spec.ts` for mapper functions.
+- Test base field mapping (assert id not present in DTO).
+- Test conditional relation mapping (present/absent).
+- Example test cases: maps base fields excluding id, does not map relation when missing, maps relation when provided.
+
+### Quality Gates
 - 100% branch coverage for conditional relation mapping.
 - No `any`/`unknown`
 - Satisfies TypeScript type checks without casts (except localized test assertions).
@@ -57,19 +68,13 @@ description: "Rules for implementing mappers between entities and DTOs"
   };
   ```
 
-## Test
-### Required Test Cases
-1. Maps base fields (assert id not present in DTO)
-2. Does NOT call related mappers when relations absent
-3. Maps each relation when present (one test per relation)
-
-### Example Skeleton
+### Test Example
 ```ts
-describe('<root>EntityToDTO', () => {
+describe('<root>Mapper', () => {
   it('maps base fields excluding id', () => {
     const entity = mock<Root>Entity();
 
-    const dto = <root>EntityToDTO(entity);
+    const dto = <root>Mapper.toDTO(entity);
 
     expect(dto).toHaveProperty('uuid');
     expect(dto).not.toHaveProperty('id');
@@ -84,7 +89,7 @@ describe('<root>EntityToDTO', () => {
     const <relatedEntity>MapperSpy = jest.spyOn(<relatedEntity>Mapper, 'toDTO');
     const <relatedEntity>MapperSpy = jest.spyOn(<relatedEntity>Mapper, 'toDTO');
 
-    const dto = <root>EntityToDTO(entity);
+    const dto = <root>Mapper.toDTO(entity);
 
     expect(dto.<relatedEntity>).not.toBeDefined();
     expect(dto.<relatedEntity>List).not.toBeDefined();
@@ -104,7 +109,7 @@ describe('<root>EntityToDTO', () => {
     const <relatedEntity>MapperSpy = jest.spyOn(<relatedEntity>Mapper, 'toDTO');
     const <relatedEntity>MapperSpy = jest.spyOn(<relatedEntity>Mapper, 'toDTO');
 
-    const dto = <root>EntityToDTO(entity);
+    const dto = <root>Mapper.toDTO(entity);
 
     expect(dto.<relatedEntity>).toBeDefined();
     expect(dto.<relatedEntity>List).toBeDefined();
