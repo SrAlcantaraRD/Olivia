@@ -48,9 +48,9 @@ export default function SplashScreen() {
   };
 
   useEffect(() => {
-    notifyAdapter.info({
-      title: 'splash-screen.welcome-title',
-      description: 'splash-screen.welcome-message',
+    notifyAdapter.loading({
+      title: 'welcome',
+      description: 'common.view_all',
     });
   }, []);
 

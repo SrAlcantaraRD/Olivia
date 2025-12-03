@@ -35,7 +35,7 @@ export default function TabLayout() {
       </NativeTabs.Trigger>
 
       {/* Register Tab - Default landing page (first tab) */}
-      <NativeTabs.Trigger name="register">
+      <NativeTabs.Trigger name="register" testID="register-tab">
         <Icon sf="plus.circle.fill" />
         <Label>{t('tab.register')}</Label>
       </NativeTabs.Trigger>
