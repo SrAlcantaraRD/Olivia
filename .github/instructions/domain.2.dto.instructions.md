@@ -1,73 +1,43 @@
 ---
-applyTo: "**/*.dto.ts,**/*.dto.spec.ts,**/*.dto.test.ts"
-description: "Template & rules for Domain DTOs (copied from existing instruction artifact)."
----
-````instructions
-# Domain DTOs — Consolidated
-
-This artifact has been consolidated into the canonical architecture guide.
-
-See: `docs/architecture/condensed-copilot-guide.md` — section "Domain: DTOs & Mapping" for canonical DTO patterns and usage examples.
-
-Original content archived at: `.github/artifacts/archive/1.domain__2.dto.instructions.md`
-
-If you need the original full text, open the archive file above or check Git history.
----
-applyTo: "**/*.dto.ts"
-description: "Template & rules for generating or modifying Domain Data Transfer Objects (DTO) and their mocks."
+applyTo: 'src/domain/**/*.dto.ts'
+description: "Rules for defining domain DTOs for decoupling"
 ---
 
-# DTO Generation Instructions
+# Domain DTO Instructions
 
 ## Purpose
-Define external contract shape exposed via controllers / frontend. Hide internal persistence fields (numeric `id`). Prefer `uuid`.
+- Define transfer objects for decoupling layers, ensuring clean separation between domain and infrastructure.
 
-## Artifacts
-- `<root>.dto.ts`
-- `__test__/mock.dtos.ts`
+## Rules
+### Basic Structure
+- Use `GenerateDTOSchema` helper to create read DTO schemas from entity schemas.
+- Use `GenerateCreateDTOSchema` helper to create create DTO schemas from entity schemas.
+- DTOs must be derived from entity schemas for consistency and type safety.
+- Define DTO schemas as `<Root>CreateDTOSchema` and `<Root>DTOSchema` (or `<Root>ReadDTOSchema`).
+- Type as `T<Root>CreateDTO = z.infer<typeof <Root>CreateDTOSchema>` and `T<Root>DTO = z.infer<typeof <Root>DTOSchema>`.
 
-## Naming
-- Schema: `<Root>DTOSchema`, `<Root>CreateDTOSchema`
-- Types: `T<Root>DTO`, `T<Root>CreateDTO`
+### Validation
+- Ensure DTOs are validated with Zod for data integrity.
+- Use i18n keys for error messages in the format "validation.<root>.<field>.<constraint>.<type>".
+- Apply constraints as needed for transfer validation.
 
-## Implementation Rules
-- Base from Entity Schema: `GenerateDTOSchema(<Entity>EntitySchema)`
-- Creation: `GenerateDetailCreateDTOSchema(<Entity>CreateEntitySchema)`
-- Replace foreign key numeric IDs with UUID fields for related resources
- - For constrained categorical fields reuse enum schema (see `10.enum.instructions.md`)
+### Usage
+- Transform data between layers using DTOs.
+- DTOs must decouple domain from infrastructure; avoid exposing internal details.
+- Never use DTOs for business logic; only for data transfer.
 
-```typescript
+### Example
+  ```typescript
+  export const <Root>CreateDTOSchema = GenerateCreateDTOSchema(<Root>EntitySchema);
+  export const <Root>DTOSchema = GenerateDTOSchema(<Root>EntitySchema, {
+    // Optional overrides or additions
+    additionalField: z.string().optional(),
+  });
 
-export const <Entity>DTOSchema = GenerateDTOSchema(<Entity>EntitySchema);
-export const <Entity>CreateDTOSchema = GenerateDetailCreateDTOSchema(<Entity>CreateEntitySchema);
+  export type T<Root>CreateDTO = z.infer<typeof <Root>CreateDTOSchema>;
+  export type T<Root>DTO = z.infer<typeof <Root>DTOSchema>;
 
-export type T<Entity>DTO = Static<typeof <Entity>DTOSchema> & {
-  // reference to other entities.
-  <RelatedEntity>?: T<RelatedEntity>DTO;
-  <RelatedEntity>List?: T<RelatedEntity>DTO[];
-};
-export type T<Entity>CreateDTO = Static<typeof <Entity>CreateDTOSchema>;
-```
-
-## Relations
-- Lists: `<relatedPlural>? : TRelatedDTO[]`
-- Single: `<relatedSingular>? : TRelatedDTO`
-
-## Do / Avoid
-| Do | Avoid |
-|----|-------|
-| Use TypeBox for schema | Re-declaring entity fields manually |
-| Keep contract minimal | Exposing DB identifiers |
-| Use optional nested DTOs | Eagerly embedding large graphs |
-
-## Mock Factory
-```ts
-export function mock<Root>DTO(overrides: Partial<T<Root>DTO> = {}): T<Root>DTO { /* build via entity mock + mapping */ }
-```
-
-## Quality Gates
-- No internal `id`
-- Must export schemas + types
-- Run Codacy after edit
-
-````
+  // Usage in adapter
+  const createDto = <Root>CreateDTOSchema.parse(createData);
+  const dto = <Root>DTOSchema.parse(entityData);
+  ```
