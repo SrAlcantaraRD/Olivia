@@ -1,95 +1,52 @@
 ---
-applyTo: "**/*.entity.ts,**/*.entity.tsx,**/*.entity.spec.ts,**/*.entity.test.ts"
-description: "Template & rules for Domain Entities (copied from existing instruction artifact)."
----
-````instructions
----
-applyTo: "**/*.entity.ts"
-description: "Template & rules for generating or modifying Domain Entities and their test scaffolds."
+applyTo: 'src/domain/**/*.entity.ts'
+description: "Rules for defining domain entities with Zod schemas"
 ---
 
-# Domain Entities — Consolidated
-
-This artifact has been consolidated into the canonical architecture guide.
-
-See: `docs/architecture/condensed-copilot-guide.md` — section "Domain: Entities & Schemas" for canonical entity patterns, Zod usage, and mock factory guidance.
-
-Original content archived at: `.github/artifacts/archive/1.domain__1.entity.instructions.md`
-
-If you need the original full text, open the archive file above or check Git history.
-
-# Entity Generation Instructions
+# Domain Entity Instructions
 
 ## Purpose
-Define immutable domain shape (business core) distinct from persistence & transport (DB rows / DTOs).
+- Define domain entities that are technology-agnostic, with robust Zod schemas for data validation and security.
 
-## Artifacts
-- `<root>.entity.ts`
-- `__test__/mock.entities.ts`
+## Rules
+### Basic Structure
+- Entities must use Zod schemas extending BaseEntitySchema.
+- BaseEntitySchema must include id, uuid, status, createdAt, deletedAt.
+- Define schema as `<Root>EntitySchema`.
+- Type as `T<Root>Entity = z.infer<typeof <Root>EntitySchema>`.
+- Use STATUS_ENUM for status values.
+- Domain layer must remain technology-agnostic; all infrastructure adapts to domain.
 
-## Naming
-- File: `kebab-case` `<root>.entity.ts`
-- Schema: `<Root>EntitySchema`
-- Types: `T<Root>Entity`, `T<Root>CreateEntity`
+### Advanced Constraints
+- Always include constraints for security: .min(), .max(), .email(), .regex(), .int(), .positive().
+- Chain constraints for incremental validation (e.g., z.string().min(3).max(50).regex(/^[a-zA-Z\s]+$/)).
+- Use i18n keys for error messages in the format "validation.<root>.<field>.<constraint>.<type>" (e.g., "validation.task.name.min.error").
 
-## Implementation Rules
-- Base: `BaseEntitySchema.extend(z.object({...}))`
-- Use shared scalar schemas (`UUIDSchema`, `IDSchema`, etc.)
-- Use `z.extend` for extension; prefer reuse over duplication
-- Relations: represent as foreign key IDs in schema, optional full entity on type only (lazy loading pattern)
+### Refinements
+- Apply .refine() for custom logic, e.g., passwords with numbers or complex rules.
+- Ensure refinements enhance security without exposing sensitive logic.
 
-```typescript
-export const <Entity>EntitySchema = BaseEntitySchema.extend(
-  z.object({
-    // add entity-specific fields here.
-  }),
-);
+### Error Handling
+- Use safeParse() for validation to avoid throwing errors.
+- Format errors with .format() for clear, field-specific feedback.
+- Handle ZodError instances gracefully in adapters.
 
-export const <Entity>CreateEntitySchema = GenerateCreateEntitySchema(<Entity>EntitySchema);
+### Type Inference
+- Always use z.infer to derive TypeScript types from schemas.
+- Ensure types stay synchronized with validation rules.
 
-export type T<Entity>Entity = Static<typeof <Entity>EntitySchema> & {
-  // reference to other entities.
-  <RelatedEntity>?: T<RelatedEntity>Entity;
-  <RelatedEntity>List?: T<RelatedEntity>Entity[];
-};
+### Example
+  ```typescript
+  export const <Root>EntitySchema = z.object({
+    ...BaseEntitySchema.shape,
+    name: z.string().min(3, "validation.<root>.name.min.error").max(50, "validation.<root>.name.max.error").regex(/^[a-zA-Z\s]+$/, "validation.<root>.name.regex.error"),
+    email: z.string().email("validation.<root>.email.email.error"),
+    age: z.number().int().positive("validation.<root>.age.positive.error"),
+    password: z.string().min(8, "validation.<root>.password.min.error").refine(pwd => /\d/.test(pwd), "validation.<root>.password.refine.error"),
+  });
 
-export type T<Entity>CreateEntity = Static<typeof <Entity>CreateEntitySchema>;
-```
+  export const <Root>CreateEntitySchema = GenerateCreateEntitySchema(<Root>EntitySchema);
 
-## Relations
-- Lists: `<relatedPlural>? : TRelatedEntity[]`
-- Single: `<relatedSingular>? : TRelatedEntity`
-
-## Creation Schema
-- Derive using `GenerateCreateEntitySchema(<Root>EntitySchema)`
-- Omit generated fields (id, uuid, timestamps) unless part of domain invariants
-
-## Invariants & Validation
-- Express structural invariants in schema
-- For behavioral invariants (cross-field) use use case logic, not entity constructor
-
-## Enums
-When a field has a constrained finite set of stable semantic values, define an enum (see `9.enum.instructions.md`) instead of scattering string literals. Reference enum schema via `z.enum`.
-
-## Do / Avoid
-| Do | Avoid |
-|----|-------|
-| Keep pure (no side effects) | Importing adapters/framework |
-| Reuse common fragments | Duplicating scalar definitions |
-| Document field meaning | Leaving ambiguous optional fields |
-
-# Tests
-- Entity itself usually doesn't need direct tests unless complex derived logic (rare)
-- Ensure mock factory provides complete valid object
-
-## Mock Factories
-```ts
-export function mock<Root>Entity(overrides: Partial<T<Root>Entity> = {}): T<Root>Entity { /* build deterministic mock */ }
-```
-
-## Quality Gates
-- No `any`/`unknown`
-- No leaking DB-only columns (except `id` internally allowed; omitted from DTO later)
-- Run Codacy after edits
-
-````
+  export type T<Root>Entity = z.infer<typeof <Root>EntitySchema>;
+  export type T<Root>CreateEntity = z.infer<typeof <Root>CreateEntitySchema>;
+  ```
