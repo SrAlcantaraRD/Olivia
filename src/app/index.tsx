@@ -4,6 +4,7 @@ import { useThemeColor } from 'heroui-native';
 import { useEffect, useRef } from 'react';
 import { Animated, Pressable, View } from 'react-native';
 
+import { useAdapters } from '@/adapter';
 import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
 import {
   TypographyHeading,
@@ -13,6 +14,9 @@ import {
 
 export default function SplashScreen() {
   const router = useRouter();
+
+  const { notifyAdapter } = useAdapters();
+
   const backgroundColor = useThemeColor('background');
   const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
@@ -42,6 +46,13 @@ export default function SplashScreen() {
   const handleContinue = () => {
     router.push('/(onboarding)');
   };
+
+  useEffect(() => {
+    notifyAdapter.info({
+      title: 'splash-screen.welcome-title',
+      description: 'splash-screen.welcome-message',
+    });
+  }, []);
 
   return (
     <View

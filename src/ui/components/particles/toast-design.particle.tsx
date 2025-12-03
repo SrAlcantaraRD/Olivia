@@ -38,7 +38,7 @@ const AuraSVG = ({ color }: { color: string }) => {
       style={[StyleSheet.absoluteFillObject]}
       className="rounded-xl overflow-hidden"
     >
-      <Svg width="100%" height="100%">
+      <Svg width="100%" height="200%">
         <Defs>
           <RadialGradient id="auraGrad" cx="-90%" cy="50%" r="200%">
             <Stop offset="0%" stopColor={color} stopOpacity="0.05" />
@@ -61,55 +61,56 @@ const BaseToast = ({
   auraColor,
 }: BaseToastProps) => {
   return (
-    <View
-      style={{
-        position: 'absolute',
-        bottom: 20,
-        left: '5%',
-        right: '5%',
-        minHeight: 60,
-        backgroundColor: TOAST_BG_COLOR,
-        borderRadius: 12,
-        padding: 16,
-      }}
-      className="flex-row items-center shadow-lg overflow-hidden"
-    >
+    // <View
+    //   style={{
+    //     bottom: 20,
+    //     left: '5%',
+    //     right: '5%',
+    //     minHeight: 60,
+    //     backgroundColor: TOAST_BG_COLOR,
+    //     borderRadius: 12,
+    //   }}
+    //   className="absolute flex-row items-center shadow-lg overflow-hidden"
+    // >
+    <View className="absolute bottom-5 left-[5%] right-[5%] min-h-[60px] bg-[#2C3E50] rounded-xl flex-row items-center shadow-lg overflow-hidden p-4">
       {/* Aura background SVG radial gradient */}
       <AuraSVG color={auraColor} />
 
-      {/* Icon circle with solid color */}
-      <View
-        style={{ backgroundColor: iconBgColor }}
-        className="w-8 h-8 rounded-full items-center justify-center mr-3 z-10"
-      >
-        <StyledIonicons
-          name={iconName}
-          size={24}
-          style={{ color: TOAST_BG_COLOR }}
-        />
-      </View>
+      <View className="flex-row items-center flex-1">
+        {/* Icon circle with solid color */}
+        <View
+          style={{ backgroundColor: iconBgColor }}
+          className="w-8 h-8 rounded-full items-center justify-center mr-3 z-10"
+        >
+          <StyledIonicons
+            name={iconName}
+            size={24}
+            style={{ color: TOAST_BG_COLOR }}
+          />
+        </View>
 
-      {/* Text content */}
-      <View className="flex-1 z-10">
-        {text1 && (
-          <TypographyParagraph
-            i18nKey={text1}
-            size="sm"
-            weight="semibold"
-            style={{
-              color: TITLE_TEXT_COLOR,
-              marginBottom: text2 ? 4 : 0,
-            }}
-          />
-        )}
-        {text2 && (
-          <TypographySmall
-            i18nKey={text2}
-            style={{
-              color: DETAIL_TEXT_COLOR,
-            }}
-          />
-        )}
+        {/* Text content */}
+        <View className="flex-1 z-10">
+          {text1 && (
+            <TypographyParagraph
+              i18nKey={text1}
+              size="sm"
+              weight="semibold"
+              style={{
+                color: TITLE_TEXT_COLOR,
+                marginBottom: text2 ? 4 : 0,
+              }}
+            />
+          )}
+          {text2 && (
+            <TypographySmall
+              i18nKey={text2}
+              style={{
+                color: DETAIL_TEXT_COLOR,
+              }}
+            />
+          )}
+        </View>
       </View>
     </View>
   );
