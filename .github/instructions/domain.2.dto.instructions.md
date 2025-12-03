@@ -8,6 +8,14 @@ description: "Rules for defining domain DTOs for decoupling"
 ## Purpose
 - Define transfer objects for decoupling layers, ensuring clean separation between domain and infrastructure.
 
+## Artifacts
+- `src/domain/**/dto/<root>.dto.ts`
+- `test/unit-test/domain/**/mock/dto/<root>.dto.mock.ts`
+
+## Naming
+- Schema: `<Root>DTOSchema`, `<Root>CreateDTOSchema`
+- Types: `T<Root>DTO`, `T<Root>CreateDTO`
+
 ## Rules
 ### Basic Structure
 - Use `GenerateDTOSchema` helper to create read DTO schemas from entity schemas.
@@ -26,7 +34,26 @@ description: "Rules for defining domain DTOs for decoupling"
 - DTOs must decouple domain from infrastructure; avoid exposing internal details.
 - Never use DTOs for business logic; only for data transfer.
 
-### Example
+### Do / Avoid
+| Do | Avoid |
+|----|-------|
+| Use zod for schema | Re-declaring entity fields manually |
+| Keep contract minimal | Exposing DB identifiers |
+| Use optional nested DTOs | Eagerly embedding large graphs |
+
+### Relations
+- Lists: `<RelatedEntity>List? : TRelatedEntity[]`
+- Single: `<RelatedEntity>? : TRelatedEntity`
+
+## Quality Gates
+- No `any`/`unknown`
+- No internal `id`
+- Must export schemas + types
+- Run Codacy after edits
+
+## Examples
+
+### Entity
   ```typescript
   export const <Root>CreateDTOSchema = GenerateCreateDTOSchema(<Root>EntitySchema);
   export const <Root>DTOSchema = GenerateDTOSchema(<Root>EntitySchema, {
@@ -34,10 +61,25 @@ description: "Rules for defining domain DTOs for decoupling"
     additionalField: z.string().optional(),
   });
 
+  export type T<Root>DTO = z.infer<typeof <Root>DTOSchema> & {
+    // reference to other entities.
+    <RelatedEntity>?: T<RelatedEntity>DTO;
+    <RelatedEntity>List?: T<RelatedEntity>DTO[];
+  };
+
   export type T<Root>CreateDTO = z.infer<typeof <Root>CreateDTOSchema>;
-  export type T<Root>DTO = z.infer<typeof <Root>DTOSchema>;
 
   // Usage in adapter
-  const createDto = <Root>CreateDTOSchema.parse(createData);
+  const createDTO = <Root>CreateDTOSchema.parse(createData);
   const dto = <Root>DTOSchema.parse(entityData);
   ```
+
+### Mock Factories
+```ts
+export function mock<Root>DTO(overrides: Partial<T<Root>DTO> = {}): T<Root>DTO {
+  /* build deterministic mock */
+  id: 1,
+  // other fields...
+  ...overrides,
+  }
+```
