@@ -1,10 +1,10 @@
 /// <reference types="jest" />
 
 import { ErrorWhenSetupParent } from '@/domain/carer/error/carer-create.errors';
-import { SetupParentUseCase } from '@/domain/carer/use-case/setup-parent.use-case';
 import type { TRequestSetupParent } from '@/domain/carer/use-case-schema/setup-parent.use-case-schema';
-import type { TID } from '@/domain/core';
+import { SetupParentUseCase } from '@/domain/carer/use-case/setup-parent.use-case';
 import { ErrorDatabaseDefault } from '@/domain/core/error/database-default.error';
+import type { TID } from '@/domain/core/schemas/id.schema';
 import { mockLoggerPort } from '../../core/mocks/mock.port';
 import { mockModuleEntity } from '../../module/mocks/mock.entities';
 import { mockModulePort } from '../../module/mocks/mock.port';
