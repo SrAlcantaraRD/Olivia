@@ -6,14 +6,15 @@ import type { TCarerCreateDTO } from '@/domain/carer/dto/carer.dto';
 import type { TCarerEntity } from '@/domain/carer/entity/carer.entity';
 import { getCarerTypeFromValue } from '@/domain/carer/enum/carer-type.enums';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
-import type { TID } from '@/domain/core';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
 import {
   getStatusFromValue,
   STATUS_ENUM,
 } from '@/domain/core/enum/status.enum';
+import type { TID } from '@/domain/core/schemas/id.schema';
 
 export type TCarerAdapterEntity = typeof DB_SCHEMA.CARER.$inferSelect;
+
 export class SQLiteCarerAdapter implements ICarerPort {
   private readonly database;
 

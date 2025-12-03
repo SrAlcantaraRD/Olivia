@@ -94,7 +94,7 @@ const BaseToast = ({
           {text1 && (
             <TypographyParagraph
               i18nKey={text1}
-              size="sm"
+              size="lg"
               weight="semibold"
               style={{
                 color: TITLE_TEXT_COLOR,
@@ -105,6 +105,7 @@ const BaseToast = ({
           {text2 && (
             <TypographySmall
               i18nKey={text2}
+              size="sm"
               style={{
                 color: DETAIL_TEXT_COLOR,
               }}

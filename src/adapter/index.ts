@@ -1,7 +1,7 @@
-import { SQLiteCarerAdapter } from '@/adapter/sqlite.carer.adapter';
-import { SQLiteModuleAdapter } from '@/adapter/sqlite.module.adapter';
-import { SQLitePatientAdapter } from '@/adapter/sqlite.patient.adapter';
 import { ToastUINotifyPortAdapter } from '@/adapter/toast.notify-port.adapter';
+import { SQLiteCarerAdapter } from '@/database/adapter/sqlite.carer.adapter';
+import { SQLiteModuleAdapter } from '@/database/adapter/sqlite.module.adapter';
+import { SQLitePatientAdapter } from '@/database/adapter/sqlite.patient.adapter';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IModulePort } from '@/domain/module/port/module.port';

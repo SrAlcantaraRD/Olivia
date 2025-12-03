@@ -2,13 +2,15 @@ import { drizzle } from 'drizzle-orm/expo-sqlite';
 
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
-import { STATUS_ENUM } from '@/domain/core';
 import type { TPatientEntity } from '@/domain/patient/entity/patient.entity';
 
 export type TPatientAdapterEntity = typeof DB_SCHEMA.PATIENT.$inferSelect;
 
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
-import { getStatusFromValue } from '@/domain/core/enum/status.enum';
+import {
+  getStatusFromValue,
+  STATUS_ENUM,
+} from '@/domain/core/enum/status.enum';
 import type { TPatientCreateDTO } from '@/domain/patient/dto/patient.dto';
 import { getAutonomyLevelFromValue } from '@/domain/patient/enum/autonomy-level.enum';
 import { getSexTypeFromValue } from '@/domain/patient/enum/sex.enum';

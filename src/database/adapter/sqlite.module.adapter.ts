@@ -3,8 +3,9 @@ import { drizzle } from 'drizzle-orm/expo-sqlite';
 
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
-import { STATUS_ENUM, type TID } from '@/domain/core';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
+import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
+import type { TID } from '@/domain/core/schemas/id.schema';
 import type { IModulePort } from '@/domain/module/port/module.port';
 
 export class SQLiteModuleAdapter implements IModulePort {

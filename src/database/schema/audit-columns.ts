@@ -1,6 +1,6 @@
 import { int, integer, text } from 'drizzle-orm/sqlite-core';
 
-import { generateUUID } from '@/domain/core/schemas';
+import { generateUUID } from '@/domain/core/schemas/uuid.schema';
 
 export function AUDIT_COLUMNS() {
   return {
