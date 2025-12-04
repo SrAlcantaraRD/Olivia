@@ -6,4 +6,5 @@ export interface ICarerPort {
   create(dto: TCarerCreateDTO): Promise<TCarerEntity>;
   getById(id: TID): Promise<TCarerEntity | null>;
   getAll(): Promise<TCarerEntity[]>;
+  existsAny(): Promise<boolean>;
 }

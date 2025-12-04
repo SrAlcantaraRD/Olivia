@@ -73,4 +73,12 @@ export class SQLiteCarerAdapter implements ICarerPort {
 
     return list.map((row) => SQLiteCarerAdapter.toDomainEntity(row));
   }
+
+  public async existsAny(): Promise<boolean> {
+    const item = await this.database.query.CARER.findFirst({
+      where: (row, { eq }) => eq(row.status, STATUS_ENUM.ACTIVE),
+    });
+
+    return item !== null;
+  }
 }
