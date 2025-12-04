@@ -21,6 +21,7 @@ description: "Rules for generating or modifying Use Case Request/Response Schema
 - Use Zod only.
 - Define request and response schemas.
 - Export types inferred from schemas.
+- Use z.void() when not request|response schema are defined.
 
 ### Referencing
 - Reference existing entity/DTO schemas.
