@@ -127,7 +127,7 @@ El flujo `parent-setup` utiliza FormWizard en tres pantallas:
 2. **child-info.tsx**: Información del menor (nombre, fecha nacimiento, diagnóstico)
 3. **modules.tsx**: Selección de módulos a activar
 
-Cada pantalla define un solo step y gestiona su propia navegación con `router.push()`.
+Cada pantalla define un solo step y gestiona su propia navegación con `useNavigation`.
 
 ## Estructura del Componente
 
