@@ -27,6 +27,7 @@ description: "Instructions for implementing reusable React hooks wrapping hook p
 - Maintain separation from HTTP concerns.
 - Use shared hooks: useCreateEntity, useFindEntityByUUID, useGetEntityList.
 - Naming: useGet<Entity>List, useFind<Entity>ByUUID.
+- Hooks MUST abstract navigation via ports/adapters; NEVER allow direct router.push in components or screens. All navigation MUST result from hook orchestration, injecting adapters for domain-defined ports.
 
 ### Implementation
 - Inject notify and adapter ports.
@@ -47,8 +48,11 @@ description: "Instructions for implementing reusable React hooks wrapping hook p
 
 ### Example
   ```typescript
-  export const use<Feature> = (notify: INotifyPort, adapter: I<Entity>Port) => {
+  export const use<Feature> = (adapters: { notify: INotifyPort; adapter: I<Entity>Port }) => {
     const [isExecuting, setExecuting] = useState<boolean>(false);
+
+    const { notify, adapter } = adapters;
+
     const execute = useCallback(async (dto: T<Entity>DTO): Promise<IHookResponse<T<Entity>DTO>> => {
       setExecuting(true);
       try {
