@@ -1,5 +1,5 @@
 ---
-applyTo: 'src/ui/**/*.tsx'
+applyTo: 'src/**/*.tsx'
 description: "Rules for implementing UI components following Atomic Design with HeroUI"
 ---
 
@@ -9,27 +9,37 @@ description: "Rules for implementing UI components following Atomic Design with 
 Organize and implement UI components scalably using Atomic Design principles with HeroUI base components, ensuring accessibility, internationalization, and consistent theming.
 
 ## Artifacts
-- `src/ui/atoms/*.atom.tsx`
-- `src/ui/molecules/*.molecule.tsx`
-- `src/ui/organisms/*.organism.tsx`
-- `src/ui/particles/*.particle.tsx`
-- `test/unit-test/ui/components/**/*.spec.tsx`
+- `src/ui/components/particle/*.particle.tsx`
+- `src/ui/components/atom/*.atom.tsx`
+- `src/ui/components/molecule/*.molecule.tsx`
+- `src/ui/components/organism/*.organism.tsx`
+- `src/ui/components/form/*.form.tsx`
+- `src/ui/components/layout/*.layout.tsx`
+- `test/unit-test/ui/component/**/*.spec.tsx`
 
 ## Naming
-- Atoms: `<Component>Atom.atom.tsx` (e.g., `ButtonAtom.atom.tsx`)
-- Molecules: `<Component>Molecule.molecule.tsx` (e.g., `FormField.molecule.tsx`)
-- Organisms: `<Component>Organism.organism.tsx` (e.g., `ParentSetupForm.organism.tsx`)
-- Particles: `<Component>Particle.particle.tsx` (e.g., `ToastParticle.particle.tsx`)
+- Particles: `<Component>Particle.particle.tsx` (e.g., `toast-particle.particle.tsx`)
+- Atoms: `<Component>Atom.atom.tsx` (e.g., `button-atom.atom.tsx`)
+- Molecules: `<Component>Molecule.molecule.tsx` (e.g., `form-field.molecule.tsx`)
+- Organisms: `<Component>Organism.organism.tsx` (e.g., `parent-setup-form.organism.tsx`)
+- Forms: `<Feature>Form.form.tsx` (e.g., `register-form.form.tsx`)
+- Layouts: `<Feature>Layout.layout.tsx` (e.g., `main-layout.layout.tsx`)
 
 ## Rules
 
 ### Atomic Design Structure
+- **Particles**: Transversal components used across the app (e.g., toasts, modals)
 - **Atoms**: Basic wrappers around heroui-native components, single purpose, highly reusable
 - **Molecules**: Combine atoms into functional units (e.g., form fields, buttons with labels)
 - **Organisms**: Complex sections combining molecules (e.g., full forms, navigation sections)
-- **Particles**: Transversal components used across the app (e.g., toasts, modals)
+
 
 ### Component Implementation
+
+#### Particles Layer
+- Transversal components: Toast, Modal, LoadingSpinner
+- Used across different parts of the app
+- Consistent behavior and styling
 
 #### Atoms Layer
 - Wrap heroui-native components with consistent styling
@@ -38,23 +48,29 @@ Organize and implement UI components scalably using Atomic Design principles wit
 - Implement Typography variants: Title, Subtitle, Heading, Paragraph, Small
 - Create ButtonAtom with rounded-lg default styling
 - Build CardAtom, TextFieldAtom (with icons), SpinnerAtom
+- TestID pattern: `${props.testID}.<component>.<part?>.atom` (e.g., `button.atom`, `text-field.input.atom`)
 
 #### Molecules Layer
 - Combine multiple atoms into functional units
 - Examples: FormField (TextFieldAtom + Typography), FormWizard (steps + navigation)
 - Handle state management between atoms
 - Implement validation display
+- TestID pattern: `${props.testID}.<component>.<part?>.molecule`
 
 #### Organisms Layer
 - Combine molecules into complex sections
 - Examples: ParentSetupForm, RegisterScreen sections
 - Manage complex state and business logic presentation
 - Coordinate between multiple molecules
+- TestID pattern: `${props.testID}.<component>.<part?>.organism`
 
-#### Particles Layer
-- Transversal components: Toast, Modal, LoadingSpinner
-- Used across different parts of the app
-- Consistent behavior and styling
+### Form Components
+- Create form components for complex forms
+- Use controlled components for form fields
+- Implement validation and error display
+- Examples: RegisterForm, ParentSetupForm
+- Integrate with hooks for state management
+- TestID pattern: `${props.testID}.<component>.<part?>.form`
 
 ### HeroUI Integration
 - Use heroui-native as base components only in atoms layer
@@ -92,6 +108,7 @@ Organize and implement UI components scalably using Atomic Design principles wit
 - No heroui-native imports outside atoms layer
 - No hardcoded strings in components
 - All interactive elements are accessible
+- **All components must have a required `testID` prop**
 - Components follow Atomic Design hierarchy
 - Codacy scan passes without issues
 
@@ -103,6 +120,7 @@ Organize and implement UI components scalably using Atomic Design principles wit
 | Use i18nKey on Typography atoms | Hardcode strings in components |
 | Implement accessibility props | Skip accessibility requirements |
 | Use uniwind for TailwindCSS | Inline Tailwind classes |
+| **Always include required `testID` prop** | Skip testID in components |
 | Test with screen readers | Assume keyboard-only navigation |
 
 ## Testing
@@ -111,6 +129,8 @@ Organize and implement UI components scalably using Atomic Design principles wit
 - Integration test organisms for complex interactions
 - Accessibility testing with screen readers
 - Visual regression testing for UI consistency
+- **Add testID for all components** to facilitate testing with this pattern: `screen.<screen>.<section>.<element>.<part?>` (e.g., `screen.caregiver-setup.confirm-link.welcome-button`)
+- Append component-specific suffixes in atoms (e.g., `button.atom`)
 
 ### Example
 ```typescript
@@ -124,6 +144,7 @@ interface ButtonAtomProps {
   onPress: () => void;
   variant?: 'primary' | 'secondary';
   isLoading?: boolean;
+  testID: string;
 }
 
 const ButtonAtomBase: React.FC<ButtonAtomProps> = ({
@@ -131,6 +152,7 @@ const ButtonAtomBase: React.FC<ButtonAtomProps> = ({
   onPress,
   variant = 'primary',
   isLoading = false,
+  testID,
 }) => {
   return (
     <Button
@@ -140,6 +162,7 @@ const ButtonAtomBase: React.FC<ButtonAtomProps> = ({
       isLoading={isLoading}
       accessibilityLabel={title}
       accessibilityRole="button"
+      testID={`${testID}.button.atom`}
     >
       <Button.Label i18nKey={title} />
     </Button>
@@ -159,6 +182,7 @@ interface FormFieldProps {
   onChangeText: (text: string) => void;
   error?: Ti18nKeys;
   required?: boolean;
+  testID: string;
 }
 
 export const FormFieldMolecule: React.FC<FormFieldProps> = ({
@@ -168,12 +192,14 @@ export const FormFieldMolecule: React.FC<FormFieldProps> = ({
   onChangeText,
   error,
   required = false,
+  testID,
 }) => {
   return (
     <View className="mb-4">
       <TypographySmall
         i18nKey={label}
         className={required ? 'text-red-500' : 'text-gray-700'}
+        testID={`${testID}.form-field.label`}
       />
       <TextFieldAtom
         placeholder={placeholder}
@@ -181,11 +207,13 @@ export const FormFieldMolecule: React.FC<FormFieldProps> = ({
         onChangeText={onChangeText}
         isRequired={required}
         className="mt-1"
+        testID={`${testID}.form-field.input`}
       />
       {error && (
         <TypographySmall
           i18nKey={error}
           className="text-red-500 mt-1"
+          testID={`${testID}.form-field.error`}
         />
       )}
     </View>
@@ -202,11 +230,13 @@ import { TypographyTitle } from '../atoms/typography.atom';
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => void;
   isLoading?: boolean;
+  testID: string;
 }
 
 export const LoginFormOrganism: React.FC<LoginFormProps> = ({
   onSubmit,
   isLoading = false,
+  testID,
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -220,6 +250,7 @@ export const LoginFormOrganism: React.FC<LoginFormProps> = ({
       <TypographyTitle
         i18nKey="auth.login.title"
         className="mb-6 text-center"
+        testID={`${testID}.login-form.title`}
       />
 
       <FormFieldMolecule
@@ -228,6 +259,7 @@ export const LoginFormOrganism: React.FC<LoginFormProps> = ({
         value={email}
         onChangeText={setEmail}
         required
+        testID={`${testID}.login-form.email`}
       />
 
       <FormFieldMolecule
@@ -235,6 +267,7 @@ export const LoginFormOrganism: React.FC<LoginFormProps> = ({
         placeholder="auth.login.password_placeholder"
         value={password}
         onChangeText={setPassword}
+        testID={`${testID}.login-form.password`}
         required
       />
 
@@ -243,6 +276,7 @@ export const LoginFormOrganism: React.FC<LoginFormProps> = ({
         onPress={handleSubmit}
         isLoading={isLoading}
         className="mt-4"
+        testID={`${testID}.login-form.submit`}
       />
     </View>
   );
