@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
+import { SetupParentUseCase } from '@/domain/carer/use-case/setup-parent.use-case';
 import type {
   TRequestSetupParent,
   TResponseSetupParent,
 } from '@/domain/carer/use-case-schema/setup-parent.use-case-schema';
-import { SetupParentUseCase } from '@/domain/carer/use-case/setup-parent.use-case';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
   IHookResponse,
@@ -15,14 +15,22 @@ import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
 import type { IPatientPort } from '@/domain/patient/port/patient.port';
 
-export function useSetupParent(
-  loggerAdapter: TLoggerPort,
-  notifyAdapter: INotifyPort,
-  carerAdapter: ICarerPort,
-  patientAdapter: IPatientPort,
-  moduleAdapter: IModulePort
-): IUseHook<TRequestSetupParent, TResponseSetupParent> {
+export function useSetupParent(adapters: {
+  loggerAdapter: TLoggerPort;
+  notifyAdapter: INotifyPort;
+  carerAdapter: ICarerPort;
+  patientAdapter: IPatientPort;
+  moduleAdapter: IModulePort;
+}): IUseHook<TRequestSetupParent, TResponseSetupParent> {
   const [isExecuting, setExecuting] = useState<boolean>(false);
+
+  const {
+    loggerAdapter,
+    notifyAdapter,
+    carerAdapter,
+    patientAdapter,
+    moduleAdapter,
+  } = adapters;
 
   const execute = useCallback(
     async (
