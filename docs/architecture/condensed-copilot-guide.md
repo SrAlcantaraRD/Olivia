@@ -37,8 +37,8 @@
 
 - Project root: `src/`
 - Domain: `src/domain/` — entities, DTOs, ports, use-cases, errors, mappers, zod schemas
-- Database infra: `src/ddbb/` (schemas, adapters, migrations) — unify on `src/ddbb/`
-- Adapters: `src/ddbb/adapter/` or `src/adapter/` — filename: `{tech}.{entity}.adapter.ts` (e.g., `sqlite.task.adapter.ts`)
+- Database infra: `src/database/` (schemas, adapters, migrations) — unify on `src/database/`
+- Adapters: `src/database/adapter/` or `src/adapter/` — filename: `{tech}.{entity}.adapter.ts` (e.g., `sqlite.task.adapter.ts`)
 - Ports: co-locate in domain: `src/domain/{entity}/{entity}.port.ts` → `I{Entity}Port`
 - Hook layer: `src/hooks/` — `use-{feature}.ts` or `use-{entity}.hook.ts` (inject adapters)
 - UI: `src/ui/components/atoms/*.atom.tsx`, `*.molecule.tsx`, `*.organism.tsx`, `*.particle.tsx`
@@ -55,7 +55,7 @@
 
 Adapter → Port (GOOD)
 ```ts
-// src/ddbb/adapter/sqlite.patient.adapter.ts
+// src/database/adapter/sqlite.patient.adapter.ts
 export class SQLitePatientAdapter implements IPatientPort {
   static toDomainEntity(r){ return { id:r.id, uuid:r.uuid, name:r.name }; }
   async getById(id){ const row = await db.query.PATIENT.findFirst({ where: f=>f.id.eq(id) });
@@ -134,7 +134,7 @@ git commit -m "feat(scope): msg"    # Conventional Commits
 **Risks / Preserve These Details**
 
 - Exact Expo & Expo Router versions and lockfile discrepancies.
-- DB constraints (FKs), audit columns, soft-delete semantics and migration config path (`src/ddbb/*`).
+- DB constraints (FKs), audit columns, soft-delete semantics and migration config path (`src/database/*`).
 - Zod schemas and domain error codes mapping.
 - Husky pre-push test enforcement and Biome config (80 cols, single quotes).
 
