@@ -1,11 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { useThemeColor } from 'heroui-native';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Animated, Pressable, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
+import { useNavigation } from '@/hooks/use-navigation.hook';
 import { useSplashCarerValidation } from '@/hooks/use-splash-carer-validation.hook';
 import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
 import {
@@ -13,11 +13,11 @@ import {
   TypographyParagraph,
   TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
+import { cn } from '@/ui/lib/utils';
 
 export default function SplashScreen() {
-  const router = useRouter();
-
-  const { notifyAdapter, carerAdapter } = useAdapters();
+  const { notifyAdapter, carerAdapter, navigationAdapter } = useAdapters();
+  const { goToOnboarding } = useNavigation({ navigationAdapter });
 
   const backgroundColor = useThemeColor('background');
   const foregroundColor = useThemeColor('foreground');
@@ -27,24 +27,16 @@ export default function SplashScreen() {
   // Animation for the continue button
   const bounceAnim = useRef(new Animated.Value(0)).current;
 
-  const [showContinue, setShowContinue] = useState(false);
-
   const { execute: checkCarerExistence, isExecuting } =
-    useSplashCarerValidation(BASE_LOGGER, notifyAdapter, carerAdapter);
+    useSplashCarerValidation({
+      loggerAdapter: BASE_LOGGER,
+      notifyAdapter,
+      carerAdapter,
+      navigationAdapter,
+    });
 
   const handlerCheckExistence = async () => {
-    const result = await checkCarerExistence();
-
-    // wait for 2 seconds to show the splash screen
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    if (result.success && result.data?.exists) {
-      // Navigate to private zone
-      router.push('/(tabs)/register');
-    } else {
-      // Show continue button
-      setShowContinue(true);
-    }
+    await checkCarerExistence();
   };
 
   useEffect(() => {
@@ -70,12 +62,10 @@ export default function SplashScreen() {
   }, []);
 
   const handleContinue = () => {
-    router.push('/(onboarding)');
+    goToOnboarding();
   };
 
   const handleResetDb = async () => {
-    setShowContinue(false);
-
     await handlerCheckExistence();
   };
 
@@ -115,31 +105,32 @@ export default function SplashScreen() {
       </View>
 
       {/* Continue Button */}
-      {showContinue && (
-        <Pressable
-          testID="continue-button"
-          onPress={handleContinue}
-          className="absolute bottom-32 items-center"
+      <Pressable
+        testID="continue-button"
+        onPress={handleContinue}
+        className={cn(
+          'absolute bottom-32 items-center',
+          isExecuting && 'hidden'
+        )}
+      >
+        <Animated.View
+          style={{
+            transform: [{ translateY: bounceAnim }],
+          }}
+          className="mb-3"
         >
-          <Animated.View
-            style={{
-              transform: [{ translateY: bounceAnim }],
-            }}
-            className="mb-3"
+          <View
+            style={{ backgroundColor: accentColor }}
+            className="rounded-full p-4 w-16 h-16 items-center justify-center"
           >
-            <View
-              style={{ backgroundColor: accentColor }}
-              className="rounded-full p-4 w-16 h-16 items-center justify-center"
-            >
-              <AtomLogoSVG width={40} height={40} />
-            </View>
-          </Animated.View>
-          <TypographyParagraph
-            style={{ color: foregroundColor }}
-            i18nKey="continue"
-          />
-        </Pressable>
-      )}
+            <AtomLogoSVG width={40} height={40} />
+          </View>
+        </Animated.View>
+        <TypographyParagraph
+          style={{ color: foregroundColor }}
+          i18nKey="continue"
+        />
+      </Pressable>
 
       {/* Privacy Notice */}
       <View className="absolute bottom-12 items-center flex-row gap-2 px-6">
