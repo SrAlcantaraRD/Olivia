@@ -15,7 +15,7 @@ module.exports = {
     'src/hooks/**/*.{ts,tsx}',
     'src/constants/**/*.{ts,tsx}',
     'src/domain/**/*.{ts,tsx}',
-    'src/ddbb/**/*.{ts,tsx}',
+    'src/database/**/*.{ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
     '!**/__tests__/**',
