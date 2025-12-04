@@ -1,7 +1,8 @@
 import type { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
 
+import { useAdapters } from '@/adapter';
+import { useNavigation } from '@/hooks/use-navigation.hook';
 import { WelcomeSlideContent } from '@/ui/components/molecules/welcome-slide-content.molecule';
 import {
   Wizard,
@@ -70,12 +71,15 @@ const WELCOME_SLIDES: WelcomeSlide[] = [
 ];
 
 export default function OnboardingIndex() {
-  const router = useRouter();
+  const { navigationAdapter } = useAdapters();
+  const { goToRoleSelection, goBack: navigateBack } = useNavigation({
+    navigationAdapter,
+  });
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const handleNext = () => {
     if (currentSlide === WELCOME_SLIDES.length - 1) {
-      router.push('/(onboarding)/role-selection');
+      goToRoleSelection();
     } else {
       setCurrentSlide((prev) => prev + 1);
     }
@@ -83,7 +87,7 @@ export default function OnboardingIndex() {
 
   const handleBack = () => {
     if (currentSlide === 0) {
-      router.back();
+      navigateBack();
     } else {
       setCurrentSlide((prev) => prev - 1);
     }
@@ -109,7 +113,7 @@ export default function OnboardingIndex() {
       currentStepIndex={currentSlide}
       onNext={handleNext}
       onBack={handleBack}
-      onSkip={() => router.push('/(onboarding)/role-selection')}
+      onSkip={goToRoleSelection}
       showBackButton={true}
       showSkipButton={true}
     />

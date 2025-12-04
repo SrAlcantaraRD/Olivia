@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { useThemeColor } from 'heroui-native';
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
+import { useAdapters } from '@/adapter';
+import { useNavigation } from '@/hooks/use-navigation.hook';
 import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
 import {
   TypographyParagraph,
@@ -17,7 +18,10 @@ enum ROLE_ENUM {
 }
 
 export default function RoleSelectionScreen() {
-  const router = useRouter();
+  const { navigationAdapter } = useAdapters();
+  const { goToParentSetup, goToScanQr, goBack } = useNavigation({
+    navigationAdapter,
+  });
   const [selectedRole, setSelectedRole] = useState<ROLE_ENUM | null>(null);
 
   const backgroundColor = useThemeColor('background');
@@ -27,9 +31,9 @@ export default function RoleSelectionScreen() {
 
   const handleContinue = () => {
     if (selectedRole === 'parent') {
-      router.push('/(onboarding)/parent-setup');
+      goToParentSetup();
     } else if (selectedRole === 'caregiver') {
-      router.push('/(caregiver-setup)/scan-qr');
+      goToScanQr();
     }
   };
 
@@ -37,7 +41,7 @@ export default function RoleSelectionScreen() {
     <View style={{ backgroundColor }} className="flex-1">
       {/* Header */}
       <View className="flex-row items-center justify-between px-6 pt-12 pb-4">
-        <Pressable onPress={() => router.back()}>
+        <Pressable onPress={goBack}>
           <Ionicons name="chevron-back" size={24} color={foregroundColor} />
         </Pressable>
         <AtomLogoSVG width={40} height={40} />
@@ -67,6 +71,7 @@ export default function RoleSelectionScreen() {
             titleKey="role-selection-screen.parent.title"
             subtitleKey="role-selection-screen.parent.subtitle"
             descriptionKey="role-selection-screen.parent.description"
+            testID="role-selection.parent"
             isSelected={selectedRole === ROLE_ENUM.PARENT}
             onSelect={() => setSelectedRole(ROLE_ENUM.PARENT)}
           />
@@ -76,6 +81,7 @@ export default function RoleSelectionScreen() {
             titleKey="role-selection-screen.caregiver.title"
             subtitleKey="role-selection-screen.caregiver.subtitle"
             descriptionKey="role-selection-screen.caregiver.description"
+            testID="role-selection.caregiver"
             isSelected={selectedRole === ROLE_ENUM.CAREGIVER}
             onSelect={() => setSelectedRole(ROLE_ENUM.CAREGIVER)}
           />
