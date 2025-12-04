@@ -24,7 +24,11 @@ export default function ScanQRScreen() {
     >
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <TypographyTitle i18nKey="caregiver-setup.scan-qr.title" />
-        <ButtonAtom title="next" onPress={goToConfirmLink} />
+        <ButtonAtom
+          title="next"
+          onPress={goToConfirmLink}
+          testID="page.caregiver-setup.scan-qr.next-button"
+        />
       </View>
     </KeyboardAwareScrollView>
   );

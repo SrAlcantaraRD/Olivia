@@ -22,6 +22,7 @@ export default function CaregiverConfirmLinkScreen() {
         <ButtonAtom
           title="welcome"
           onPress={() => router.replace('/(tabs)/register')}
+          testID="screen.caregiver-setup.confirm-link.welcome-button"
         />
       </View>
     </KeyboardAwareScrollView>
