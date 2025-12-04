@@ -1,11 +1,11 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.biome": "explicit",
-    "source.organizeImports.biome": "explicit",
+    "source.fixAll.biome": "always",
+    "source.organizeImports.biome": "always",
     "source.sortMembers": "explicit",
     "source.biome": "always",
-    "source.removeUnused.ts": "always"
+    "source.organizeImports": "explicit"
   },
   "files.associations": {
     "*.css": "tailwindcss",

@@ -260,6 +260,8 @@ export const enEN = {
   'hook.setup-parent.description': 'Please wait while we set up your account.',
   'hook.setup-parent.error-title': 'Setup Failed',
   'hook.setup-parent.success-title': 'Setup Successful',
+
+  'test.reset-db': 'Reset Database for Testing',
 };
 
 type RecursiveKeyOf<TObj extends object> = {
