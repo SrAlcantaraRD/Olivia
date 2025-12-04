@@ -6,11 +6,12 @@ import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 type ButtonAtomProps = React.ComponentProps<typeof Button> & {
   title: Ti18nKeys;
+  testID: string;
 };
 
-export const ButtonAtom = ({ children, ...props }: ButtonAtomProps) => {
+export const ButtonAtom = ({ children, testID, ...props }: ButtonAtomProps) => {
   return (
-    <Button className="rounded-lg" {...props}>
+    <Button className="rounded-lg" {...props} testID={`${testID}.button.atom`}>
       <TypographyParagraph i18nKey={props.title} />
     </Button>
   );

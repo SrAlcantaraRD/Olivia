@@ -13,13 +13,13 @@ import { INITIAL_FORM_DATA } from '../types';
 export function useParentSetupForm() {
   const { carerAdapter, patientAdapter, moduleAdapter, notifyAdapter } =
     useAdapters();
-  const { execute, isExecuting } = useSetupParent(
-    BASE_LOGGER,
+  const { execute, isExecuting } = useSetupParent({
+    loggerAdapter: BASE_LOGGER,
     notifyAdapter,
     carerAdapter,
     patientAdapter,
-    moduleAdapter
-  );
+    moduleAdapter,
+  });
 
   const [formData, setFormData] =
     useState<ParentSetupFormData>(INITIAL_FORM_DATA);

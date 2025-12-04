@@ -33,7 +33,7 @@ export function CardWithDetails({
       isSelected={isSelected}
       onSelect={onSelect}
       className="p-4 mb-4"
-      testID={testID}
+      testID={`${testID}.card`}
     >
       <View className="flex-row items-center gap-4">
         {/* Icon */}
