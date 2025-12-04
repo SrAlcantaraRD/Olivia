@@ -77,7 +77,7 @@ Con una estructura de carpeta organizada de la siguiente forma:
 ```sh
 ├── src/
 │   ├── app/                # Configuración global, layouts, tabs, Context Providers y Route Guards.
-│   ├── ddbb/               # Contiene la definición de la BBDD, los ficheros de migración y los adaptadores.
+│   ├── database/           # Contiene la definición de la BBDD, los ficheros de migración y los adaptadores.
 │   ├── domain/             # Contiene la lógica de negocio.
 │   ├── ui/                 # Contiene la implementación exacta de los componentes de diseño.
 │   │   ├── components/     # Implementación de metodología Atomic Design para componentes reutilizables.
