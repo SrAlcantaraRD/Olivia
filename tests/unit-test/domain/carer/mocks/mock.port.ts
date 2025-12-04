@@ -9,6 +9,7 @@ export function mockCarerPort(
     create: jest.fn(),
     getById: jest.fn(),
     getAll: jest.fn(),
+    existsAny: jest.fn(),
     ...overrides,
   } satisfies jest.Mocked<ICarerPort>;
 }
