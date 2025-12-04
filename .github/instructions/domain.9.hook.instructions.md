@@ -9,8 +9,8 @@ description: "Instructions for implementing reusable React hooks wrapping hook p
 - Encapsulate data fetch lifecycle, caching, and user feedback while exposing simple execute interface to components.
 
 ## Artifacts
-- `src/hooks/<feature>.hook.ts`
-- `test/unit-test/domain/hooks/use-<feature>.spec.tsx`
+- `src/domain/**/hooks/<feature>.hook.ts`
+- `test/unit-test/domain/**/hooks/use-<feature>.spec.tsx`
 - Main hooks defined at `src/domain/core/hooks`:
   - useCreateEntity
   - useFindEntityByUUID
