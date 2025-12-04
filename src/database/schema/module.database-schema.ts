@@ -9,7 +9,7 @@ export const MODULE = sqliteTable('module', {
   name: text('name').notNull(),
   description: text('description'),
   key: text('key'),
-  active: integer('active').notNull().default(1),
+  active: integer('active').notNull().default(0),
   ord: integer('ord').notNull().default(0),
 });
 
