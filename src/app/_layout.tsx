@@ -16,6 +16,7 @@ import '@/ui/i18n/i18n';
 import 'react-native-reanimated';
 import '../global.css';
 
+import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 import { Stack } from 'expo-router';
 import { SQLiteProvider } from 'expo-sqlite';
 import { HeroUINativeProvider } from 'heroui-native';
@@ -25,8 +26,10 @@ import {
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
 
+import { SQLITE_DB } from '@/database/config/database.config';
 import { useInitDb } from '@/database/execute-migrations';
-import { BASE_LOGGER, DATABASE_NAME } from '@/domain/core';
+import { BASE_LOGGER } from '@/domain/core';
+import { ENVIRONMENT_VARIABLES } from '@/domain/core/constant/environment-variables.constants';
 import { ThemeToggle } from '@/ui/components/atoms/theme-toggle.atom';
 import { toastConfig } from '@/ui/components/particles/toast-design.particle';
 import { AppThemeProvider, useAppTheme } from '@/ui/themes/app-theme-context';
@@ -46,6 +49,9 @@ SplashScreen.preventAutoHideAsync();
 
 function RootNavigator() {
   const { isDark } = useAppTheme();
+
+  // Enable Drizzle Studio for development
+  useDrizzleStudio(SQLITE_DB);
 
   const renderTitle = () => {
     return (
@@ -128,7 +134,7 @@ export default function RootLayout() {
               }}
             >
               <SQLiteProvider
-                databaseName={DATABASE_NAME}
+                databaseName={ENVIRONMENT_VARIABLES.DATABASE_NAME}
                 options={{ enableChangeListener: true }}
                 useSuspense
               >
