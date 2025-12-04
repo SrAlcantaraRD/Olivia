@@ -23,6 +23,7 @@ interface WizardProps {
   onSkip?: () => void;
   showBackButton?: boolean;
   showSkipButton?: boolean;
+  testID: string;
 }
 
 export function Wizard({
@@ -34,6 +35,7 @@ export function Wizard({
   onSkip,
   showBackButton = true,
   showSkipButton = false,
+  testID,
 }: WizardProps) {
   const backgroundColor = useThemeColor('background');
   const foregroundColor = useThemeColor('foreground');
@@ -59,7 +61,7 @@ export function Wizard({
   };
 
   return (
-    <View style={{ backgroundColor }} className="px-8 flex-1">
+    <View testID={testID} style={{ backgroundColor }} className="px-8 flex-1">
       {/* Header */}
       <View className="flex-row items-center justify-between pt-12 pb-4">
         {showBackButton ? (
