@@ -1,7 +1,8 @@
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
+import { useAdapters } from '@/adapter';
+import { useNavigation } from '@/hooks/use-navigation.hook';
 import {
   TypographyHeading,
   TypographySmall,
@@ -10,19 +11,22 @@ import {
 import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
 
 export default function RegisterScreen() {
-  const router = useRouter();
+  const { navigationAdapter } = useAdapters();
+  const { goToRegisterCic, goToFilterHistory } = useNavigation({
+    navigationAdapter,
+  });
   const [selectedAction, setSelectedAction] = useState<
     'cic' | 'stool' | 'medication' | null
   >(null);
 
   const handleCicSelect = () => {
     setSelectedAction('cic');
-    router.push('/(modals)/modal-register-cic');
+    goToRegisterCic();
   };
 
   const handleStoolSelect = () => {
     setSelectedAction('stool');
-    router.push('/(modals)/modal-filter-history');
+    goToFilterHistory();
   };
 
   const handleMedicationSelect = () => {
@@ -62,6 +66,7 @@ export default function RegisterScreen() {
               descriptionKey="component.register_cic_button.description"
               isSelected={selectedAction === 'cic'}
               onSelect={handleCicSelect}
+              testID="register.cic"
             />
 
             {/* Stool Button */}
@@ -70,6 +75,7 @@ export default function RegisterScreen() {
               titleKey="component.register_stool_button.label"
               subtitleKey="component.register_stool_button.subtitle"
               descriptionKey="component.register_stool_button.description"
+              testID="register.stool"
               isSelected={selectedAction === 'stool'}
               onSelect={handleStoolSelect}
             />
@@ -81,6 +87,7 @@ export default function RegisterScreen() {
               subtitleKey="component.register_medication_button.subtitle"
               descriptionKey="component.register_medication_button.description"
               isSelected={selectedAction === 'medication'}
+              testID="register.medication"
               onSelect={handleMedicationSelect}
             />
           </View>
