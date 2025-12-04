@@ -104,6 +104,7 @@ export default function OnboardingIndex() {
 
   return (
     <Wizard
+      testID="onboarding-wizard"
       steps={steps}
       currentStepIndex={currentSlide}
       onNext={handleNext}
