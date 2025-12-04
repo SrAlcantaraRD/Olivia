@@ -9,14 +9,14 @@ Generate a structured implementation document for a given feature in the Oliva A
 
 ## Input Requirements
 - **Feature Description**: Clear, concise description of the functionality to implement
-- **Current Date**: Automatically use today's date in YYYYMMDD format
+- **Current Date**: Automatically use today's date in YYYYMMDDHHMM format
 - **Project Context**: Oliva App (React Native + Expo healthcare app for pediatric care)
 
 ## Output Format
 Generate a Markdown document with the following structure:
 
 ### Document Title
-`{YYYYMMDD}.{feature-slug}.prompt.md`
+`{YYYYMMDDHHMM}.{feature-slug}.prompt.md`
 
 Where:
 - `YYYYMMDDHHMM`: Current date (e.g., 202512041452)
