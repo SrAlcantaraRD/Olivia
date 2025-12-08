@@ -2,15 +2,10 @@ import { z } from 'zod';
 
 import { statusSchema } from '@/domain/core/enum/status.enum';
 import { IDSchema } from '@/domain/core/schemas/id.schema';
-import { UUIDSchema } from '@/domain/core/schemas/uuid.schema';
 
 export const BaseEntitySchema = z.object({
   id: IDSchema,
-  uuid: UUIDSchema,
   status: statusSchema,
-  createdAt: z.string(),
-  updatedAt: z.string().optional(),
-  deletedAt: z.string().optional(),
 });
 
 export type TBaseEntity = z.infer<typeof BaseEntitySchema>;

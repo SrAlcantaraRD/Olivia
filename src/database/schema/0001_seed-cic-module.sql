@@ -1,17 +1,14 @@
--- Custom SQL migration file, put your code below! --
--- Insert medication module
 INSERT INTO
-  module (name, description, key, active, ord)
+  module (code, name, description, active)
 VALUES
   (
-    'Medicación',
-    'Registro de tomas de medicación relacionadas con el cuidado urológico o intestinal.',
-    'medication',
+    'CIC',
+    'Cateterismos (CIC)',
+    'Registro de cateterismos intermitentes limpios.',
     0,
-    4
   );
 
--- Insert medication fields
+-- Insert CIC fields
 INSERT INTO
   module_field (
     moduleID,
@@ -21,15 +18,22 @@ INSERT INTO
     values
 ,
       required,
-      ord
+      order
   )
 VALUES
   (
-    last_insert_rowid(),
-    'name',
+    (
+      SELECT
+        id
+      FROM
+        module
+      WHERE
+        code = 'CIC'
+    ),
+    'volumeLevel',
     NULL,
-    'string',
-    NULL,
+    'enum',
+    '["low","normal","high"]',
     1,
     1
   );
@@ -47,12 +51,19 @@ INSERT INTO
   )
 VALUES
   (
-    last_insert_rowid(),
-    'dose',
+    (
+      SELECT
+        id
+      FROM
+        module
+      WHERE
+        code = 'cic'
+    ),
+    'color',
     NULL,
-    'string',
-    NULL,
-    0,
+    'enum',
+    '["transparent","light_yellow","dark_yellow","abnormal"]',
+    1,
     2
   );
 
@@ -69,12 +80,19 @@ INSERT INTO
   )
 VALUES
   (
-    last_insert_rowid(),
-    'route',
+    (
+      SELECT
+        id
+      FROM
+        module
+      WHERE
+        code = 'cic'
+    ),
+    'turbidity',
     NULL,
     'enum',
-    '["oral","rectal","other"]',
-    0,
+    '["clear","mild","high"]',
+    1,
     3
   );
 
@@ -91,11 +109,18 @@ INSERT INTO
   )
 VALUES
   (
-    last_insert_rowid(),
-    'taken',
+    (
+      SELECT
+        id
+      FROM
+        module
+      WHERE
+        code = 'cic'
+    ),
+    'discomfortLevel',
     NULL,
-    'boolean',
-    NULL,
+    'enum',
+    '["none","mild","pain"]',
     1,
     4
   );
@@ -113,8 +138,15 @@ INSERT INTO
   )
 VALUES
   (
-    last_insert_rowid(),
-    'reasonNotTaken',
+    (
+      SELECT
+        id
+      FROM
+        module
+      WHERE
+        code = 'cic'
+    ),
+    'notes',
     NULL,
     'string',
     NULL,
@@ -135,12 +167,19 @@ INSERT INTO
   )
 VALUES
   (
-    last_insert_rowid(),
-    'notes',
+    (
+      SELECT
+        id
+      FROM
+        module
+      WHERE
+        code = 'cic'
+    ),
+    'source',
     NULL,
-    'string',
-    NULL,
-    0,
+    'enum',
+    '["primary","secondary"]',
+    1,
     6
   );
 
@@ -157,12 +196,19 @@ INSERT INTO
   )
 VALUES
   (
-    last_insert_rowid(),
-    'source',
+    (
+      SELECT
+        id
+      FROM
+        module
+      WHERE
+        code = 'cic'
+    ),
+    'deviceId',
     NULL,
-    'enum',
-    '["primary","secondary"]',
-    1,
+    'string',
+    NULL,
+    0,
     7
   );
 
@@ -179,33 +225,18 @@ INSERT INTO
   )
 VALUES
   (
-    last_insert_rowid(),
-    'deviceId',
-    NULL,
-    'string',
-    NULL,
-    0,
-    8
-  );
-
-INSERT INTO
-  module_field (
-    moduleID,
-    title,
-    description,
-    type,
-    values
-,
-      required,
-      ord
-  )
-VALUES
-  (
-    last_insert_rowid(),
+    (
+      SELECT
+        id
+      FROM
+        module
+      WHERE
+        code = 'cic'
+    ),
     'syncStatus',
     NULL,
     'enum',
     '["local_only","synced"]',
     1,
-    9
+    8
   );

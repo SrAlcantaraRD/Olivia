@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
+import { CheckCarerExistenceUseCase } from '@/domain/carer/use-case/check-carer-existence.use-case';
 import type {
   TCheckCarerExistenceRequest,
   TCheckCarerExistenceResponse,
 } from '@/domain/carer/use-case-schema/check-carer-existence.use-case-schema';
-import { CheckCarerExistenceUseCase } from '@/domain/carer/use-case/check-carer-existence.use-case';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
   IHookResponse,
@@ -40,6 +40,12 @@ export function useSplashCarerValidation(adapters: {
 
         // sleep for 3s to show splash screen
         await new Promise((resolve) => setTimeout(resolve, 3000));
+
+        loggerAdapter.info(
+          `[useSplashCarerValidation] Carer existence check response: ${JSON.stringify(
+            response
+          )}`
+        );
 
         if (!response.success) {
           return { success: false };

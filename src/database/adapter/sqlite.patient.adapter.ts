@@ -29,7 +29,6 @@ export class SQLitePatientAdapter implements IPatientPort {
   public static toDomainEntity(entity: TPatientAdapterEntity): TPatientEntity {
     return {
       id: entity.id,
-      uuid: entity.uuid,
 
       name: entity.name,
       birthDate: entity.birthDate,
@@ -37,9 +36,6 @@ export class SQLitePatientAdapter implements IPatientPort {
       autonomyLevel: getAutonomyLevelFromValue(entity.autonomyLevel),
 
       status: getStatusFromValue(entity.status),
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt ?? undefined,
-      deletedAt: entity.deletedAt ?? undefined,
     };
   }
 

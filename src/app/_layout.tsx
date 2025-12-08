@@ -123,28 +123,28 @@ export default function RootLayout() {
 
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
-      <GestureHandlerRootView style={styles.root}>
-        <KeyboardProvider>
-          <AppThemeProvider>
-            <HeroUINativeProvider
-              config={{
-                textProps: {
-                  allowFontScaling: false,
-                },
-              }}
-            >
-              <SQLiteProvider
-                databaseName={ENVIRONMENT_VARIABLES.DATABASE_NAME}
-                options={{ enableChangeListener: true }}
-                useSuspense
+      <SQLiteProvider
+        databaseName={ENVIRONMENT_VARIABLES.DATABASE_NAME}
+        options={{ enableChangeListener: true }}
+        useSuspense
+      >
+        <GestureHandlerRootView style={styles.root}>
+          <KeyboardProvider>
+            <AppThemeProvider>
+              <HeroUINativeProvider
+                config={{
+                  textProps: {
+                    allowFontScaling: false,
+                  },
+                }}
               >
                 <RootNavigator />
                 <Toast config={toastConfig} />
-              </SQLiteProvider>
-            </HeroUINativeProvider>
-          </AppThemeProvider>
-        </KeyboardProvider>
-      </GestureHandlerRootView>
+              </HeroUINativeProvider>
+            </AppThemeProvider>
+          </KeyboardProvider>
+        </GestureHandlerRootView>
+      </SQLiteProvider>
     </Suspense>
   );
 }

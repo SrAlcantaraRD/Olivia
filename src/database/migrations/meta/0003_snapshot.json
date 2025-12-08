@@ -1,6 +1,6 @@
 {
-  "id": "a53ebea1-b424-4e5c-a45d-223a0819e585",
-  "prevId": "d18ff8d9-9b17-4db4-8eb2-206beb45feaf",
+  "id": "79444f42-7b92-48e2-a694-faa55b7860a2",
+  "prevId": "743ae0dd-86b6-430b-be43-617959b2fcae",
   "version": "6",
   "dialect": "sqlite",
   "tables": {
@@ -14,13 +14,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "uuid": {
-          "name": "uuid",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "status": {
           "name": "status",
           "type": "integer",
@@ -28,27 +21,6 @@
           "notNull": true,
           "autoincrement": false,
           "default": 1
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         },
         "name": {
           "name": "name",
@@ -80,13 +52,7 @@
           "autoincrement": false
         }
       },
-      "indexes": {
-        "carer_uuid_unique": {
-          "name": "carer_uuid_unique",
-          "columns": ["uuid"],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -102,13 +68,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "uuid": {
-          "name": "uuid",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "status": {
           "name": "status",
           "type": "integer",
@@ -117,25 +76,11 @@
           "autoincrement": false,
           "default": 1
         },
-        "created_at": {
-          "name": "created_at",
+        "code": {
+          "name": "code",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
           "autoincrement": false
         },
         "name": {
@@ -149,14 +94,7 @@
           "name": "description",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "key": {
-          "name": "key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "active": {
@@ -165,21 +103,13 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 1
-        },
-        "ord": {
-          "name": "ord",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
           "default": 0
         }
       },
       "indexes": {
-        "module_uuid_unique": {
-          "name": "module_uuid_unique",
-          "columns": ["uuid"],
+        "module_code_unique": {
+          "name": "module_code_unique",
+          "columns": ["code"],
           "isUnique": true
         }
       },
@@ -198,13 +128,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "uuid": {
-          "name": "uuid",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "status": {
           "name": "status",
           "type": "integer",
@@ -212,27 +135,6 @@
           "notNull": true,
           "autoincrement": false,
           "default": 1
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         },
         "module_id": {
           "name": "module_id",
@@ -277,8 +179,8 @@
           "autoincrement": false,
           "default": 0
         },
-        "ord": {
-          "name": "ord",
+        "order": {
+          "name": "order",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -286,13 +188,7 @@
           "default": 0
         }
       },
-      "indexes": {
-        "module_field_uuid_unique": {
-          "name": "module_field_uuid_unique",
-          "columns": ["uuid"],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -308,13 +204,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "uuid": {
-          "name": "uuid",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "status": {
           "name": "status",
           "type": "integer",
@@ -322,27 +211,6 @@
           "notNull": true,
           "autoincrement": false,
           "default": 1
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         },
         "name": {
           "name": "name",
@@ -373,13 +241,61 @@
           "autoincrement": false
         }
       },
-      "indexes": {
-        "patient_uuid_unique": {
-          "name": "patient_uuid_unique",
-          "columns": ["uuid"],
-          "isUnique": true
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "record": {
+      "name": "record",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "field_id": {
+          "name": "field_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "synced": {
+          "name": "synced",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         }
       },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},

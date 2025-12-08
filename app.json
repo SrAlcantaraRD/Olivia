@@ -46,8 +46,7 @@
       "@config-plugins/detox",
       "expo-localization",
       "expo-sqlite",
-      "expo-font",
-      "expo-drizzle-studio-plugin"
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

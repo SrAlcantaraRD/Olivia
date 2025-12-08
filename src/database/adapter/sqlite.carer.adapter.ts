@@ -7,6 +7,7 @@ import type { TCarerEntity } from '@/domain/carer/entity/carer.entity';
 import { getCarerTypeFromValue } from '@/domain/carer/enum/carer-type.enums';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import {
   getStatusFromValue,
   STATUS_ENUM,
@@ -28,7 +29,6 @@ export class SQLiteCarerAdapter implements ICarerPort {
   public static toDomainEntity(entity: TCarerAdapterEntity): TCarerEntity {
     return {
       id: entity.id,
-      uuid: entity.uuid,
 
       name: entity.name,
       type: getCarerTypeFromValue(entity.type),
@@ -36,9 +36,6 @@ export class SQLiteCarerAdapter implements ICarerPort {
       pinHash: entity.pinHash,
 
       status: getStatusFromValue(entity.status),
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt ?? undefined,
-      deletedAt: entity.deletedAt ?? undefined,
     };
   }
 
@@ -78,6 +75,10 @@ export class SQLiteCarerAdapter implements ICarerPort {
     const item = await this.database.query.CARER.findFirst({
       where: (row, { eq }) => eq(row.status, STATUS_ENUM.ACTIVE),
     });
+
+    BASE_LOGGER.info(
+      `[SQLiteCarerAdapter] existsAny result: ${JSON.stringify(item)}`
+    );
 
     return item !== null;
   }

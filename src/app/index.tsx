@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { Animated, Pressable, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
+import { dropDatabase } from '@/database/config/drop-database.config';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 import { useSplashCarerValidation } from '@/hooks/use-splash-carer-validation.hook';
@@ -66,7 +67,7 @@ export default function SplashScreen() {
   };
 
   const handleResetDb = async () => {
-    await handlerCheckExistence();
+    await dropDatabase();
   };
 
   useEffect(() => {
@@ -132,6 +133,15 @@ export default function SplashScreen() {
         />
       </Pressable>
 
+      {__DEV__ && (
+        <Pressable testID="reset-db-button" onPress={handleResetDb}>
+          <TypographySmall
+            style={{ color: mutedColor }}
+            i18nKey="test.reset-db"
+          />
+        </Pressable>
+      )}
+
       {/* Privacy Notice */}
       <View className="absolute bottom-12 items-center flex-row gap-2 px-6">
         <Ionicons
@@ -144,14 +154,6 @@ export default function SplashScreen() {
           className="text-center"
           i18nKey="splash-screen.privacy-notice"
         />
-        {__DEV__ && (
-          <Pressable testID="reset-db-button" onPress={handleResetDb}>
-            <TypographySmall
-              style={{ color: mutedColor }}
-              i18nKey="test.reset-db"
-            />
-          </Pressable>
-        )}
       </View>
     </View>
   );

@@ -15,6 +15,8 @@ export const ModuleFieldEntitySchema = z.object({
   values: z.string(),
   required: z.boolean(),
   order: z.number().int(),
+  //TODO: add "isActive" field to handler "development" fields
+  // TODO: add an "icon" field to show in the UI
 });
 
 export const ModuleFieldCreateEntitySchema = GenerateCreateEntitySchema(
