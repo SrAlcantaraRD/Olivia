@@ -15,4 +15,5 @@ export type IUseHook<TRequestDTO, TResponseDTO> = {
     reload?: boolean
   ) => Promise<IHookResponse<TResponseDTO>>;
   isExecuting: boolean;
+  items: TResponseDTO;
 };

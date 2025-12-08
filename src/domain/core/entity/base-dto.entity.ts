@@ -16,9 +16,7 @@ export const GenerateDTOSchema = <T extends z.ZodObject>(
   schema: T
 ): ZodDTOSchema<T> => {
   return schema.omit({
-    id: true,
     status: true,
-    deletedAt: true,
   }) as unknown as ZodDTOSchema<T>;
 };
 
@@ -42,11 +40,7 @@ export const GenerateCreateDTOSchema = <T extends z.ZodObject>(
 ): ZodCreateDTOSchema<T> => {
   return schema.omit({
     id: true,
-    uuid: true,
     status: true,
-    deletedAt: true,
-    createdAt: true,
-    updatedAt: true,
   }) as unknown as ZodCreateDTOSchema<T>;
 };
 
