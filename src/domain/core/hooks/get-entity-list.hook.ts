@@ -21,7 +21,7 @@ export function useGetEntityList<T extends TBaseEntityDTO>(
   // const [controller] = useState<AbortController>(new AbortController());
 
   const {
-    actions: { saveItems, getItems },
+    actions: { saveItems, getItems, s },
   } = useListStore<T>(entityName);
 
   const execute = useCallback(async (): Promise<IHookResponse<T[]>> => {

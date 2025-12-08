@@ -6,12 +6,16 @@ type StoreProps = {
   [entity: string]: {
     items: TBaseEntityDTO[];
     listLoaded: boolean;
+    isLoading: boolean;
   };
 };
 
 interface StoreActions {
   saveItems: <T extends TBaseEntityDTO>(entity: string, items: T[]) => void;
   getItems: <T extends TBaseEntityDTO>(entity: string) => T[];
+  startLoading: (entity: string) => void;
+  stopLoading: (entity: string) => void;
+  isLoading: (entity: string) => boolean;
   clearStore: (entity: string) => void;
 }
 
@@ -25,11 +29,42 @@ const initialState: StoreProps = {};
 const ownStore = create<Store>((set, get) => ({
   state: initialState,
   actions: {
+    isLoading: (entity: string) => {
+      return get().state[entity]?.isLoading || false;
+    },
+    stopLoading: (entity: string) => {
+      set((state) => ({
+        state: {
+          ...state.state,
+          [entity]: {
+            ...(state.state[entity] || {
+              items: [],
+              listLoaded: false,
+            }),
+            isLoading: false,
+          },
+        },
+      }));
+    },
+    startLoading: (entity: string) => {
+      set((state) => ({
+        state: {
+          ...state.state,
+          [entity]: {
+            ...(state.state[entity] || {
+              items: [],
+              listLoaded: false,
+            }),
+            isLoading: true,
+          },
+        },
+      }));
+    },
     saveItems: <T extends TBaseEntityDTO>(entity: string, items: T[]) =>
       set((state) => ({
         state: {
           ...state.state,
-          [entity]: { items, listLoaded: true },
+          [entity]: { items, listLoaded: true, isLoading: false },
         },
       })),
     getItems: <T extends TBaseEntityDTO>(entity: string) =>
@@ -43,7 +78,12 @@ const ownStore = create<Store>((set, get) => ({
   },
 }));
 
-export const useListStore = <T extends TBaseEntityDTO>(entity: string) => {
+export const useListStore = <T extends TBaseEntityDTO>(
+  entity: string
+): {
+  items: T[];
+  actions: StoreActions;
+} => {
   const store = ownStore();
 
   return {
@@ -52,6 +92,9 @@ export const useListStore = <T extends TBaseEntityDTO>(entity: string) => {
       saveItems: (items: T[]) => store.actions.saveItems<T>(entity, items),
       getItems: () => store.actions.getItems<T>(entity),
       clearStore: () => store.actions.clearStore(entity),
+      isLoading: () => store.actions.isLoading(entity),
+      startLoading: () => store.actions.startLoading(entity),
+      stopLoading: () => store.actions.stopLoading(entity),
     },
   };
 };
