@@ -13,7 +13,7 @@ export class CheckCarerExistenceUseCase extends BaseUseCase<
 > {
   constructor(
     loggerAdapter: TLoggerPort,
-    private readonly carerPort: ICarerPort
+    private readonly carerAdapter: ICarerPort
   ) {
     super('check-carer-existence', loggerAdapter);
   }
@@ -21,7 +21,10 @@ export class CheckCarerExistenceUseCase extends BaseUseCase<
   public async execute(
     request: TCheckCarerExistenceRequest
   ): Promise<IBaseResponse<TCheckCarerExistenceResponse>> {
-    const exists = await this.carerPort.existsAny();
+    const exists = await this.carerAdapter.existsAny();
+    this.loggerAdapter.info(
+      `[CheckCarerExistenceUseCase] existsAny result: ${exists}`
+    );
 
     return {
       success: true,

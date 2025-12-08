@@ -6,7 +6,7 @@ export abstract class BaseUseCase<BaseRequest, BaseResponse> {
 
   constructor(
     private readonly useCaseName: string,
-    private readonly loggerAdapter: TLoggerPort
+    public readonly loggerAdapter: TLoggerPort
   ) {}
 
   protected logInfo(message: string, details?: unknown): void {

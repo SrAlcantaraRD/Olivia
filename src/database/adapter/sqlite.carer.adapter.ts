@@ -77,9 +77,9 @@ export class SQLiteCarerAdapter implements ICarerPort {
     });
 
     BASE_LOGGER.info(
-      `[SQLiteCarerAdapter] existsAny result: ${JSON.stringify(item)}`
+      `[SQLiteCarerAdapter] existsAny result: ${JSON.stringify(item)}[${!!item}]`
     );
 
-    return item !== null;
+    return !!item;
   }
 }
