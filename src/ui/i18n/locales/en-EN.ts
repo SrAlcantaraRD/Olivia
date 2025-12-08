@@ -74,6 +74,16 @@ export const enEN = {
   'parent-setup.modules.enemas.title': 'Enemas',
   'parent-setup.modules.enemas.description':
     'Opcional, según necesidades clínicas.',
+  'parent-setup.modules.urine.title': 'Orina',
+  'parent-setup.modules.urine.description':
+    'Seguimiento de volumen y características de la orina.',
+
+  'parent-setup.modules.medication.title': 'Medicación',
+  'parent-setup.modules.medication.description':
+    'Registro de administración de medicamentos.',
+  'parent-setup.modules.unknown.title': 'Módulo desconocido',
+  'parent-setup.modules.unknown.description':
+    'Descripción del módulo desconocido',
   'parent-setup.summary.title': 'Revisa tu información',
   'parent-setup.summary.description':
     'Confirma que todo es correcto antes de continuar',

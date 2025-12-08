@@ -4,6 +4,7 @@ import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 import type { BaseToastProps as RNToastBaseProps } from 'react-native-toast-message';
 import { withUniwind } from 'uniwind';
 
+import type { IconName } from '@/ui/components/atoms/icon.atom';
 import {
   TypographyParagraph,
   TypographySmall,
@@ -26,7 +27,7 @@ interface CustomToastProps extends RNToastBaseProps {
 interface BaseToastProps {
   text1?: Ti18nKeys;
   text2?: Ti18nKeys;
-  iconName: keyof typeof Ionicons.glyphMap;
+  iconName: IconName;
   iconBgColor: string;
   auraColor: string;
 }
