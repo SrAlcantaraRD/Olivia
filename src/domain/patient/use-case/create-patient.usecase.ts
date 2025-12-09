@@ -4,7 +4,7 @@ import type { TPatientDTO } from '@/domain/patient/dto/patient.dto';
 import type { TPatientCreateDTO } from '@/domain/patient/entity/patient.entity';
 import { ErrorWhenCreatePatien } from '@/domain/patient/errors';
 import type { IPatientPort } from '@/domain/patient/port/patient.port';
-import { CreatePatientSchema } from '@/domain/patient/schemas/create-patient.schema';
+import { CreatePatientSchema } from '@/domain/patient/use-case-schema/create-patient.use-case-schema';
 
 type CreatePatientInput = TPatientCreateDTO & { moduleIds?: number[] };
 
