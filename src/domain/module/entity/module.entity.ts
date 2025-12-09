@@ -9,9 +9,8 @@ export const ModuleEntitySchema = z.object({
   ...BaseEntitySchema.shape,
   name: z.string().min(1),
   description: z.string(),
-  key: ModuleKeySchema,
-  active: z.boolean(),
-  order: z.number().int(),
+  code: ModuleKeySchema,
+  isActive: z.boolean(),
 });
 
 export const ModuleCreateEntitySchema =

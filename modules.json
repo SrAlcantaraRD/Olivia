@@ -1,0 +1,230 @@
+{
+  "modules": {
+    "cic": {
+      "id": "cic",
+      "name": "Cateterismos (CIC)",
+      "description": "Registro de cateterismos intermitentes limpios.",
+      "recordFields": [
+        {
+          "name": "volumeLevel",
+          "type": "enum",
+          "values": ["low", "normal", "high"],
+          "required": true
+        },
+        {
+          "name": "color",
+          "type": "enum",
+          "values": ["transparent", "light_yellow", "dark_yellow", "abnormal"],
+          "required": true
+        },
+        {
+          "name": "turbidity",
+          "type": "enum",
+          "values": ["clear", "mild", "high"],
+          "required": true
+        },
+        {
+          "name": "discomfortLevel",
+          "type": "enum",
+          "values": ["none", "mild", "pain"],
+          "required": true
+        },
+        { "name": "notes", "type": "string", "required": false },
+        {
+          "name": "source",
+          "type": "enum",
+          "values": ["primary", "secondary"],
+          "required": true
+        },
+        { "name": "deviceId", "type": "string", "required": false },
+        {
+          "name": "syncStatus",
+          "type": "enum",
+          "values": ["local_only", "synced"],
+          "required": true
+        }
+      ],
+      "configFields": [
+        { "name": "intervalHours", "type": "number", "required": true },
+        { "name": "remindersEnabled", "type": "boolean", "required": true },
+        { "name": "reminderStartTime", "type": "time", "required": false },
+        { "name": "reminderEndTime", "type": "time", "required": false }
+      ]
+    },
+    "stool": {
+      "id": "stool",
+      "name": "Deposiciones",
+      "description": "Registro de deposiciones (caca) y patrón intestinal.",
+      "recordFields": [
+        {
+          "name": "consistency",
+          "type": "enum",
+          "values": ["hard", "normal", "soft", "diarrhea"],
+          "required": true
+        },
+        {
+          "name": "amount",
+          "type": "enum",
+          "values": ["small", "medium", "large"],
+          "required": false
+        },
+        {
+          "name": "color",
+          "type": "enum",
+          "values": [
+            "brown",
+            "light_brown",
+            "dark_brown",
+            "green",
+            "black",
+            "other"
+          ],
+          "required": false
+        },
+        {
+          "name": "effort",
+          "type": "enum",
+          "values": ["none", "mild", "high"],
+          "required": false
+        },
+        {
+          "name": "pain",
+          "type": "enum",
+          "values": ["none", "mild", "pain"],
+          "required": false
+        },
+        { "name": "accident", "type": "boolean", "required": false },
+        { "name": "notes", "type": "string", "required": false },
+        {
+          "name": "source",
+          "type": "enum",
+          "values": ["primary", "secondary"],
+          "required": true
+        },
+        { "name": "deviceId", "type": "string", "required": false },
+        {
+          "name": "syncStatus",
+          "type": "enum",
+          "values": ["local_only", "synced"],
+          "required": true
+        }
+      ],
+      "configFields": [
+        { "name": "minStoolsPerWeek", "type": "number", "required": false },
+        { "name": "maxDaysWithoutStool", "type": "number", "required": false },
+        { "name": "alertsEnabled", "type": "boolean", "required": true }
+      ]
+    },
+    "enema": {
+      "id": "enema",
+      "name": "Enemas",
+      "description": "Registro de enemas y su efecto.",
+      "recordFields": [
+        {
+          "name": "type",
+          "type": "enum",
+          "values": ["rectal", "oral", "other"],
+          "required": true
+        },
+        {
+          "name": "result",
+          "type": "enum",
+          "values": ["no_result", "partial", "complete"],
+          "required": false
+        },
+        {
+          "name": "tolerance",
+          "type": "enum",
+          "values": ["good", "regular", "poor"],
+          "required": false
+        },
+        {
+          "name": "pain",
+          "type": "enum",
+          "values": ["none", "mild", "pain"],
+          "required": false
+        },
+        { "name": "notes", "type": "string", "required": false },
+        {
+          "name": "source",
+          "type": "enum",
+          "values": ["primary", "secondary"],
+          "required": true
+        },
+        { "name": "deviceId", "type": "string", "required": false },
+        {
+          "name": "syncStatus",
+          "type": "enum",
+          "values": ["local_only", "synced"],
+          "required": true
+        }
+      ],
+      "configFields": [
+        { "name": "frequencyPerWeek", "type": "number", "required": false },
+        {
+          "name": "scheduledDayTimes",
+          "type": "array",
+          "itemType": "time",
+          "required": false
+        },
+        { "name": "remindersEnabled", "type": "boolean", "required": true }
+      ]
+    },
+    "medication": {
+      "id": "medication",
+      "name": "Medicación",
+      "description": "Registro de tomas de medicación relacionadas con el cuidado urológico o intestinal.",
+      "recordFields": [
+        { "name": "name", "type": "string", "required": true },
+        { "name": "dose", "type": "string", "required": false },
+        {
+          "name": "route",
+          "type": "enum",
+          "values": ["oral", "rectal", "other"],
+          "required": false
+        },
+        { "name": "taken", "type": "boolean", "required": true },
+        { "name": "reasonNotTaken", "type": "string", "required": false },
+        { "name": "notes", "type": "string", "required": false },
+        {
+          "name": "source",
+          "type": "enum",
+          "values": ["primary", "secondary"],
+          "required": true
+        },
+        { "name": "deviceId", "type": "string", "required": false },
+        {
+          "name": "syncStatus",
+          "type": "enum",
+          "values": ["local_only", "synced"],
+          "required": true
+        }
+      ],
+      "configFields": [
+        {
+          "name": "scheduledMedications",
+          "type": "array",
+          "itemType": "object",
+          "required": false
+        },
+        {
+          "name": "scheduledMedicationSchema",
+          "type": "schema",
+          "fields": [
+            { "name": "name", "type": "string" },
+            { "name": "dose", "type": "string" },
+            { "name": "time", "type": "time" },
+            { "name": "daysOfWeek", "type": "array", "itemType": "string" }
+          ]
+        }
+      ]
+    }
+  },
+  "commonRecordMeta": [
+    { "name": "id", "type": "string", "required": true },
+    { "name": "patientId", "type": "string", "required": true },
+    { "name": "caregiverId", "type": "string", "required": true },
+    { "name": "createdAt", "type": "datetime", "required": true },
+    { "name": "updatedAt", "type": "datetime", "required": false }
+  ]
+}
