@@ -1,44 +1,80 @@
-import type {
-  TGetListActiveModuleRequest,
-  TGetListActiveModuleResponse,
-} from '@/domain/carer/use-case-schema/get-list-active-module.use-case-schema';
+import { useCallback } from 'react';
+
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
-import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
-import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
-import type { TModuleDTO } from '@/domain/module/dto/module.dto';
+import type {
+  IHookResponse,
+  IUseHook,
+} from '@/domain/core/interface/hook.interface';
+import type { INotifyPort } from '@/domain/core/port/notify.port';
+import { useListStore } from '@/domain/core/stores/list.store';
+import type { TModule } from '@/domain/module/entity/module.entity';
 import type { IModulePort } from '@/domain/module/port/module.port';
+import type { TRequestGetActiveModuleList } from '@/domain/module/use-case-schema/get-active-module-list.use-case-schema';
+import { GetActiveModuleListUseCase } from '@/domain/module/use-case/get-active-module-list.use-case';
 
-export class GetListActiveModuleUseCase extends BaseUseCase<
-  TGetListActiveModuleRequest,
-  TGetListActiveModuleResponse
-> {
-  constructor(
-    private readonly adapters: {
-      loggerAdapter: TLoggerPort;
-      moduleAdapter: IModulePort;
-    }
-  ) {
-    super('get-list-active-module', adapters.loggerAdapter);
-  }
+export function useGetListActiveModule(adapters: {
+  loggerAdapter: TLoggerPort;
+  moduleAdapter: IModulePort;
+  notifyAdapter: INotifyPort;
+}): IUseHook<void, TModule[]> {
+  const {
+    actions: { saveItems, getItems, isLoading, startLoading, stopLoading },
+  } = useListStore<TModule>('module');
 
-  public async execute(
-    request: TGetListActiveModuleRequest
-  ): Promise<IBaseResponse<TGetListActiveModuleResponse>> {
-    let items: TModuleDTO[] = [];
+  const { loggerAdapter, moduleAdapter, notifyAdapter } = adapters;
 
-    try {
-      const exists = await this.adapters.moduleAdapter.getAll();
-      items = exists.filter((module) => module.isActive);
-    } catch (error) {
-      this.adapters.loggerAdapter.error(
-        `Error getting active module list: ${error}`
-      );
-    }
+  const execute = useCallback(
+    async (
+      _data: TRequestGetActiveModuleList
+    ): Promise<IHookResponse<TModule[]>> => {
+      startLoading();
 
-    return {
-      success: true,
-      message: 'common.success',
-      details: { items },
-    } satisfies IBaseResponse<TGetListActiveModuleResponse>;
-  }
+      notifyAdapter.loading({
+        title: 'hook.get-list-active-module.title',
+        description: 'hook.get-list-active-module.description',
+      });
+
+      try {
+        const useCase = new GetActiveModuleListUseCase({
+          loggerAdapter,
+          moduleAdapter,
+        });
+
+        const response = await useCase.execute();
+
+        if (!response.success) {
+          notifyAdapter.error({
+            title: 'hook.get-list-active-module.error-title',
+            description: response.message,
+          });
+
+          return { success: false };
+        }
+
+        console.log({ response });
+
+        loggerAdapter.info(`[AAAAAA]: ${response}`);
+
+        // Save only the array of items to the store (not the wrapper object)
+        saveItems(response.details.items);
+
+        return {
+          success: true,
+          data: response.details.items,
+        };
+      } catch (error) {
+        console.error(error);
+        return { success: false };
+      } finally {
+        stopLoading();
+      }
+    },
+    []
+  );
+
+  return {
+    execute,
+    isExecuting: isLoading(),
+    items: getItems() ?? [],
+  };
 }

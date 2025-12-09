@@ -22,9 +22,6 @@ export class CheckCarerExistenceUseCase extends BaseUseCase<
     request: TCheckCarerExistenceRequest
   ): Promise<IBaseResponse<TCheckCarerExistenceResponse>> {
     const exists = await this.carerAdapter.existsAny();
-    this.loggerAdapter.info(
-      `[CheckCarerExistenceUseCase] existsAny result: ${exists}`
-    );
 
     return {
       success: true,

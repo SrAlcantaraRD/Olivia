@@ -1,42 +1,58 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
+import { BASE_LOGGER } from '@/domain/core';
+import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
+import { useGetListActiveModule } from '@/domain/module/hook/get-list-active-module.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 import {
   TypographyHeading,
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
+import { ModuleCard } from '@/ui/components/cards/module.card';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
-import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
 
 export default function RegisterScreen() {
   const { navigationAdapter } = useAdapters();
-  const { goToRegisterCic, goToFilterHistory } = useNavigation({
+  const { goToRegisterCic } = useNavigation({
     navigationAdapter,
   });
-  const [selectedAction, setSelectedAction] = useState<
-    'cic' | 'stool' | 'medication' | null
-  >(null);
 
-  const handleCicSelect = () => {
-    setSelectedAction('cic');
-    goToRegisterCic();
+  const { notifyAdapter, moduleAdapter } = useAdapters();
+
+  const { isExecuting, execute, items } = useGetListActiveModule({
+    loggerAdapter: BASE_LOGGER,
+    moduleAdapter,
+    notifyAdapter,
+  });
+
+  const handlerOnSelectAction = (code: MODULE_KEY_ENUM) => {
+    switch (code) {
+      case MODULE_KEY_ENUM.CIC:
+        goToRegisterCic();
+        break;
+      case MODULE_KEY_ENUM.STOOL:
+      case MODULE_KEY_ENUM.ENEMA:
+      case MODULE_KEY_ENUM.URINE:
+      case MODULE_KEY_ENUM.MEDICATION:
+        break;
+    }
   };
 
-  const handleStoolSelect = () => {
-    setSelectedAction('stool');
-    goToFilterHistory();
+  const handlerGetList = async () => {
+    await execute();
   };
 
-  const handleMedicationSelect = () => {
-    setSelectedAction('medication');
-    // TODO: Navigate to medication registration when implemented
-  };
+  useEffect(() => {
+    handlerGetList();
+  }, []);
+
+  BASE_LOGGER.info(items);
 
   return (
-    <ScreenLayout testID="screen.register">
+    <ScreenLayout testID="screen.register" isLoading={isExecuting}>
       {/* Header */}
       <View className="gap-2">
         <TypographyTitle
@@ -53,38 +69,18 @@ export default function RegisterScreen() {
           accessibilityRole="header"
         />
 
-        {/* CIC Button */}
-        <CardWithDetails
-          icon="water"
-          titleKey="component.register_cic_button.label"
-          subtitleKey="component.register_cic_button.subtitle"
-          descriptionKey="component.register_cic_button.description"
-          isSelected={selectedAction === 'cic'}
-          onSelect={handleCicSelect}
-          testID="register.cic"
-        />
-
-        {/* Stool Button */}
-        <CardWithDetails
-          icon="nutrition"
-          titleKey="component.register_stool_button.label"
-          subtitleKey="component.register_stool_button.subtitle"
-          descriptionKey="component.register_stool_button.description"
-          testID="register.stool"
-          isSelected={selectedAction === 'stool'}
-          onSelect={handleStoolSelect}
-        />
-
-        {/* Medication Button */}
-        <CardWithDetails
-          icon="medical"
-          titleKey="component.register_medication_button.label"
-          subtitleKey="component.register_medication_button.subtitle"
-          descriptionKey="component.register_medication_button.description"
-          isSelected={selectedAction === 'medication'}
-          testID="register.medication"
-          onSelect={handleMedicationSelect}
-        />
+        {Array.isArray(items) &&
+          items.map((module) => (
+            <ModuleCard
+              key={module.id}
+              module={module}
+              testID="register"
+              isSelected={false}
+              onSelect={() => {
+                handlerOnSelectAction(module.code);
+              }}
+            />
+          ))}
       </View>
     </ScreenLayout>
   );

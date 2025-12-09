@@ -9,7 +9,7 @@ import {
   STATUS_ENUM,
 } from '@/domain/core/enum/status.enum';
 import type { TID } from '@/domain/core/schemas/id.schema';
-import type { TModuleEntity } from '@/domain/module/entity/module.entity';
+import type { TModule } from '@/domain/module/entity/module.entity';
 import { getModuleKeyFromValue } from '@/domain/module/enum/module-key.enum';
 import type { IModulePort } from '@/domain/module/port/module.port';
 
@@ -25,7 +25,7 @@ export class SQLiteModuleAdapter implements IModulePort {
     });
   }
 
-  public static toDomainEntity(entity: TModuleAdapterEntity): TModuleEntity {
+  public static toDomainEntity(entity: TModuleAdapterEntity): TModule {
     return {
       id: entity.id,
       status: getStatusFromValue(entity.status),
@@ -37,7 +37,7 @@ export class SQLiteModuleAdapter implements IModulePort {
     };
   }
 
-  public async getAll(): Promise<TModuleEntity[]> {
+  public async getAll(): Promise<TModule[]> {
     const list = await this.database.select().from(DB_SCHEMA.MODULE);
 
     return list.map(SQLiteModuleAdapter.toDomainEntity);

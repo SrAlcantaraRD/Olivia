@@ -41,12 +41,6 @@ export function useSplashCarerValidation(adapters: {
         // sleep for 3s to show splash screen
         await new Promise((resolve) => setTimeout(resolve, 300));
 
-        loggerAdapter.info(
-          `[useSplashCarerValidation] Carer existence check response: ${JSON.stringify(
-            response
-          )}`
-        );
-
         if (!response.success || !response.details.exists) {
           return { success: false };
         }

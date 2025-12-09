@@ -5,12 +5,11 @@ import {
   GenerateDTOSchema,
 } from '@/domain/core/entity/base-dto.entity';
 import type { TModuleFieldDTO } from '@/domain/module/dto/module-field.dto';
-import { ModuleEntitySchema } from '@/domain/module/entity/module.entity';
+import { ModuleSchema } from '@/domain/module/entity/module.entity';
 
-export const ModuleCreateDTOSchema =
-  GenerateCreateDTOSchema(ModuleEntitySchema);
+export const ModuleCreateDTOSchema = GenerateCreateDTOSchema(ModuleSchema);
 
-export const ModuleDTOSchema = GenerateDTOSchema(ModuleEntitySchema);
+export const ModuleDTOSchema = GenerateDTOSchema(ModuleSchema);
 
 export type TModuleCreateDTO = z.infer<typeof ModuleCreateDTOSchema> & {
   fieldList?: TModuleFieldDTO[];

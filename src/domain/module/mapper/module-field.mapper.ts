@@ -1,7 +1,7 @@
 import type { TBaseMapper } from '@/domain/core';
 import type { TModuleFieldDTO } from '@/domain/module/dto/module-field.dto';
 import type { TModuleFieldEntity } from '@/domain/module/entity/module-field.entity';
-import { moduleMapper } from '@/domain/module/mapper/module.mapper';
+import { MODULE_MAPPER } from '@/domain/module/mapper/module.mapper';
 
 export const moduleFieldMapper: TBaseMapper<
   TModuleFieldEntity,
@@ -20,7 +20,7 @@ export const moduleFieldMapper: TBaseMapper<
       order: entity.order,
 
       ...(entity.module && {
-        module: moduleMapper.toDTO(entity.module),
+        module: MODULE_MAPPER.toDTO(entity.module),
       }),
     };
   },

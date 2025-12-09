@@ -3,7 +3,7 @@ import { z } from 'zod';
 // import type { CreateFrom } from '@/domain/core/entity/base-dto.entity';
 import { GenerateCreateEntitySchema } from '@/domain/core/entity/base-dto.entity';
 import { BaseEntitySchema } from '@/domain/core/entity/base-entity.entity';
-import type { TModuleEntity } from '@/domain/module/entity/module.entity';
+import type { TModule } from '@/domain/module/entity/module.entity';
 import { ModuleFieldTypeSchema } from '@/domain/module/enum/module-field-type.enum';
 
 export const ModuleFieldEntitySchema = z.object({
@@ -24,7 +24,7 @@ export const ModuleFieldCreateEntitySchema = GenerateCreateEntitySchema(
 );
 
 export type TModuleFieldEntity = z.infer<typeof ModuleFieldEntitySchema> & {
-  module: TModuleEntity;
+  module: TModule;
 };
 
 export type TModuleFieldCreateDTO = z.infer<

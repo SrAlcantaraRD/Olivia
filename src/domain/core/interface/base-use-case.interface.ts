@@ -9,8 +9,8 @@ export abstract class BaseUseCase<BaseRequest, BaseResponse> {
     public readonly loggerAdapter: TLoggerPort
   ) {}
 
-  protected logInfo(message: string, details?: unknown): void {
-    this.loggerAdapter.info(message, details);
+  protected logDebug(message: string, details?: unknown): void {
+    this.loggerAdapter.debug(message, details);
   }
 
   protected logError(message: string, details?: unknown): void {

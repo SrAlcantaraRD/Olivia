@@ -270,6 +270,11 @@ export const enEN = {
   'hook.setup-parent.description': 'Please wait while we set up your account.',
   'hook.setup-parent.error-title': 'Setup Failed',
   'hook.setup-parent.success-title': 'Setup Successful',
+  'hook.get-list-active-module.title': 'Loading Modules',
+  'hook.get-list-active-module.description':
+    'Please wait while we load modules.',
+  'hook.get-list-active-module.error-title': 'Failed to Load Modules',
+  'hook.get-list-active-module.success-title': 'Modules Loaded Successfully',
 
   'test.reset-db': 'Reset Database for Testing',
 };

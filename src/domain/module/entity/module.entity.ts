@@ -5,7 +5,7 @@ import { BaseEntitySchema } from '@/domain/core/entity/base-entity.entity';
 import type { TModuleFieldEntity } from '@/domain/module/entity/module-field.entity';
 import { ModuleKeySchema } from '@/domain/module/enum/module-key.enum';
 
-export const ModuleEntitySchema = z.object({
+export const ModuleSchema = z.object({
   ...BaseEntitySchema.shape,
   name: z.string().min(1),
   description: z.string(),
@@ -14,9 +14,9 @@ export const ModuleEntitySchema = z.object({
 });
 
 export const ModuleCreateEntitySchema =
-  GenerateCreateEntitySchema(ModuleEntitySchema);
+  GenerateCreateEntitySchema(ModuleSchema);
 
-export type TModuleEntity = z.infer<typeof ModuleEntitySchema> & {
+export type TModule = z.infer<typeof ModuleSchema> & {
   fieldList?: TModuleFieldEntity[];
 };
 
