@@ -22,7 +22,7 @@ export class SQLiteCarerAdapter implements ICarerPort {
   constructor() {
     this.database = drizzle(SQLITE_DB, {
       schema: DB_SCHEMA,
-      logger: new DrizzleLogger('SQLiteCarerAdapter'),
+      logger: new DrizzleLogger('Carer Adapter'),
     });
   }
 
