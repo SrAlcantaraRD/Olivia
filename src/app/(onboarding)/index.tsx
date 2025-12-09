@@ -1,8 +1,9 @@
-import type { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 
 import { useAdapters } from '@/adapter';
 import { useNavigation } from '@/hooks/use-navigation.hook';
+import type { IconName } from '@/ui/components/atoms/icon.atom';
+import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { WelcomeSlideContent } from '@/ui/components/molecules/welcome-slide-content.molecule';
 import {
   Wizard,
@@ -12,11 +13,11 @@ import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface WelcomeSlide {
   illustration: {
-    icon: keyof typeof Ionicons.glyphMap;
+    icon: IconName;
     iconSize?: number;
     shape?: 'rounded-full' | 'rounded-3xl';
     secondaryIcon?: {
-      name: keyof typeof Ionicons.glyphMap;
+      name: IconName;
       size?: number;
       position?: { bottom?: number; right?: number };
     };
@@ -107,15 +108,17 @@ export default function OnboardingIndex() {
   }));
 
   return (
-    <Wizard
-      testID="onboarding-wizard"
-      steps={steps}
-      currentStepIndex={currentSlide}
-      onNext={handleNext}
-      onBack={handleBack}
-      onSkip={goToRoleSelection}
-      showBackButton={true}
-      showSkipButton={true}
-    />
+    <ScreenLayout testID="onboarding-screen">
+      <Wizard
+        testID="onboarding-wizard"
+        steps={steps}
+        currentStepIndex={currentSlide}
+        onNext={handleNext}
+        onBack={handleBack}
+        onSkip={goToRoleSelection}
+        showBackButton={true}
+        showSkipButton={true}
+      />
+    </ScreenLayout>
   );
 }

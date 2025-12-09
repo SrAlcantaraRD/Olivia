@@ -14,13 +14,13 @@ import {
   TypographyParagraph,
   TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
+import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { cn } from '@/ui/lib/utils';
 
 export default function SplashScreen() {
   const { notifyAdapter, carerAdapter, navigationAdapter } = useAdapters();
   const { goToOnboarding } = useNavigation({ navigationAdapter });
 
-  const backgroundColor = useThemeColor('background');
   const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
   const accentColor = useThemeColor('accent');
@@ -78,9 +78,11 @@ export default function SplashScreen() {
   }, []);
 
   return (
-    <View
-      style={{ backgroundColor, flex: 1 }}
-      className="flex-1 items-center justify-center px-6"
+    <ScreenLayout
+      testID="splash-screen"
+      styles={{
+        content: 'justify-center items-center',
+      }}
     >
       {/* Logo Section */}
       <View className="items-center mb-16">
@@ -155,6 +157,6 @@ export default function SplashScreen() {
           i18nKey="splash-screen.privacy-notice"
         />
       </View>
-    </View>
+    </ScreenLayout>
   );
 }

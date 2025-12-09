@@ -10,6 +10,7 @@ import {
   TypographyParagraph,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
+import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
 
 enum ROLE_ENUM {
@@ -24,7 +25,6 @@ export default function RoleSelectionScreen() {
   });
   const [selectedRole, setSelectedRole] = useState<ROLE_ENUM | null>(null);
 
-  const backgroundColor = useThemeColor('background');
   const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
   const accentColor = useThemeColor('accent');
@@ -38,9 +38,9 @@ export default function RoleSelectionScreen() {
   };
 
   return (
-    <View style={{ backgroundColor }} className="flex-1">
+    <ScreenLayout testID="role-selection-screen">
       {/* Header */}
-      <View className="flex-row items-center justify-between px-6 pt-12 pb-4">
+      <View className="flex-row items-center justify-between pt-12 pb-4">
         <Pressable onPress={goBack}>
           <Ionicons name="chevron-back" size={24} color={foregroundColor} />
         </Pressable>
@@ -49,7 +49,7 @@ export default function RoleSelectionScreen() {
       </View>
 
       {/* Content */}
-      <View className="flex-1 px-6">
+      <View className="flex-1">
         {/* Title */}
         <View className="mb-8">
           <TypographyTitle
@@ -89,7 +89,7 @@ export default function RoleSelectionScreen() {
       </View>
 
       {/* Footer */}
-      <View className="px-6 pb-12">
+      <View className="pb-12">
         <Pressable
           onPress={handleContinue}
           disabled={!selectedRole}
@@ -107,6 +107,6 @@ export default function RoleSelectionScreen() {
           />
         </Pressable>
       </View>
-    </View>
+    </ScreenLayout>
   );
 }

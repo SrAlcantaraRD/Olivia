@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { useNavigation } from '@/hooks/use-navigation.hook';
@@ -8,6 +8,7 @@ import {
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
+import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
 
 export default function RegisterScreen() {
@@ -35,64 +36,56 @@ export default function RegisterScreen() {
   };
 
   return (
-    <View className="flex-1 bg-background">
-      <ScrollView
-        className="flex-1"
-        contentContainerStyle={{ padding: 16 }}
-        contentInsetAdjustmentBehavior="automatic"
-      >
-        <View className="gap-6">
-          {/* Header */}
-          <View className="gap-2">
-            <TypographyTitle
-              i18nKey="page.register.title"
-              accessibilityRole="header"
-            />
-            <TypographySmall i18nKey="page.register.subtitle" variant="light" />
-          </View>
+    <ScreenLayout testID="screen.register">
+      {/* Header */}
+      <View className="gap-2">
+        <TypographyTitle
+          i18nKey="page.register.title"
+          accessibilityRole="header"
+        />
+        <TypographySmall i18nKey="page.register.subtitle" variant="light" />
+      </View>
 
-          {/* Quick Actions */}
-          <View className="gap-4">
-            <TypographyHeading
-              i18nKey="page.register.quick_actions"
-              accessibilityRole="header"
-            />
+      {/* Quick Actions */}
+      <View className="gap-4">
+        <TypographyHeading
+          i18nKey="page.register.quick_actions"
+          accessibilityRole="header"
+        />
 
-            {/* CIC Button */}
-            <CardWithDetails
-              icon="water"
-              titleKey="component.register_cic_button.label"
-              subtitleKey="component.register_cic_button.subtitle"
-              descriptionKey="component.register_cic_button.description"
-              isSelected={selectedAction === 'cic'}
-              onSelect={handleCicSelect}
-              testID="register.cic"
-            />
+        {/* CIC Button */}
+        <CardWithDetails
+          icon="water"
+          titleKey="component.register_cic_button.label"
+          subtitleKey="component.register_cic_button.subtitle"
+          descriptionKey="component.register_cic_button.description"
+          isSelected={selectedAction === 'cic'}
+          onSelect={handleCicSelect}
+          testID="register.cic"
+        />
 
-            {/* Stool Button */}
-            <CardWithDetails
-              icon="nutrition"
-              titleKey="component.register_stool_button.label"
-              subtitleKey="component.register_stool_button.subtitle"
-              descriptionKey="component.register_stool_button.description"
-              testID="register.stool"
-              isSelected={selectedAction === 'stool'}
-              onSelect={handleStoolSelect}
-            />
+        {/* Stool Button */}
+        <CardWithDetails
+          icon="nutrition"
+          titleKey="component.register_stool_button.label"
+          subtitleKey="component.register_stool_button.subtitle"
+          descriptionKey="component.register_stool_button.description"
+          testID="register.stool"
+          isSelected={selectedAction === 'stool'}
+          onSelect={handleStoolSelect}
+        />
 
-            {/* Medication Button */}
-            <CardWithDetails
-              icon="medical"
-              titleKey="component.register_medication_button.label"
-              subtitleKey="component.register_medication_button.subtitle"
-              descriptionKey="component.register_medication_button.description"
-              isSelected={selectedAction === 'medication'}
-              testID="register.medication"
-              onSelect={handleMedicationSelect}
-            />
-          </View>
-        </View>
-      </ScrollView>
-    </View>
+        {/* Medication Button */}
+        <CardWithDetails
+          icon="medical"
+          titleKey="component.register_medication_button.label"
+          subtitleKey="component.register_medication_button.subtitle"
+          descriptionKey="component.register_medication_button.description"
+          isSelected={selectedAction === 'medication'}
+          testID="register.medication"
+          onSelect={handleMedicationSelect}
+        />
+      </View>
+    </ScreenLayout>
   );
 }
