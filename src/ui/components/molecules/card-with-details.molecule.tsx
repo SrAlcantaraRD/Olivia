@@ -1,7 +1,6 @@
-import type { Ionicons } from '@expo/vector-icons';
 import { View } from 'react-native';
 
-import { IconAtom } from '@/ui/components/atoms/icon.atom';
+import { IconAtom, type IconName } from '@/ui/components/atoms/icon.atom';
 import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
 import {
   TypographyParagraph,
@@ -10,7 +9,7 @@ import {
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface CardWithDetailsProps {
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: IconName;
   titleKey?: Ti18nKeys;
   subtitleKey?: Ti18nKeys;
   descriptionKey?: Ti18nKeys;

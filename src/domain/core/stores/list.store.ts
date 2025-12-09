@@ -78,12 +78,7 @@ const ownStore = create<Store>((set, get) => ({
   },
 }));
 
-export const useListStore = <T extends TBaseEntityDTO>(
-  entity: string
-): {
-  items: T[];
-  actions: StoreActions;
-} => {
+export const useListStore = <T extends TBaseEntityDTO>(entity: string) => {
   const store = ownStore();
 
   return {

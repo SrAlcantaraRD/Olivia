@@ -23,7 +23,7 @@ export function SelectableCard({
   testID,
 }: SelectableCardProps) {
   const accentColor = useThemeColor('accent');
-  const cardBgColor = useThemeColor('surface');
+  const cardBgColor = useThemeColor('background-tertiary');
 
   // Animated value for border opacity
   const borderOpacity = useSharedValue(isSelected ? 1 : 0);
@@ -42,10 +42,8 @@ export function SelectableCard({
   return (
     <Pressable
       onPress={onSelect}
-      style={{
-        backgroundColor: cardBgColor,
-      }}
-      className={`rounded-3xl relative ${className}`}
+      // className={`rounded-3xl relative ${className} shadow-primary-500/30`}
+      className={`rounded-3xl relative ${className} shadow-[0px_1px_20px_-1px_rgb(0,139,194)]`}
       testID={testID}
     >
       {/* Animated border */}

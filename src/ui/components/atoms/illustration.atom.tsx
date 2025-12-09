@@ -2,13 +2,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { View } from 'react-native';
 import { withUniwind } from 'uniwind';
 
+import type { IconName } from '@/ui/components/atoms/icon.atom';
+
 const StyledIonicons = withUniwind(Ionicons);
 
 interface IllustrationAtomProps {
   /**
    * Primary icon displayed in the center
    */
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: IconName;
   /**
    * Size of the main icon (default: 60)
    */
@@ -21,7 +23,7 @@ interface IllustrationAtomProps {
    * Optional secondary icon (e.g., badge or overlay)
    */
   secondaryIcon?: {
-    name: keyof typeof Ionicons.glyphMap;
+    name: IconName;
     size?: number;
     position?: { bottom?: number; right?: number; top?: number; left?: number };
   };

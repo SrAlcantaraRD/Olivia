@@ -3,11 +3,13 @@ import { useEffect, useRef } from 'react';
 import { Animated, Pressable, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
+import type { IconName } from '@/ui/components/atoms/icon.atom';
+
 interface CircularProgressButtonProps {
   onPress: () => void;
   progress: number; // 0 to 1
   size?: number;
-  iconName?: keyof typeof Ionicons.glyphMap;
+  iconName?: IconName;
   iconSize?: number;
   backgroundColor: string;
   progressColor: string;

@@ -6,13 +6,10 @@ import { moduleFieldMapper } from '@/domain/module/mapper/module-field.mapper';
 export const moduleMapper: TBaseMapper<TModuleEntity, TModuleDTO> = {
   toDTO: (entity: TModuleEntity): TModuleDTO => {
     return {
-      uuid: entity.uuid,
-      createdAt: entity.createdAt,
+      code: entity.code,
       name: entity.name,
       description: entity.description,
-      key: entity.key,
-      active: entity.active,
-      order: entity.order,
+      isActive: entity.isActive,
 
       ...(entity.fieldList && {
         fieldList: entity.fieldList.map(moduleFieldMapper.toDTO),

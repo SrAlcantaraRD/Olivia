@@ -1,8 +1,8 @@
-import type { Ionicons } from '@expo/vector-icons';
 import { useThemeColor } from 'heroui-native';
 import { View } from 'react-native';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 
+import type { IconName } from '@/ui/components/atoms/icon.atom';
 import { IllustrationAtom } from '@/ui/components/atoms/illustration.atom';
 import {
   TypographyParagraph,
@@ -12,11 +12,11 @@ import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface WelcomeSlideContentProps {
   illustration: {
-    icon: keyof typeof Ionicons.glyphMap;
+    icon: IconName;
     iconSize?: number;
     shape?: 'rounded-full' | 'rounded-3xl';
     secondaryIcon?: {
-      name: keyof typeof Ionicons.glyphMap;
+      name: IconName;
       size?: number;
       position?: { bottom?: number; right?: number };
     };

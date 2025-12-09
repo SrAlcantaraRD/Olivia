@@ -6,12 +6,13 @@ import { withUniwind } from 'uniwind';
 const StyledIonicons = withUniwind(Ionicons);
 
 export type IconVariant = 'default' | 'contained' | 'outlined';
+export type IconName = keyof typeof Ionicons.glyphMap;
 
 interface IconAtomProps {
   /**
    * Icon name from Ionicons
    */
-  name: keyof typeof Ionicons.glyphMap;
+  name: IconName;
   /**
    * Visual variant
    */

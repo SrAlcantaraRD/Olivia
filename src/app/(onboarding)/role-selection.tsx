@@ -65,7 +65,7 @@ export default function RoleSelectionScreen() {
         </View>
 
         {/* Role Cards */}
-        <View className="mb-8">
+        <View className="mb-8 gap-8">
           <CardWithDetails
             icon="heart"
             titleKey="role-selection-screen.parent.title"

@@ -37,7 +37,6 @@ export function Wizard({
   showSkipButton = false,
   testID,
 }: WizardProps) {
-  const backgroundColor = useThemeColor('background');
   const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
   const accentColor = useThemeColor('accent');
@@ -61,9 +60,9 @@ export function Wizard({
   };
 
   return (
-    <View testID={testID} style={{ backgroundColor }} className="px-8 flex-1">
+    <View testID={testID} className="flex-1 bg-background">
       {/* Header */}
-      <View className="flex-row items-center justify-between pt-12 pb-4">
+      <View className="flex-row items-center justify-between">
         {showBackButton ? (
           <Pressable onPress={handleBack}>
             <Ionicons name="chevron-back" size={24} color={foregroundColor} />

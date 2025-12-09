@@ -39,7 +39,7 @@ export function useSplashCarerValidation(adapters: {
         const response = await useCase.execute(data);
 
         // sleep for 3s to show splash screen
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        await new Promise((resolve) => setTimeout(resolve, 300));
 
         loggerAdapter.info(
           `[useSplashCarerValidation] Carer existence check response: ${JSON.stringify(

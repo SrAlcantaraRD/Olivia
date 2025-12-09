@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, type TextInputProps } from 'react-native';
 import { withUniwind } from 'uniwind';
 
+import type { IconName } from '@/ui/components/atoms/icon.atom';
 import { TextTranslation } from '@/ui/components/atoms/text-translations.atom';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
@@ -15,9 +16,9 @@ interface TextFieldAtomProps extends Omit<TextInputProps, 'placeholder'> {
   isRequired?: boolean;
   isInvalid?: boolean;
   isDisabled?: boolean;
-  startIcon?: keyof typeof Ionicons.glyphMap;
+  startIcon?: IconName;
   onPressStartIcon?: () => void;
-  endIcon?: keyof typeof Ionicons.glyphMap;
+  endIcon?: IconName;
   onPressEndIcon?: () => void;
 }
 

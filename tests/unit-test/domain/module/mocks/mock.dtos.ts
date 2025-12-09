@@ -1,7 +1,7 @@
 /// <reference types="jest" />
 
-import type { TModuleCreateDTO } from '@/domain/module/dto/module.dto';
 import type { TModuleFieldCreateDTO } from '@/domain/module/dto/module-field.dto';
+import type { TModuleCreateDTO } from '@/domain/module/dto/module.dto';
 import { MODULE_FIELD_TYPE_ENUM } from '@/domain/module/enum/module-field-type.enum';
 import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 
@@ -24,7 +24,7 @@ export const mockModuleCreateDTO = (
   name: 'Catheterization',
   description: 'CIC module',
   key: MODULE_KEY_ENUM.CIC,
-  active: true,
+  isActive: true,
   ord: 0,
   fieldList: undefined,
   ...overrides,

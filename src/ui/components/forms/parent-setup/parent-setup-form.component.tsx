@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 
+import { ModulesStep } from '@/ui/components/forms/parent-setup/steps/modules-step.component';
 import {
   FormPage,
   type FormPageStep,
@@ -10,7 +11,6 @@ import {
 } from '@/ui/components/molecules/wizard.molecule';
 import { useParentSetupForm } from './hooks/use-parent-setup-form.hook';
 import { ChildInfoStep } from './steps/child-info-step.component';
-import { ModulesStep } from './steps/modules-step.component';
 import { ParentInfoStep } from './steps/parent-info-step.component';
 import { SummaryStep } from './steps/summary-step.component';
 
@@ -115,6 +115,7 @@ export function ParentSetupForm() {
 
   return (
     <Wizard
+      testID="parent-setup-wizard"
       steps={wizardSteps}
       currentStepIndex={currentStep}
       onNext={handleNext}

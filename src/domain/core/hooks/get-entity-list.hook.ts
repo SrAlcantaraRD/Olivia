@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 import { BASE_LOGGER, type TBaseEntityDTO } from '@/domain/core';
 import type {
@@ -17,14 +17,13 @@ export function useGetEntityList<T extends TBaseEntityDTO>(
   notifyAdapter: INotifyPort,
   adapter: IAdapterHook<T>
 ): IUseHook<void, T[]> {
-  const [isExecuting, setExecuting] = useState<boolean>(false);
-  // const [controller] = useState<AbortController>(new AbortController());
-
   const {
-    actions: { saveItems, getItems, s },
+    actions: { saveItems, getItems, isLoading, startLoading, stopLoading },
   } = useListStore<T>(entityName);
 
   const execute = useCallback(async (): Promise<IHookResponse<T[]>> => {
+    startLoading();
+
     const items = getItems();
 
     BASE_LOGGER.debug(
@@ -34,8 +33,6 @@ export function useGetEntityList<T extends TBaseEntityDTO>(
     if (items.length > 0) {
       return { success: true, data: items };
     }
-
-    setExecuting(true);
 
     try {
       const response = await adapter.getAll();
@@ -47,7 +44,7 @@ export function useGetEntityList<T extends TBaseEntityDTO>(
       console.error(error);
       return { success: false };
     } finally {
-      setExecuting(false);
+      // stopLoading();
     }
   }, []);
 
@@ -55,5 +52,5 @@ export function useGetEntityList<T extends TBaseEntityDTO>(
   //   return () => controller.abort();
   // }, []);
 
-  return { execute, isExecuting, items: getItems() };
+  return { execute, isExecuting: isLoading(), items: getItems() };
 }
