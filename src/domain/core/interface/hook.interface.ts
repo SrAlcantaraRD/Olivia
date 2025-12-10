@@ -9,11 +9,11 @@ interface IHookError {
 
 export type IHookResponse<T> = IHookSuccess<T> | IHookError;
 
-export type IUseHook<TRequestDTO, TResponseDTO> = {
+export type IUseHook<TRequest, TResponse> = {
   execute: (
-    data: TRequestDTO,
+    data: TRequest,
     reload?: boolean
-  ) => Promise<IHookResponse<TResponseDTO>>;
+  ) => Promise<IHookResponse<TResponse>>;
   isExecuting: boolean;
-  items: TResponseDTO;
+  items: TResponse;
 };

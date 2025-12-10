@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-import { ModuleDTOSchema } from '@/domain/module/dto/module.dto';
+import { ModuleSchema } from '@/domain/module/entity/module.entity';
 
 export const RequestGetListActiveModuleSchema = z.void();
 
 export const ResponseGetListActiveModuleSchema = z.object({
-  items: z.array(ModuleDTOSchema),
+  items: z.array(ModuleSchema),
 });
 
 export type TGetListActiveModuleRequest = z.infer<

@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import type { TBaseEntityDTO } from '@/domain/core/entity/base-entity.entity';
+import type { TBaseEntity } from '@/domain/core/entity/base-entity.entity';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import type {
   IHookResponse,
@@ -8,29 +8,27 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { TUUID } from '@/domain/core/schemas/uuid.schema';
+import { useByIDStore } from '@/domain/core/stores/by-id.store';
 
 interface IAdapterHook<T> {
   findByUUID: (uuid: TUUID) => Promise<IBaseResponse<{ item: T }>>;
 }
 
-export const useFindEntityByUUID = <EntityDTO extends TBaseEntityDTO>(
+export const useFindEntityByUUID = <Entity extends TBaseEntity>(
   entityName: string,
   notifyAdapter: INotifyPort,
-  adapter: IAdapterHook<EntityDTO>
-): IUseHook<TUUID, EntityDTO> => {
+  adapter: IAdapterHook<Entity>
+): IUseHook<TUUID, Entity> => {
   const [isExecuting, setExecuting] = useState<boolean>(false);
   // const [controller] = useState<AbortController>(new AbortController());
 
   const {
     actions: { saveItem, getItem },
-  } = useByUUIDStore<EntityDTO>(entityName);
+  } = useByIDStore<Entity>(entityName);
   // const { api } = useAuthApi(controller.signal);
 
   const execute = useCallback(
-    async (
-      uuid: TUUID,
-      reload?: boolean
-    ): Promise<IHookResponse<EntityDTO>> => {
+    async (uuid: TUUID, reload?: boolean): Promise<IHookResponse<Entity>> => {
       const _item = getItem(uuid);
 
       if (_item && !reload) {
@@ -47,7 +45,7 @@ export const useFindEntityByUUID = <EntityDTO extends TBaseEntityDTO>(
 
         if (!response.success || !response.details) {
           notifyAdapter.error({
-            title: 'error.get-map-position-by-uuid',
+            title: 'error.on-get-entity-by-id',
             message: response.message,
           });
 

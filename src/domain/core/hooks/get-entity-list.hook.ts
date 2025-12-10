@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
-import { BASE_LOGGER, type TBaseEntityDTO } from '@/domain/core';
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
+import type { TBaseEntity } from '@/domain/core/entity/base-entity.entity';
 import type {
   IHookResponse,
   IUseHook,
@@ -12,7 +13,7 @@ interface IAdapterHook<T> {
   getAll: () => Promise<T[]>;
 }
 
-export function useGetEntityList<T extends TBaseEntityDTO>(
+export function useGetEntityList<T extends TBaseEntity>(
   entityName: string,
   notifyAdapter: INotifyPort,
   adapter: IAdapterHook<T>

@@ -2,11 +2,11 @@ import z from 'zod';
 
 import { CarerCreateSchema } from '@/domain/carer/entity/carer.entity';
 import { IDSchema } from '@/domain/core/schemas/id.schema';
-import { PatientCreateDTOSchema } from '@/domain/patient/dto/patient.dto';
+import { PatientCreateSchema } from '@/domain/patient/entity/patient.entity';
 
 export const RequestSetupParentSchema = z.object({
   parent: CarerCreateSchema,
-  patient: PatientCreateDTOSchema,
+  patient: PatientCreateSchema,
   moduleList: z.array(IDSchema),
 });
 

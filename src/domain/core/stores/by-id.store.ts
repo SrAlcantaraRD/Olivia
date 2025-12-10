@@ -1,20 +1,17 @@
 import { create } from 'zustand';
 
-import type { TBaseEntityDTO } from '@/domain/core/entity/base-entity.entity';
+import type { TBaseEntity } from '@/domain/core/entity/base-entity.entity';
 import type { TUUID } from '@/domain/core/schemas/uuid.schema';
 
 type StoreProps = {
   [storeName: string]: {
-    [uuid: TUUID]: TBaseEntityDTO;
+    [uuid: TUUID]: TBaseEntity;
   };
 };
 
 interface StoreActions {
-  saveItem: <T extends TBaseEntityDTO>(storeName: string, item: T) => void;
-  getItem: <T extends TBaseEntityDTO>(
-    storeName: string,
-    uuid: TUUID
-  ) => T | null;
+  saveItem: <T extends TBaseEntity>(storeName: string, item: T) => void;
+  getItem: <T extends TBaseEntity>(storeName: string, uuid: TUUID) => T | null;
   removeItem: (storeName: string, uuid: TUUID) => void;
   clearStore: (storeName: string) => void;
 }
@@ -30,18 +27,18 @@ const initialState: StoreProps = {};
 const ownStore = create<Store>((set, get) => ({
   items: initialState,
   actions: {
-    saveItem: <T extends TBaseEntityDTO>(storeName: string, item: T) => {
+    saveItem: <T extends TBaseEntity>(storeName: string, item: T) => {
       set((state) => ({
         items: {
           ...state.items,
           [storeName]: {
             ...state.items[storeName],
-            [item.uuid]: item,
+            [item.id]: item,
           },
         },
       }));
     },
-    getItem: <T extends TBaseEntityDTO>(
+    getItem: <T extends TBaseEntity>(
       storeName: string,
       uuid: TUUID
     ): T | null => {
@@ -89,7 +86,7 @@ const ownStore = create<Store>((set, get) => ({
   },
 }));
 
-export const useByUUIDStore = <T extends TBaseEntityDTO>(storeName: string) => {
+export const useByIDStore = <T extends TBaseEntity>(storeName: string) => {
   const store = ownStore();
 
   return {

@@ -14,13 +14,3 @@ export type TBaseEntityCreate = Omit<
   TBaseEntity,
   'id' | 'uuid' | 'createdAt' | 'deletedAt' | 'status'
 >;
-
-export type TBaseEntityDTO = Omit<TBaseEntity, 'id' | 'status' | 'deletedAt'>;
-export type TBaseEntityCreateDTO = Omit<TBaseEntityCreate, 'id'>;
-
-export interface TBaseMapper<
-  Entity extends TBaseEntity,
-  DTO extends TBaseEntityDTO,
-> {
-  toDTO: (entity: Entity) => DTO;
-}

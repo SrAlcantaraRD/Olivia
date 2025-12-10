@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { BASE_LOGGER } from '@/domain/core/adapter';
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 
 const environmentVariableSchema = z.object({
   NODE_ENV: z.string().default('development'),

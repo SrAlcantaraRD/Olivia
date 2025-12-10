@@ -1,5 +1,9 @@
 import { useCallback, useState } from 'react';
 
+import type {
+  TBaseEntity,
+  TBaseEntityCreate,
+} from '@/domain/core/entity/base-entity.entity';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import type {
   IHookResponse,
@@ -7,20 +11,23 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 
-interface IAdapterHook<EntityDTO, Entity> {
-  create: (dto: EntityDTO) => Promise<IBaseResponse<{ item: Entity }>>;
+interface IAdapterHook<EntityCreate, Entity> {
+  create: (dto: EntityCreate) => Promise<IBaseResponse<{ item: Entity }>>;
 }
 
-export function useCreateEntity<EntityDTO, Entity>(
+export function useCreateEntity<
+  EntityCreate extends TBaseEntityCreate,
+  Entity extends TBaseEntity,
+>(
   entityName: string,
   notifyAdapter: INotifyPort,
-  adapter: IAdapterHook<EntityDTO, Entity>
-): IUseHook<EntityDTO, Entity> {
+  adapter: IAdapterHook<EntityCreate, Entity>
+): IUseHook<EntityCreate, Entity> {
   const [isExecuting, setExecuting] = useState<boolean>(false);
   // const [controller] = useState<AbortController>(new AbortController());
 
   const execute = useCallback(
-    async (dto: EntityDTO): Promise<IHookResponse<Entity>> => {
+    async (dto: EntityCreate): Promise<IHookResponse<Entity>> => {
       setExecuting(true);
 
       try {

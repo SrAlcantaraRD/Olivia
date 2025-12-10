@@ -30,10 +30,6 @@ export const GenerateCreateEntitySchema = <T extends z.ZodObject>(
   }) as unknown as ZodCreateSchema<T>;
 };
 
-/**
- * Type helper to derive a Create-DTO TypeScript type from a Zod entity schema.
- * Example: `type TCreatePatient = CreateFrom<typeof PatientEntitySchema>`
- */
 export type CreateFrom<T extends z.ZodTypeAny> = Omit<
   z.infer<T>,
   'id' | 'uuid' | 'status' | 'deletedAt' | 'createdAt' | 'updatedAt'

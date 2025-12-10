@@ -1,4 +1,4 @@
-import type { TLoggerPort } from '@/domain/core/adapter';
+import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 
 export abstract class BaseUseCase<BaseRequest, BaseResponse> {
