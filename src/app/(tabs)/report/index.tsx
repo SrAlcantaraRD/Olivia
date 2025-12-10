@@ -1,4 +1,4 @@
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { useThemeColor } from 'heroui-native';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
@@ -32,6 +32,11 @@ export default function ReportScreen() {
     notifyAdapter,
   });
 
+  const router = useRouter();
+  const [trendByModule, setTrendByModule] = useState<Record<number, number[]>>(
+    {}
+  );
+
   const [range, setRange] = useState<'today' | '7d' | '30d' | '90d'>('7d');
   const timeRange = useMemo(() => {
     const end = Math.floor(Date.now() / 1000);
@@ -57,9 +62,61 @@ export default function ReportScreen() {
   }, [range]);
 
   useEffect(() => {
+    let mounted = true;
+
     executeGetStats({ start: timeRange.start, end: timeRange.end });
+    // fetch global trend
     executeGetTrend({ start: timeRange.start, end: timeRange.end });
-  }, [range]);
+
+    // fetch per-module trends in parallel
+    (async () => {
+      try {
+        const entries: Record<number, number[]> = {};
+
+        await Promise.all(
+          STAT_MODULES.map(async (m) => {
+            try {
+              const res = await executeGetTrend({
+                start: timeRange.start,
+                end: timeRange.end,
+                moduleID: m.moduleID,
+              });
+              const series = (res?.data ?? []) as {
+                day: string;
+                count: number;
+              }[];
+              const numDays =
+                Math.floor((timeRange.end - timeRange.start) / (24 * 60 * 60)) +
+                1;
+              const dayMap: Record<string, number> = {};
+              series.forEach((s) => {
+                dayMap[s.day] = s.count;
+              });
+              const counts = Array.from({ length: numDays }, (_, i) => {
+                const ts = (timeRange.start + i * 24 * 60 * 60) * 1000;
+                const day = new Date(ts).toISOString().slice(0, 10);
+                return dayMap[day] ?? 0;
+              });
+              entries[m.moduleID] = counts;
+            } catch (err) {
+              // on error, fallback to generated data
+              entries[m.moduleID] = Array.from({ length: 7 }, () =>
+                Math.floor(Math.random() * 5)
+              );
+            }
+          })
+        );
+
+        if (mounted) setTrendByModule(entries);
+      } catch (err) {
+        // ignore
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, [timeRange.start, timeRange.end]);
 
   const STAT_MODULES = [
     {
@@ -153,12 +210,9 @@ export default function ReportScreen() {
             {STAT_MODULES.map((m) => {
               const item = stats?.find((s) => s.moduleID === m.moduleID);
               const count = item?.count ?? 0;
-              // TODO: fetch trend data for sparkline
-              // Build trend series for the module from trendItems (fallback to random if missing)
-              const _trend =
-                trendItems?.filter((t) => !!t?.day).map((t) => t.count) ?? [];
-              const trend = _trend.length
-                ? _trend
+              const moduleTrend = trendByModule[m.moduleID];
+              const trend = moduleTrend?.length
+                ? moduleTrend
                 : Array.from({ length: 7 }, () =>
                     Math.floor(Math.random() * 5)
                   );
@@ -170,6 +224,12 @@ export default function ReportScreen() {
                   data={trend}
                   color={m.color}
                   iconName={m.icon}
+                  onPress={() =>
+                    router.push({
+                      pathname: '/(tabs)/report/history-detail',
+                      params: { moduleId: String(m.moduleID) },
+                    })
+                  }
                 />
               );
             })}

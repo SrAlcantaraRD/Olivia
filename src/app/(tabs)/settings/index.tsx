@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { CardAtom } from '@/ui/components/atoms/card.atom';
@@ -9,6 +10,7 @@ import {
 } from '@/ui/components/atoms/typography.atom';
 
 export default function SettingsScreen() {
+  const router = useRouter();
   return (
     <View className="flex-1 bg-background">
       <ScrollView
@@ -157,6 +159,7 @@ export default function SettingsScreen() {
               accessibilityRole="button"
               accessibilityLabel="a11y.button.logout"
               accessibilityHint="a11y.hint.logout_action"
+              onPress={() => router.push('/(tabs)/settings/log-out')}
             >
               <CardAtom className="flex-row items-center justify-center p-4 bg-danger/10 border border-danger/20">
                 <TypographyParagraph
