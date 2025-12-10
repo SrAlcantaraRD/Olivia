@@ -10,7 +10,4 @@ export const BaseEntitySchema = z.object({
 
 export type TBaseEntity = z.infer<typeof BaseEntitySchema>;
 
-export type TBaseEntityCreate = Omit<
-  TBaseEntity,
-  'id' | 'uuid' | 'createdAt' | 'deletedAt' | 'status'
->;
+export type TBaseEntityCreate = Omit<TBaseEntity, 'id' | 'status'>;

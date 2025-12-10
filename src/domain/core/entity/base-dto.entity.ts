@@ -22,15 +22,11 @@ export const GenerateCreateEntitySchema = <T extends z.ZodObject>(
 ): ZodCreateSchema<T> => {
   return schema.omit({
     id: true,
-    uuid: true,
     status: true,
-    deletedAt: true,
-    createdAt: true,
-    updatedAt: true,
   }) as unknown as ZodCreateSchema<T>;
 };
 
 export type CreateFrom<T extends z.ZodTypeAny> = Omit<
   z.infer<T>,
-  'id' | 'uuid' | 'status' | 'deletedAt' | 'createdAt' | 'updatedAt'
+  'id' | 'status'
 >;
