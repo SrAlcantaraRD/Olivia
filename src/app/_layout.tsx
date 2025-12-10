@@ -32,6 +32,7 @@ import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { ENVIRONMENT_VARIABLES } from '@/domain/core/constant/environment-variables.constants';
 import { ThemeToggle } from '@/ui/components/atoms/theme-toggle.atom';
 import { toastConfig } from '@/ui/components/particles/toast-design.particle';
+import { SettingsProvider } from '@/ui/context/settings.context';
 import { AppThemeProvider, useAppTheme } from '@/ui/themes/app-theme-context';
 import LogoDark from '../assets/logo-dark.png';
 import LogoLight from '../assets/logo-light.png';
@@ -131,16 +132,18 @@ export default function RootLayout() {
         <GestureHandlerRootView style={styles.root}>
           <KeyboardProvider>
             <AppThemeProvider>
-              <HeroUINativeProvider
-                config={{
-                  textProps: {
-                    allowFontScaling: false,
-                  },
-                }}
-              >
-                <RootNavigator />
-                <Toast config={toastConfig} />
-              </HeroUINativeProvider>
+              <SettingsProvider>
+                <HeroUINativeProvider
+                  config={{
+                    textProps: {
+                      allowFontScaling: false,
+                    },
+                  }}
+                >
+                  <RootNavigator />
+                  <Toast config={toastConfig} />
+                </HeroUINativeProvider>
+              </SettingsProvider>
             </AppThemeProvider>
           </KeyboardProvider>
         </GestureHandlerRootView>
