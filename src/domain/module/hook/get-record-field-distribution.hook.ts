@@ -5,6 +5,7 @@ import type {
   IHookResponse,
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
+import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
 import type { IRecordPort } from '@/domain/module/port/record.port';
@@ -14,6 +15,7 @@ export function useGetRecordFieldDistribution(adapters: {
   loggerAdapter: TLoggerPort;
   recordAdapter: IRecordPort;
   notifyAdapter: INotifyPort;
+  cacheAdapter?: ICachePort;
 }): IUseHook<
   { fieldID: number; moduleID?: number; start?: number; end?: number },
   { value: string; count: number }[]
@@ -22,7 +24,8 @@ export function useGetRecordFieldDistribution(adapters: {
     actions: { saveItems, getItems, startLoading, stopLoading },
   } = useListStore('report-field-distribution');
 
-  const { loggerAdapter, recordAdapter, notifyAdapter } = adapters;
+  const { loggerAdapter, recordAdapter, notifyAdapter, cacheAdapter } =
+    adapters;
 
   const execute = useCallback(
     async (data: {
@@ -33,6 +36,25 @@ export function useGetRecordFieldDistribution(adapters: {
     }): Promise<IHookResponse<{ value: string; count: number }[]>> => {
       startLoading();
       try {
+        const cacheKey = `report:distribution:${data.moduleID ?? 'global'}:${data.fieldID}:${data.start ?? 0}:${data.end ?? 0}`;
+        // try to get from cache
+        if (cacheAdapter) {
+          try {
+            const cached =
+              await cacheAdapter.get<{ value: string; count: number }[]>(
+                cacheKey
+              );
+            if (cached && cached.length > 0) {
+              saveItems(cached);
+              return { success: true, data: cached };
+            }
+          } catch (err) {
+            // ignore cache errors and continue
+            // eslint-disable-next-line no-console
+            console.warn('cache.get failed', err);
+          }
+        }
+
         const useCase = new GetRecordFieldDistributionUseCase({
           loggerAdapter,
           recordAdapter,
@@ -47,6 +69,15 @@ export function useGetRecordFieldDistribution(adapters: {
         }
 
         saveItems(response.details.values);
+        // store in cache
+        if (cacheAdapter) {
+          try {
+            await cacheAdapter.set(cacheKey, response.details.values);
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.warn('cache.set failed', err);
+          }
+        }
         return { success: true, data: response.details.values };
       } catch (error) {
         console.error(error);

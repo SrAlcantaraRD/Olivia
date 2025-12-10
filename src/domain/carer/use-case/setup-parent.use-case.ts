@@ -9,6 +9,8 @@ import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import { BaseError } from '@/domain/core/entity/base-error';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
+import type { ICachePort } from '@/domain/core/port/cache.port';
+import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
 import type { IPatientPort } from '@/domain/patient/port/patient.port';
 
@@ -20,7 +22,9 @@ export class SetupParentUseCase extends BaseUseCase<
     loggerAdapter: TLoggerPort,
     private readonly carerAdapter: ICarerPort,
     private readonly patientAdapter: IPatientPort,
-    private readonly moduleAdapter: IModulePort
+    private readonly moduleAdapter: IModulePort,
+    private readonly cacheAdapter: ICachePort,
+    private readonly secureStoreAdapter: ICachePort
   ) {
     super('setup-parent', loggerAdapter);
   }
@@ -46,11 +50,29 @@ export class SetupParentUseCase extends BaseUseCase<
     const { parent, patient, moduleList } = parse.data;
 
     try {
-      await this.carerAdapter.create(parent);
+      const createdCarer = await this.carerAdapter.create(parent);
 
       await this.patientAdapter.create(patient);
 
       await this.moduleAdapter.batchActivate(moduleList);
+
+      // persist cache for quick access (non-sensitive in regular cache, sensitive pin in secure store)
+      const cachedCarer = {
+        id: createdCarer.id,
+        name: createdCarer.name,
+        type: createdCarer.type,
+        isPrimary: createdCarer.isPrimary,
+      } as const;
+
+      await this.cacheAdapter.set(CACHE_KEY_ENUM.CARER, cachedCarer);
+
+      // pinHash is sensitive; persist in secure store
+      if (createdCarer.pinHash) {
+        await this.secureStoreAdapter.set(
+          CACHE_KEY_ENUM.CARER_PIN_HASH,
+          createdCarer.pinHash
+        );
+      }
     } catch (error) {
       let details = error instanceof Error ? error.message : 'Unexpected error';
       if (!(error instanceof BaseError)) {
