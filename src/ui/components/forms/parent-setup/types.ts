@@ -13,7 +13,7 @@ export interface ParentSetupFormData {
   diagnosis: string;
 
   // Step 3: Modules
-  selectedModules: Set<TID>; //FIXME: Modify for TUUID
+  selectedModules: Set<TID>;
 }
 
 export const INITIAL_FORM_DATA: ParentSetupFormData = {

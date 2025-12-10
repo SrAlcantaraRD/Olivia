@@ -28,7 +28,7 @@ import {
 
 import { SQLITE_DB } from '@/database/config/database.config';
 import { useInitDb } from '@/database/execute-migrations';
-import { BASE_LOGGER } from '@/domain/core';
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { ENVIRONMENT_VARIABLES } from '@/domain/core/constant/environment-variables.constants';
 import { ThemeToggle } from '@/ui/components/atoms/theme-toggle.atom';
 import { toastConfig } from '@/ui/components/particles/toast-design.particle';

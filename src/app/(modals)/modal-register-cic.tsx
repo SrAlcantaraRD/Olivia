@@ -1,6 +1,5 @@
-import { View } from 'react-native';
-
 import { CicRegisterForm } from '@/ui/components/forms/cic-register';
+import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 
 /**
  * Modal screen for CIC (Clean Intermittent Catheterization) registration
@@ -8,8 +7,8 @@ import { CicRegisterForm } from '@/ui/components/forms/cic-register';
  */
 export default function ModalRegisterCic() {
   return (
-    <View className="flex-1 bg-background">
+    <ScreenLayout testID="modal-register">
       <CicRegisterForm />
-    </View>
+    </ScreenLayout>
   );
 }

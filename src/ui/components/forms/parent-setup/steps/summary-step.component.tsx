@@ -70,7 +70,6 @@ export function SummaryStep({ formData }: SummaryStepProps) {
   const mutedColor = useThemeColor('muted');
 
   // Map module IDs to translated names
-  // FIXME: Modify for TUUID
   const getModuleName = (moduleID: TID): Ti18nKeys => {
     switch (moduleID) {
       case MODULE_IDS.CATHETERIZATION:

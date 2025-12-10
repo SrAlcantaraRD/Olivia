@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
-import { BASE_LOGGER } from '@/domain/core';
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import { useGetListActiveModule } from '@/domain/module/hook/get-list-active-module.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
