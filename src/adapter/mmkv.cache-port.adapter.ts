@@ -1,8 +1,8 @@
-import { MMKV } from 'react-native-mmkv';
+import * as MMKV from 'react-native-mmkv';
 
 import type { ICachePort } from '@/domain/core/port/cache.port';
 
-const storage = new MMKV({ id: 'app_cache' });
+const storage = MMKV.createMMKV({ id: 'app_cache' });
 
 export class MMKVCacheAdapter implements ICachePort {
   async set<T>(key: string, value: T): Promise<void> {
