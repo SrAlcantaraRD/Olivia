@@ -10,11 +10,11 @@ import {
   STATUS_ENUM,
 } from '@/domain/core/enum/status.enum';
 import type { TID } from '@/domain/core/schemas/id.schema';
-import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TModule } from '@/domain/module/entity/module.entity';
+import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import { getModuleKeyFromValue } from '@/domain/module/enum/module-key.enum';
-import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
+import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 
 export type TModuleAdapterEntity = typeof DB_SCHEMA.MODULE.$inferSelect;
 

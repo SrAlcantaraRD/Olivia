@@ -151,7 +151,8 @@ export class SQLiteRecordAdapter implements IRecordPort {
       end = Math.floor(Date.now() / 1000),
       moduleID,
     } = opts || {};
-    const sql = `SELECT strftime('%Y-%m-%d', r.created_at, 'unixepoch') AS day, COUNT(1) as count FROM record r WHERE r.status = 1 AND (? IS NULL OR r.module_id = ?) AND r.created_at BETWEEN ? AND ? GROUP BY day ORDER BY day ASC`;
+    // Use localtime so day buckets respect the user's timezone
+    const sql = `SELECT strftime('%Y-%m-%d', r.created_at, 'unixepoch', 'localtime') AS day, COUNT(1) as count FROM record r WHERE r.status = 1 AND (? IS NULL OR r.module_id = ?) AND r.created_at BETWEEN ? AND ? GROUP BY day ORDER BY day ASC`;
     try {
       const rawExec: unknown =
         (this.database as unknown as { execute?: unknown }).execute ??

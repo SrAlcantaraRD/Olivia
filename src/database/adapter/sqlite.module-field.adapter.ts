@@ -4,11 +4,11 @@ import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
 import { getStatusFromValue } from '@/domain/core/enum/status.enum';
+import type { TModule } from '@/domain/module/entity/module.entity';
 import type {
   TModuleField,
   TModuleFieldCreate,
 } from '@/domain/module/entity/module-field.entity';
-import type { TModule } from '@/domain/module/entity/module.entity';
 import {
   getModuleFieldTypeFromValue,
   MODULE_FIELD_TYPE_ENUM,
