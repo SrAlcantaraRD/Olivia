@@ -12,10 +12,9 @@ export const CarerEntitySchema = z.object({
   pinHash: z.string(),
 });
 
-export const CarerCreateEntitySchema =
-  GenerateCreateEntitySchema(CarerEntitySchema);
+export const CarerCreateSchema = GenerateCreateEntitySchema(CarerEntitySchema);
 
-export type TCarerEntity = z.infer<typeof CarerEntitySchema>;
+export type TCarer = z.infer<typeof CarerEntitySchema>;
 
 // Derive the Create DTO type from the schema's inferred type to preserve fields
-export type TCarerCreateEntity = z.infer<typeof CarerCreateEntitySchema>;
+export type TCarerCreate = z.infer<typeof CarerCreateSchema>;

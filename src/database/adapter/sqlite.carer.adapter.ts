@@ -2,8 +2,7 @@ import { drizzle } from 'drizzle-orm/expo-sqlite';
 
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
-import type { TCarerCreateDTO } from '@/domain/carer/dto/carer.dto';
-import type { TCarerEntity } from '@/domain/carer/entity/carer.entity';
+import type { TCarer, TCarerCreate } from '@/domain/carer/entity/carer.entity';
 import { getCarerTypeFromValue } from '@/domain/carer/enum/carer-type.enums';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
@@ -26,7 +25,7 @@ export class SQLiteCarerAdapter implements ICarerPort {
     });
   }
 
-  public static toDomainEntity(entity: TCarerAdapterEntity): TCarerEntity {
+  public static toDomainEntity(entity: TCarerAdapterEntity): TCarer {
     return {
       id: entity.id,
 
@@ -39,7 +38,7 @@ export class SQLiteCarerAdapter implements ICarerPort {
     };
   }
 
-  public async create(dto: TCarerCreateDTO): Promise<TCarerEntity> {
+  public async create(dto: TCarerCreate): Promise<TCarer> {
     const [item] = await this.database
       .insert(DB_SCHEMA.CARER)
       .values({
@@ -54,7 +53,7 @@ export class SQLiteCarerAdapter implements ICarerPort {
     return SQLiteCarerAdapter.toDomainEntity(item);
   }
 
-  public async getById(id: TID): Promise<TCarerEntity | null> {
+  public async getById(id: TID): Promise<TCarer | null> {
     const item = await this.database.query.CARER.findFirst({
       where: (row, { eq, and }) =>
         and(eq(row.id, id), eq(row.status, STATUS_ENUM.ACTIVE)),
@@ -63,7 +62,7 @@ export class SQLiteCarerAdapter implements ICarerPort {
     return item ? SQLiteCarerAdapter.toDomainEntity(item) : null;
   }
 
-  public async getAll(): Promise<TCarerEntity[]> {
+  public async getAll(): Promise<TCarer[]> {
     const list = await this.database.query.CARER.findMany({
       where: (row, { eq }) => eq(row.status, STATUS_ENUM.ACTIVE),
     });

@@ -1,19 +1,24 @@
 /// <reference types="jest" />
 
-import type { TCarerEntity } from '@/domain/carer/entity/carer.entity';
+import type { TCarer, TCarerCreate } from '@/domain/carer/entity/carer.entity';
 import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
 
-export const mockCarerEntity = (
-  overrides: Partial<TCarerEntity> = {}
-): TCarerEntity => ({
+export const mockCarerEntity = (overrides: Partial<TCarer> = {}): TCarer => ({
   id: 1,
-  uuid: 'carer-uuid-123',
   name: 'John Doe',
   type: CARER_TYPE_ENUM.ADMIN,
   isPrimary: true,
   pinHash: 'hashed-pin-123',
-  status: true,
-  createdAt: new Date('2024-01-01T00:00:00Z').getTime().toString(),
-  deletedAt: undefined,
+  status: 1,
+  ...overrides,
+});
+
+export const mockCarerCreate = (
+  overrides: Partial<TCarerCreate> = {}
+): TCarerCreate => ({
+  name: 'John Doe',
+  type: CARER_TYPE_ENUM.SECONDARY,
+  isPrimary: true,
+  pinHash: 'hashed-pin-123',
   ...overrides,
 });
