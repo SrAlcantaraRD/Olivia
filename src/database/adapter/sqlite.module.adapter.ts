@@ -1,6 +1,7 @@
 import { inArray } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 
+import { SQLiteModuleFieldAdapter } from '@/database/adapter/sqlite.module-field.adapter';
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
@@ -9,8 +10,10 @@ import {
   STATUS_ENUM,
 } from '@/domain/core/enum/status.enum';
 import type { TID } from '@/domain/core/schemas/id.schema';
+import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TModule } from '@/domain/module/entity/module.entity';
 import { getModuleKeyFromValue } from '@/domain/module/enum/module-key.enum';
+import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
 
 export type TModuleAdapterEntity = typeof DB_SCHEMA.MODULE.$inferSelect;
@@ -40,7 +43,22 @@ export class SQLiteModuleAdapter implements IModulePort {
   public async getAll(): Promise<TModule[]> {
     const list = await this.database.select().from(DB_SCHEMA.MODULE);
 
-    return list.map(SQLiteModuleAdapter.toDomainEntity);
+    // Load all module fields and group them by module ID for efficiency
+    const moduleFieldAdapter: IModuleFieldPort = new SQLiteModuleFieldAdapter();
+    const allFields: TModuleField[] = await moduleFieldAdapter.getAll();
+    const fieldsByModule: Record<number, TModuleField[]> = {};
+    allFields.forEach((f) => {
+      if (!fieldsByModule[f.moduleId]) fieldsByModule[f.moduleId] = [];
+      fieldsByModule[f.moduleId].push(f);
+    });
+
+    return list.map((dbModule) => {
+      const module = SQLiteModuleAdapter.toDomainEntity(dbModule);
+      return {
+        ...module,
+        fieldList: fieldsByModule[module.id] ?? [],
+      };
+    });
   }
 
   public async batchActivate(idList: TID[]): Promise<void> {
