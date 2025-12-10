@@ -9,17 +9,14 @@ export const mockModuleFieldEntity = (
   overrides: Partial<TModuleField> = {}
 ): TModuleField => ({
   id: 1,
-  uuid: 'mf-uuid-1',
   moduleId: 1,
   title: 'Field 1',
-  description: undefined,
   type: MODULE_FIELD_TYPE_ENUM.TEXT,
-  values: undefined,
   required: false,
-  ord: 0,
-  status: true,
-  createdAt: new Date('2024-01-01T00:00:00Z'),
-  deletedAt: undefined,
+  description: 'mock-description',
+  values: '',
+  order: 1,
+  status: 1,
   ...overrides,
 });
 
@@ -27,14 +24,10 @@ export const mockModuleEntity = (
   overrides: Partial<TModule> = {}
 ): TModule => ({
   id: 1,
-  uuid: 'm-uuid-1',
   name: 'Catheterization',
   description: 'CIC module',
-  key: MODULE_KEY_ENUM.CIC,
   isActive: true,
-  ord: 0,
-  status: true,
-  createdAt: new Date('2024-01-01T00:00:00Z'),
-  deletedAt: undefined,
+  code: MODULE_KEY_ENUM.CIC,
+  status: 1,
   ...overrides,
 });
