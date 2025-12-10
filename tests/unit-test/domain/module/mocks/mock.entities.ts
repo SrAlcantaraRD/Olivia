@@ -1,7 +1,7 @@
 /// <reference types="jest" />
 
-import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TModule } from '@/domain/module/entity/module.entity';
+import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import { MODULE_FIELD_TYPE_ENUM } from '@/domain/module/enum/module-field-type.enum';
 import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 

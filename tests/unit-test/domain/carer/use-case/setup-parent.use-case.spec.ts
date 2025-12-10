@@ -1,8 +1,8 @@
 /// <reference types="jest" />
 
 import { ErrorWhenSetupParent } from '@/domain/carer/error/carer-create.errors';
-import type { TRequestSetupParent } from '@/domain/carer/use-case-schema/setup-parent.use-case-schema';
 import { SetupParentUseCase } from '@/domain/carer/use-case/setup-parent.use-case';
+import type { TRequestSetupParent } from '@/domain/carer/use-case-schema/setup-parent.use-case-schema';
 import { ErrorDatabaseDefault } from '@/domain/core/error/database-default.error';
 import type { TID } from '@/domain/core/schemas/id.schema';
 import { mockLoggerPort } from '../../core/mocks/mock.port';
@@ -19,12 +19,18 @@ describe('[UseCase] - Setup Parent', () => {
     const carerAdapter = mockCarerPort();
     const patientAdapter = mockPatientPort();
     const moduleAdapter = mockModulePort();
+    const cacheAdapter =
+      require('../../core/mocks/mock.cache.port').mockCachePort();
+    const secureStoreAdapter =
+      require('../../core/mocks/mock.cache.port').mockCachePort();
 
     const useCase = new SetupParentUseCase(
       loggerAdapter,
       carerAdapter,
       patientAdapter,
-      moduleAdapter
+      moduleAdapter,
+      cacheAdapter,
+      secureStoreAdapter
     );
 
     return {
