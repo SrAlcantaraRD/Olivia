@@ -1,18 +1,17 @@
 import { useCallback, useState } from 'react';
 
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
-import { CheckCarerExistenceUseCase } from '@/domain/carer/use-case/check-carer-existence.use-case';
 import type {
   TCheckCarerExistenceRequest,
   TCheckCarerExistenceResponse,
 } from '@/domain/carer/use-case-schema/check-carer-existence.use-case-schema';
+import { CheckCarerExistenceUseCase } from '@/domain/carer/use-case/check-carer-existence.use-case';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
   IHookResponse,
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
 import type { ICachePort } from '@/domain/core/port/cache.port';
-import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { INavigationPort } from '@/domain/ports/navigation.port';
 

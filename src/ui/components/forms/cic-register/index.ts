@@ -5,18 +5,12 @@
 
 export { CicRegisterForm } from './cic-register-form.component';
 export { useCicRegisterForm } from './hooks/use-cic-register-form.hook';
-export type {
+export {
   CicColor,
   CicDiscomfort,
   CicRegisterFormData,
   CicTurbidity,
   CicVolume,
-  StepValidation,
-} from './types';
-export {
-  CicColor,
-  CicDiscomfort,
-  CicTurbidity,
-  CicVolume,
   INITIAL_FORM_DATA,
+  StepValidation,
 } from './types';

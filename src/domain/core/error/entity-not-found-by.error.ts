@@ -1,5 +1,6 @@
-import { ERROR_CODE } from '@/domain/core';
-import { BaseError, type TBaseEntity } from '@/domain/core/entity';
+import type { TBaseEntity } from '@/domain/core/entity/base-entity.entity';
+import { BaseError } from '@/domain/core/entity/base-error';
+import { ERROR_CODE_ENUM } from '@/domain/core/enum/error-code.enum';
 
 export class ErrorEntityNotFoundBy extends BaseError {
   constructor(
@@ -8,7 +9,7 @@ export class ErrorEntityNotFoundBy extends BaseError {
     value: string | number
   ) {
     super(
-      ERROR_CODE.ENTITY_NOT_FOUND,
+      ERROR_CODE_ENUM.ENTITY_NOT_FOUND,
       entity,
       `Could not find entity "${entity}" by "${field}" equal to "${value}".`
     );

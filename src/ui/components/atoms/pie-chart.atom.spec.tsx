@@ -1,4 +1,3 @@
-// React import not required with modern JSX runtime
 import { render } from '@testing-library/react-native';
 
 import PieChartAtom from './pie-chart.atom';
