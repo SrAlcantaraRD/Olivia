@@ -1,11 +1,8 @@
-import type { TID } from '@/domain/core/schemas/id.schema';
 import type {
-  TPatientCreateEntity,
-  TPatientEntity,
+  TPatient,
+  TPatientCreate,
 } from '@/domain/patient/entity/patient.entity';
 
 export interface IPatientPort {
-  create(dto: TPatientCreateEntity): Promise<TPatientEntity>;
-  getById(id: TID): Promise<TPatientEntity | null>;
-  getAll(): Promise<TPatientEntity[]>;
+  create(dto: TPatientCreate): Promise<TPatient>;
 }

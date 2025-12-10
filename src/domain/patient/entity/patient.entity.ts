@@ -5,7 +5,7 @@ import { BaseEntitySchema } from '@/domain/core/entity/base-entity.entity';
 import { AutonomyLevelSchema } from '@/domain/patient/enum/autonomy-level.enum';
 import { SexSchema } from '@/domain/patient/enum/sex.enum';
 
-export const PatientEntitySchema = z.object({
+export const PatientSchema = z.object({
   ...BaseEntitySchema.shape,
   name: z.string().min(1),
   birthDate: z.number().int(),
@@ -13,9 +13,8 @@ export const PatientEntitySchema = z.object({
   autonomyLevel: AutonomyLevelSchema,
 });
 
-export const PatientCreateEntitySchema =
-  GenerateCreateEntitySchema(PatientEntitySchema);
+export const PatientCreateSchema = GenerateCreateEntitySchema(PatientSchema);
 
-export type TPatientEntity = z.infer<typeof PatientEntitySchema>;
+export type TPatient = z.infer<typeof PatientSchema>;
 
-export type TPatientCreateEntity = z.infer<typeof PatientCreateEntitySchema>;
+export type TPatientCreate = z.infer<typeof PatientCreateSchema>;
