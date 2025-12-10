@@ -29,11 +29,6 @@ export function useGetListActiveModule(adapters: {
     ): Promise<IHookResponse<TModule[]>> => {
       startLoading();
 
-      notifyAdapter.loading({
-        title: 'hook.get-list-active-module.title',
-        description: 'hook.get-list-active-module.description',
-      });
-
       try {
         const useCase = new GetActiveModuleListUseCase({
           loggerAdapter,
