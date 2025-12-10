@@ -50,13 +50,15 @@ export function CicRegisterForm() {
     const cicModule = modules.find((m) => m.code === MODULE_KEY_ENUM.CIC);
     if (!cicModule) return;
 
-    const payload: TRecordCreate = {
+    const payload = {
       moduleID: cicModule.id,
+      carerID: 2, // FIXME: Use the id of the carer saved at cache.
       data: JSON.stringify({ values }),
       synced: false,
-    } as TRecordCreate;
+    } satisfies TRecordCreate;
 
     const response = await executeCreateRecord(payload);
+
     if (response?.success) {
       router.back();
     }

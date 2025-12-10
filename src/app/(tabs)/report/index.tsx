@@ -1,7 +1,12 @@
 import { Link } from 'expo-router';
 import { useThemeColor } from 'heroui-native';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
+import { useAdapters } from '@/adapter';
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
+import { useGetRecordStatistics } from '@/domain/module/hook/get-record-statistics.hook';
+import { useGetRecordTrend } from '@/domain/module/hook/get-record-trend.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { IconAtom } from '@/ui/components/atoms/icon.atom';
 import {
@@ -10,9 +15,72 @@ import {
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
+import StatCardWithTrend from '@/ui/components/molecules/stat-card-with-trend.molecule';
 
 export default function ReportScreen() {
   const foregroundColor = useThemeColor('foreground');
+  const { recordAdapter, notifyAdapter } = useAdapters();
+  const { execute: executeGetStats, items: stats } = useGetRecordStatistics({
+    loggerAdapter: BASE_LOGGER,
+    recordAdapter,
+    notifyAdapter,
+  });
+
+  const { execute: executeGetTrend, items: trendItems } = useGetRecordTrend({
+    loggerAdapter: BASE_LOGGER,
+    recordAdapter,
+    notifyAdapter,
+  });
+
+  const [range, setRange] = useState<'today' | '7d' | '30d' | '90d'>('7d');
+  const timeRange = useMemo(() => {
+    const end = Math.floor(Date.now() / 1000);
+    let start = end - 7 * 24 * 60 * 60;
+    switch (range) {
+      case 'today': {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        start = Math.floor(today.getTime() / 1000);
+        break;
+      }
+      case '7d':
+        start = end - 7 * 24 * 60 * 60;
+        break;
+      case '30d':
+        start = end - 30 * 24 * 60 * 60;
+        break;
+      case '90d':
+        start = end - 90 * 24 * 60 * 60;
+        break;
+    }
+    return { start, end };
+  }, [range]);
+
+  useEffect(() => {
+    executeGetStats({ start: timeRange.start, end: timeRange.end });
+    executeGetTrend({ start: timeRange.start, end: timeRange.end });
+  }, [range]);
+
+  const STAT_MODULES = [
+    {
+      moduleID: 1,
+      icon: 'water',
+      titleKey: 'component.stat_card.cic_label',
+      color: '#4f46e5',
+    },
+    {
+      moduleID: 2,
+      icon: 'nutrition',
+      titleKey: 'component.stat_card.stool_label',
+      color: '#f97316',
+    },
+    {
+      moduleID: 3,
+      icon: 'medical',
+      titleKey: 'component.stat_card.medication_label',
+      color: '#22c55e',
+    },
+  ];
 
   return (
     <View className="flex-1 bg-background">
@@ -59,6 +127,21 @@ export default function ReportScreen() {
             </Link>
           </View>
 
+          {/* Range Selector */}
+          <View className="gap-2">
+            <View className="flex-row gap-2">
+              {(['today', '7d', '30d', '90d'] as const).map((r) => (
+                <Pressable
+                  key={`range-${r}`}
+                  onPress={() => setRange(r)}
+                  className={`px-3 py-2 rounded-xl ${range === r ? 'bg-default-100' : 'bg-default-50'}`}
+                >
+                  <Text className="text-sm">{r}</Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+
           {/* Statistics Cards */}
           <View className="gap-4">
             <TypographyHeading
@@ -66,74 +149,30 @@ export default function ReportScreen() {
               accessibilityRole="header"
             />
 
-            {/* Stat Card 1 - CIC */}
-            <CardAtom className="p-4 bg-primary/10 border border-primary/20">
-              <View className="flex-row items-center gap-2 mb-2">
-                <IconAtom name="water" />
-                <TypographySmall
-                  i18nKey="component.stat_card.cic_label"
-                  className="font-medium"
+            {/* Dynamic stat cards */}
+            {STAT_MODULES.map((m) => {
+              const item = stats?.find((s) => s.moduleID === m.moduleID);
+              const count = item?.count ?? 0;
+              // TODO: fetch trend data for sparkline
+              // Build trend series for the module from trendItems (fallback to random if missing)
+              const _trend =
+                trendItems?.filter((t) => !!t?.day).map((t) => t.count) ?? [];
+              const trend = _trend.length
+                ? _trend
+                : Array.from({ length: 7 }, () =>
+                    Math.floor(Math.random() * 5)
+                  );
+              return (
+                <StatCardWithTrend
+                  key={`stat-${m.moduleID}`}
+                  titleKey={m.titleKey}
+                  value={count}
+                  data={trend}
+                  color={m.color}
+                  iconName={m.icon}
                 />
-              </View>
-              <Text
-                style={{ color: foregroundColor }}
-                className="text-3xl font-bold"
-                accessibilityLabel="0 CIC records today"
-              >
-                0
-              </Text>
-              <TypographySmall
-                i18nKey="component.stat_card.today"
-                variant="light"
-                className="mt-1"
-              />
-            </CardAtom>
-
-            {/* Stat Card 2 - Stool */}
-            <CardAtom className="p-4 bg-secondary/10 border border-secondary/20">
-              <View className="flex-row items-center gap-2 mb-2">
-                <IconAtom name="nutrition" />
-                <TypographySmall
-                  i18nKey="component.stat_card.stool_label"
-                  className="font-medium"
-                />
-              </View>
-              <Text
-                style={{ color: foregroundColor }}
-                className="text-3xl font-bold"
-                accessibilityLabel="0 stool records today"
-              >
-                0
-              </Text>
-              <TypographySmall
-                i18nKey="component.stat_card.today"
-                variant="light"
-                className="mt-1"
-              />
-            </CardAtom>
-
-            {/* Stat Card 3 - Medication */}
-            <CardAtom className="p-4 bg-success/10 border border-success/20">
-              <View className="flex-row items-center gap-2 mb-2">
-                <IconAtom name="medical" />
-                <TypographySmall
-                  i18nKey="component.stat_card.medication_label"
-                  className="font-medium"
-                />
-              </View>
-              <Text
-                style={{ color: foregroundColor }}
-                className="text-3xl font-bold"
-                accessibilityLabel="0 medication records today"
-              >
-                0
-              </Text>
-              <TypographySmall
-                i18nKey="component.stat_card.today"
-                variant="light"
-                className="mt-1"
-              />
-            </CardAtom>
+              );
+            })}
           </View>
 
           {/* History Section */}

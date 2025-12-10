@@ -4,9 +4,11 @@ export {
   MODULE_FIELD,
   MODULE_FIELD_RELATIONS,
   MODULE_RELATIONS,
+} from './module.database-schema';
+export { PATIENT } from './patient.database-schema';
+export {
   RECORD,
   RECORD_FIELD,
   RECORD_FIELD_RELATIONS,
   RECORD_RELATIONS,
-} from './module.database-schema';
-export { PATIENT } from './patient.database-schema';
+} from './record.database-schema';

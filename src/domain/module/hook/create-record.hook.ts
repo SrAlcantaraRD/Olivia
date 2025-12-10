@@ -29,6 +29,7 @@ export function useCreateRecord(adapters: {
           loggerAdapter,
           recordAdapter,
         });
+
         const response = await useCase.execute(data);
 
         if (!response.success) {
@@ -43,6 +44,7 @@ export function useCreateRecord(adapters: {
           title: 'hook.create-record.success-title',
           description: 'common.success',
         });
+
         return { success: true };
       } catch (error) {
         console.error(error);

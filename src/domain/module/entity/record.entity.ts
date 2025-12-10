@@ -9,6 +9,7 @@ import type { TRecordField } from '@/domain/module/entity/record-field.entity';
 export const RecordSchema = z.object({
   ...BaseEntitySchema.shape,
   moduleID: IDSchema,
+  carerID: IDSchema,
   data: z.string().min(1),
   synced: z.boolean(),
 });

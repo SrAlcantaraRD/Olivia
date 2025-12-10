@@ -46,7 +46,8 @@
       "@config-plugins/detox",
       "expo-localization",
       "expo-sqlite",
-      "expo-font"
+      "expo-font",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,
