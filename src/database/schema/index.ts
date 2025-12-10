@@ -5,6 +5,8 @@ export {
   MODULE_FIELD_RELATIONS,
   MODULE_RELATIONS,
   RECORD,
+  RECORD_FIELD,
+  RECORD_FIELD_RELATIONS,
   RECORD_RELATIONS,
 } from './module.database-schema';
 export { PATIENT } from './patient.database-schema';
