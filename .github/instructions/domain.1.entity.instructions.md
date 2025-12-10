@@ -19,7 +19,7 @@ description: "Rules for defining domain entities with Zod schemas"
 ## Rules
 ### Basic Structure
 - Entities must use Zod schemas extending BaseEntitySchema.
-- BaseEntitySchema must include id, uuid, status, createdAt, deletedAt.
+- BaseEntitySchema must include AUDIT_COLUMNS fields
 - Define schema as `<Root>EntitySchema`.
 - Type as `T<Root>Entity = z.infer<typeof <Root>EntitySchema>`.
 - Use STATUS_ENUM for status values.

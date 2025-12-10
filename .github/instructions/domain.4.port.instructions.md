@@ -24,7 +24,7 @@ description: "Rules for defining domain ports as abstractions over external capa
 - Use `T<Root>CreateEntity` for creation inputs.
 
 ### Method Naming
-- Prefer explicit methods like `findByUUID`, `create`, `findById`, `getAll`.
+- Prefer explicit methods like `findByID`, `create`, `getAll`.
 - Keep interface minimal and cohesive.
 - Add methods only when required by use cases.
 

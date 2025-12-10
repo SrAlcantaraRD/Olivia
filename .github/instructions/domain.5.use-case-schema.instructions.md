@@ -26,9 +26,8 @@ description: "Rules for generating or modifying Use Case Request/Response Schema
 ### Referencing
 - Reference existing entity/DTO schemas.
 - Do not duplicate structure manually.
-- All relation references via UUID fields.
+- All relation references via ID fields.
 - Use IDSchema when referencing entities.
-- Use UUIDSchema when referencing by UUID.
 
 ### Constraints
 - No business logic, no side effects, no any.

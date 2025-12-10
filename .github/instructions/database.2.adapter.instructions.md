@@ -76,7 +76,6 @@ export class SQLite<ENTITY>Adapter implements I<ENTITY>Port {
   public static toDomainEntity(entity: T<ENTITY>AdapterEntity): T<ENTITY>Entity {
     return {
       id: entity.id,
-      uuid: entity.uuid,
       // other files
     };
   }

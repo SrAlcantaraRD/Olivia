@@ -25,10 +25,8 @@ description: "Rules for implementing mappers between entities and DTOs"
 - Export as `export const <root>Mapper: TBaseMapper<T<Root>Entity, T<Root>DTO>`.
 
 ### Implementation
-- Provide `toDTO` method to transform Entity to DTO.
 - Ensure type safety with Zod-inferred types.
 - Mappers must be pure functions without side effects.
-- Map fields directly, omitting internal fields like `id`, including public ones like `uuid`.
 - Handle relations conditionally: only map if present, using spread operator.
 - For arrays, use `.map(otherMapper.toDTO)`.
 
@@ -53,7 +51,7 @@ description: "Rules for implementing mappers between entities and DTOs"
   export const <root>Mapper: TBaseMapper<T<Root>Entity, T<Root>DTO> = {
     toDTO: (entity: T<Root>Entity): T<Root>DTO => {
       return {
-        uuid: entity.uuid,
+        id: entity.id,
         // Map other fields...
 
         // Conditional relations
@@ -76,8 +74,8 @@ describe('<root>Mapper', () => {
 
     const dto = <root>Mapper.toDTO(entity);
 
-    expect(dto).toHaveProperty('uuid');
-    expect(dto).not.toHaveProperty('id');
+    expect(dto).toHaveProperty('id');
+    expect(dto).not.toHaveProperty('name'); // Example of excluded field
   });
 
   it('does not map relation when missing', () => {

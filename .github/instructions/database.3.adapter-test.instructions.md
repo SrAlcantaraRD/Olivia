@@ -71,7 +71,6 @@ describe('SQLiteTaskAdapter - Unit Tests', () => {
     it('should map database entity to domain entity correctly', () => {
       const dbEntity = {
         id: 1,
-        uuid: 'uuid-123',
         title: 'Test Task',
         description: 'Test Description',
         status: 'ACTIVE',
@@ -84,7 +83,6 @@ describe('SQLiteTaskAdapter - Unit Tests', () => {
 
       expect(result).toEqual({
         id: 1,
-        uuid: 'uuid-123',
         title: 'Test Task',
         description: 'Test Description',
         status: getTaskStatusFromValue('ACTIVE'),
@@ -97,7 +95,6 @@ describe('SQLiteTaskAdapter - Unit Tests', () => {
     it('should handle null deletedAt as undefined', () => {
       const dbEntity = {
         id: 1,
-        uuid: 'uuid-123',
         title: 'Test Task',
         description: null,
         status: 'COMPLETED',

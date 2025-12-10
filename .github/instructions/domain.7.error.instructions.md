@@ -34,7 +34,7 @@ description: "Rules for generating or modifying Domain Error classes"
   ```typescript
   export class Error<Action> extends BaseError {
     public readonly code = 'ENTITY_NOT_FOUND';
-    constructor(public readonly uuid: TUUID) {
+    constructor(public readonly id: TID) {
       super('error.entity-not-found', HTTP_STATUS_CODE.NOT_FOUND_404);
     }
   }

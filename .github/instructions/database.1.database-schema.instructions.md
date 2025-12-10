@@ -142,7 +142,6 @@ const textEnum = <V extends Record<string, string>, RV = V[keyof V]>(
 
 export const taskSchema = sqliteTable('tasks', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  uuid: text('uuid').notNull().unique(),
   title: text('title').notNull(),
   description: text('description'),
   // Domain enums stored as text with runtime validation

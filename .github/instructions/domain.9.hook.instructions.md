@@ -11,11 +11,7 @@ description: "Instructions for implementing reusable React hooks wrapping hook p
 ## Artifacts
 - `src/domain/**/hooks/<feature>.hook.ts`
 - `test/unit-test/domain/**/hooks/use-<feature>.spec.tsx`
-- Main hooks defined at `src/domain/core/hooks`:
-  - useCreateEntity
-  - useFindEntityByUUID
-  - useGetEntityList
-  - useUpdateEntity
+- Main hooks defined at `src/domain/core/hooks`
 
 ## Naming
 - Hook: `use<Feature>`
@@ -25,8 +21,8 @@ description: "Instructions for implementing reusable React hooks wrapping hook p
 ### Basic Structure
 - Wrap hook port adapters for data retrieval & state.
 - Maintain separation from HTTP concerns.
-- Use shared hooks: useCreateEntity, useFindEntityByUUID, useGetEntityList.
-- Naming: useGet<Entity>List, useFind<Entity>ByUUID.
+- Use shared hooks at src/domain/core/hooks
+- Naming: useGet<Entity>List, useFind<Entity>ByName.
 - Hooks MUST abstract navigation via ports/adapters; NEVER allow direct router.push in components or screens. All navigation MUST result from hook orchestration, injecting adapters for domain-defined ports.
 
 ### Implementation
