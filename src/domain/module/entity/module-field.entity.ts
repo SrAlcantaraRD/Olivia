@@ -4,9 +4,10 @@ import { z } from 'zod';
 import { GenerateCreateEntitySchema } from '@/domain/core/entity/base-dto.entity';
 import { BaseEntitySchema } from '@/domain/core/entity/base-entity.entity';
 import type { TModule } from '@/domain/module/entity/module.entity';
+import type { TRecordField } from '@/domain/module/entity/record-field.entity';
 import { ModuleFieldTypeSchema } from '@/domain/module/enum/module-field-type.enum';
 
-export const ModuleFieldEntitySchema = z.object({
+export const ModuleFieldSchema = z.object({
   ...BaseEntitySchema.shape,
   moduleId: z.number().int(),
   title: z.string().min(1),
@@ -19,14 +20,12 @@ export const ModuleFieldEntitySchema = z.object({
   // TODO: add an "icon" field to show in the UI
 });
 
-export const ModuleFieldCreateEntitySchema = GenerateCreateEntitySchema(
-  ModuleFieldEntitySchema
-);
+export const ModuleFieldCreateSchema =
+  GenerateCreateEntitySchema(ModuleFieldSchema);
 
-export type TModuleFieldEntity = z.infer<typeof ModuleFieldEntitySchema> & {
-  module: TModule;
+export type TModuleField = z.infer<typeof ModuleFieldSchema> & {
+  module?: TModule;
+  recordFieldList?: TRecordField[];
 };
 
-export type TModuleFieldCreateDTO = z.infer<
-  typeof ModuleFieldCreateEntitySchema
->;
+export type TModuleFieldCreate = z.infer<typeof ModuleFieldCreateSchema>;

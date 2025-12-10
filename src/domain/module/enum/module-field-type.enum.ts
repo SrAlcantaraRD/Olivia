@@ -4,13 +4,7 @@ import { ErrorCannotParseSchema } from '@/domain/core/error/cannot-parse-schema.
 
 export enum MODULE_FIELD_TYPE_ENUM {
   TEXT = 'TEXT',
-  NUMBER = 'NUMBER',
   SELECT = 'SELECT',
-  MULTISELECT = 'MULTISELECT',
-  BOOLEAN = 'BOOLEAN',
-  DATE = 'DATE',
-  TIME = 'TIME',
-  TEXTAREA = 'TEXTAREA',
 }
 
 export const ModuleFieldTypeSchema = z.enum(MODULE_FIELD_TYPE_ENUM);

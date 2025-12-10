@@ -2,7 +2,8 @@ import { z } from 'zod';
 
 import { GenerateCreateEntitySchema } from '@/domain/core/entity/base-dto.entity';
 import { BaseEntitySchema } from '@/domain/core/entity/base-entity.entity';
-import type { TModuleFieldEntity } from '@/domain/module/entity/module-field.entity';
+import type { TModuleField } from '@/domain/module/entity/module-field.entity';
+import type { TRecord } from '@/domain/module/entity/record.entity';
 import { ModuleKeySchema } from '@/domain/module/enum/module-key.enum';
 
 export const ModuleSchema = z.object({
@@ -13,11 +14,11 @@ export const ModuleSchema = z.object({
   isActive: z.boolean(),
 });
 
-export const ModuleCreateEntitySchema =
-  GenerateCreateEntitySchema(ModuleSchema);
+export const ModuleCreateSchema = GenerateCreateEntitySchema(ModuleSchema);
 
 export type TModule = z.infer<typeof ModuleSchema> & {
-  fieldList?: TModuleFieldEntity[];
+  fieldList?: TModuleField[];
+  recordList?: TRecord[];
 };
 
-export type TModuleCreateDTO = z.infer<typeof ModuleCreateEntitySchema>;
+export type TModuleCreate = z.infer<typeof ModuleCreateSchema>;
