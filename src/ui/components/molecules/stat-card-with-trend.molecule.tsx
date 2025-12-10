@@ -1,5 +1,5 @@
 import { useThemeColor } from 'heroui-native';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { IconAtom } from '@/ui/components/atoms/icon.atom';
@@ -12,6 +12,7 @@ interface StatCardWithTrendProps {
   data: number[];
   color?: string;
   iconName?: string;
+  onPress?: () => void;
 }
 
 export function StatCardWithTrend({
@@ -20,28 +21,35 @@ export function StatCardWithTrend({
   data,
   color,
   iconName,
+  onPress,
 }: StatCardWithTrendProps) {
   const fg = useThemeColor('foreground');
 
   return (
-    <CardAtom className="p-4">
-      <View className="flex-row justify-between items-center mb-2">
-        <View className="flex-row items-center gap-2">
-          {iconName && <IconAtom name={iconName} />}
-          <TypographySmall i18nKey={titleKey} className="font-medium" />
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={titleKey}
+    >
+      <CardAtom className="p-4">
+        <View className="flex-row justify-between items-center mb-2">
+          <View className="flex-row items-center gap-2">
+            {iconName && <IconAtom name={iconName} />}
+            <TypographySmall i18nKey={titleKey} className="font-medium" />
+          </View>
         </View>
-      </View>
-      <View className="mb-2">
-        <View>
-          <Text style={{ color: fg }} className="text-3xl font-bold">
-            {value}
-          </Text>
+        <View className="mb-2">
+          <View>
+            <Text style={{ color: fg }} className="text-3xl font-bold">
+              {value}
+            </Text>
+          </View>
+          <View className="mt-2">
+            <Sparkline data={data} height={36} color={color} />
+          </View>
         </View>
-        <View className="mt-2">
-          <Sparkline data={data} height={36} color={color} />
-        </View>
-      </View>
-    </CardAtom>
+      </CardAtom>
+    </Pressable>
   );
 }
 

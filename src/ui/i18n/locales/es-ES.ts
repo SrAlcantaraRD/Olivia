@@ -49,6 +49,10 @@ export const esES = {
   'page.history_detail.title': 'Detalle del Historial',
   'page.history_detail.placeholder':
     'Contenido del historial detallado próximamente',
+  'page.history_detail.select_field': 'Selecciona un campo',
+  'page.history_detail.no_fields': 'No hay campos disponibles para este módulo',
+  'page.history_detail.no_data':
+    'No hay datos para este campo en el rango seleccionado',
 
   // Page: Settings Tab
   'page.settings.title': 'Configuración',
@@ -74,6 +78,29 @@ export const esES = {
   'page.carer_management.placeholder': 'Lista de cuidadores próximamente',
   'page.app_settings.title': 'Ajustes de la Aplicación',
   'page.app_settings.placeholder': 'Ajustes de la aplicación próximamente',
+  'page.app_settings.section_theme': 'Tema',
+  'page.app_settings.section_language': 'Idioma',
+  'page.app_settings.language.english': 'English',
+  'page.app_settings.language.spanish': 'Español',
+  'page.app_settings.language.catalan': 'Català',
+  'page.app_settings.action.switch_to_dark': 'Cambiar a modo oscuro',
+  'page.app_settings.action.switch_to_light': 'Cambiar a modo claro',
+
+  // Página: Confirmación de borrado / logout
+  'page.settings.logout_confirm.title': 'Esta acción es irreversible',
+  'page.settings.logout_confirm.warning':
+    'Se eliminarán todos los datos almacenados en este dispositivo asociados a este perfil. No podrás recuperarlos después.',
+  'page.settings.logout_confirm.summary_title': 'Resumen de tu información',
+  'page.settings.logout_confirm.time_registered': 'Tiempo registrado',
+  'page.settings.logout_confirm.total_records': 'Registros totales',
+  'page.settings.logout_confirm.cic': 'CIC',
+  'page.settings.logout_confirm.stools': 'Deposiciones',
+  'page.settings.logout_confirm.enemas': 'Enemas',
+  'page.settings.logout_confirm.medication': 'Medicación',
+  'page.settings.logout_confirm.confirm_question':
+    '¿Estás seguro de que deseas borrar todo? Esta operación no se puede deshacer.',
+  'page.settings.logout_confirm.delete_warning':
+    'Solicitud de borrado recibida',
 
   // Page: CIC Registration Wizard - Volume
   'page.cic_register.volume.title': 'Volumen de orina',

@@ -137,6 +137,10 @@ export const enEN = {
   // Page: History Detail
   'page.history_detail.title': 'History Detail',
   'page.history_detail.placeholder': 'Detailed history content coming soon',
+  'page.history_detail.select_field': 'Select a field',
+  'page.history_detail.no_fields': 'No fields available for this module',
+  'page.history_detail.no_data':
+    'No data for this field in the selected date range',
 
   // Page: Settings Tab
   'page.settings.title': 'Settings',
@@ -162,6 +166,28 @@ export const enEN = {
   'page.carer_management.placeholder': 'Carer list coming soon',
   'page.app_settings.title': 'App Settings',
   'page.app_settings.placeholder': 'App settings coming soon',
+  'page.app_settings.section_theme': 'Theme',
+  'page.app_settings.section_language': 'Language',
+  'page.app_settings.language.english': 'English',
+  'page.app_settings.language.spanish': 'Español',
+  'page.app_settings.language.catalan': 'Català',
+  'page.app_settings.action.switch_to_dark': 'Switch to dark',
+  'page.app_settings.action.switch_to_light': 'Switch to light',
+
+  // Page: Logout confirmation
+  'page.settings.logout_confirm.title': 'This action is irreversible',
+  'page.settings.logout_confirm.warning':
+    'This action will delete all data stored on this device for this profile. It cannot be undone.',
+  'page.settings.logout_confirm.summary_title': 'Your information summary',
+  'page.settings.logout_confirm.time_registered': 'Time registered',
+  'page.settings.logout_confirm.total_records': 'Total records',
+  'page.settings.logout_confirm.cic': 'CIC',
+  'page.settings.logout_confirm.stools': 'Stools',
+  'page.settings.logout_confirm.enemas': 'Enemas',
+  'page.settings.logout_confirm.medication': 'Medication',
+  'page.settings.logout_confirm.confirm_question':
+    'Are you sure you want to delete everything? This cannot be undone.',
+  'page.settings.logout_confirm.delete_warning': 'Delete action requested',
 
   // Page: CIC Registration Wizard - Volume
   'page.cic_register.volume.title': 'Urine volume',

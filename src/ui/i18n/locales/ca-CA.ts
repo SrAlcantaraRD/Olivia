@@ -26,4 +26,11 @@ export const caCA = {
   // Actions (legacy keys)
   'actions.save': 'Desa',
   'actions.cancel': 'Cancel·la',
+  'page.app_settings.section_theme': 'Tema',
+  'page.app_settings.section_language': 'Idioma',
+  'page.app_settings.language.english': 'English',
+  'page.app_settings.language.spanish': 'Español',
+  'page.app_settings.language.catalan': 'Català',
+  'page.app_settings.action.switch_to_dark': 'Canvia a mode fosc',
+  'page.app_settings.action.switch_to_light': 'Canvia a mode clar',
 } satisfies Ti18nKeys;

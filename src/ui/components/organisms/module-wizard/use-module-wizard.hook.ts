@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TModule } from '@/domain/module/entity/module.entity';
+import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 export interface IModuleWizardOptions {
