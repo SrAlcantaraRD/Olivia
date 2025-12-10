@@ -275,6 +275,8 @@ export const enEN = {
     'Please wait while we load modules.',
   'hook.get-list-active-module.error-title': 'Failed to Load Modules',
   'hook.get-list-active-module.success-title': 'Modules Loaded Successfully',
+  'hook.get-list-module-field.error-title': 'Failed to Load Module Fields',
+  'error.on-get-entity-by-id': 'Error Getting Entity by ID',
 
   'test.reset-db': 'Reset Database for Testing',
 };
