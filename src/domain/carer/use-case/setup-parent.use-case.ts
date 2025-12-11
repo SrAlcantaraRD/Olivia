@@ -78,7 +78,7 @@ export class SetupParentUseCase extends BaseUseCase<
       if (!(error instanceof BaseError)) {
         details = 'Unexpected error not instance of BaseError';
       }
-
+      this.logError('SetupParentUseCase', error);
       this.logError('SetupParentUseCase', details);
 
       throw new ErrorWhenSetupParent(
