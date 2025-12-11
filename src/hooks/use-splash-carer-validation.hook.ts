@@ -11,7 +11,6 @@ import type {
   IHookResponse,
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
-import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { INavigationPort } from '@/domain/ports/navigation.port';
 
@@ -20,19 +19,11 @@ export function useSplashCarerValidation(adapters: {
   notifyAdapter: INotifyPort;
   carerAdapter: ICarerPort;
   navigationAdapter: INavigationPort;
-  cacheAdapter: ICachePort;
-  secureStoreAdapter?: ICachePort;
 }): IUseHook<TCheckCarerExistenceRequest, TCheckCarerExistenceResponse> {
   const [isExecuting, setExecuting] = useState<boolean>(false);
 
-  const {
-    loggerAdapter,
-    notifyAdapter,
-    carerAdapter,
-    navigationAdapter,
-    cacheAdapter,
-    secureStoreAdapter,
-  } = adapters;
+  const { loggerAdapter, notifyAdapter, carerAdapter, navigationAdapter } =
+    adapters;
 
   const execute = useCallback(
     async (
@@ -46,9 +37,6 @@ export function useSplashCarerValidation(adapters: {
           carerAdapter
         );
         const response = await useCase.execute(data);
-
-        // sleep for 3s to show splash screen
-        await new Promise((resolve) => setTimeout(resolve, 300));
 
         if (!response.success || !response.details.exists) {
           return { success: false };
