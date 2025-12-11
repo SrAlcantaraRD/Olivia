@@ -1,5 +1,17 @@
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 
+import {
+  SQLiteCarerAdapter,
+  type TCarerAdapterEntity,
+} from '@/database/adapter/sqlite.carer.adapter';
+import {
+  SQLiteModuleAdapter,
+  type TModuleAdapterEntity,
+} from '@/database/adapter/sqlite.module.adapter';
+import {
+  SQLiteRecordFieldAdapter,
+  type TRecordFieldAdapterEntity,
+} from '@/database/adapter/sqlite.record-field.adapter';
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
@@ -11,7 +23,12 @@ import type {
 import type { IRecordPort } from '@/domain/module/port/record.port';
 // NOTE: no direct usage of named schema imported — keeping DB_SCHEMA used to reference tables
 
-export type TRecordAdapterEntity = typeof DB_SCHEMA.RECORD.$inferSelect;
+export type TRecordAdapterEntity = typeof DB_SCHEMA.RECORD.$inferSelect & {
+  carer?: TCarerAdapterEntity;
+  module?: TModuleAdapterEntity;
+  recordFields?: TRecordFieldAdapterEntity[];
+};
+
 export type TRecordAdapterInsert = typeof DB_SCHEMA.RECORD.$inferInsert;
 
 export class SQLiteRecordAdapter implements IRecordPort {
@@ -24,14 +41,31 @@ export class SQLiteRecordAdapter implements IRecordPort {
     });
   }
 
-  private static toDomainEntity(entity: TRecordAdapterEntity): TRecord {
+  public static toDomainEntity(entity: TRecordAdapterEntity): TRecord {
     return {
       id: entity.id,
+      status: getStatusFromValue(entity.status),
+
+      carerID: entity.carerID,
       moduleID: entity.moduleID,
+
       data: entity.data,
       synced: Boolean(entity.synced),
-      status: getStatusFromValue(entity.status),
-    } as TRecord;
+
+      ...(entity.carer && {
+        carer: SQLiteCarerAdapter.toDomainEntity(entity.carer),
+      }),
+
+      ...(entity.module && {
+        module: SQLiteModuleAdapter.toDomainEntity(entity.module),
+      }),
+
+      ...(entity.recordFields && {
+        recordFields: entity.recordFields.map(
+          SQLiteRecordFieldAdapter.toDomainEntity
+        ),
+      }),
+    } satisfies TRecord;
   }
 
   public async create(data: TRecordCreate): Promise<TRecord> {
@@ -43,32 +77,10 @@ export class SQLiteRecordAdapter implements IRecordPort {
       status: 1,
     } satisfies TRecordAdapterInsert;
 
-    const inserted = await this.database
+    const [record] = await this.database
       .insert(DB_SCHEMA.RECORD)
       .values(insertPayload)
       .returning();
-
-    const record = inserted[0];
-
-    // Parse payload to create record fields if present as JSON object
-    let fields: Record<number, string> = {};
-    try {
-      const parsed = JSON.parse(data.data);
-      if (parsed?.values) fields = parsed.values;
-    } catch (err) {
-      // nop
-    }
-
-    const fieldEntries = Object.entries(fields).map(([key, value]) => ({
-      recordID: record.id,
-      fieldID: Number(key),
-      value: String(value),
-      status: 1,
-    }));
-
-    if (fieldEntries.length > 0) {
-      await this.database.insert(DB_SCHEMA.RECORD_FIELD).values(fieldEntries);
-    }
 
     return SQLiteRecordAdapter.toDomainEntity(record);
   }
@@ -95,45 +107,18 @@ export class SQLiteRecordAdapter implements IRecordPort {
     end?: number;
   }): Promise<{ moduleID: number; count: number }[]> {
     const { start = 0, end = Math.floor(Date.now() / 1000) } = opts || {};
-    const sql = `SELECT module_id as moduleID, COUNT(1) as count FROM record WHERE status = 1 AND created_at BETWEEN ? AND ? GROUP BY module_id`;
-    try {
-      const rawExec: unknown =
-        (this.database as unknown as { execute?: unknown }).execute ??
-        (this.database as unknown as { run?: unknown }).run ??
-        (this.database as unknown as { all?: unknown }).all;
-      if (typeof rawExec === 'function') {
-        const fn = rawExec as (
-          sql: string,
-          params?: unknown[]
-        ) => Promise<unknown>;
-        const rows = await fn.call(this.database, sql, [start, end]);
-        // Normalize rows if needed (SQLite returns { rows } sometimes)
-        const normalize = (rows as unknown as { rows?: unknown[] })?.rows
-          ? (rows as unknown as { rows?: unknown[] }).rows
-          : (rows as unknown as unknown[]);
-        if (Array.isArray(normalize))
-          return normalize.map((r: unknown) => {
-            const row = r as { moduleID: number; count: number };
-            return { moduleID: Number(row.moduleID), count: Number(row.count) };
-          });
-      }
-    } catch (err) {
-      // fallback to in-memory grouping
-    }
+    // Use Drizzle query to fetch active records and then group in memory.
+    const recordList = await this.database.query.RECORD.findMany({
+      where: (row, { eq }) => eq(row.status, 1),
+    });
 
-    // fallback to in-memory grouping
-    const list = (await this.database.query.RECORD.findMany(
-      {}
-    )) as TRecordAdapterEntity[];
     const map: Record<number, number> = {};
-    list
-      .filter(
-        (r) =>
-          Number(r.createdAt ?? 0) >= start && Number(r.createdAt ?? 0) <= end
-      )
-      .forEach((r) => {
-        map[r.moduleID] = (map[r.moduleID] ?? 0) + 1;
-      });
+
+    for (const record of recordList) {
+      const created = Number(record.createdAt ?? 0);
+      if (created < start || created > end) continue;
+      map[record.moduleID] = (map[record.moduleID] ?? 0) + 1;
+    }
 
     return Object.entries(map).map(([moduleID, count]) => ({
       moduleID: Number(moduleID),
@@ -151,53 +136,24 @@ export class SQLiteRecordAdapter implements IRecordPort {
       end = Math.floor(Date.now() / 1000),
       moduleID,
     } = opts || {};
-    // Use localtime so day buckets respect the user's timezone
-    const sql = `SELECT strftime('%Y-%m-%d', r.created_at, 'unixepoch', 'localtime') AS day, COUNT(1) as count FROM record r WHERE r.status = 1 AND (? IS NULL OR r.module_id = ?) AND r.created_at BETWEEN ? AND ? GROUP BY day ORDER BY day ASC`;
-    try {
-      const rawExec: unknown =
-        (this.database as unknown as { execute?: unknown }).execute ??
-        (this.database as unknown as { run?: unknown }).run ??
-        (this.database as unknown as { all?: unknown }).all;
-      if (typeof rawExec === 'function') {
-        const fn = rawExec as (
-          sql: string,
-          params?: unknown[]
-        ) => Promise<unknown>;
-        const rows = await fn.call(this.database, sql, [
-          moduleID ?? null,
-          moduleID ?? null,
-          start,
-          end,
-        ]);
-        const normalize = (rows as unknown as { rows?: unknown[] })?.rows
-          ? (rows as unknown as { rows?: unknown[] }).rows
-          : (rows as unknown as unknown[]);
-        if (Array.isArray(normalize))
-          return normalize.map((r: unknown) => ({
-            day: (r as { day: string }).day,
-            count: Number((r as { count: number }).count),
-          }));
-      }
-    } catch (err) {
-      // fallback to in-memory grouping
-    }
+    // Fetch active records via Drizzle and bucket by local date.
+    const recordList = await this.database.query.RECORD.findMany({
+      where: (row, { eq }) => eq(row.status, 1),
+    });
 
-    const list = (await this.database.query.RECORD.findMany(
-      {}
-    )) as TRecordAdapterEntity[];
     const map: Record<string, number> = {};
-    list
-      .filter((r) => {
-        const created = Number(r.createdAt ?? 0);
-        if (created < start || created > end) return false;
-        if (moduleID && r.moduleID !== moduleID) return false;
-        return true;
-      })
-      .forEach((r) => {
-        const ts = Number(r.createdAt ?? 0) * 1000;
-        const day = new Date(ts).toISOString().slice(0, 10); // UTC YYYY-MM-DD
-        map[day] = (map[day] ?? 0) + 1;
-      });
+    for (const record of recordList) {
+      const created = Number(record.createdAt ?? 0);
+      if (created < start || created > end) continue;
+      if (moduleID && record.moduleID !== moduleID) continue;
+
+      const ts = created * 1000;
+      const d = new Date(ts);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = `${y}-${m}-${String(d.getDate()).padStart(2, '0')}`; // local YYYY-MM-DD
+      map[day] = (map[day] ?? 0) + 1;
+    }
 
     return Object.entries(map)
       .map(([day, count]) => ({ day, count }))
@@ -216,66 +172,32 @@ export class SQLiteRecordAdapter implements IRecordPort {
       start = 0,
       end = Math.floor(Date.now() / 1000),
     } = opts;
+    // Fetch active records in range (Drizzle) and build a set of valid record IDs.
+    const recordList = await this.database.query.RECORD.findMany({
+      where: (row, { eq }) => eq(row.status, 1),
+    });
 
-    // Try DB aggregation first
-    const sql = `SELECT rf.value as value, COUNT(1) as count FROM record_field rf JOIN record r ON r.id = rf.record_id WHERE rf.field_id = ? AND r.status = 1 AND r.created_at BETWEEN ? AND ? ${moduleID ? 'AND r.module_id = ?' : ''} GROUP BY rf.value ORDER BY count DESC`;
-    try {
-      const rawExec: unknown =
-        (this.database as unknown as { execute?: unknown }).execute ??
-        (this.database as unknown as { run?: unknown }).run ??
-        (this.database as unknown as { all?: unknown }).all;
-      if (typeof rawExec === 'function') {
-        const fn = rawExec as (
-          sql: string,
-          params?: unknown[]
-        ) => Promise<unknown>;
-        const params = moduleID
-          ? [fieldID, start, end, moduleID]
-          : [fieldID, start, end];
-        const rows = await fn.call(this.database, sql, params);
-        const normalize = (rows as unknown as { rows?: unknown[] })?.rows
-          ? (rows as unknown as { rows?: unknown[] }).rows
-          : (rows as unknown as unknown[]);
-        if (Array.isArray(normalize))
-          return normalize.map((r: unknown) => ({
-            value: String((r as { value: string }).value),
-            count: Number((r as { count: number }).count),
-          }));
-      }
-    } catch (err) {
-      // fallback to in-memory
+    const validRecordIds = new Set<number>();
+
+    for (const record of recordList) {
+      const created = Number(record.createdAt ?? 0);
+      if (created < start || created > end) continue;
+      if (moduleID && record.moduleID !== moduleID) continue;
+      validRecordIds.add(record.id);
     }
 
-    // Fetch records within time range and optional module filter (fallback)
-    const records = (await this.database.query.RECORD.findMany(
-      {}
-    )) as TRecordAdapterEntity[];
-    const validRecordIds = new Set(
-      records
-        .filter((r) => {
-          const created = Number(r.createdAt ?? 0);
-          if (created < start || created > end) return false;
-          if (moduleID && r.moduleID !== moduleID) return false;
-          return true;
-        })
-        .map((r) => r.id)
-    );
-
-    // Fetch record_fields for the given fieldID
-    const recordFields = await this.database.query.RECORD_FIELD.findMany({
+    // Fetch record fields for the given fieldID and count values where recordID is valid
+    const recordFieldList = await this.database.query.RECORD_FIELD.findMany({
       where: (row, { eq }) => eq(row.fieldID, fieldID),
     });
 
     const map: Record<string, number> = {};
-    recordFields
-      .filter((rf) => validRecordIds.has(rf.recordID))
-      .forEach((rf) => {
-        const val = String(rf.value);
-        map[val] = (map[val] ?? 0) + 1;
-      });
+    for (const recordField of recordFieldList) {
+      if (!validRecordIds.has(recordField.recordID)) continue;
+      const val = String(recordField.value);
+      map[val] = (map[val] ?? 0) + 1;
+    }
 
     return Object.entries(map).map(([value, count]) => ({ value, count }));
   }
 }
-
-export default SQLiteRecordAdapter;

@@ -2,21 +2,20 @@ import { drizzle } from 'drizzle-orm/expo-sqlite';
 
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
-import type {
-  TPatient,
-  TPatientCreate,
-} from '@/domain/patient/entity/patient.entity';
-
-export type TPatientAdapterEntity = typeof DB_SCHEMA.PATIENT.$inferSelect;
-
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
 import {
   getStatusFromValue,
   STATUS_ENUM,
 } from '@/domain/core/enum/status.enum';
+import type {
+  TPatient,
+  TPatientCreate,
+} from '@/domain/patient/entity/patient.entity';
 import { getAutonomyLevelFromValue } from '@/domain/patient/enum/autonomy-level.enum';
 import { getSexTypeFromValue } from '@/domain/patient/enum/sex.enum';
 import type { IPatientPort } from '@/domain/patient/port/patient.port';
+
+export type TPatientAdapterEntity = typeof DB_SCHEMA.PATIENT.$inferSelect;
 
 export class SQLitePatientAdapter implements IPatientPort {
   private readonly database;
@@ -38,7 +37,7 @@ export class SQLitePatientAdapter implements IPatientPort {
       autonomyLevel: getAutonomyLevelFromValue(entity.autonomyLevel),
 
       status: getStatusFromValue(entity.status),
-    };
+    } satisfies TPatient;
   }
 
   public async create(dto: TPatientCreate): Promise<TPatient> {

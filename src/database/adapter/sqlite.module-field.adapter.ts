@@ -1,10 +1,17 @@
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 
+import {
+  SQLiteModuleAdapter,
+  type TModuleAdapterEntity,
+} from '@/database/adapter/sqlite.module.adapter';
+import {
+  SQLiteRecordFieldAdapter,
+  type TRecordFieldAdapterEntity,
+} from '@/database/adapter/sqlite.record-field.adapter';
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
 import { getStatusFromValue } from '@/domain/core/enum/status.enum';
-import type { TModule } from '@/domain/module/entity/module.entity';
 import type {
   TModuleField,
   TModuleFieldCreate,
@@ -13,11 +20,13 @@ import {
   getModuleFieldTypeFromValue,
   MODULE_FIELD_TYPE_ENUM,
 } from '@/domain/module/enum/module-field-type.enum';
-// NOTE: keep imports minimal and use DB_SCHEMA export for references
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 
 export type TModuleFieldAdapterEntity =
-  typeof DB_SCHEMA.MODULE_FIELD.$inferSelect;
+  typeof DB_SCHEMA.MODULE_FIELD.$inferSelect & {
+    module?: TModuleAdapterEntity;
+    recordFieldList?: TRecordFieldAdapterEntity[];
+  };
 
 export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
   private readonly database;
@@ -29,7 +38,7 @@ export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
     });
   }
 
-  private static toDomainEntity(
+  public static toDomainEntity(
     entity: TModuleFieldAdapterEntity
   ): TModuleField {
     // Normalize DB type strings to domain enum values
@@ -62,8 +71,17 @@ export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
       values: entity.values ?? '',
       required: Boolean(Number(entity.required)),
       order: Number(entity.order),
-      module: {} as TModule,
-    };
+
+      ...(entity.module && {
+        module: SQLiteModuleAdapter.toDomainEntity(entity.module),
+      }),
+
+      ...(entity.recordFieldList && {
+        recordFieldList: entity.recordFieldList.map(
+          SQLiteRecordFieldAdapter.toDomainEntity
+        ),
+      }),
+    } satisfies TModuleField;
   }
 
   public async getById(id: number): Promise<TModuleField | null> {

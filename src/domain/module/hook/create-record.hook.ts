@@ -8,18 +8,21 @@ import type {
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
+import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import type { IRecordPort } from '@/domain/module/port/record.port';
 import { CreateRecordUseCase } from '@/domain/module/use-case/create-record.use-case';
 
 export function useCreateRecord(adapters: {
   loggerAdapter: TLoggerPort;
-  recordAdapter: IRecordPort;
   notifyAdapter: INotifyPort;
+  recordAdapter: IRecordPort;
+  recordFieldAdapter: IRecordFieldPort;
 }): IUseHook<TRecordCreate, void> {
   const {
     actions: { startLoading, stopLoading },
   } = useListStore('record');
-  const { loggerAdapter, recordAdapter, notifyAdapter } = adapters;
+  const { loggerAdapter, recordAdapter, notifyAdapter, recordFieldAdapter } =
+    adapters;
 
   const execute = useCallback(
     async (data: TRecordCreate): Promise<IHookResponse<void>> => {
@@ -28,6 +31,7 @@ export function useCreateRecord(adapters: {
         const useCase = new CreateRecordUseCase({
           loggerAdapter,
           recordAdapter,
+          recordFieldAdapter,
         });
 
         const response = await useCase.execute(data);

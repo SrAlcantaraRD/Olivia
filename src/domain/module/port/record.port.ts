@@ -24,5 +24,3 @@ export interface IRecordPort {
     end?: number;
   }): Promise<{ value: string; count: number }[]>;
 }
-
-export default IRecordPort;

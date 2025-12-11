@@ -1,5 +1,9 @@
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 
+import {
+  SQLiteRecordAdapter,
+  type TRecordAdapterEntity,
+} from '@/database/adapter/sqlite.record.adapter';
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
 import type { TCarer, TCarerCreate } from '@/domain/carer/entity/carer.entity';
@@ -13,7 +17,9 @@ import {
 } from '@/domain/core/enum/status.enum';
 import type { TID } from '@/domain/core/schemas/id.schema';
 
-export type TCarerAdapterEntity = typeof DB_SCHEMA.CARER.$inferSelect;
+export type TCarerAdapterEntity = typeof DB_SCHEMA.CARER.$inferSelect & {
+  recordList?: TRecordAdapterEntity[];
+};
 
 export class SQLiteCarerAdapter implements ICarerPort {
   private readonly database;
@@ -28,14 +34,17 @@ export class SQLiteCarerAdapter implements ICarerPort {
   public static toDomainEntity(entity: TCarerAdapterEntity): TCarer {
     return {
       id: entity.id,
+      status: getStatusFromValue(entity.status),
 
       name: entity.name,
       type: getCarerTypeFromValue(entity.type),
       isPrimary: entity.isPrimary === 1,
       pinHash: entity.pinHash,
 
-      status: getStatusFromValue(entity.status),
-    };
+      ...(entity.recordList && {
+        recordList: entity.recordList.map(SQLiteRecordAdapter.toDomainEntity),
+      }),
+    } satisfies TCarer;
   }
 
   public async create(dto: TCarerCreate): Promise<TCarer> {

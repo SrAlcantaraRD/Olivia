@@ -1,7 +1,14 @@
 import { inArray } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 
-import { SQLiteModuleFieldAdapter } from '@/database/adapter/sqlite.module-field.adapter';
+import {
+  SQLiteModuleFieldAdapter,
+  type TModuleFieldAdapterEntity,
+} from '@/database/adapter/sqlite.module-field.adapter';
+import {
+  SQLiteRecordAdapter,
+  type TRecordAdapterEntity,
+} from '@/database/adapter/sqlite.record.adapter';
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
@@ -10,13 +17,16 @@ import {
   STATUS_ENUM,
 } from '@/domain/core/enum/status.enum';
 import type { TID } from '@/domain/core/schemas/id.schema';
-import type { TModule } from '@/domain/module/entity/module.entity';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
+import type { TModule } from '@/domain/module/entity/module.entity';
 import { getModuleKeyFromValue } from '@/domain/module/enum/module-key.enum';
-import type { IModulePort } from '@/domain/module/port/module.port';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
+import type { IModulePort } from '@/domain/module/port/module.port';
 
-export type TModuleAdapterEntity = typeof DB_SCHEMA.MODULE.$inferSelect;
+export type TModuleAdapterEntity = typeof DB_SCHEMA.MODULE.$inferSelect & {
+  fieldList?: TModuleFieldAdapterEntity[];
+  recordList?: TRecordAdapterEntity[];
+};
 
 export class SQLiteModuleAdapter implements IModulePort {
   private readonly database;
@@ -37,7 +47,17 @@ export class SQLiteModuleAdapter implements IModulePort {
       name: entity.name,
       description: entity.description,
       isActive: entity.active === STATUS_ENUM.ACTIVE,
-    };
+
+      ...(entity.fieldList && {
+        fieldList: entity.fieldList.map(
+          SQLiteModuleFieldAdapter.toDomainEntity
+        ),
+      }),
+
+      ...(entity.recordList && {
+        recordList: entity.recordList.map(SQLiteRecordAdapter.toDomainEntity),
+      }),
+    } satisfies TModule;
   }
 
   public async getAll(): Promise<TModule[]> {
