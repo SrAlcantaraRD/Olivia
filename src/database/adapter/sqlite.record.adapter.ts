@@ -1,13 +1,12 @@
+import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 
 import {
   SQLiteCarerAdapter,
   type TCarerAdapterEntity,
 } from '@/database/adapter/sqlite.carer.adapter';
-import {
-  SQLiteModuleAdapter,
-  type TModuleAdapterEntity,
-} from '@/database/adapter/sqlite.module.adapter';
+import type { TModuleRow } from '@/database/adapter/common.adapter';
+import { mapModuleRowToDomain } from '@/database/adapter/common.adapter';
 import {
   SQLiteRecordFieldAdapter,
   type TRecordFieldAdapterEntity,
@@ -15,7 +14,11 @@ import {
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
-import { getStatusFromValue } from '@/domain/core/enum/status.enum';
+import {
+  getStatusFromValue,
+  STATUS_ENUM,
+} from '@/domain/core/enum/status.enum';
+import type { TID } from '@/domain/core/schemas/id.schema';
 import type {
   TRecord,
   TRecordCreate,
@@ -25,7 +28,7 @@ import type { IRecordPort } from '@/domain/module/port/record.port';
 
 export type TRecordAdapterEntity = typeof DB_SCHEMA.RECORD.$inferSelect & {
   carer?: TCarerAdapterEntity;
-  module?: TModuleAdapterEntity;
+  module?: TModuleRow;
   recordFields?: TRecordFieldAdapterEntity[];
 };
 
@@ -57,7 +60,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
       }),
 
       ...(entity.module && {
-        module: SQLiteModuleAdapter.toDomainEntity(entity.module),
+        module: mapModuleRowToDomain(entity.module),
       }),
 
       ...(entity.recordFields && {
@@ -73,8 +76,8 @@ export class SQLiteRecordAdapter implements IRecordPort {
       moduleID: Number(data.moduleID),
       carerID: Number(data.carerID),
       data: data.data,
-      synced: data.synced ? 1 : 0,
-      status: 1,
+      synced: data.synced ? STATUS_ENUM.ACTIVE : STATUS_ENUM.INACTIVE,
+      status: STATUS_ENUM.ACTIVE,
     } satisfies TRecordAdapterInsert;
 
     const [record] = await this.database
@@ -85,7 +88,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
     return SQLiteRecordAdapter.toDomainEntity(record);
   }
 
-  public async getById(id: number): Promise<TRecord | null> {
+  public async getByID(id: TID): Promise<TRecord | null> {
     const record = await this.database.query.RECORD.findFirst({
       where: (row, { eq }) => eq(row.id, id),
     });
@@ -95,109 +98,99 @@ export class SQLiteRecordAdapter implements IRecordPort {
   }
 
   public async getAll(): Promise<TRecord[]> {
-    const list = (await this.database.query.RECORD.findMany(
-      {}
-    )) as TRecordAdapterEntity[];
+    const list = await this.database.query.RECORD.findMany();
+
     return list.map(SQLiteRecordAdapter.toDomainEntity);
   }
 
-  // Aggregations for reporting
-  public async getCountsByModule(opts?: {
-    start?: number;
-    end?: number;
-  }): Promise<{ moduleID: number; count: number }[]> {
-    const { start = 0, end = Math.floor(Date.now() / 1000) } = opts || {};
-    // Use Drizzle query to fetch active records and then group in memory.
-    const recordList = await this.database.query.RECORD.findMany({
-      where: (row, { eq }) => eq(row.status, 1),
-    });
+  public async getCountsByModule(criteria?: {
+    startDate?: Date;
+    endDate?: Date;
+  }): Promise<{ moduleID: TID; count: number }[]> {
+    const { startDate, endDate } = criteria || {};
 
-    const map: Record<number, number> = {};
+    const rows = await this.database
+      .select({
+        moduleID: DB_SCHEMA.RECORD.moduleID,
+        count: count(DB_SCHEMA.RECORD.id).as('count'),
+      })
+      .from(DB_SCHEMA.RECORD)
+      .where(
+        and(
+          eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE),
+          ...(startDate ? [gte(DB_SCHEMA.RECORD.createdAt, startDate)] : []),
+          ...(endDate ? [lte(DB_SCHEMA.RECORD.createdAt, endDate)] : [])
+        )
+      )
+      .groupBy(DB_SCHEMA.RECORD.moduleID);
 
-    for (const record of recordList) {
-      const created = Number(record.createdAt ?? 0);
-      if (created < start || created > end) continue;
-      map[record.moduleID] = (map[record.moduleID] ?? 0) + 1;
-    }
-
-    return Object.entries(map).map(([moduleID, count]) => ({
+    return rows.map(({ moduleID, count }) => ({
       moduleID: Number(moduleID),
       count,
     }));
   }
 
-  public async getCountsByDay(opts?: {
-    start?: number;
-    end?: number;
+  public async getCountsByDay(criteria?: {
+    startDate?: Date;
+    endDate?: Date;
     moduleID?: number;
   }): Promise<{ day: string; count: number }[]> {
-    const {
-      start = 0,
-      end = Math.floor(Date.now() / 1000),
-      moduleID,
-    } = opts || {};
-    // Fetch active records via Drizzle and bucket by local date.
-    const recordList = await this.database.query.RECORD.findMany({
-      where: (row, { eq }) => eq(row.status, 1),
-    });
+    const { startDate, endDate, moduleID } = criteria || {};
+    // createdAt is stored as unix epoch seconds in DB
+    const dayExpr = sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`;
 
-    const map: Record<string, number> = {};
-    for (const record of recordList) {
-      const created = Number(record.createdAt ?? 0);
-      if (created < start || created > end) continue;
-      if (moduleID && record.moduleID !== moduleID) continue;
+    type TDayCountRow = { day: string; count: number };
 
-      const ts = created * 1000;
-      const d = new Date(ts);
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const day = `${y}-${m}-${String(d.getDate()).padStart(2, '0')}`; // local YYYY-MM-DD
-      map[day] = (map[day] ?? 0) + 1;
-    }
+    const rows = (await this.database
+      .select({
+        day: dayExpr.as('day'),
+        count: count(DB_SCHEMA.RECORD.id).as('count'),
+      })
+      .from(DB_SCHEMA.RECORD)
+      .where(
+        and(
+          eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE),
+          ...(startDate ? [gte(DB_SCHEMA.RECORD.createdAt, startDate)] : []),
+          ...(endDate ? [lte(DB_SCHEMA.RECORD.createdAt, endDate)] : []),
+          ...(moduleID ? [eq(DB_SCHEMA.RECORD.moduleID, moduleID)] : [])
+        )
+      )
+      .groupBy(dayExpr)
+      .orderBy(dayExpr)) as TDayCountRow[];
 
-    return Object.entries(map)
-      .map(([day, count]) => ({ day, count }))
-      .sort((a, b) => a.day.localeCompare(b.day));
+    return rows;
   }
 
-  public async getFieldDistribution(opts: {
+  public async getFieldDistribution(criteria: {
     fieldID: number;
     moduleID?: number;
-    start?: number;
-    end?: number;
+    startDate?: Date;
+    endDate?: Date;
   }): Promise<{ value: string; count: number }[]> {
-    const {
-      fieldID,
-      moduleID,
-      start = 0,
-      end = Math.floor(Date.now() / 1000),
-    } = opts;
-    // Fetch active records in range (Drizzle) and build a set of valid record IDs.
-    const recordList = await this.database.query.RECORD.findMany({
-      where: (row, { eq }) => eq(row.status, 1),
-    });
+    const { fieldID, moduleID, startDate, endDate = new Date() } = criteria;
+    type TFieldCountRow = { value: string; count: number };
 
-    const validRecordIds = new Set<number>();
+    const rows = (await this.database
+      .select({
+        value: DB_SCHEMA.RECORD_FIELD.value,
+        count: count(DB_SCHEMA.RECORD_FIELD.id).as('count'),
+      })
+      .from(DB_SCHEMA.RECORD_FIELD)
+      .innerJoin(
+        DB_SCHEMA.RECORD,
+        eq(DB_SCHEMA.RECORD_FIELD.recordID, DB_SCHEMA.RECORD.id)
+      )
+      .where(
+        and(
+          eq(DB_SCHEMA.RECORD_FIELD.fieldID, fieldID),
+          eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE),
+          ...(startDate ? [gte(DB_SCHEMA.RECORD.createdAt, startDate)] : []),
+          ...(endDate ? [lte(DB_SCHEMA.RECORD.createdAt, endDate)] : []),
+          ...(moduleID ? [eq(DB_SCHEMA.RECORD.moduleID, moduleID)] : [])
+        )
+      )
+      .groupBy(DB_SCHEMA.RECORD_FIELD.value)) as TFieldCountRow[];
 
-    for (const record of recordList) {
-      const created = Number(record.createdAt ?? 0);
-      if (created < start || created > end) continue;
-      if (moduleID && record.moduleID !== moduleID) continue;
-      validRecordIds.add(record.id);
-    }
-
-    // Fetch record fields for the given fieldID and count values where recordID is valid
-    const recordFieldList = await this.database.query.RECORD_FIELD.findMany({
-      where: (row, { eq }) => eq(row.fieldID, fieldID),
-    });
-
-    const map: Record<string, number> = {};
-    for (const recordField of recordFieldList) {
-      if (!validRecordIds.has(recordField.recordID)) continue;
-      const val = String(recordField.value);
-      map[val] = (map[val] ?? 0) + 1;
-    }
-
-    return Object.entries(map).map(([value, count]) => ({ value, count }));
+    return rows;
   }
 }

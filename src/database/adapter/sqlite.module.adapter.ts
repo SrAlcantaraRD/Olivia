@@ -5,10 +5,8 @@ import {
   SQLiteModuleFieldAdapter,
   type TModuleFieldAdapterEntity,
 } from '@/database/adapter/sqlite.module-field.adapter';
-import {
-  SQLiteRecordAdapter,
-  type TRecordAdapterEntity,
-} from '@/database/adapter/sqlite.record.adapter';
+import type { TRecordRow } from '@/database/adapter/common.adapter';
+import { mapRecordRowToDomain } from '@/database/adapter/common.adapter';
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
@@ -17,15 +15,15 @@ import {
   STATUS_ENUM,
 } from '@/domain/core/enum/status.enum';
 import type { TID } from '@/domain/core/schemas/id.schema';
-import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TModule } from '@/domain/module/entity/module.entity';
+import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import { getModuleKeyFromValue } from '@/domain/module/enum/module-key.enum';
-import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
+import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 
 export type TModuleAdapterEntity = typeof DB_SCHEMA.MODULE.$inferSelect & {
   fieldList?: TModuleFieldAdapterEntity[];
-  recordList?: TRecordAdapterEntity[];
+  recordList?: TRecordRow[];
 };
 
 export class SQLiteModuleAdapter implements IModulePort {
@@ -55,7 +53,7 @@ export class SQLiteModuleAdapter implements IModulePort {
       }),
 
       ...(entity.recordList && {
-        recordList: entity.recordList.map(SQLiteRecordAdapter.toDomainEntity),
+        recordList: entity.recordList.map(mapRecordRowToDomain),
       }),
     } satisfies TModule;
   }

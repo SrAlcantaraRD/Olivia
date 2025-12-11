@@ -35,7 +35,9 @@ export const RECORD = sqliteTable(
     index('record__index__id').on(table.id),
     index('record__index__status').on(table.status),
     index('record__index__module_id').on(table.moduleID),
+    index('record__index__carer_id').on(table.carerID),
     index('record__index__synced').on(table.synced),
+    index('record__index__created_at').on(table.createdAt),
     foreignKey({
       name: 'record__fk__module__id',
       columns: [table.moduleID],
@@ -77,6 +79,7 @@ export const RECORD_FIELD = sqliteTable(
     index('record_field__index__status').on(table.status),
     index('record_field__index__record_id').on(table.recordID),
     index('record_field__index__field_id').on(table.fieldID),
+    index('record_field__index__created_at').on(table.createdAt),
     foreignKey({
       name: 'record_field__fk__record__id',
       columns: [table.recordID],
