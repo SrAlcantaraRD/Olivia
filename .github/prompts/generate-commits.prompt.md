@@ -110,9 +110,6 @@ Analyze current git changes and organize them into logical, focused "baby commit
 
 ## Example Output
 
-Desired output: the agent must create a `organize_commits.sh`. The script should be ready-to-run after `chmod +x`.
-Show specific commans to be executed at the terminal to run the `organize_commits.sh`.
-
 ```bash
 # Example of well-organized commits (SHORT messages only):
 feat(database): add SQLite schema and migrations

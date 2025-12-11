@@ -56,7 +56,6 @@
     "expo-symbols": "~1.0.8",
     "expo-system-ui": "~6.0.9",
     "heroui-native": "^1.0.0-beta.3",
-    "i": "^0.3.7",
     "i18next": "^25.6.3",
     "intl-pluralrules": "^2.0.1",
     "npm": "^11.7.0",
