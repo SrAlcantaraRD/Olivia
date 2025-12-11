@@ -5,10 +5,6 @@ import type {
   INotifyPort,
 } from '@/domain/core/port/notify.port';
 
-/**
- * Adapter to use react-native-toast-message library to notify the user about application actions.
- * Creates toast notifications with translated messages using i18next.
- */
 export class ToastUINotifyPortAdapter implements INotifyPort {
   private showToast(
     type: 'success' | 'error' | 'info' | 'delete',
@@ -19,7 +15,7 @@ export class ToastUINotifyPortAdapter implements INotifyPort {
       text1: params.title,
       text2: params.description,
       position: 'bottom',
-      visibilityTime: 4000,
+      visibilityTime: 500,
       autoHide: true,
       bottomOffset: 10,
     });

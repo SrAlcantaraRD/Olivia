@@ -2,7 +2,6 @@ import { useRouter } from 'expo-router';
 
 import { ExpoRouterNavigationAdapter } from '@/adapter/expo-router-navigation.adapter';
 import { SecureStoreCacheAdapter } from '@/adapter/expo-secure-store.cache-port.adapter';
-import { MMKVCacheAdapter } from '@/adapter/mmkv.cache-port.adapter';
 import { ToastUINotifyPortAdapter } from '@/adapter/toast.notify-port.adapter';
 import { SQLiteCarerAdapter } from '@/database/adapter/sqlite.carer.adapter';
 import { SQLiteModuleFieldAdapter } from '@/database/adapter/sqlite.module-field.adapter';
@@ -10,6 +9,10 @@ import { SQLiteModuleAdapter } from '@/database/adapter/sqlite.module.adapter';
 import { SQLitePatientAdapter } from '@/database/adapter/sqlite.patient.adapter';
 import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
+import {
+  BASE_LOGGER,
+  type TLoggerPort,
+} from '@/domain/core/adapter/logger.adapter';
 import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
@@ -28,6 +31,7 @@ interface IAdapters {
   navigationAdapter: INavigationPort;
   cacheAdapter: ICachePort;
   secureStoreAdapter: ICachePort;
+  loggerAdapter: TLoggerPort;
 }
 
 export const useAdapters = (): Readonly<IAdapters> => {
@@ -43,9 +47,10 @@ export const useAdapters = (): Readonly<IAdapters> => {
   const recordAdapter = new SQLiteRecordAdapter();
 
   const secureStoreAdapter = new SecureStoreCacheAdapter();
-  const cacheAdapter = new MMKVCacheAdapter();
+  // const cacheAdapter = new SecureStoreCacheAdapter();
 
   return Object.freeze({
+    loggerAdapter: BASE_LOGGER,
     notifyAdapter,
     carerAdapter,
     patientAdapter,
@@ -53,7 +58,7 @@ export const useAdapters = (): Readonly<IAdapters> => {
     moduleFieldAdapter,
     recordAdapter,
     navigationAdapter,
-    cacheAdapter,
+    cacheAdapter: secureStoreAdapter,
     secureStoreAdapter,
   });
 };
