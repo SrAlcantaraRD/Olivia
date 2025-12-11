@@ -2,22 +2,26 @@ import { createMMKV } from 'react-native-mmkv';
 
 import type { ICachePort } from '@/domain/core/port/cache.port';
 
-const storage = createMMKV();
-
 export class MMKVCacheAdapter implements ICachePort {
+  private storage = createMMKV({ id: 'storage-id' });
+
   async set<T>(key: string, value: T): Promise<void> {
     const payload = JSON.stringify(value);
 
-    storage.set(key, payload);
+    this.storage.set(key, payload);
   }
 
   async get<T>(key: string): Promise<T | null> {
-    const item = storage.getString(key);
+    const item = this.storage.getString(key);
 
     return item ? (JSON.parse(item) as T) : null;
   }
 
   async delete(key: string): Promise<void> {
-    storage.delete(key);
+    this.storage.remove(key);
+  }
+
+  async clearAll(): Promise<void> {
+    this.storage.clearAll();
   }
 }

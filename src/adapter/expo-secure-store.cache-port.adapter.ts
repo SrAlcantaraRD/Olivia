@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 
-import type { ICachePort } from '@/domain/core/port/cache.port';
+import { CACHE_KEY_ENUM, type ICachePort } from '@/domain/core/port/cache.port';
 
 export class SecureStoreCacheAdapter implements ICachePort {
   public async set<T>(key: string, value: T): Promise<void> {
@@ -19,5 +19,15 @@ export class SecureStoreCacheAdapter implements ICachePort {
 
   public async delete(key: string): Promise<void> {
     await SecureStore.deleteItemAsync(key);
+  }
+
+  public async clearAll(): Promise<void> {
+    const keys = Object.values(CACHE_KEY_ENUM);
+
+    await Promise.all(
+      keys.map(async (k) => {
+        await this.delete(String(k));
+      })
+    );
   }
 }
