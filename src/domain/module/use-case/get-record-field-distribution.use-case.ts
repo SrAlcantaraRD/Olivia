@@ -6,8 +6,8 @@ import type { IRecordPort } from '@/domain/module/port/record.port';
 export type TRequestRecordFieldDistribution = {
   fieldID: number;
   moduleID?: number;
-  start?: number;
-  end?: number;
+  startDate?: Date;
+  endDate?: Date;
 };
 export type TResponseRecordFieldDistribution = {
   values: { value: string; count: number }[];
@@ -30,6 +30,7 @@ export class GetRecordFieldDistributionUseCase extends BaseUseCase<
     data: TRequestRecordFieldDistribution
   ): Promise<IBaseResponse<TResponseRecordFieldDistribution>> {
     const values = await this.adapters.recordAdapter.getFieldDistribution(data);
+
     return { success: true, message: 'common.success', details: { values } };
   }
 }

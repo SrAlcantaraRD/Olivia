@@ -1,3 +1,4 @@
+import type { TID } from '@/domain/core/schemas/id.schema';
 import type {
   TRecord,
   TRecordCreate,
@@ -5,22 +6,21 @@ import type {
 
 export interface IRecordPort {
   create(data: TRecordCreate): Promise<TRecord>;
-  getById(id: number): Promise<TRecord | null>;
+  getByID(id: TID): Promise<TRecord | null>;
   getAll(): Promise<TRecord[]>;
   // Aggregations for reports
-  getCountsByModule(opts?: {
-    start?: number;
-    end?: number;
-  }): Promise<{ moduleID: number; count: number }[]>;
-  getCountsByDay(opts?: {
-    start?: number;
-    end?: number;
-    moduleID?: number;
+  getCountsByModule(criteria?: {
+    startDate?: Date;
+    endDate?: Date;
+  }): Promise<{ moduleID: TID; count: number }[]>;
+  getCountsByDay(criteria?: {
+    moduleID?: TID;
+    startDate?: Date;
+    endDate?: Date;
   }): Promise<{ day: string; count: number }[]>;
-  getFieldDistribution(opts: {
-    fieldID: number;
-    moduleID?: number;
-    start?: number;
-    end?: number;
+  getFieldDistribution(criteria: {
+    fieldID: TID;
+    startDate?: Date;
+    endDate?: Date;
   }): Promise<{ value: string; count: number }[]>;
 }

@@ -17,7 +17,7 @@ export function useGetRecordFieldDistribution(adapters: {
   notifyAdapter: INotifyPort;
   cacheAdapter?: ICachePort;
 }): IUseHook<
-  { fieldID: number; moduleID?: number; start?: number; end?: number },
+  { fieldID: number; moduleID?: number; startDate?: Date; endDate?: Date },
   { value: string; count: number }[]
 > {
   const {
@@ -31,12 +31,18 @@ export function useGetRecordFieldDistribution(adapters: {
     async (data: {
       fieldID: number;
       moduleID?: number;
-      start?: number;
-      end?: number;
+      startDate?: Date;
+      endDate?: Date;
     }): Promise<IHookResponse<{ value: string; count: number }[]>> => {
       startLoading();
       try {
-        const cacheKey = `report:distribution:${data.moduleID ?? 'global'}:${data.fieldID}:${data.start ?? 0}:${data.end ?? 0}`;
+        const startEpoch = data.startDate
+          ? Math.floor(data.startDate.getTime() / 1000)
+          : 0;
+        const endEpoch = data.endDate
+          ? Math.floor(data.endDate.getTime() / 1000)
+          : 0;
+        const cacheKey = `report:distribution:${data.moduleID ?? 'global'}:${data.fieldID}:${startEpoch}:${endEpoch}`;
         // try to get from cache
         if (cacheAdapter) {
           try {
@@ -67,8 +73,7 @@ export function useGetRecordFieldDistribution(adapters: {
           });
           return { success: false };
         }
-
-        saveItems(response.details.values);
+        // don't store distribution values in the generic list store (not TBaseEntity)
         // store in cache
         if (cacheAdapter) {
           try {
@@ -94,7 +99,7 @@ export function useGetRecordFieldDistribution(adapters: {
     isExecuting: false,
     items: getItems() ?? [],
   } as unknown as IUseHook<
-    { fieldID: number; moduleID?: number; start?: number; end?: number },
+    { fieldID: number; moduleID?: number; startDate?: Date; endDate?: Date },
     { value: string; count: number }[]
   >;
 }

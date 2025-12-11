@@ -3,7 +3,7 @@ import type { IBaseResponse } from '@/domain/core/interface/base-response.interf
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import type { IRecordPort } from '@/domain/module/port/record.port';
 
-export type TRequestRecordStatistics = { start?: number; end?: number };
+export type TRequestRecordStatistics = { startDate?: Date; endDate?: Date };
 export type TResponseRecordStatistics = {
   countsByModule: { moduleID: number; count: number }[];
 };

@@ -6,6 +6,7 @@ import type {
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
+import type { TID } from '@/domain/core/schemas/id.schema';
 import { useListStore } from '@/domain/core/stores/list.store';
 import type { IRecordPort } from '@/domain/module/port/record.port';
 import { GetRecordStatisticsUseCase } from '@/domain/module/use-case/get-record-statistics.use-case';
@@ -15,8 +16,8 @@ export function useGetRecordStatistics(adapters: {
   recordAdapter: IRecordPort;
   notifyAdapter: INotifyPort;
 }): IUseHook<
-  { start?: number; end?: number },
-  { moduleID: number; count: number }[]
+  { startDate?: Date; endDate?: Date },
+  { moduleID: TID; count: number }[]
 > {
   const {
     actions: { saveItems, getItems, startLoading, stopLoading },
@@ -26,9 +27,9 @@ export function useGetRecordStatistics(adapters: {
 
   const execute = useCallback(
     async (data: {
-      start?: number;
-      end?: number;
-    }): Promise<IHookResponse<{ moduleID: number; count: number }[]>> => {
+      startDate?: Date;
+      endDate?: Date;
+    }): Promise<IHookResponse<{ moduleID: TID; count: number }[]>> => {
       startLoading();
       try {
         const useCase = new GetRecordStatisticsUseCase({
@@ -36,6 +37,7 @@ export function useGetRecordStatistics(adapters: {
           recordAdapter,
         });
         const response = await useCase.execute(data);
+
         if (!response.success || !response.details) {
           notifyAdapter.error({
             title: 'hook.get-record-statistics.error',
@@ -61,8 +63,5 @@ export function useGetRecordStatistics(adapters: {
     execute,
     isExecuting: false,
     items: getItems() ?? [],
-  } as unknown as IUseHook<
-    { start?: number; end?: number },
-    { moduleID: number; count: number }[]
-  >;
+  };
 }

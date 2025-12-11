@@ -15,7 +15,7 @@ export function useGetRecordTrend(adapters: {
   recordAdapter: IRecordPort;
   notifyAdapter: INotifyPort;
 }): IUseHook<
-  { start?: number; end?: number; moduleID?: number },
+  { startDate?: Date; endDate?: Date; moduleID?: number },
   { day: string; count: number }[]
 > {
   const {
@@ -26,8 +26,8 @@ export function useGetRecordTrend(adapters: {
 
   const execute = useCallback(
     async (data: {
-      start?: number;
-      end?: number;
+      startDate?: Date;
+      endDate?: Date;
       moduleID?: number;
     }): Promise<IHookResponse<{ day: string; count: number }[]>> => {
       startLoading();
@@ -39,13 +39,14 @@ export function useGetRecordTrend(adapters: {
         const response = await useCase.execute(data);
         if (!response.success || !response.details) {
           notifyAdapter.error({
-            title: 'hook.get-record-trend.error',
+            title:
+              'hook.get-record-trend.error' as unknown as import('@/ui/i18n/locales/en-EN').Ti18nKeys,
             description: response.message,
           });
           return { success: false };
         }
 
-        saveItems(response.details.series);
+        // don't store non-entity series in the generic list store
         return { success: true, data: response.details.series };
       } catch (error) {
         console.error(error);
@@ -62,7 +63,7 @@ export function useGetRecordTrend(adapters: {
     isExecuting: false,
     items: getItems() ?? [],
   } as unknown as IUseHook<
-    { start?: number; end?: number; moduleID?: number },
+    { startDate?: Date; endDate?: Date; moduleID?: number },
     { day: string; count: number }[]
   >;
 }
