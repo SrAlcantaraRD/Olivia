@@ -69,8 +69,8 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations (clean)', () => {
     (adapter as unknown as { database: unknown }).database = fakeDb as unknown;
 
     const result = await adapter.getCountsByModule({
-      start: nowEpoch - 100,
-      end: nowEpoch,
+      startDate: nowEpoch - 100,
+      endDate: nowEpoch,
     });
 
     expect(Array.isArray(result)).toBe(true);

@@ -83,8 +83,8 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
     (adapter as unknown as { database: unknown }).database = fakeDb as unknown;
 
     const result = await adapter.getCountsByModule({
-      start: nowEpoch - 100,
-      end: nowEpoch,
+      startDate: nowEpoch - 100,
+      endDate: nowEpoch,
     });
 
     expect(Array.isArray(result)).toBe(true);
@@ -97,9 +97,7 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
   });
 });
 
-import { describe, expect, it, jest } from '@jest/globals';
-
-import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
+import { describe, expect, it } from '@jest/globals';
 
 describe('SQLiteRecordAdapter aggregations', () => {
   it('getFieldDistribution uses database.execute when available (no moduleID)', async () => {
@@ -162,8 +160,8 @@ describe('SQLiteRecordAdapter aggregations', () => {
     (adapter as unknown as { database: unknown }).database = fakeDb as any;
 
     const result = await adapter.getCountsByModule({
-      start: nowEpoch - 100,
-      end: nowEpoch,
+      startDate: nowEpoch - 100,
+      endDate: nowEpoch,
     });
 
     expect(Array.isArray(result)).toBe(true);
@@ -175,8 +173,6 @@ describe('SQLiteRecordAdapter aggregations', () => {
     );
   });
 });
-
-import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
 
 describe('SQLiteRecordAdapter aggregations', () => {
   it('calls database.execute with correct SQL when execute is available (no moduleID)', async () => {
@@ -214,11 +210,7 @@ describe('SQLiteRecordAdapter aggregations', () => {
   });
 });
 
-import { describe, expect, it } from '@jest/globals';
-
 // Using global jest from @jest/globals; no direct import required
-
-import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
 
 describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
   it('getCountsByModule aggregates counts correctly', async () => {
@@ -267,8 +259,8 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
     );
 
     const result = await adapter.getCountsByModule({
-      start: nowEpoch - 100,
-      end: nowEpoch,
+      startDate: nowEpoch - 100,
+      endDate: nowEpoch,
     });
     expect(result).toEqual(
       expect.arrayContaining([
