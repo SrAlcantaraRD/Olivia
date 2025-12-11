@@ -49,8 +49,6 @@ export default function RegisterScreen() {
     handlerGetList();
   }, []);
 
-  BASE_LOGGER.info(items);
-
   return (
     <ScreenLayout testID="screen.register" isLoading={isExecuting}>
       {/* Header */}

@@ -14,6 +14,7 @@ import {
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 export default function LogoutConfirmScreen() {
   const router = useRouter();
@@ -40,8 +41,6 @@ export default function LogoutConfirmScreen() {
         if (Array.isArray(days) && days.length > 0) {
           setEarliestDay(days[0].day);
         }
-        const sum = (stats ?? []).reduce((s, it) => s + (it.count ?? 0), 0);
-        setTotal(sum);
       } catch (err) {
         // ignore
       }
@@ -50,7 +49,13 @@ export default function LogoutConfirmScreen() {
     return () => {
       mounted = false;
     };
-  }, [recordAdapter]);
+  }, [executeGetStats, recordAdapter]);
+
+  useEffect(() => {
+    // compute total when stats change
+    const sum = (stats ?? []).reduce((s, it) => s + (it.count ?? 0), 0);
+    setTotal(sum);
+  }, [stats]);
 
   const daysRegistered = useMemo(() => {
     if (!earliestDay) return '0';
@@ -72,6 +77,13 @@ export default function LogoutConfirmScreen() {
     cacheAdapter,
     secureStoreAdapter,
   });
+
+  // typed i18n keys used in this screen (cast to Ti18nKeys so the atom types align)
+  const K_TIME_REGISTERED =
+    'page.settings.logout_confirm.time_registered_value' as Ti18nKeys;
+  const K_TOTAL_RECORDS =
+    'page.settings.logout_confirm.total_records_value' as Ti18nKeys;
+  const K_COMMON_NUMBER = 'common.number' as Ti18nKeys;
 
   const onDelete = async () => {
     const resp = await executeWipe();
@@ -103,7 +115,7 @@ export default function LogoutConfirmScreen() {
             accessibilityRole="header"
           />
 
-          <CardAtom className="p-4 bg-danger/10 border border-danger/20">
+          <CardAtom className="p-4 bg-danger/10 border border-danger-soft-hover">
             <TypographyParagraph
               i18nKey="page.settings.logout_confirm.warning"
               className="font-medium text-danger"
@@ -122,9 +134,11 @@ export default function LogoutConfirmScreen() {
                   i18nKey="page.settings.logout_confirm.time_registered"
                   variant="light"
                 />
-                <TypographySmall className="font-medium">
-                  {daysRegistered + ' días'}
-                </TypographySmall>
+                <TypographySmall
+                  i18nKey={K_TIME_REGISTERED}
+                  values={{ count: Number(daysRegistered) }}
+                  className="font-medium"
+                />
               </View>
 
               <View className="flex-row justify-between">
@@ -132,9 +146,11 @@ export default function LogoutConfirmScreen() {
                   i18nKey="page.settings.logout_confirm.total_records"
                   variant="light"
                 />
-                <TypographySmall className="font-medium">
-                  {total}
-                </TypographySmall>
+                <TypographySmall
+                  i18nKey={K_TOTAL_RECORDS}
+                  values={{ count: total }}
+                  className="font-medium"
+                />
               </View>
 
               <View className="flex-row justify-between">
@@ -142,9 +158,13 @@ export default function LogoutConfirmScreen() {
                   i18nKey="page.settings.logout_confirm.cic"
                   variant="light"
                 />
-                <TypographySmall className="font-medium">
-                  {stats?.find((s) => s.moduleID === 1)?.count ?? 0}
-                </TypographySmall>
+                <TypographySmall
+                  i18nKey={K_COMMON_NUMBER}
+                  values={{
+                    value: stats?.find((s) => s.moduleID === 1)?.count ?? 0,
+                  }}
+                  className="font-medium"
+                />
               </View>
 
               <View className="flex-row justify-between">
@@ -152,9 +172,13 @@ export default function LogoutConfirmScreen() {
                   i18nKey="page.settings.logout_confirm.stools"
                   variant="light"
                 />
-                <TypographySmall className="font-medium">
-                  {stats?.find((s) => s.moduleID === 2)?.count ?? 0}
-                </TypographySmall>
+                <TypographySmall
+                  i18nKey={K_COMMON_NUMBER}
+                  values={{
+                    value: stats?.find((s) => s.moduleID === 2)?.count ?? 0,
+                  }}
+                  className="font-medium"
+                />
               </View>
 
               <View className="flex-row justify-between">
@@ -162,9 +186,13 @@ export default function LogoutConfirmScreen() {
                   i18nKey="page.settings.logout_confirm.enemas"
                   variant="light"
                 />
-                <TypographySmall className="font-medium">
-                  {stats?.find((s) => s.moduleID === 3)?.count ?? 0}
-                </TypographySmall>
+                <TypographySmall
+                  i18nKey={K_COMMON_NUMBER}
+                  values={{
+                    value: stats?.find((s) => s.moduleID === 3)?.count ?? 0,
+                  }}
+                  className="font-medium"
+                />
               </View>
 
               <View className="flex-row justify-between">
@@ -172,9 +200,13 @@ export default function LogoutConfirmScreen() {
                   i18nKey="page.settings.logout_confirm.medication"
                   variant="light"
                 />
-                <TypographySmall className="font-medium">
-                  {stats?.find((s) => s.moduleID === 4)?.count ?? 0}
-                </TypographySmall>
+                <TypographySmall
+                  i18nKey={K_COMMON_NUMBER}
+                  values={{
+                    value: stats?.find((s) => s.moduleID === 4)?.count ?? 0,
+                  }}
+                  className="font-medium"
+                />
               </View>
             </View>
           </View>
@@ -191,7 +223,7 @@ export default function LogoutConfirmScreen() {
                 testID="logout.cancel"
                 accessibilityLabel="a11y.button.cancel"
                 onPress={onCancel}
-                disabled={isWiping}
+                isDisabled={isWiping}
               />
             </View>
             <View style={{ flex: 1 }}>
@@ -200,7 +232,7 @@ export default function LogoutConfirmScreen() {
                 testID="logout.delete"
                 accessibilityLabel="a11y.button.delete"
                 onPress={onDelete}
-                disabled={isWiping}
+                isDisabled={isWiping}
               />
             </View>
           </View>

@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
@@ -15,6 +15,7 @@ import {
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 export default function HistoryDetailScreen() {
   const params = useLocalSearchParams() as Record<string, string | undefined>;
@@ -39,27 +40,30 @@ export default function HistoryDetailScreen() {
   const [selectedFieldId, setSelectedFieldId] = useState<number | null>(null);
   const [range, setRange] = useState<'30d' | '90d' | '7d' | 'today'>('30d');
 
-  const timeRange = useMemo(() => {
-    const end = Math.floor(Date.now() / 1000);
-    let start = end - 30 * 24 * 60 * 60;
+  const timeRange: {
+    startDate?: Date;
+    endDate?: Date;
+  } = useMemo(() => {
+    const endDate = new Date();
+    let startDate = new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000);
     switch (range) {
       case 'today': {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        start = Math.floor(today.getTime() / 1000);
+        startDate = today;
         break;
       }
       case '7d':
-        start = end - 7 * 24 * 60 * 60;
+        startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
         break;
       case '30d':
-        start = end - 30 * 24 * 60 * 60;
+        startDate = new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000);
         break;
       case '90d':
-        start = end - 90 * 24 * 60 * 60;
+        startDate = new Date(endDate.getTime() - 90 * 24 * 60 * 60 * 1000);
         break;
     }
-    return { start, end };
+    return { startDate, end: endDate };
   }, [range]);
 
   useEffect(() => {
@@ -71,11 +75,11 @@ export default function HistoryDetailScreen() {
       executeGetDistribution({
         fieldID: selectedFieldId,
         moduleID: moduleId || undefined,
-        start: timeRange.start,
-        end: timeRange.end,
+        startDate: timeRange.startDate,
+        endDate: timeRange.endDate,
       });
     }
-  }, [selectedFieldId, timeRange.start, timeRange.end]);
+  }, [selectedFieldId, timeRange.startDate, timeRange.endDate]);
 
   useEffect(() => {
     if (!selectedFieldId && fields && fields.length > 0) {
@@ -99,15 +103,28 @@ export default function HistoryDetailScreen() {
           <View className="gap-2">
             <TypographyHeading i18nKey="page.history_detail.select_field" />
             <View className="flex-row gap-2">
-              {(['today', '7d', '30d', '90d'] as const).map((r) => (
-                <Pressable
-                  key={`range-${r}`}
-                  onPress={() => setRange(r)}
-                  className={`px-3 py-2 rounded-xl ${range === r ? 'bg-default-100' : 'bg-default-50'}`}
-                >
-                  <TypographySmall>{r}</TypographySmall>
-                </Pressable>
-              ))}
+              {(['today', '7d', '30d', '90d'] as const).map((r) => {
+                const rangeKey =
+                  r === 'today'
+                    ? 'page.history_detail.range.today'
+                    : r === '7d'
+                      ? 'page.history_detail.range.7d'
+                      : r === '30d'
+                        ? 'page.history_detail.range.30d'
+                        : 'page.history_detail.range.90d';
+
+                return (
+                  <Pressable
+                    key={`range-${r}`}
+                    onPress={() => setRange(r)}
+                    className={`px-3 py-2 rounded-xl ${range === r ? 'bg-default-100' : 'bg-default-50'}`}
+                  >
+                    <TypographySmall
+                      i18nKey={rangeKey as unknown as Ti18nKeys}
+                    />
+                  </Pressable>
+                );
+              })}
             </View>
           </View>
 
@@ -125,10 +142,10 @@ export default function HistoryDetailScreen() {
                     <CardAtom
                       className={`p-3 ${selectedFieldId === f.id ? 'bg-default-100' : 'bg-default-50'}`}
                     >
-                      <TypographyParagraph>{f.title}</TypographyParagraph>
-                      <TypographySmall variant="light">
-                        {f.type}
-                      </TypographySmall>
+                      <Text style={{ fontSize: 16 }}>{f.title}</Text>
+                      <Text style={{ fontSize: 12, color: '#6b7280' }}>
+                        {String(f.type)}
+                      </Text>
                     </CardAtom>
                   </Pressable>
                 ))}
@@ -171,7 +188,7 @@ export default function HistoryDetailScreen() {
                         <View
                           key={`val-${d.value}`}
                           className="flex-row justify-between py-1 items-center"
-                          accessibilityRole="listitem"
+                          accessibilityRole="text"
                           accessibilityLabel={`${d.value}, ${d.count} (${pct}% )`}
                         >
                           <View className="flex-row gap-2 items-center">
@@ -183,11 +200,11 @@ export default function HistoryDetailScreen() {
                                 backgroundColor: color,
                               }}
                             />
-                            <TypographyParagraph>{d.value}</TypographyParagraph>
+                            <Text style={{ fontSize: 16 }}>{d.value}</Text>
                           </View>
-                          <TypographySmall variant="light">
+                          <Text style={{ fontSize: 12, color: '#6b7280' }}>
                             {d.count} · {pct}%
-                          </TypographySmall>
+                          </Text>
                         </View>
                       );
                     });

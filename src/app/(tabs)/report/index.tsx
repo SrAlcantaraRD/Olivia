@@ -1,151 +1,37 @@
 import { Link, useRouter } from 'expo-router';
-import { useThemeColor } from 'heroui-native';
-import { useEffect, useMemo, useState } from 'react';
+// react imports not required directly here
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
-import { useAdapters } from '@/adapter';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
-import { useGetRecordStatistics } from '@/domain/module/hook/get-record-statistics.hook';
-import { useGetRecordTrend } from '@/domain/module/hook/get-record-trend.hook';
+import type { TModule } from '@/domain/module/entity/module.entity';
+import { useReportManager } from '@/hooks/use-report-manager.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
-import { IconAtom } from '@/ui/components/atoms/icon.atom';
+import { IconAtom, type IconName } from '@/ui/components/atoms/icon.atom';
 import {
   TypographyHeading,
   TypographyParagraph,
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
-import StatCardWithTrend from '@/ui/components/molecules/stat-card-with-trend.molecule';
+import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { StatCardWithTrend } from '@/ui/components/molecules/stat-card-with-trend.molecule';
 
 export default function ReportScreen() {
-  const foregroundColor = useThemeColor('foreground');
-  const { recordAdapter, notifyAdapter } = useAdapters();
-  const { execute: executeGetStats, items: stats } = useGetRecordStatistics({
-    loggerAdapter: BASE_LOGGER,
-    recordAdapter,
-    notifyAdapter,
-  });
-
-  const { execute: executeGetTrend, items: trendItems } = useGetRecordTrend({
-    loggerAdapter: BASE_LOGGER,
-    recordAdapter,
-    notifyAdapter,
-  });
+  const report = useReportManager();
 
   const router = useRouter();
-  const [trendByModule, setTrendByModule] = useState<Record<number, number[]>>(
-    {}
-  );
 
-  const [range, setRange] = useState<'today' | '7d' | '30d' | '90d'>('7d');
-  const timeRange = useMemo(() => {
-    const end = Math.floor(Date.now() / 1000);
-    let start = end - 7 * 24 * 60 * 60;
-    switch (range) {
-      case 'today': {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        start = Math.floor(today.getTime() / 1000);
-        break;
-      }
-      case '7d':
-        start = end - 7 * 24 * 60 * 60;
-        break;
-      case '30d':
-        start = end - 30 * 24 * 60 * 60;
-        break;
-      case '90d':
-        start = end - 90 * 24 * 60 * 60;
-        break;
-    }
-    return { start, end };
-  }, [range]);
+  const MODULE_META: Record<number, { icon?: string; color?: string }> = {
+    1: { icon: 'water', color: '#4f46e5' },
+    2: { icon: 'nutrition', color: '#f97316' },
+    3: { icon: 'medical', color: '#22c55e' },
+  };
 
-  useEffect(() => {
-    let mounted = true;
-
-    executeGetStats({ start: timeRange.start, end: timeRange.end });
-    // fetch global trend
-    executeGetTrend({ start: timeRange.start, end: timeRange.end });
-
-    // fetch per-module trends in parallel
-    (async () => {
-      try {
-        const entries: Record<number, number[]> = {};
-
-        await Promise.all(
-          STAT_MODULES.map(async (m) => {
-            try {
-              const res = await executeGetTrend({
-                start: timeRange.start,
-                end: timeRange.end,
-                moduleID: m.moduleID,
-              });
-              const series = (res?.data ?? []) as {
-                day: string;
-                count: number;
-              }[];
-              const numDays =
-                Math.floor((timeRange.end - timeRange.start) / (24 * 60 * 60)) +
-                1;
-              const dayMap: Record<string, number> = {};
-              series.forEach((s) => {
-                dayMap[s.day] = s.count;
-              });
-              const counts = Array.from({ length: numDays }, (_, i) => {
-                const ts = (timeRange.start + i * 24 * 60 * 60) * 1000;
-                const day = new Date(ts).toISOString().slice(0, 10);
-                return dayMap[day] ?? 0;
-              });
-              entries[m.moduleID] = counts;
-            } catch (err) {
-              // on error, fallback to generated data
-              entries[m.moduleID] = Array.from({ length: 7 }, () =>
-                Math.floor(Math.random() * 5)
-              );
-            }
-          })
-        );
-
-        if (mounted) setTrendByModule(entries);
-      } catch (err) {
-        // ignore
-      }
-    })();
-
-    return () => {
-      mounted = false;
-    };
-  }, [timeRange.start, timeRange.end]);
-
-  const STAT_MODULES = [
-    {
-      moduleID: 1,
-      icon: 'water',
-      titleKey: 'component.stat_card.cic_label',
-      color: '#4f46e5',
-    },
-    {
-      moduleID: 2,
-      icon: 'nutrition',
-      titleKey: 'component.stat_card.stool_label',
-      color: '#f97316',
-    },
-    {
-      moduleID: 3,
-      icon: 'medical',
-      titleKey: 'component.stat_card.medication_label',
-      color: '#22c55e',
-    },
-  ];
+  // Visible modules come from the report manager
+  const visibleModules = report.visibleModules;
 
   return (
-    <View className="flex-1 bg-background">
-      <ScrollView
-        className="flex-1"
-        contentContainerStyle={{ padding: 16 }}
-        contentInsetAdjustmentBehavior="automatic"
-      >
+    <ScreenLayout testID="page.report">
+      <ScrollView className="flex-1" contentInsetAdjustmentBehavior="automatic">
         <View className="gap-6">
           {/* Header */}
           <View className="gap-2">
@@ -190,8 +76,8 @@ export default function ReportScreen() {
               {(['today', '7d', '30d', '90d'] as const).map((r) => (
                 <Pressable
                   key={`range-${r}`}
-                  onPress={() => setRange(r)}
-                  className={`px-3 py-2 rounded-xl ${range === r ? 'bg-default-100' : 'bg-default-50'}`}
+                  onPress={() => report.setRange(r)}
+                  className={`px-3 py-2 rounded-xl ${report.range === r ? 'bg-default-100' : 'bg-default-50'}`}
                 >
                   <Text className="text-sm">{r}</Text>
                 </Pressable>
@@ -206,11 +92,31 @@ export default function ReportScreen() {
               accessibilityRole="header"
             />
 
+            {/* DEBUG: show raw fetched items for troubleshooting */}
+            <CardAtom className="p-3 bg-default-50">
+              <TypographySmall
+                variant="light"
+                i18nKey={'page.report.debug_stats'}
+              />
+              <Text style={{ fontSize: 12 }} selectable>
+                {JSON.stringify(report.stats ?? [], null, 2)}
+              </Text>
+              <TypographySmall
+                variant="light"
+                i18nKey={'page.report.debug_trendItems'}
+              />
+              <Text style={{ fontSize: 12 }} selectable>
+                {JSON.stringify(report.globalTrend ?? [], null, 2)}
+              </Text>
+            </CardAtom>
+
             {/* Dynamic stat cards */}
-            {STAT_MODULES.map((m) => {
-              const item = stats?.find((s) => s.moduleID === m.moduleID);
+            {visibleModules.map((m: TModule) => {
+              const moduleId =
+                m.id ?? (m as unknown as { moduleID?: number }).moduleID;
+              const item = report.stats?.find((s) => s.moduleID === moduleId);
               const count = item?.count ?? 0;
-              const moduleTrend = trendByModule[m.moduleID];
+              const moduleTrend = report.trendByModule[moduleId];
               const trend = moduleTrend?.length
                 ? moduleTrend
                 : Array.from({ length: 7 }, () =>
@@ -218,16 +124,21 @@ export default function ReportScreen() {
                   );
               return (
                 <StatCardWithTrend
-                  key={`stat-${m.moduleID}`}
-                  titleKey={m.titleKey}
+                  key={`stat-${moduleId}`}
+                  titleKey={
+                    (m.code
+                      ? `component.stat_card.${String(m.code).toLowerCase()}_label`
+                      : (m.name ??
+                        '')) as unknown as import('@/ui/i18n/locales/en-EN').Ti18nKeys
+                  }
                   value={count}
                   data={trend}
-                  color={m.color}
-                  iconName={m.icon}
+                  color={MODULE_META[moduleId]?.color}
+                  iconName={MODULE_META[moduleId]?.icon as unknown as IconName}
                   onPress={() =>
                     router.push({
                       pathname: '/(tabs)/report/history-detail',
-                      params: { moduleId: String(m.moduleID) },
+                      params: { moduleId: String(moduleId) },
                     })
                   }
                 />
@@ -242,7 +153,7 @@ export default function ReportScreen() {
               accessibilityRole="header"
             />
 
-            <CardAtom className="p-4 bg-default-100">
+            <CardAtom className="p-3 bg-default-50">
               <TypographySmall
                 i18nKey="page.report.no_history"
                 variant="light"
@@ -252,6 +163,6 @@ export default function ReportScreen() {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </ScreenLayout>
   );
 }
