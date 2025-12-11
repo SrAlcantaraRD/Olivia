@@ -101,6 +101,9 @@ export const esES = {
     '¿Estás seguro de que deseas borrar todo? Esta operación no se puede deshacer.',
   'page.settings.logout_confirm.delete_warning':
     'Solicitud de borrado recibida',
+  'page.settings.logout_confirm.time_registered_value': '{{count}} días',
+  'page.settings.logout_confirm.total_records_value': '{{count}}',
+  'common.number': '{{value}}',
 
   // Page: CIC Registration Wizard - Volume
   'page.cic_register.volume.title': 'Volumen de orina',

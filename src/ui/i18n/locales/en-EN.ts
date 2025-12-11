@@ -188,6 +188,9 @@ export const enEN = {
   'page.settings.logout_confirm.confirm_question':
     'Are you sure you want to delete everything? This cannot be undone.',
   'page.settings.logout_confirm.delete_warning': 'Delete action requested',
+  'page.settings.logout_confirm.time_registered_value': '{{count}} days',
+  'page.settings.logout_confirm.total_records_value': '{{count}}',
+  'common.number': '{{value}}',
 
   // Page: CIC Registration Wizard - Volume
   'page.cic_register.volume.title': 'Urine volume',
@@ -257,6 +260,14 @@ export const enEN = {
   'component.stat_card.stool_label': 'Stools',
   'component.stat_card.medication_label': 'Medication',
   'component.stat_card.today': 'Today',
+  'page.report.debug_stats': 'Debug: stats',
+  'page.report.debug_trendItems': 'Debug: trend items',
+
+  // History detail ranges
+  'page.history_detail.range.today': 'Today',
+  'page.history_detail.range.7d': 'Last 7 days',
+  'page.history_detail.range.30d': 'Last 30 days',
+  'page.history_detail.range.90d': 'Last 90 days',
 
   // Accessibility
   'a11y.button.register_cic': 'Button to register catheterization',

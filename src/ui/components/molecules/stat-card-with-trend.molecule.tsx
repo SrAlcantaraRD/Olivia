@@ -2,16 +2,17 @@ import { useThemeColor } from 'heroui-native';
 import { Pressable, Text, View } from 'react-native';
 
 import { CardAtom } from '@/ui/components/atoms/card.atom';
-import { IconAtom } from '@/ui/components/atoms/icon.atom';
+import { IconAtom, type IconName } from '@/ui/components/atoms/icon.atom';
 import { Sparkline } from '@/ui/components/atoms/sparkline.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface StatCardWithTrendProps {
-  titleKey: string;
+  titleKey: Ti18nKeys;
   value: number | string;
   data: number[];
   color?: string;
-  iconName?: string;
+  iconName?: IconName;
   onPress?: () => void;
 }
 
@@ -52,5 +53,3 @@ export function StatCardWithTrend({
     </Pressable>
   );
 }
-
-export default StatCardWithTrend;
