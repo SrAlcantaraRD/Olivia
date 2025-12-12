@@ -110,7 +110,9 @@ export function ParentSetupForm() {
   const wizardSteps: WizardStep[] = steps.map((step) => ({
     id: step.id,
     isValid: step.isValid,
-    content: <FormPage step={step} />,
+    content: (
+      <FormPage step={step} testID={`screen.parent-setup.form.${step.id}`} />
+    ),
   }));
 
   return (

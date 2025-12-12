@@ -41,6 +41,7 @@ export function ParentInfoStep({
           className="mb-4"
           weight="medium"
           i18nKey="parent-setup.parent-info.relationship-label"
+          testID="screen.parent-setup.parent-info.relationship_label"
         />
         <View className="flex-1 flex-col gap-4">
           <CardWithDetails

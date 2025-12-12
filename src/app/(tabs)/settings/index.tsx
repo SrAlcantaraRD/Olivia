@@ -22,15 +22,21 @@ export default function SettingsScreen() {
           {/* Header */}
           <View className="gap-2">
             <TypographyTitle
+              testID="screen.settings.title"
               i18nKey="page.settings.title"
               accessibilityRole="header"
             />
-            <TypographySmall i18nKey="page.settings.subtitle" variant="light" />
+            <TypographySmall
+              testID="screen.settings.subtitle"
+              i18nKey="page.settings.subtitle"
+              variant="light"
+            />
           </View>
 
           {/* Child Profile Section */}
           <View className="gap-3">
             <TypographySmall
+              testID="screen.settings.section_child"
               i18nKey="page.settings.section_child"
               className="font-semibold text-default-400 uppercase"
               accessibilityRole="header"
@@ -46,10 +52,12 @@ export default function SettingsScreen() {
                   <IconAtom name="person" />
                   <View>
                     <TypographyParagraph
+                      testID="screen.settings.child_profile"
                       i18nKey="page.settings.child_profile"
                       className="font-medium"
                     />
                     <TypographySmall
+                      testID="screen.settings.child_profile_desc"
                       i18nKey="page.settings.child_profile_desc"
                       variant="light"
                     />
@@ -63,6 +71,7 @@ export default function SettingsScreen() {
           {/* Carers Section */}
           <View className="gap-3">
             <TypographySmall
+              testID="screen.settings.section_carers"
               i18nKey="page.settings.section_carers"
               className="font-semibold text-default-400 uppercase"
               accessibilityRole="header"
@@ -78,10 +87,12 @@ export default function SettingsScreen() {
                   <IconAtom name="people" />
                   <View>
                     <TypographyParagraph
+                      testID="screen.settings.manage_carers"
                       i18nKey="page.settings.manage_carers"
                       className="font-medium"
                     />
                     <TypographySmall
+                      testID="screen.settings.manage_carers_desc"
                       i18nKey="page.settings.manage_carers_desc"
                       variant="light"
                     />
@@ -95,6 +106,7 @@ export default function SettingsScreen() {
           {/* App Settings Section */}
           <View className="gap-3">
             <TypographySmall
+              testID="screen.settings.section_app"
               i18nKey="page.settings.section_app"
               className="font-semibold text-default-400 uppercase"
               accessibilityRole="header"
@@ -110,10 +122,12 @@ export default function SettingsScreen() {
                   <IconAtom name="settings" />
                   <View>
                     <TypographyParagraph
+                      testID="screen.settings.app_settings"
                       i18nKey="page.settings.app_settings"
                       className="font-medium"
                     />
                     <TypographySmall
+                      testID="screen.settings.app_settings_desc"
                       i18nKey="page.settings.app_settings_desc"
                       variant="light"
                     />
@@ -133,10 +147,12 @@ export default function SettingsScreen() {
                   <IconAtom name="information-circle" />
                   <View>
                     <TypographyParagraph
+                      testID="screen.settings.about"
                       i18nKey="page.settings.about"
                       className="font-medium"
                     />
                     <TypographySmall
+                      testID="screen.settings.about_desc"
                       i18nKey="page.settings.about_desc"
                       variant="light"
                     />
@@ -150,6 +166,7 @@ export default function SettingsScreen() {
           {/* Danger Zone */}
           <View className="gap-3 mt-4">
             <TypographySmall
+              testID="screen.settings.section_danger"
               i18nKey="page.settings.section_danger"
               className="font-semibold text-danger uppercase"
               accessibilityRole="header"
@@ -163,6 +180,7 @@ export default function SettingsScreen() {
             >
               <CardAtom className="flex-row items-center justify-center p-4 bg-danger/10 border border-danger/20">
                 <TypographyParagraph
+                  testID="screen.settings.logout"
                   i18nKey="page.settings.logout"
                   className="font-semibold text-danger"
                 />

@@ -23,7 +23,10 @@ export default function ScanQRScreen() {
       bottomOffset={60}
     >
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <TypographyTitle i18nKey="caregiver-setup.scan-qr.title" />
+        <TypographyTitle
+          testID="screen.caregiver-setup.scan-qr.title"
+          i18nKey="caregiver-setup.scan-qr.title"
+        />
         <ButtonAtom
           title="next"
           onPress={goToConfirmLink}

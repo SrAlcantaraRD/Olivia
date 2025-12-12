@@ -251,7 +251,10 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
         >
           <View className={classNames.triggerContentContainer}>
             {item.icon}
-            <TypographyParagraph className={classNames.triggerTitle}>
+            <TypographyParagraph
+              className={classNames.triggerTitle}
+              testID={`screen.component.accordion.${item.id}.title`}
+            >
               {item.title}
             </TypographyParagraph>
           </View>
@@ -263,6 +266,7 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
           <TypographyParagraph
             className={classNames.contentText}
             i18nKey={'welcome'}
+            testID={`screen.component.accordion.${item.id}.content`}
           >
             {item.content}
           </TypographyParagraph>

@@ -53,11 +53,13 @@ export default function RoleSelectionScreen() {
         {/* Title */}
         <View className="mb-8">
           <TypographyTitle
+            testID="screen.role-selection.title"
             style={{ color: foregroundColor }}
             className="mb-2 text-center"
             i18nKey="role-selection-screen.title"
           />
           <TypographyParagraph
+            testID="screen.role-selection.description"
             style={{ color: mutedColor }}
             className="text-center"
             i18nKey="role-selection-screen.description"
@@ -100,6 +102,7 @@ export default function RoleSelectionScreen() {
           className="rounded-full py-4 items-center"
         >
           <TypographyParagraph
+            testID="screen.role-selection.continue"
             style={{ color: 'white' }}
             weight="semibold"
             size="lg"

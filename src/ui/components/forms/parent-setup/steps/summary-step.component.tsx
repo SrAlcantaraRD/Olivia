@@ -35,6 +35,7 @@ function SummaryRow({ label, value, backgroundColor }: SummaryRowProps) {
         className="flex-1 mr-4"
         variant="light"
         i18nKey={label}
+        testID={`screen.parent-setup.summary.${label}`}
         values={{
           value,
         }}
@@ -57,6 +58,7 @@ function SummarySection({ title, children }: SummarySectionProps) {
         style={{ color: foregroundColor }}
         size="lg"
         i18nKey={title}
+        testID={`screen.parent-setup.summary.section.${title}`}
       />
       {children}
     </View>
@@ -151,6 +153,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
                 <TypographySmall
                   style={{ color: foregroundColor }}
                   i18nKey={moduleName}
+                  testID={`screen.parent-setup.summary.module.${moduleName}`}
                 />
               </View>
             ))
@@ -158,6 +161,7 @@ export function SummaryStep({ formData }: SummaryStepProps) {
             <TypographyParagraph
               style={{ color: mutedColor }}
               i18nKey="parent-setup.summary.no-modules"
+              testID="screen.parent-setup.summary.no-modules"
               variant="light"
             />
           )}

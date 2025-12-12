@@ -36,7 +36,11 @@ export function StatCardWithTrend({
         <View className="flex-row justify-between items-center mb-2">
           <View className="flex-row items-center gap-2">
             {iconName && <IconAtom name={iconName} />}
-            <TypographySmall i18nKey={titleKey} className="font-medium" />
+            <TypographySmall
+              i18nKey={titleKey}
+              className="font-medium"
+              testID={`screen.stat-card.${titleKey}`}
+            />
           </View>
         </View>
         <View className="mb-2">

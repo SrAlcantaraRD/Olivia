@@ -1,14 +1,13 @@
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 // react imports not required directly here
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import type { TModule } from '@/domain/module/entity/module.entity';
 import { useReportManager } from '@/hooks/use-report-manager.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
-import { IconAtom, type IconName } from '@/ui/components/atoms/icon.atom';
+import type { IconName } from '@/ui/components/atoms/icon.atom';
 import {
   TypographyHeading,
-  TypographyParagraph,
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
@@ -36,38 +35,24 @@ export default function ReportScreen() {
           {/* Header */}
           <View className="gap-2">
             <TypographyTitle
+              testID="page.report.title"
               i18nKey="page.report.title"
               accessibilityRole="header"
             />
-            <TypographySmall i18nKey="page.report.subtitle" variant="light" />
+            <TypographySmall
+              testID="page.report.subtitle"
+              i18nKey="page.report.subtitle"
+              variant="light"
+            />
           </View>
 
           {/* Filter Section */}
           <View className="gap-4">
             <TypographyHeading
+              testID="page.report.filters"
               i18nKey="page.report.filters"
               accessibilityRole="header"
             />
-
-            <Link href="/(modals)/modal-filter-history" asChild>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="a11y.button.open_filters"
-                accessibilityHint="a11y.hint.opens_filter_modal"
-              >
-                <CardAtom className="flex-row items-center gap-3 p-4 bg-default-100">
-                  <IconAtom name="filter" />
-                  <TypographyParagraph
-                    i18nKey="component.filter_button.label"
-                    className="font-medium flex-1"
-                  />
-                  <TypographySmall
-                    i18nKey="component.filter_button.all_types"
-                    variant="light"
-                  />
-                </CardAtom>
-              </Pressable>
-            </Link>
           </View>
 
           {/* Range Selector */}
@@ -88,6 +73,7 @@ export default function ReportScreen() {
           {/* Statistics Cards */}
           <View className="gap-4">
             <TypographyHeading
+              testID="page.report.statistics"
               i18nKey="page.report.statistics"
               accessibilityRole="header"
             />
@@ -95,6 +81,7 @@ export default function ReportScreen() {
             {/* DEBUG: show raw fetched items for troubleshooting */}
             <CardAtom className="p-3 bg-default-50">
               <TypographySmall
+                testID="page.report.debug-stats"
                 variant="light"
                 i18nKey={'page.report.debug_stats'}
               />
@@ -103,6 +90,7 @@ export default function ReportScreen() {
               </Text>
               <TypographySmall
                 variant="light"
+                testID="page.report.debug-trendItems"
                 i18nKey={'page.report.debug_trendItems'}
               />
               <Text style={{ fontSize: 12 }} selectable>
@@ -112,8 +100,7 @@ export default function ReportScreen() {
 
             {/* Dynamic stat cards */}
             {visibleModules.map((m: TModule) => {
-              const moduleId =
-                m.id ?? (m as unknown as { moduleID?: number }).moduleID;
+              const moduleId = m.id;
               const item = report.stats?.find((s) => s.moduleID === moduleId);
               const count = item?.count ?? 0;
               const moduleTrend = report.trendByModule[moduleId];
@@ -149,12 +136,14 @@ export default function ReportScreen() {
           {/* History Section */}
           <View className="gap-4 mt-4">
             <TypographyHeading
+              testID="page.report.history"
               i18nKey="page.report.history"
               accessibilityRole="header"
             />
 
             <CardAtom className="p-3 bg-default-50">
               <TypographySmall
+                testID="page.report.no-history"
                 i18nKey="page.report.no_history"
                 variant="light"
                 className="text-center"

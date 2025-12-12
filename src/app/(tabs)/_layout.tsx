@@ -1,6 +1,7 @@
 import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
 import { useThemeColor } from 'heroui-native';
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 
 import { useAppTheme } from '@/ui/themes/app-theme-context';
 
@@ -35,8 +36,10 @@ export default function TabLayout() {
       </NativeTabs.Trigger>
 
       {/* Register Tab - Default landing page (first tab) */}
-      <NativeTabs.Trigger name="register" testID="register-tab">
-        <Icon sf="plus.circle.fill" />
+      <NativeTabs.Trigger name="register">
+        <View testID="screen.tabs.register.icon">
+          <Icon sf="plus.circle.fill" />
+        </View>
         <Label>{t('tab.register')}</Label>
       </NativeTabs.Trigger>
 

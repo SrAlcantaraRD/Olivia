@@ -60,6 +60,7 @@ export function WelcomeSlideContent({
           style={{ color: foregroundColor }}
           className={`text-center ${bulletPoints ? 'mb-6' : 'mb-4'}`}
           i18nKey={title}
+          testID={`screen.welcome.title.${title}`}
         />
 
         {/* Description or Bullet Points */}
@@ -68,6 +69,7 @@ export function WelcomeSlideContent({
             style={{ color: mutedColor }}
             className="text-center"
             i18nKey={description}
+            testID={`screen.welcome.description.${description}`}
           />
         )}
 
@@ -82,6 +84,7 @@ export function WelcomeSlideContent({
                 <TypographyParagraph
                   style={{ color: mutedColor }}
                   i18nKey={item}
+                  testID={`screen.welcome.bullet.${item}`}
                 />
               </View>
             ))}

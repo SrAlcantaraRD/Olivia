@@ -57,6 +57,7 @@ export function ChildInfoStep({
           className="text-muted ml-1 mt-1"
           i18nKey="parent-setup.child-info.diagnosis-hint"
           variant="light"
+          testID="screen.parent-setup.child-info.diagnosis_hint"
         />
       </View>
     </>

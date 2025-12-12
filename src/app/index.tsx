@@ -94,6 +94,7 @@ export default function SplashScreen() {
         </View>
 
         <TypographyHeading
+          testID="screen.splash.app-name"
           style={{ color: foregroundColor }}
           className="mb-2"
           size="4xl"
@@ -101,6 +102,7 @@ export default function SplashScreen() {
         />
 
         <TypographyParagraph
+          testID="screen.splash.tagline"
           style={{ color: mutedColor }}
           className="text-center"
           i18nKey="splash-screen.tagline"
@@ -130,6 +132,7 @@ export default function SplashScreen() {
           </View>
         </Animated.View>
         <TypographyParagraph
+          testID="screen.splash.continue"
           style={{ color: foregroundColor }}
           i18nKey="continue"
         />
@@ -138,6 +141,7 @@ export default function SplashScreen() {
       {__DEV__ && (
         <Pressable testID="reset-db-button" onPress={handleResetDb}>
           <TypographySmall
+            testID="screen.splash.reset-db"
             style={{ color: mutedColor }}
             i18nKey="test.reset-db"
           />
@@ -152,6 +156,7 @@ export default function SplashScreen() {
           color={mutedColor}
         />
         <TypographySmall
+          testID="screen.splash.privacy-notice"
           style={{ color: mutedColor }}
           className="text-center"
           i18nKey="splash-screen.privacy-notice"

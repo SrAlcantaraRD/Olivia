@@ -18,7 +18,10 @@ export default function CaregiverConfirmLinkScreen() {
       bottomOffset={60}
     >
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <TypographyTitle i18nKey="caregiver-setup.confirm-link.title" />
+        <TypographyTitle
+          testID="screen.caregiver-setup.confirm-link.title"
+          i18nKey="caregiver-setup.confirm-link.title"
+        />
         <ButtonAtom
           title="welcome"
           onPress={() => router.replace('/(tabs)/register')}

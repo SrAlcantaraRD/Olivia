@@ -35,7 +35,7 @@ export default function LogoutConfirmScreen() {
 
     (async () => {
       try {
-        await executeGetStats({ start: 0, end: Math.floor(Date.now() / 1000) });
+        await executeGetStats({ startDate: new Date(0), endDate: new Date() });
         const days = await recordAdapter.getCountsByDay();
         if (!mounted) return;
         if (Array.isArray(days) && days.length > 0) {
@@ -53,7 +53,10 @@ export default function LogoutConfirmScreen() {
 
   useEffect(() => {
     // compute total when stats change
-    const sum = (stats ?? []).reduce((s, it) => s + (it.count ?? 0), 0);
+    const sum = (stats?.countsByModule ?? []).reduce(
+      (s, it) => s + (it.count ?? 0),
+      0
+    );
     setTotal(sum);
   }, [stats]);
 
@@ -111,12 +114,14 @@ export default function LogoutConfirmScreen() {
       >
         <View className="gap-6">
           <TypographyTitle
+            testID="screen.settings.logout-confirm.title"
             i18nKey="page.settings.logout_confirm.title"
             accessibilityRole="header"
           />
 
           <CardAtom className="p-4 bg-danger/10 border border-danger-soft-hover">
             <TypographyParagraph
+              testID="screen.settings.logout-confirm.warning"
               i18nKey="page.settings.logout_confirm.warning"
               className="font-medium text-danger"
             />
@@ -124,6 +129,7 @@ export default function LogoutConfirmScreen() {
 
           <View className="p-4 bg-default-100 rounded-lg">
             <TypographySmall
+              testID="screen.settings.logout-confirm.summary-title"
               i18nKey="page.settings.logout_confirm.summary_title"
               className="font-semibold text-default-400 uppercase"
             />
@@ -131,10 +137,12 @@ export default function LogoutConfirmScreen() {
             <View className="mt-3 gap-2">
               <View className="flex-row justify-between">
                 <TypographySmall
+                  testID="page.settings.logout-confirm.time-registered"
                   i18nKey="page.settings.logout_confirm.time_registered"
                   variant="light"
                 />
                 <TypographySmall
+                  testID="page.settings.logout-confirm.time-registered-value"
                   i18nKey={K_TIME_REGISTERED}
                   values={{ count: Number(daysRegistered) }}
                   className="font-medium"
@@ -143,10 +151,12 @@ export default function LogoutConfirmScreen() {
 
               <View className="flex-row justify-between">
                 <TypographySmall
+                  testID="page.settings.logout-confirm.total-records"
                   i18nKey="page.settings.logout_confirm.total_records"
                   variant="light"
                 />
                 <TypographySmall
+                  testID="page.settings.logout-confirm.total-records-value"
                   i18nKey={K_TOTAL_RECORDS}
                   values={{ count: total }}
                   className="font-medium"
@@ -155,13 +165,17 @@ export default function LogoutConfirmScreen() {
 
               <View className="flex-row justify-between">
                 <TypographySmall
+                  testID="screen.settings.logout_confirm.cic"
                   i18nKey="page.settings.logout_confirm.cic"
                   variant="light"
                 />
                 <TypographySmall
+                  testID="screen.settings.logout_confirm.cic_value"
                   i18nKey={K_COMMON_NUMBER}
                   values={{
-                    value: stats?.find((s) => s.moduleID === 1)?.count ?? 0,
+                    value:
+                      stats?.countsByModule?.find((s) => s.moduleID === 1)
+                        ?.count ?? 0,
                   }}
                   className="font-medium"
                 />
@@ -169,13 +183,17 @@ export default function LogoutConfirmScreen() {
 
               <View className="flex-row justify-between">
                 <TypographySmall
+                  testID="screen.settings.logout_confirm.stools"
                   i18nKey="page.settings.logout_confirm.stools"
                   variant="light"
                 />
                 <TypographySmall
+                  testID="screen.settings.logout_confirm.stools_value"
                   i18nKey={K_COMMON_NUMBER}
                   values={{
-                    value: stats?.find((s) => s.moduleID === 2)?.count ?? 0,
+                    value:
+                      stats?.countsByModule?.find((s) => s.moduleID === 2)
+                        ?.count ?? 0,
                   }}
                   className="font-medium"
                 />
@@ -183,13 +201,17 @@ export default function LogoutConfirmScreen() {
 
               <View className="flex-row justify-between">
                 <TypographySmall
+                  testID="screen.settings.logout_confirm.enemas"
                   i18nKey="page.settings.logout_confirm.enemas"
                   variant="light"
                 />
                 <TypographySmall
+                  testID="screen.settings.logout_confirm.enemas_value"
                   i18nKey={K_COMMON_NUMBER}
                   values={{
-                    value: stats?.find((s) => s.moduleID === 3)?.count ?? 0,
+                    value:
+                      stats?.countsByModule?.find((s) => s.moduleID === 3)
+                        ?.count ?? 0,
                   }}
                   className="font-medium"
                 />
@@ -197,13 +219,17 @@ export default function LogoutConfirmScreen() {
 
               <View className="flex-row justify-between">
                 <TypographySmall
+                  testID="screen.settings.logout_confirm.medication"
                   i18nKey="page.settings.logout_confirm.medication"
                   variant="light"
                 />
                 <TypographySmall
+                  testID="screen.settings.logout_confirm.medication_value"
                   i18nKey={K_COMMON_NUMBER}
                   values={{
-                    value: stats?.find((s) => s.moduleID === 4)?.count ?? 0,
+                    value:
+                      stats?.countsByModule?.find((s) => s.moduleID === 4)
+                        ?.count ?? 0,
                   }}
                   className="font-medium"
                 />
@@ -212,6 +238,7 @@ export default function LogoutConfirmScreen() {
           </View>
 
           <TypographyHeading
+            testID="screen.settings.logout_confirm.confirm_question"
             i18nKey="page.settings.logout_confirm.confirm_question"
             accessibilityRole="header"
           />

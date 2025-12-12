@@ -20,13 +20,18 @@ const TITLE_TEXT_COLOR = 'white';
 const DETAIL_TEXT_COLOR = '#BBBBBB'; // Light grey
 
 interface CustomToastProps extends RNToastBaseProps {
-  text1?: Ti18nKeys;
-  text2?: Ti18nKeys;
+  text1?: Ti18nKeys | string;
+  text2?: Ti18nKeys | string;
 }
 
 interface BaseToastProps {
-  text1?: Ti18nKeys;
-  text2?: Ti18nKeys;
+  iconName: IconName;
+  iconBgColor: string;
+  auraColor: string;
+}
+interface BaseToastProps {
+  text1?: Ti18nKeys | string;
+  text2?: Ti18nKeys | string;
   iconName: IconName;
   iconBgColor: string;
   auraColor: string;
@@ -101,6 +106,7 @@ const BaseToast = ({
                 color: TITLE_TEXT_COLOR,
                 marginBottom: text2 ? 4 : 0,
               }}
+              testID={`screen.toast.${text1}.title`}
             />
           )}
           {text2 && (
@@ -110,6 +116,7 @@ const BaseToast = ({
               style={{
                 color: DETAIL_TEXT_COLOR,
               }}
+              testID={`screen.toast.${text2}.detail`}
             />
           )}
         </View>

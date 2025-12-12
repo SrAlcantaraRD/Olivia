@@ -35,12 +35,14 @@ export default function AppSettingsScreen() {
       >
         <View className="gap-6">
           <TypographyTitle
+            testID="page.app-settings.title"
             i18nKey="page.app_settings.title"
             accessibilityRole="header"
           />
 
           <View className="p-4 bg-default-100 rounded-lg">
             <TypographyParagraph
+              testID="page.app-settings.subtitle"
               i18nKey="page.app_settings.placeholder"
               variant="light"
               size="sm"
@@ -50,7 +52,10 @@ export default function AppSettingsScreen() {
 
           {/* Application section */}
           <View className="p-4 bg-default-100 rounded-lg">
-            <TypographyTitle i18nKey="page.app_settings.section_theme" />
+            <TypographyTitle
+              testID="page.app-settings.ui-theme"
+              i18nKey="page.app_settings.section_theme"
+            />
             <View className="mt-4">
               <ButtonAtom
                 onPress={onToggleTheme}
@@ -65,20 +70,23 @@ export default function AppSettingsScreen() {
           </View>
 
           <View className="p-4 bg-default-100 rounded-lg">
-            <TypographyTitle i18nKey="page.app_settings.section_language" />
+            <TypographyTitle
+              testID="page.app-settings.ui-language"
+              i18nKey="page.app_settings.section_language"
+            />
             <View className="mt-4 space-y-2">
               <ButtonAtom
-                testID="page.app_settings.button.change-language-english"
+                testID="page.app-settings.button.change-language-english"
                 title="page.app_settings.language.english"
                 onPress={() => void setLocale(ELocaleCode.EN)}
               />
               <ButtonAtom
-                testID="page.app_settings.button.change-language-spanish"
+                testID="page.app-settings.button.change-language-spanish"
                 title="page.app_settings.language.spanish"
                 onPress={() => void setLocale(ELocaleCode.ES)}
               />
               <ButtonAtom
-                testID="page.app_settings.button.change-language-catalan"
+                testID="page.app-settings.button.change-language-catalan"
                 title="page.app_settings.language.catalan"
                 onPress={() => void setLocale(ELocaleCode.CA)}
               />

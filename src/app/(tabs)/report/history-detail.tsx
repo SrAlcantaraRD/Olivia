@@ -4,6 +4,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
+import type { TID } from '@/domain/core/schemas/id.schema';
 import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import { useGetRecordFieldDistribution } from '@/domain/module/hook/get-record-field-distribution.hook';
 import BarChartAtom from '@/ui/components/atoms/bar-chart.atom';
@@ -15,19 +16,18 @@ import {
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
-import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 export default function HistoryDetailScreen() {
-  const params = useLocalSearchParams() as Record<string, string | undefined>;
-  const moduleId = Number(params.moduleId ?? 0);
+  const { moduleID } = useLocalSearchParams<{ moduleID: string }>();
   const { moduleFieldAdapter, recordAdapter, notifyAdapter, cacheAdapter } =
     useAdapters();
 
-  const { execute: executeGetFields, items: fields } = useGetListModuleField({
-    loggerAdapter: BASE_LOGGER,
-    moduleFieldAdapter,
-    notifyAdapter,
-  });
+  const { execute: executeGetModuleFieldList, items: fields } =
+    useGetListModuleField({
+      loggerAdapter: BASE_LOGGER,
+      moduleFieldAdapter,
+      notifyAdapter,
+    });
 
   const { execute: executeGetDistribution, items: distributionItems } =
     useGetRecordFieldDistribution({
@@ -36,6 +36,10 @@ export default function HistoryDetailScreen() {
       notifyAdapter,
       cacheAdapter,
     });
+
+  const handlerLoadModuleFieldList = async (moduleID: TID) => {
+    await executeGetModuleFieldList({ moduleID });
+  };
 
   const [selectedFieldId, setSelectedFieldId] = useState<number | null>(null);
   const [range, setRange] = useState<'30d' | '90d' | '7d' | 'today'>('30d');
@@ -63,18 +67,18 @@ export default function HistoryDetailScreen() {
         startDate = new Date(endDate.getTime() - 90 * 24 * 60 * 60 * 1000);
         break;
     }
-    return { startDate, end: endDate };
+    return { startDate, endDate };
   }, [range]);
 
   useEffect(() => {
-    if (moduleId > 0) executeGetFields({ moduleId });
-  }, [moduleId]);
+    if (moduleID) handlerLoadModuleFieldList(Number(moduleID));
+  }, [moduleID]);
 
   useEffect(() => {
     if (selectedFieldId) {
       executeGetDistribution({
         fieldID: selectedFieldId,
-        moduleID: moduleId || undefined,
+        moduleID: moduleID ? Number(moduleID) : undefined,
         startDate: timeRange.startDate,
         endDate: timeRange.endDate,
       });
@@ -96,12 +100,16 @@ export default function HistoryDetailScreen() {
       >
         <View className="gap-6">
           <TypographyTitle
+            testID="page.history-detail.title"
             i18nKey="page.history_detail.title"
             accessibilityRole="header"
           />
 
           <View className="gap-2">
-            <TypographyHeading i18nKey="page.history_detail.select_field" />
+            <TypographyHeading
+              testID="page.history-detail.select-field"
+              i18nKey="page.history_detail.select_field"
+            />
             <View className="flex-row gap-2">
               {(['today', '7d', '30d', '90d'] as const).map((r) => {
                 const rangeKey =
@@ -120,7 +128,8 @@ export default function HistoryDetailScreen() {
                     className={`px-3 py-2 rounded-xl ${range === r ? 'bg-default-100' : 'bg-default-50'}`}
                   >
                     <TypographySmall
-                      i18nKey={rangeKey as unknown as Ti18nKeys}
+                      testID={`page.history-detail.range.${r}`}
+                      i18nKey={rangeKey}
                     />
                   </Pressable>
                 );
@@ -129,7 +138,10 @@ export default function HistoryDetailScreen() {
           </View>
 
           <View className="gap-3">
-            <TypographyHeading i18nKey="page.history_detail.select_field" />
+            <TypographyHeading
+              testID="page.history-detail.select-field.secondary"
+              i18nKey="page.history_detail.select_field"
+            />
             {fields && fields.length > 0 ? (
               <View className="flex-row flex-wrap gap-2">
                 {fields.map((f) => (
@@ -152,13 +164,19 @@ export default function HistoryDetailScreen() {
               </View>
             ) : (
               <CardAtom className="p-4 bg-default-100">
-                <TypographyParagraph i18nKey="page.history_detail.no_fields" />
+                <TypographyParagraph
+                  testID="page.history-detail.no-fields"
+                  i18nKey="page.history_detail.no_fields"
+                />
               </CardAtom>
             )}
           </View>
 
           <View>
-            <TypographyHeading i18nKey="page.history_detail.title" />
+            <TypographyHeading
+              testID="page.history-detail.section-title"
+              i18nKey="page.history_detail.title"
+            />
             {distributionItems && distributionItems.length > 0 ? (
               <CardAtom className="p-4 bg-default-100">
                 <PieChartAtom values={distributionItems} />
@@ -213,7 +231,10 @@ export default function HistoryDetailScreen() {
               </CardAtom>
             ) : (
               <CardAtom className="p-4 bg-default-100">
-                <TypographyParagraph i18nKey="page.history_detail.no_data" />
+                <TypographyParagraph
+                  testID="page.history-detail.no-data"
+                  i18nKey="page.history_detail.no_data"
+                />
               </CardAtom>
             )}
           </View>

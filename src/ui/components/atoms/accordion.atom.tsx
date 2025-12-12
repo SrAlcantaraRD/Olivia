@@ -25,7 +25,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
 
-import { Typography } from '@/ui/components/atoms/typography.atom';
+import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
 import { cn } from '@/ui/lib/utils';
 
 const LAYOUT_TRANSITION = LinearTransition.springify()
@@ -251,18 +251,24 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
         >
           <View className={classNames.triggerContentContainer}>
             {item.icon}
-            <Typography className={classNames.triggerTitle}>
+            <TypographyParagraph
+              className={classNames.triggerTitle}
+              testID={`screen.component.accordion.${item.id}.title`}
+            >
               {item.title}
-            </Typography>
+            </TypographyParagraph>
           </View>
           <Accordion.Indicator>
             <CustomIndicator />
           </Accordion.Indicator>
         </Accordion.Trigger>
         <Accordion.Content className="px-5">
-          <Typography className={classNames.contentText}>
+          <TypographyParagraph
+            className={classNames.contentText}
+            testID={`screen.component.accordion.${item.id}.content`}
+          >
             {item.content}
-          </Typography>
+          </TypographyParagraph>
         </Accordion.Content>
       </Animated.View>
       {showDivider && (
