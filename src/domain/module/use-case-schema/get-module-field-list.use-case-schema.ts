@@ -1,9 +1,10 @@
 import z from 'zod';
 
+import { IDSchema } from '@/domain/core/schemas/id.schema';
 import { ModuleFieldSchema } from '@/domain/module/entity/module-field.entity';
 
 export const RequestGetModuleFieldListSchema = z.object({
-  moduleId: z.number().int(),
+  moduleID: IDSchema,
 });
 
 export const ResponseGetModuleFieldListSchema = z.object({

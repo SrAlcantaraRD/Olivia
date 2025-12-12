@@ -24,7 +24,7 @@ export class GetModuleFieldListUseCase extends BaseUseCase<
     data: TRequestGetModuleFieldList
   ): Promise<IBaseResponse<TResponseGetModuleFieldList>> {
     const list = await this.adapters.moduleFieldAdapter.getAllByModuleId(
-      data.moduleId
+      data.moduleID
     );
 
     return {

@@ -7,11 +7,10 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
-import type { TModule } from '@/domain/module/entity/module.entity';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
-import { GetModuleFieldListUseCase } from '@/domain/module/use-case/get-module-field-list.use-case';
 import type { TRequestGetModuleFieldList } from '@/domain/module/use-case-schema/get-module-field-list.use-case-schema';
+import { GetModuleFieldListUseCase } from '@/domain/module/use-case/get-module-field-list.use-case';
 
 export function useGetListModuleField(adapters: {
   loggerAdapter: TLoggerPort;
@@ -47,18 +46,9 @@ export function useGetListModuleField(adapters: {
           return { success: false };
         }
 
-        // Ensure items include the module reference expected by the domain type
-        const itemsWithModule: TModuleField[] = response.details.items.map(
-          (item) =>
-            ({
-              ...item,
-              module: { id: data.moduleId } as TModule,
-            }) as unknown as TModuleField
-        );
+        saveItems(response.details.items);
 
-        saveItems(itemsWithModule);
-
-        return { success: true, data: itemsWithModule };
+        return { success: true, data: response.details.items };
       } catch (error) {
         console.error(error);
         return { success: false };
