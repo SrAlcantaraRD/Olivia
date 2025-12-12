@@ -83,15 +83,15 @@ describe('useNavigation', () => {
     );
   });
 
-  it('should call navigateTo with register cic route on goToRegisterCic', () => {
+  it('should call navigateTo with register cic route on goToRegister', () => {
     const { result } = renderHook(() =>
       useNavigation({ navigationAdapter: mockNavigationAdapter })
     );
 
-    result.current.goToRegisterCic();
+    result.current.goToRegister();
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(modals)/modal-register-cic'
+      '/(tabs)/register/execute-register'
     );
   });
 

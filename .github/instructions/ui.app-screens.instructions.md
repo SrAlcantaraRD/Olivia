@@ -23,7 +23,7 @@ Organize and implement Expo Router screens scalably, orchestrating hooks and UI 
 - Layouts: `_layout.tsx` in each route group
 - Feature Screens: `<feature>.tsx` (e.g., `parent-setup.tsx`, `confirm-link.tsx`)
 - Route Groups: Use parentheses for organization `(onboarding)`, `(tabs)`, `(modals)`
-- Modal Screens: `modal-<feature>.tsx` (e.g., `modal-register-cic.tsx`)
+- Modal Screens: `modal-<feature>.tsx` (e.g., `execute-register.tsx`)
 
 ## Rules
 
