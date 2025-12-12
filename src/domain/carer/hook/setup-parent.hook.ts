@@ -87,5 +87,5 @@ export function useSetupParent(adapters: {
     []
   );
 
-  return { execute, isExecuting };
+  return { execute, isExecuting, items: undefined };
 }
