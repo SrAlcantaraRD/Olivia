@@ -5,8 +5,10 @@ import {
   SQLiteCarerAdapter,
   type TCarerAdapterEntity,
 } from '@/database/adapter/sqlite.carer.adapter';
-import type { TModuleRow } from '@/database/adapter/common.adapter';
-import { mapModuleRowToDomain } from '@/database/adapter/common.adapter';
+import {
+  SQLiteModuleAdapter,
+  type TModuleAdapterEntity,
+} from '@/database/adapter/sqlite.module.adapter';
 import {
   SQLiteRecordFieldAdapter,
   type TRecordFieldAdapterEntity,
@@ -28,7 +30,7 @@ import type { IRecordPort } from '@/domain/module/port/record.port';
 
 export type TRecordAdapterEntity = typeof DB_SCHEMA.RECORD.$inferSelect & {
   carer?: TCarerAdapterEntity;
-  module?: TModuleRow;
+  module?: TModuleAdapterEntity;
   recordFields?: TRecordFieldAdapterEntity[];
 };
 
@@ -60,7 +62,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
       }),
 
       ...(entity.module && {
-        module: mapModuleRowToDomain(entity.module),
+        module: SQLiteModuleAdapter.toDomainEntity(entity.module),
       }),
 
       ...(entity.recordFields && {
