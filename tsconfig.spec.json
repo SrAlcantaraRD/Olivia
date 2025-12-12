@@ -1,15 +1,11 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "module": "nodenext",
-    "target": "ES2020",
-    "jsx": "react-jsx",
-    "moduleResolution": "nodenext",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "types": ["jest", "node"]
+    "strict": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/i18n": ["./src/ui/i18n/*"]
+    }
   },
   "include": [
     "**/*.spec.ts",
@@ -17,6 +13,8 @@
     "tests/**/*.ts",
     "tests/**/*.tsx",
     "src/**/*.spec.ts",
-    "src/**/*.spec.tsx"
+    "src/**/*.spec.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
   ]
 }
