@@ -9,8 +9,8 @@ import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
 import type { TModule } from '@/domain/module/entity/module.entity';
 import type { IModulePort } from '@/domain/module/port/module.port';
-import { GetActiveModuleListUseCase } from '@/domain/module/use-case/get-active-module-list.use-case';
 import type { TRequestGetActiveModuleList } from '@/domain/module/use-case-schema/get-active-module-list.use-case-schema';
+import { GetActiveModuleListUseCase } from '@/domain/module/use-case/get-active-module-list.use-case';
 
 export function useGetListActiveModule(adapters: {
   loggerAdapter: TLoggerPort;
@@ -54,7 +54,8 @@ export function useGetListActiveModule(adapters: {
           data: response.details.items,
         };
       } catch (error) {
-        console.error(error);
+        loggerAdapter.error('useGetListActiveModule.execute', error);
+
         return { success: false };
       } finally {
         stopLoading();

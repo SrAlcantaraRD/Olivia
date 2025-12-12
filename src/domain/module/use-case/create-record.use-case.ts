@@ -5,8 +5,8 @@ import type {
   TRecord,
   TRecordCreate,
 } from '@/domain/module/entity/record.entity';
-import type { IRecordPort } from '@/domain/module/port/record.port';
 import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
+import type { IRecordPort } from '@/domain/module/port/record.port';
 
 export class CreateRecordUseCase extends BaseUseCase<TRecordCreate, TRecord> {
   constructor(
@@ -21,6 +21,10 @@ export class CreateRecordUseCase extends BaseUseCase<TRecordCreate, TRecord> {
 
   public async execute(data: TRecordCreate): Promise<IBaseResponse<TRecord>> {
     const record = await this.adapters.recordAdapter.create(data);
+
+    this.adapters.loggerAdapter.info(`Record created with ID: ${record.id}`);
+
+    this.adapters.loggerAdapter.error(data);
 
     await this.adapters.recordFieldAdapter.batchCreate(
       record.id,

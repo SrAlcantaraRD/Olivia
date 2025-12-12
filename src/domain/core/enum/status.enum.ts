@@ -19,7 +19,7 @@ export const getStatusFromValue = (value: number): STATUS_ENUM => {
   if (!type) {
     throw new ErrorCannotParseSchema(
       'STATUS_ENUM',
-      `Value "${value}" is not a valid status.`
+      `Value "${value}" is not a valid STATUS_ENUM.`
     );
   }
 
