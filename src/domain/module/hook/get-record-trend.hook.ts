@@ -39,8 +39,7 @@ export function useGetRecordTrend(adapters: {
         const response = await useCase.execute(data);
         if (!response.success || !response.details) {
           notifyAdapter.error({
-            title:
-              'hook.get-record-trend.error' as unknown as import('@/ui/i18n/locales/en-EN').Ti18nKeys,
+            title: 'hook.get-record-trend.error',
             description: response.message,
           });
           return { success: false };

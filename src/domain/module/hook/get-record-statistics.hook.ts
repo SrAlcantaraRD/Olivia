@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
@@ -6,22 +6,21 @@ import type {
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
-import type { TID } from '@/domain/core/schemas/id.schema';
-import { useListStore } from '@/domain/core/stores/list.store';
 import type { IRecordPort } from '@/domain/module/port/record.port';
-import { GetRecordStatisticsUseCase } from '@/domain/module/use-case/get-record-statistics.use-case';
+import {
+  GetRecordStatisticsUseCase,
+  type TResponseRecordStatistics,
+} from '@/domain/module/use-case/get-record-statistics.use-case';
 
 export function useGetRecordStatistics(adapters: {
   loggerAdapter: TLoggerPort;
   recordAdapter: IRecordPort;
   notifyAdapter: INotifyPort;
-}): IUseHook<
-  { startDate?: Date; endDate?: Date },
-  { moduleID: TID; count: number }[]
-> {
-  const {
-    actions: { saveItems, getItems, startLoading, stopLoading },
-  } = useListStore('report');
+}): IUseHook<{ startDate?: Date; endDate?: Date }, TResponseRecordStatistics> {
+  const [items, setItems] = useState<TResponseRecordStatistics>({
+    countsByModule: [],
+  });
+  const [isExecuting, setIsExecuting] = useState(false);
 
   const { loggerAdapter, recordAdapter, notifyAdapter } = adapters;
 
@@ -29,8 +28,8 @@ export function useGetRecordStatistics(adapters: {
     async (data: {
       startDate?: Date;
       endDate?: Date;
-    }): Promise<IHookResponse<{ moduleID: TID; count: number }[]>> => {
-      startLoading();
+    }): Promise<IHookResponse<TResponseRecordStatistics>> => {
+      setIsExecuting(true);
       try {
         const useCase = new GetRecordStatisticsUseCase({
           loggerAdapter,
@@ -46,14 +45,14 @@ export function useGetRecordStatistics(adapters: {
           return { success: false };
         }
 
-        saveItems(response.details.countsByModule);
+        setItems(response.details);
 
-        return { success: true, data: response.details.countsByModule };
+        return { success: true, data: response.details };
       } catch (error) {
         console.error(error);
         return { success: false };
       } finally {
-        stopLoading();
+        setIsExecuting(false);
       }
     },
     [loggerAdapter, recordAdapter, notifyAdapter]
@@ -61,7 +60,7 @@ export function useGetRecordStatistics(adapters: {
 
   return {
     execute,
-    isExecuting: false,
-    items: getItems() ?? [],
+    isExecuting,
+    items,
   };
 }

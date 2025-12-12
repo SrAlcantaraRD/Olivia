@@ -35,7 +35,6 @@ export class SetAppLocaleUseCase extends BaseUseCase<
       return {
         success: false,
         message: 'common.error',
-        details: undefined,
       };
     }
   }

@@ -2,8 +2,7 @@ import { dropDatabase } from '@/database/config/drop-database.config';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
-import type { ICachePort, TCacheKey } from '@/domain/core/port/cache.port';
-import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
+import type { ICachePort } from '@/domain/core/port/cache.port';
 
 export class WipeLocalDataUseCase extends BaseUseCase<undefined, undefined> {
   constructor(
@@ -16,47 +15,22 @@ export class WipeLocalDataUseCase extends BaseUseCase<undefined, undefined> {
 
   public async execute(): Promise<IBaseResponse<undefined>> {
     try {
-      // Delete known cache keys
-      const keys = Object.values(CACHE_KEY_ENUM) as TCacheKey[];
-      await Promise.all(
-        keys.map(async (k) => {
-          try {
-            await this.cacheAdapter.delete(String(k));
-          } catch (err) {
-            // ignore individual failures
-          }
-        })
-      );
+      await this.cacheAdapter.clearAll();
 
-      // Also try secure store adapter for same keys
-      await Promise.all(
-        keys.map(async (k) => {
-          try {
-            await this.secureStoreAdapter.delete(String(k));
-          } catch (err) {
-            // ignore
-          }
-        })
-      );
+      await this.secureStoreAdapter.clearAll();
 
       // Finally drop database tables
-      try {
-        await dropDatabase();
-      } catch (err) {
-        // ignore
-      }
+      await dropDatabase();
 
       return {
         success: true,
         message: 'common.success',
-        details: undefined,
       };
     } catch (error) {
       this.logError('WipeLocalDataUseCase', error as unknown);
       return {
         success: false,
         message: 'common.error',
-        details: undefined,
       };
     }
   }

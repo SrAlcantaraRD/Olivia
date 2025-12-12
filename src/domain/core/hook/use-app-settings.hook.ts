@@ -21,8 +21,14 @@ export function useAppSettings(adapters: {
 
   const getTheme = useCallback(async () => {
     const usecase = new GetAppThemeUseCase(loggerAdapter, cacheAdapter);
+
     const response = await usecase.execute();
-    return response;
+
+    if (response.success) {
+      return response.details;
+    }
+
+    return EThemeMode.LIGHT;
   }, [loggerAdapter, cacheAdapter]);
 
   const setTheme = useCallback(
@@ -43,17 +49,25 @@ export function useAppSettings(adapters: {
 
   const getLocale = useCallback(async () => {
     const usecase = new GetAppLocaleUseCase(loggerAdapter, cacheAdapter);
+
     const response = await usecase.execute();
-    return response;
+
+    if (response.success) {
+      return response.details;
+    }
+
+    return ELocaleCode.ES;
   }, [loggerAdapter, cacheAdapter]);
 
   const setLocale = useCallback(
     async (locale: ELocaleCode) => {
       setExecuting(true);
+
       try {
         await i18n.changeLanguage(locale);
 
         const usecase = new SetAppLocaleUseCase(loggerAdapter, cacheAdapter);
+
         await usecase.execute({ locale });
       } finally {
         setExecuting(false);
@@ -64,40 +78,17 @@ export function useAppSettings(adapters: {
 
   const initSettings = useCallback(async () => {
     setExecuting(true);
+
     try {
       // Theme
-      const themeResp = await getTheme();
-      const cachedTheme = themeResp.details;
-      if (!cachedTheme) {
-        // persist current theme as default
-        const defaultTheme = (currentTheme as EThemeMode) ?? EThemeMode.LIGHT;
-        const setThemeUseCase = new SetAppThemeUseCase(
-          loggerAdapter,
-          cacheAdapter
-        );
-        await setThemeUseCase.execute({ theme: defaultTheme });
-      } else {
-        Uniwind.setTheme(cachedTheme as EThemeMode);
-      }
+      const cachedTheme = await getTheme();
+
+      Uniwind.setTheme(cachedTheme);
 
       // Locale
-      const localeResp = await getLocale();
-      const cachedLocale = localeResp.details;
-      if (!cachedLocale) {
-        const lang = i18n.language ?? 'en';
-        const defaultLocale = ((): ELocaleCode => {
-          if (lang.startsWith('es')) return ELocaleCode.ES;
-          if (lang.startsWith('ca')) return ELocaleCode.CA;
-          return ELocaleCode.EN;
-        })();
-        const setLocaleUseCase = new SetAppLocaleUseCase(
-          loggerAdapter,
-          cacheAdapter
-        );
-        await setLocaleUseCase.execute({ locale: defaultLocale });
-      } else {
-        await i18n.changeLanguage(cachedLocale as ELocaleCode);
-      }
+      const cachedLocale = await getLocale();
+
+      await i18n.changeLanguage(cachedLocale);
     } finally {
       setExecuting(false);
     }

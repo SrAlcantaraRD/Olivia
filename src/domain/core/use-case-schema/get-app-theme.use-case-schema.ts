@@ -1,11 +1,12 @@
 import z from 'zod';
 
+import { EThemeMode } from '@/domain/core/enum/settings.enum';
+
 export const RequestGetAppThemeSchema = z.void();
 
 export const ResponseGetAppThemeSchema = z.union([
-  z.literal('light'),
-  z.literal('dark'),
-  z.null(),
+  z.literal(EThemeMode.LIGHT),
+  z.literal(EThemeMode.DARK),
 ]);
 
 export type TRequestGetAppTheme = z.infer<typeof RequestGetAppThemeSchema>;
