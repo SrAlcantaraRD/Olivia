@@ -254,9 +254,11 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
             <TypographyParagraph
               className={classNames.triggerTitle}
               testID={`screen.component.accordion.${item.id}.title`}
-            >
-              {item.title}
-            </TypographyParagraph>
+              i18nKey="common.raw-value"
+              values={{
+                value: item.title,
+              }}
+            />
           </View>
           <Accordion.Indicator>
             <CustomIndicator />

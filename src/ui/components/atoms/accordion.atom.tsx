@@ -165,9 +165,14 @@ const CustomIndicator = () => {
 type AccordionItemProps = {
   item: (typeof accordionData)[number];
   index: number;
+  testID: string;
 };
 
-const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
+const AccordionItemContent: FC<AccordionItemProps> = ({
+  item,
+  index,
+  testID,
+}) => {
   const { depth } = use(SettingsContext);
 
   const { value } = useAccordion();
@@ -254,9 +259,11 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
             <TypographyParagraph
               className={classNames.triggerTitle}
               testID={`screen.component.accordion.${item.id}.title`}
-            >
-              {item.title}
-            </TypographyParagraph>
+              i18nKey="common.raw-value"
+              values={{
+                value: item.title,
+              }}
+            />
           </View>
           <Accordion.Indicator>
             <CustomIndicator />
@@ -264,11 +271,13 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
         </Accordion.Trigger>
         <Accordion.Content className="px-5">
           <TypographyParagraph
+            testID={`${testID}.${item.id}.content.container`}
             className={classNames.contentText}
-            testID={`screen.component.accordion.${item.id}.content`}
-          >
-            {item.content}
-          </TypographyParagraph>
+            i18nKey="common.raw-value"
+            values={{
+              value: item.content,
+            }}
+          />
         </Accordion.Content>
       </Animated.View>
       {showDivider && (
@@ -313,7 +322,11 @@ export const AccordionAtom: FC = () => {
               value={item.id}
               className="overflow-visible"
             >
-              <AccordionItemContent item={item} index={index} />
+              <AccordionItemContent
+                item={item}
+                index={index}
+                testID={`accordion-item.${item.id}`}
+              />
             </Accordion.Item>
           ))}
         </Accordion>
