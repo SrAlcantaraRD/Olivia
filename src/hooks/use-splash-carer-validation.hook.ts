@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
+import { CheckCarerExistenceUseCase } from '@/domain/carer/use-case/check-carer-existence.use-case';
 import type {
   TCheckCarerExistenceRequest,
   TCheckCarerExistenceResponse,
 } from '@/domain/carer/use-case-schema/check-carer-existence.use-case-schema';
-import { CheckCarerExistenceUseCase } from '@/domain/carer/use-case/check-carer-existence.use-case';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
   IHookResponse,
@@ -21,6 +21,8 @@ export function useSplashCarerValidation(adapters: {
   navigationAdapter: INavigationPort;
 }): IUseHook<TCheckCarerExistenceRequest, TCheckCarerExistenceResponse> {
   const [isExecuting, setExecuting] = useState<boolean>(false);
+
+  // add a zustand store
 
   const { loggerAdapter, notifyAdapter, carerAdapter, navigationAdapter } =
     adapters;
@@ -59,5 +61,11 @@ export function useSplashCarerValidation(adapters: {
     [loggerAdapter, notifyAdapter, carerAdapter]
   );
 
-  return { execute, isExecuting };
+  return {
+    execute,
+    isExecuting,
+    items: {
+      exists: false,
+    },
+  };
 }
