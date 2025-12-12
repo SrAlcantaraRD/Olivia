@@ -1,5 +1,4 @@
-export const enEN = {
-  // Legacy keys (keeping for backward compatibility)
+export const enEN = Object.freeze({
   welcome: 'Welcome',
   next: 'Next',
   parent: 'Parent',
@@ -110,6 +109,7 @@ export const enEN = {
   'common.loading': 'Loading...',
   'common.error': 'Error',
   'common.success': 'Success',
+  'hook.get-record-statistics.error': 'Error loading record statistics',
   'common.optional': 'Optional',
   'common.required': 'Required',
   'common.view_all': 'View all',
@@ -315,8 +315,10 @@ export const enEN = {
   'hook.get-list-module-field.error-title': 'Failed to Load Module Fields',
   'error.on-get-entity-by-id': 'Error Getting Entity by ID',
 
+  'hook.get-record-trend.error': 'Error getting record trend',
+
   'test.reset-db': 'Reset Database for Testing',
-};
+} as const);
 
 type RecursiveKeyOf<TObj extends object> = {
   [TKey in keyof TObj & (string | number)]: TObj[TKey] extends object

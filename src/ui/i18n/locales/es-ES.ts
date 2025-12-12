@@ -1,12 +1,12 @@
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
-
-export const esES = {
+export const esES = Object.freeze({
   welcome: 'Bienvenido',
   next: 'Siguiente',
   parent: 'Progenitor',
   caregiver: 'Cuidador',
   finish: 'Finalizar',
   skip: 'Saltar',
+  continue: 'Continuar',
   'start-onboarding': 'Comenzar',
   'add-register': 'Añadir registro',
 
@@ -21,6 +21,8 @@ export const esES = {
   'common.loading': 'Cargando...',
   'common.error': 'Error',
   'common.success': 'Éxito',
+  'hook.get-record-statistics.error':
+    'Error al cargar estadísticas de registros',
   'common.optional': 'Opcional',
   'common.required': 'Obligatorio',
   'common.view_all': 'Ver todo',
@@ -211,19 +213,116 @@ export const esES = {
   'modal.switch-account.title': 'Cambiar de Cuenta',
   'modal.symptom-alert.title': 'Alerta de Síntomas',
 
-  // Onboarding (legacy keys - keeping for backward compatibility)
-  'onboarding-slide1-title': 'Te ayudamos a cuidar con tranquilidad.',
-  'onboarding-slide1-description':
+  // Splash Screen
+  'splash-screen.app-name': 'Oliva',
+  'splash-screen.tagline': 'Cuidar. Registrar. Respirar.',
+  'splash-screen.privacy-notice': 'Tus datos se guardan solo en tu teléfono',
+  // Onboarding
+  'onboarding-screen.slider.care-with-peace.title':
+    'Te ayudamos a cuidar con tranquilidad.',
+  'onboarding-screen.slider.care-with-peace.description':
     'Registra cateterismos y rutinas de forma rápida, clara y sin conexión.',
-  'onboarding-slide2-title': 'Rápido. Guiado. Pensado para tu día a día.',
-  'onboarding-slide2-bullet1': 'Registro en segundos',
-  'onboarding-slide2-bullet2': 'Un paso cada vez',
-  'onboarding-slide2-bullet3': 'Perfecto para rutinas con prisas',
-  'onboarding-slide3-title': 'Tus datos, bajo tu control.',
-  'onboarding-slide3-description':
-    'Todo queda en tu móvil. Sin nube. Sin cuentas.\nTú decides con quién compartir.',
+  'onboarding-screen.slider.slogan.title':
+    'Rápido. Guiado. Pensado para tu día a día.',
+  'onboarding-screen.slider.slogan.bullet.record-in-seconds':
+    'Registro en segundos',
+  'onboarding-screen.slider.slogan.bullet.one-step-at-a-time':
+    'Un paso cada vez',
+  'onboarding-screen.slider.slogan.bullet.perfect-for-busy-routines':
+    'Perfecto para rutinas con prisas',
+  'onboarding-screen.slider.data-control.title': 'Tus datos, bajo tu control.',
+  'onboarding-screen.slider.data-control.description':
+    'Todo queda en tu teléfono. Sin nube. Sin cuentas.\nTú decides con quién compartir.',
+  // Role Selection Screen
+  'role-selection-screen.title': '¿Cómo quieres empezar?',
+  'role-selection-screen.description': 'Elige tu rol para configurar la app.',
+  'role-selection-screen.parent.title': 'Progenitor / Tutor',
+  'role-selection-screen.parent.subtitle': 'Cuidador principal',
+  'role-selection-screen.parent.description':
+    'Registra y gestiona rutinas y cateterismos para tus hijos.',
+  'role-selection-screen.caregiver.title': 'Cuidador / Profesional',
+  'role-selection-screen.caregiver.subtitle': 'Apoyo o profesional sanitario',
+  'role-selection-screen.caregiver.description':
+    'Conecta con familias y registra intervenciones.',
+  // Parent Setup
+  'parent-setup.parent-info.title': 'Sobre ti',
+  'parent-setup.parent-info.description':
+    'Datos básicos del cuidador principal.',
+  'parent-setup.parent-info.name-label': 'Nombre:',
+  'parent-setup.parent-info.name-placeholder': 'Tu nombre',
+  'parent-setup.parent-info.relationship-label': 'Relación:',
+  'parent-setup.parent-info.parent': 'Padre / Madre',
+  'parent-setup.parent-info.guardian': 'Tutor',
+  'parent-setup.child-info.title': 'Sobre el niño',
+  'parent-setup.child-info.description':
+    'Datos básicos del menor para identificarlo.',
+  'parent-setup.child-info.name-label': 'Nombre:',
+  'parent-setup.child-info.name-placeholder': 'Nombre del niño/a',
+  'parent-setup.child-info.birth-date-label': 'Fecha de nacimiento:',
+  'parent-setup.child-info.birth-date-placeholder': 'DD / MM / AAAA',
+  'parent-setup.child-info.diagnosis-label': 'Diagnóstico:',
+  'parent-setup.child-info.diagnosis-placeholder': 'Diagnóstico médico',
+  'parent-setup.child-info.diagnosis-hint':
+    'Opcional: Puedes añadirlo más tarde si lo prefieres.',
+  'parent-setup.modules.title': '¿Qué módulos necesitas?',
+  'parent-setup.modules.description':
+    'Activa los módulos que vas a utilizar. Puedes modificarlos después en el perfil del menor.',
+  'parent-setup.modules.catheterization.title': 'Cateterismos',
+  'parent-setup.modules.catheterization.description':
+    'Manejo de cateterismos y registros CIC.',
+  'parent-setup.modules.bowel-movements.title': 'Deposiciones',
+  'parent-setup.modules.bowel-movements.description':
+    'Registro de deposiciones y seguimiento.',
+  'parent-setup.modules.enemas.title': 'Enemas',
+  'parent-setup.modules.enemas.description':
+    'Opcional, según necesidades clínicas.',
+  'parent-setup.modules.urine.title': 'Orina',
+  'parent-setup.modules.urine.description':
+    'Seguimiento de volumen y características de la orina.',
+  'parent-setup.modules.medication.title': 'Medicación',
+  'parent-setup.modules.medication.description':
+    'Registro de administración de medicamentos.',
+  'parent-setup.modules.unknown.title': 'Módulo desconocido',
+  'parent-setup.modules.unknown.description':
+    'Descripción del módulo desconocido',
+  'parent-setup.summary.title': 'Revisa tu información',
+  'parent-setup.summary.description':
+    'Confirma que todo es correcto antes de continuar',
+  'parent-setup.summary.parent-section': 'Información del Tutor',
+  'parent-setup.summary.parent-name': 'Nombre: <bold>{{value}}</bold>',
+  'parent-setup.summary.parent-relationship':
+    'Relación: <bold>{{value}}</bold>',
+  'parent-setup.summary.child-section': 'Información del Menor',
+  'parent-setup.summary.child-name': 'Nombre: <bold>{{value}}</bold>',
+  'parent-setup.summary.child-birth-date':
+    'Fecha de nacimiento: <bold>{{value}}</bold>',
+  'parent-setup.summary.child-diagnosis': 'Diagnóstico',
+  'parent-setup.summary.modules-section': 'Módulos Activados',
+  'parent-setup.summary.no-modules': 'No se seleccionaron módulos',
 
-  // Actions (legacy keys - keeping for backward compatibility)
-  'actions.save': 'Guardar',
-  'actions.cancel': 'Cancelar',
-} satisfies Ti18nKeys;
+  'page.report.debug_stats': 'Depurar: estadísticas',
+  'page.report.debug_trendItems': 'Depurar: elementos de tendencia',
+
+  // History detail ranges
+  'page.history_detail.range.today': 'Hoy',
+  'page.history_detail.range.7d': 'Últimos 7 días',
+  'page.history_detail.range.30d': 'Últimos 30 días',
+  'page.history_detail.range.90d': 'Últimos 90 días',
+
+  'hook.setup-parent.title': 'Configurando progenitor',
+  'hook.setup-parent.description':
+    'Por favor espera mientras configuramos tu cuenta.',
+  'hook.setup-parent.error-title': 'Configuración Fallida',
+  'hook.setup-parent.success-title': 'Configuración Exitosa',
+  'hook.get-list-active-module.title': 'Cargando Módulos',
+  'hook.get-list-active-module.description':
+    'Por favor espera mientras cargamos módulos.',
+  'hook.get-list-active-module.error-title': 'Error al Cargar Módulos',
+  'hook.get-list-active-module.success-title': 'Módulos Cargados Exitosamente',
+  'hook.get-list-module-field.error-title': 'Error al Cargar Campos del Módulo',
+  'error.on-get-entity-by-id': 'Error Obteniendo Entidad por ID',
+
+  'hook.get-record-trend.error': 'Error obteniendo tendencia de registros',
+
+  'test.reset-db': 'Restablecer Base de Datos para Pruebas',
+} satisfies Record<Ti18nKeys, string>);
