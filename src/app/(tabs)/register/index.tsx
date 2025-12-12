@@ -16,7 +16,7 @@ import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 
 export default function RegisterScreen() {
   const { navigationAdapter } = useAdapters();
-  const { goToRegisterCic } = useNavigation({
+  const { goToRegister } = useNavigation({
     navigationAdapter,
   });
 
@@ -31,7 +31,7 @@ export default function RegisterScreen() {
   const handlerOnSelectAction = (code: MODULE_KEY_ENUM) => {
     switch (code) {
       case MODULE_KEY_ENUM.CIC:
-        goToRegisterCic();
+        goToRegister();
         break;
       case MODULE_KEY_ENUM.STOOL:
       case MODULE_KEY_ENUM.ENEMA:
@@ -75,7 +75,7 @@ export default function RegisterScreen() {
               testID="register"
               isSelected={false}
               onSelect={() => {
-                handlerOnSelectAction(module.code);
+                goToRegister();
               }}
             />
           ))}
