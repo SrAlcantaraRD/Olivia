@@ -1,8 +1,10 @@
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
+import type { TRecordFieldCreate } from '@/domain/module/entity/record-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import { useCreateRecord } from '@/domain/module/hook/create-record.hook';
@@ -17,7 +19,9 @@ import { ModuleWizard } from '@/ui/components/organisms/module-wizard/module-wiz
 export function CicRegisterForm() {
   const router = useRouter();
 
-  const { moduleAdapter, notifyAdapter } = useAdapters();
+  const { moduleAdapter, notifyAdapter, recordAdapter, recordFieldAdapter } =
+    useAdapters();
+
   const {
     isExecuting: isModulesLoading,
     execute: executeGetModules,
@@ -37,12 +41,12 @@ export function CicRegisterForm() {
   }, []);
 
   // wire create record hook
-  const { recordAdapter } = useAdapters();
   const { isExecuting: isSaving, execute: executeCreateRecord } =
     useCreateRecord({
       loggerAdapter: BASE_LOGGER,
       recordAdapter,
       notifyAdapter,
+      recordFieldAdapter,
     });
 
   const handleOnComplete = async (values: Record<number, string>) => {
@@ -55,6 +59,10 @@ export function CicRegisterForm() {
       carerID: 2, // FIXME: Use the id of the carer saved at cache.
       data: JSON.stringify({ values }),
       synced: false,
+      fieldList: Object.entries(values).map(([fieldID, value]) => ({
+        fieldID: Number(fieldID),
+        value,
+      })) satisfies TRecordFieldCreate[],
     } satisfies TRecordCreate;
 
     const response = await executeCreateRecord(payload);
@@ -65,24 +73,15 @@ export function CicRegisterForm() {
   };
 
   return (
-    <>
-      {/* Module-driven wizard for CIC */}
-      {Array.isArray(modules) &&
-        modules.length > 0 &&
-        (() => {
-          const cicModule = modules.find((m) => m.code === MODULE_KEY_ENUM.CIC);
-          if (cicModule) {
-            return (
-              <ModuleWizard
-                module={cicModule}
-                testID="demo.module-wizard.cic"
-                onComplete={handleOnComplete}
-              />
-            );
-          }
-          return null;
-        })()}
-      {/* If module list is not ready show nothing or a loader in parent */}
-    </>
+    <View className="flex-1 px-4 py-6" testID="cic-register-form">
+      {modules.map((module) => (
+        <ModuleWizard
+          key={`module-wizard.${module.code}`}
+          module={module}
+          testID={`module-wizard.${module.code}`}
+          onComplete={handleOnComplete}
+        />
+      ))}
+    </View>
   );
 }

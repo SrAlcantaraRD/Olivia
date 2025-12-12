@@ -7,6 +7,7 @@ import { SQLiteCarerAdapter } from '@/database/adapter/sqlite.carer.adapter';
 import { SQLiteModuleFieldAdapter } from '@/database/adapter/sqlite.module-field.adapter';
 import { SQLiteModuleAdapter } from '@/database/adapter/sqlite.module.adapter';
 import { SQLitePatientAdapter } from '@/database/adapter/sqlite.patient.adapter';
+import { SQLiteRecordFieldAdapter } from '@/database/adapter/sqlite.record-field.adapter';
 import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import {
@@ -17,21 +18,23 @@ import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
+import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import type { IRecordPort } from '@/domain/module/port/record.port';
 import type { IPatientPort } from '@/domain/patient/port/patient.port';
 import type { INavigationPort } from '@/domain/ports/navigation.port';
 
 interface IAdapters {
+  cacheAdapter: ICachePort;
   carerAdapter: ICarerPort;
+  loggerAdapter: TLoggerPort;
   moduleAdapter: IModulePort;
   moduleFieldAdapter: IModuleFieldPort;
-  recordAdapter: IRecordPort;
-  patientAdapter: IPatientPort;
-  notifyAdapter: INotifyPort;
   navigationAdapter: INavigationPort;
-  cacheAdapter: ICachePort;
+  notifyAdapter: INotifyPort;
+  patientAdapter: IPatientPort;
+  recordAdapter: IRecordPort;
+  recordFieldAdapter: IRecordFieldPort;
   secureStoreAdapter: ICachePort;
-  loggerAdapter: TLoggerPort;
 }
 
 export const useAdapters = (): Readonly<IAdapters> => {
@@ -45,6 +48,7 @@ export const useAdapters = (): Readonly<IAdapters> => {
   const moduleAdapter = new SQLiteModuleAdapter();
   const moduleFieldAdapter = new SQLiteModuleFieldAdapter();
   const recordAdapter = new SQLiteRecordAdapter();
+  const recordFieldAdapter = new SQLiteRecordFieldAdapter();
 
   const secureStoreAdapter = new SecureStoreCacheAdapter();
   // const cacheAdapter = new SecureStoreCacheAdapter();
@@ -58,6 +62,7 @@ export const useAdapters = (): Readonly<IAdapters> => {
     moduleFieldAdapter,
     recordAdapter,
     navigationAdapter,
+    recordFieldAdapter,
     cacheAdapter: secureStoreAdapter,
     secureStoreAdapter,
   });

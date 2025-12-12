@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { View } from 'react-native';
 
 import type { TModule } from '@/domain/module/entity/module.entity';
+import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { MODULE_FIELD_TYPE_ENUM } from '@/domain/module/enum/module-field-type.enum';
 import { TextFieldAtom } from '@/ui/components/atoms/text-field.atom';
 import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
@@ -13,9 +14,8 @@ import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface ModuleWizardProps {
   module: TModule;
-  initialValues?: Record<number, string>;
-  onComplete?: (values: Record<number, string>) => void;
-  testID?: string;
+  onComplete: (data: TRecordCreate) => void;
+  testID: string;
 }
 
 export function parseFieldValues(valuesStr: string | undefined): string[] {
@@ -35,25 +35,23 @@ export function parseFieldValues(valuesStr: string | undefined): string[] {
 
 export function ModuleWizard({
   module,
-  initialValues,
   onComplete,
-  testID = 'module-wizard',
+  testID,
 }: ModuleWizardProps) {
   const {
-    fieldList,
     currentStep,
     steps,
     values,
-    currentField,
     goToNextStep,
     goToPreviousStep,
     setFieldValue,
     selectOptionAndNext,
-  } = useModuleWizard({ module, initialValues });
+  } = useModuleWizard({ module });
+
   const handleNext = () => {
     const lastIndex = wizardSteps.length - 1;
     if (currentStep >= lastIndex) {
-      onComplete?.(values);
+      onComplete(values);
     } else {
       goToNextStep();
     }
@@ -74,9 +72,7 @@ export function ModuleWizard({
                 <View className="mt-4">
                   {s.field.type === MODULE_FIELD_TYPE_ENUM.SELECT && (
                     <View>
-                      {parseFieldValues(
-                        (s.field.values as unknown as string) || ''
-                      ).map((option) => (
+                      {parseFieldValues(s.field.values || '').map((option) => (
                         <CardWithDetails
                           key={`option-${option}`}
                           icon="mic-circle"
@@ -112,7 +108,7 @@ export function ModuleWizard({
         ),
         isValid: s.isValid,
       })),
-    [steps, values, selectOptionAndNext, setFieldValue, testID]
+    []
   );
 
   return (

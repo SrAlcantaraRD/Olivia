@@ -1,12 +1,13 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import type { TModule } from '@/domain/module/entity/module.entity';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
+import type { TModule } from '@/domain/module/entity/module.entity';
+import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 export interface IModuleWizardOptions {
   module: TModule;
-  initialValues?: Record<number, string>;
+  initialValues?: TRecordCreate;
 }
 
 export function useModuleWizard(opts: IModuleWizardOptions) {
@@ -14,7 +15,7 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
 
   const fieldList = module.fieldList ?? [];
   const [currentStep, setCurrentStep] = useState(0);
-  const [values, setValues] = useState<Record<number, string>>(initialValues);
+  const [values, setValues] = useState<TRecordCreate>(initialValues);
 
   const totalSteps = fieldList.length;
 
@@ -38,7 +39,7 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
         field,
         isValid: isFieldValid(field),
       })),
-    [fieldList, isFieldValid]
+    []
   );
 
   const goToNextStep = useCallback(() => {
