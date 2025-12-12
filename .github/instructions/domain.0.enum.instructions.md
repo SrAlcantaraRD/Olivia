@@ -89,7 +89,7 @@ description: "Rules for generating Domain Enums and their usage patterns"
   export const getStatusFromValue = (value: string): StatusEnum => {
     const statuses: StatusEnum[] = Object.values(StatusEnum);
     const status = statuses.find(s => s === value);
-    if (!status) {
+    if (typeof status === 'undefined') {
       throw new ErrorCannotParseSchema('StatusEnum', `Value "${value}" is not a valid status.`);
     }
     return status;
