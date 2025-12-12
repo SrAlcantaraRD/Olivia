@@ -10,7 +10,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Image, Platform, StyleSheet } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-import Toast from 'react-native-toast-message';
+import Toast, { type ToastConfig } from 'react-native-toast-message';
 
 import '@/ui/i18n/i18n';
 import 'react-native-reanimated';
@@ -141,7 +141,7 @@ export default function RootLayout() {
                   }}
                 >
                   <RootNavigator />
-                  <Toast config={toastConfig} />
+                  <Toast config={toastConfig as ToastConfig} />
                 </HeroUINativeProvider>
               </SettingsProvider>
             </AppThemeProvider>
