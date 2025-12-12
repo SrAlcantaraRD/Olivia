@@ -20,8 +20,8 @@ const TITLE_TEXT_COLOR = 'white';
 const DETAIL_TEXT_COLOR = '#BBBBBB'; // Light grey
 
 interface CustomToastProps extends RNToastBaseProps {
-  text1?: Ti18nKeys | string;
-  text2?: Ti18nKeys | string;
+  text1?: Ti18nKeys;
+  text2?: Ti18nKeys;
 }
 
 interface BaseToastProps {
@@ -30,8 +30,8 @@ interface BaseToastProps {
   auraColor: string;
 }
 interface BaseToastProps {
-  text1?: Ti18nKeys | string;
-  text2?: Ti18nKeys | string;
+  text1?: Ti18nKeys;
+  text2?: Ti18nKeys;
   iconName: IconName;
   iconBgColor: string;
   auraColor: string;
