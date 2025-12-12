@@ -99,6 +99,7 @@ export const enEN = Object.freeze({
   'parent-setup.summary.no-modules': 'No modules selected',
 
   // Common
+  'common.raw-value': '{{value}}',
   'common.back': 'Back',
   'common.next': 'Next',
   'common.cancel': 'Cancel',
@@ -320,6 +321,8 @@ export const enEN = Object.freeze({
   'test.reset-db': 'Reset Database for Testing',
   'hook.create-record.error-title': 'Record Creation Failed',
   'hook.create-record.success-title': 'Record Created Successfully',
+  'hook.get-record-field-distribution.error':
+    'Error getting field distribution',
 } as const);
 
 type RecursiveKeyOf<TObj extends object> = {

@@ -108,6 +108,7 @@ export const caCA = Object.freeze({
   'parent-setup.summary.no-modules': "No s'han seleccionat mòduls",
 
   // Common
+  'common.raw-value': '{{value}}',
   'common.back': 'Enrere',
   'common.next': 'Següent',
   'common.cancel': 'Cancel·la',
@@ -326,4 +327,8 @@ export const caCA = Object.freeze({
   'hook.get-record-trend.error': 'Error obtenint tendència de registres',
 
   'test.reset-db': 'Restablir Base de Dades per a Proves',
+  'hook.create-record.error-title': 'Error en Crear Registre',
+  'hook.create-record.success-title': 'Registre Creat Exitosament',
+  'hook.get-record-field-distribution.error':
+    'Error obtenint distribució del camp',
 } satisfies Record<Ti18nKeys, string>);

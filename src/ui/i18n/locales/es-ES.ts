@@ -11,6 +11,7 @@ export const esES = Object.freeze({
   'add-register': 'Añadir registro',
 
   // Common
+  'common.raw-value': '{{value}}',
   'common.back': 'Atrás',
   'common.next': 'Siguiente',
   'common.cancel': 'Cancelar',
@@ -325,4 +326,8 @@ export const esES = Object.freeze({
   'hook.get-record-trend.error': 'Error obteniendo tendencia de registros',
 
   'test.reset-db': 'Restablecer Base de Datos para Pruebas',
+  'hook.create-record.error-title': 'Error al Crear Registro',
+  'hook.create-record.success-title': 'Registro Creado Exitosamente',
+  'hook.get-record-field-distribution.error':
+    'Error obteniendo distribución del campo',
 } satisfies Record<Ti18nKeys, string>);
