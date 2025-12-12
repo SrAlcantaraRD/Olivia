@@ -8,10 +8,6 @@ export default function ModalsLayout() {
       <Stack.Screen name="symptom-alert" options={{ presentation: 'modal' }} />
       <Stack.Screen name="switch-account" options={{ presentation: 'modal' }} />
       <Stack.Screen
-        name="execute-register"
-        options={{ presentation: 'modal' }}
-      />
-      <Stack.Screen
         name="modal-add-carer"
         options={{ presentation: 'modal' }}
       />

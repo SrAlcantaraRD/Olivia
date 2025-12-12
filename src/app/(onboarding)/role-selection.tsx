@@ -68,22 +68,22 @@ export default function RoleSelectionScreen() {
         <View className="mb-8 gap-8">
           <CardWithDetails
             icon="heart"
-            titleKey="role-selection-screen.parent.title"
-            subtitleKey="role-selection-screen.parent.subtitle"
-            descriptionKey="role-selection-screen.parent.description"
+            title="role-selection-screen.parent.title"
+            subtitle="role-selection-screen.parent.subtitle"
+            description="role-selection-screen.parent.description"
             testID="role-selection.parent"
             isSelected={selectedRole === ROLE_ENUM.PARENT}
-            onSelect={() => setSelectedRole(ROLE_ENUM.PARENT)}
+            onPress={() => setSelectedRole(ROLE_ENUM.PARENT)}
           />
 
           <CardWithDetails
             icon="people"
-            titleKey="role-selection-screen.caregiver.title"
-            subtitleKey="role-selection-screen.caregiver.subtitle"
-            descriptionKey="role-selection-screen.caregiver.description"
+            title="role-selection-screen.caregiver.title"
+            subtitle="role-selection-screen.caregiver.subtitle"
+            description="role-selection-screen.caregiver.description"
             testID="role-selection.caregiver"
             isSelected={selectedRole === ROLE_ENUM.CAREGIVER}
-            onSelect={() => setSelectedRole(ROLE_ENUM.CAREGIVER)}
+            onPress={() => setSelectedRole(ROLE_ENUM.CAREGIVER)}
           />
         </View>
       </View>

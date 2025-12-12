@@ -11,9 +11,15 @@ interface CardWithDetailsProps {
   module: TModule;
   onPress: () => void;
   testID: string;
+  isSelected?: boolean;
 }
 
-export function ModuleCard({ module, onPress, testID }: CardWithDetailsProps) {
+export function ModuleCard({
+  module,
+  onPress,
+  testID,
+  isSelected = false,
+}: CardWithDetailsProps) {
   const getIconFromModuleCode = useCallback(
     (code: MODULE_KEY_ENUM): IconName => {
       const mapIcon: Record<MODULE_KEY_ENUM, IconName> = {
@@ -70,7 +76,7 @@ export function ModuleCard({ module, onPress, testID }: CardWithDetailsProps) {
       icon={getIconFromModuleCode(module.code)}
       title={getTitleFromModuleCode(module.code)}
       description={getDescriptionFromModuleCode(module.code)}
-      isSelected={false}
+      isSelected={isSelected}
       onPress={onPress}
       testID={`${testID}.card-with-details`}
     />

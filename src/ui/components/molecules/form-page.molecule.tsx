@@ -18,9 +18,10 @@ export interface FormPageStep {
 
 interface FormPageProps {
   step: FormPageStep;
+  testID: string;
 }
 
-export function FormPage({ step }: FormPageProps) {
+export function FormPage({ step, testID }: FormPageProps) {
   const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
 
@@ -35,11 +36,13 @@ export function FormPage({ step }: FormPageProps) {
       >
         <TypographyTitle
           style={{ color: foregroundColor }}
+          testID={`${testID}.title`}
           className="mb-2"
           i18nKey={step.titleKey}
         />
         {step.descriptionKey && (
           <TypographyParagraph
+            testID={`${testID}.description`}
             style={{ color: mutedColor }}
             i18nKey={step.descriptionKey}
           />

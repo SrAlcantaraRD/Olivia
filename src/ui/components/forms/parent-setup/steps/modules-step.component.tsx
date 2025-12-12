@@ -40,7 +40,7 @@ export function ModulesStep({
           module={module}
           testID="parent-setup"
           isSelected={selectedModules.has(module.id)}
-          onSelect={() => onToggleModule(module.id)}
+          onPress={() => onToggleModule(module.id)}
         />
       ))}
     </View>

@@ -14,6 +14,7 @@ export default function SettingsLayout() {
         options={{ presentation: 'card' }}
       />
       <Stack.Screen name="app-settings" options={{ presentation: 'card' }} />
+      <Stack.Screen name="log-out" options={{ presentation: 'modal' }} />
     </Stack>
   );
 }

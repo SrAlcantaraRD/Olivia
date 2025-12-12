@@ -42,7 +42,7 @@ export function Wizard({
   const accentColor = useThemeColor('accent');
 
   const currentStep = steps[currentStepIndex] ?? steps[0];
-  const totalSteps = totalStepsProp ?? steps.length;
+  const totalSteps = Math.max(1, totalStepsProp ?? steps.length);
   const progress = (currentStepIndex + 1) / totalSteps;
 
   const handleNext = () => {
@@ -64,7 +64,7 @@ export function Wizard({
       {/* Header */}
       <View className="flex-row items-center justify-between">
         {showBackButton ? (
-          <Pressable onPress={handleBack}>
+          <Pressable onPress={handleBack} testID={`${testID}.back-button`}>
             <Ionicons name="chevron-back" size={24} color={foregroundColor} />
           </Pressable>
         ) : (
@@ -74,6 +74,7 @@ export function Wizard({
         {showSkipButton && onSkip ? (
           <Pressable onPress={handleSkip}>
             <TypographySmall
+              testID={`${testID}.skip-button`}
               style={{ color: mutedColor }}
               className="text-base"
               i18nKey="skip"
@@ -85,13 +86,16 @@ export function Wizard({
       </View>
 
       {/* Content */}
-      <View className="flex-1">{currentStep.content}</View>
+      <View className="flex-1" testID={`${testID}.content`}>
+        {currentStep?.content ?? null}
+      </View>
 
       {/* Footer with Pagination and Next Button */}
       <View className="pb-12 gap-6 flex flex-row items-center">
         <View className="flex-1">
           <AtomPaginationDots
-            total={totalSteps}
+            testID={`${testID}.pagination-dots`}
+            keys={steps.map((step) => step.id)}
             currentIndex={currentStepIndex}
             activeColor={accentColor}
             inactiveColor={mutedColor}

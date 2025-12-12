@@ -1,6 +1,7 @@
 import type { Href } from 'expo-router';
 import { useCallback } from 'react';
 
+import type { TID } from '@/domain/core/schemas/id.schema';
 import type { INavigationPort } from '@/domain/ports/navigation.port';
 
 export type AppRoute = Href;
@@ -35,8 +36,8 @@ export const useNavigation = (adapters: {
     navigateTo('/(caregiver-setup)/scan-qr');
   }, []);
 
-  const goToRegister = useCallback(() => {
-    navigateTo('/(tabs)/register/execute-register');
+  const goToRegister = useCallback((moduleID: TID) => {
+    navigateTo(`/(tabs)/register/execute-register?moduleID=${moduleID}`);
   }, []);
 
   const goToFilterHistory = useCallback(() => {

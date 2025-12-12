@@ -45,16 +45,16 @@ export function ParentInfoStep({
         <View className="flex-1 flex-col gap-4">
           <CardWithDetails
             icon="heart"
-            titleKey="parent-setup.parent-info.parent"
+            title="parent-setup.parent-info.parent"
             isSelected={relationship === 'parent'}
-            onSelect={() => onRelationshipChange('parent')}
+            onPress={() => onRelationshipChange('parent')}
             testID="parent-relationship-parent"
           />
           <CardWithDetails
             icon="shield"
-            titleKey="parent-setup.parent-info.guardian"
+            title="parent-setup.parent-info.guardian"
             isSelected={relationship === 'guardian'}
-            onSelect={() => onRelationshipChange('guardian')}
+            onPress={() => onRelationshipChange('guardian')}
             testID="parent-relationship-guardian"
           />
         </View>

@@ -70,6 +70,7 @@ interface TypographyProps extends TextProps, ITextTranslationProps {
   variant?: TypographyVariant;
   size?: TypographySize;
   weight?: TypographyWeight;
+  testID: string;
 }
 
 const TypographyTitle = React.forwardRef<Text, TypographyProps>(
