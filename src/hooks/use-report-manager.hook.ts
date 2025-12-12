@@ -67,8 +67,9 @@ export function useReportManager(options?: {
   const timeRange = useMemo(() => computeTimeRange(range), [range]);
 
   const visibleModules = useMemo(() => {
-    return (activeModules ?? []).filter((module: TModule) => {
-      return module.isActive !== false;
+    return (activeModules ?? []).filter((m: TModule) => {
+      const maybe = m as unknown as { isActive?: boolean };
+      return maybe.isActive !== false;
     }) as TModule[];
   }, [activeModules]);
 
@@ -131,7 +132,7 @@ export function useReportManager(options?: {
       chunks.push(modules.slice(i, i + concurrency));
 
     for (const chunk of chunks) {
-      await Promise.all(chunk.map((module) => refreshModule(module.id)));
+      await Promise.all(chunk.map((m) => refreshModule(m.id as number)));
     }
   }
 
@@ -165,27 +166,18 @@ export function useReportManager(options?: {
     } finally {
       setIsLoading(false);
     }
-  }, [
-    executeGetStats,
-    executeGetTrend,
-    fetchModuleTrends,
-    notifyAdapter,
-    timeRange.startDate,
-    timeRange.endDate,
-    visibleModules,
-  ]);
+  }, [notifyAdapter, timeRange.startDate, timeRange.endDate, visibleModules]);
 
   useEffect(() => {
     // initial load
     executeGetActiveModules();
-    // refresh after modules are fetched (effect below handles when visibleModules changes)
-  }, [executeGetActiveModules]);
+  }, []);
 
   // when visible modules or timeRange changes, refresh stats/trends
   useEffect(() => {
     // do not block UI — call refresh
     void refresh();
-  }, [timeRange.startDate, timeRange.endDate, visibleModules.length, refresh]);
+  }, [timeRange.startDate, timeRange.endDate, visibleModules.length]);
 
   const getModuleSeries = useCallback(
     (moduleId: number) => trendByModule[moduleId],

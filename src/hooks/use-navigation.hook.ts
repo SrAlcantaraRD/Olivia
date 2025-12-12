@@ -35,8 +35,8 @@ export const useNavigation = (adapters: {
     navigateTo('/(caregiver-setup)/scan-qr');
   }, []);
 
-  const goToRegisterCic = useCallback(() => {
-    navigateTo('/(modals)/modal-register-cic');
+  const goToRegister = useCallback(() => {
+    navigateTo('/(tabs)/register/execute-register');
   }, []);
 
   const goToFilterHistory = useCallback(() => {
@@ -56,7 +56,7 @@ export const useNavigation = (adapters: {
     goToParentSetup,
     goToConfirmLink,
     goToScanQr,
-    goToRegisterCic,
+    goToRegister: goToRegister,
     goToFilterHistory,
     goToOnboarding,
   };
