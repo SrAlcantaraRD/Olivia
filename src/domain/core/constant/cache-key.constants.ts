@@ -5,6 +5,14 @@ export const CACHE_KEY_ENUM = Object.freeze({
   MODULES: 'cache-modules',
   APP_THEME: 'cache-app-theme',
   APP_LOCALE: 'cache-app-locale',
+  REPORT_DISTRIBUTION: 'report:distribution',
 } as const);
 
 export type TCacheKey = (typeof CACHE_KEY_ENUM)[keyof typeof CACHE_KEY_ENUM];
+
+export const buildCacheKey = (
+  baseKey: TCacheKey,
+  ...parts: (string | number)[]
+): TCacheKey => {
+  return `${baseKey}:${parts.join(':')}` as TCacheKey;
+};
