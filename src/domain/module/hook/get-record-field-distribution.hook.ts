@@ -1,6 +1,10 @@
 import { useCallback } from 'react';
 
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
+import {
+  buildCacheKey,
+  CACHE_KEY_ENUM,
+} from '@/domain/core/constant/cache-key.constants';
 import type {
   IHookResponse,
   IUseHook,
@@ -42,7 +46,15 @@ export function useGetRecordFieldDistribution(adapters: {
         const endEpoch = data.endDate
           ? Math.floor(data.endDate.getTime() / 1000)
           : 0;
-        const cacheKey = `report:distribution:${data.moduleID ?? 'global'}:${data.fieldID}:${startEpoch}:${endEpoch}`;
+
+        const cacheKey = buildCacheKey(
+          CACHE_KEY_ENUM.REPORT_DISTRIBUTION,
+          data.moduleID ?? 'global',
+          data.fieldID,
+          startEpoch,
+          endEpoch
+        );
+
         // try to get from cache
         if (cacheAdapter) {
           try {
