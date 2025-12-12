@@ -9,7 +9,7 @@ import Animated, {
 
 interface SelectableCardProps {
   isSelected: boolean;
-  onSelect: () => void;
+  onPress: () => void;
   children: React.ReactNode;
   className?: string;
   testID: string;
@@ -17,13 +17,12 @@ interface SelectableCardProps {
 
 export function SelectableCard({
   isSelected,
-  onSelect,
+  onPress,
   children,
   className = '',
   testID,
 }: SelectableCardProps) {
   const accentColor = useThemeColor('accent');
-  const cardBgColor = useThemeColor('background-tertiary');
 
   // Animated value for border opacity
   const borderOpacity = useSharedValue(isSelected ? 1 : 0);
@@ -41,10 +40,10 @@ export function SelectableCard({
 
   return (
     <Pressable
-      onPress={onSelect}
+      onPress={onPress}
       // className={`rounded-3xl relative ${className} shadow-primary-500/30`}
       className={`rounded-3xl relative ${className} shadow-[0px_1px_20px_-1px_rgb(0,139,194)]`}
-      testID={testID}
+      testID={`${testID}.pressable`}
     >
       {/* Animated border */}
       <Animated.View

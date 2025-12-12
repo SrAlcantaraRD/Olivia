@@ -1,21 +1,44 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useAdapters } from '@/adapter';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
-import type { TModule } from '@/domain/module/entity/module.entity';
-import type { TRecordCreate } from '@/domain/module/entity/record.entity';
+import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
+import { enEN } from '@/ui/i18n/locales/en-EN';
+
+function isTi18nKey(value: string | undefined): value is Ti18nKeys {
+  if (!value) return false;
+  return Object.hasOwn(enEN, value);
+}
+
+const FALLBACK_TITLE: Ti18nKeys = 'parent-setup.modules.unknown.title';
+const FALLBACK_DESCRIPTION: Ti18nKeys =
+  'parent-setup.modules.unknown.description';
 
 export interface IModuleWizardOptions {
-  module: TModule;
-  initialValues?: TRecordCreate;
+  moduleID: number;
+  initialValues: Record<number, string>;
 }
 
 export function useModuleWizard(opts: IModuleWizardOptions) {
-  const { module, initialValues = {} } = opts;
+  const { moduleID, initialValues } = opts;
 
-  const fieldList = module.fieldList ?? [];
+  const { loggerAdapter, moduleFieldAdapter, notifyAdapter } = useAdapters();
+
+  const { execute: executeGetModuleFieldList, items: moduleFieldItems } =
+    useGetListModuleField({
+      loggerAdapter,
+      moduleFieldAdapter,
+      notifyAdapter: notifyAdapter,
+    });
+
+  useEffect(() => {
+    executeGetModuleFieldList({ moduleID });
+  }, [moduleID]);
+
+  const fieldList = moduleFieldItems ?? [];
   const [currentStep, setCurrentStep] = useState(0);
-  const [values, setValues] = useState<TRecordCreate>(initialValues);
+  const [values, setValues] = useState<Record<number, string>>(initialValues);
 
   const totalSteps = fieldList.length;
 
@@ -30,17 +53,17 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
     [values]
   );
 
-  const steps = useMemo(
-    () =>
-      fieldList.map((field) => ({
-        id: String(field.id),
-        titleKey: field.title as unknown as Ti18nKeys,
-        descriptionKey: field.description as unknown as Ti18nKeys,
-        field,
-        isValid: isFieldValid(field),
-      })),
-    []
-  );
+  const steps = useMemo(() => {
+    return fieldList.map((field) => ({
+      id: String(field.id),
+      titleKey: field.title as Ti18nKeys,
+      descriptionKey: isTi18nKey(field.description)
+        ? field.description
+        : FALLBACK_DESCRIPTION,
+      field,
+      isValid: isFieldValid(field),
+    }));
+  }, [fieldList, isFieldValid]);
 
   const goToNextStep = useCallback(() => {
     setCurrentStep((prev) => Math.min(prev + 1, totalSteps - 1));
@@ -89,5 +112,3 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
     isFieldValid,
   } as const;
 }
-
-export default useModuleWizard;

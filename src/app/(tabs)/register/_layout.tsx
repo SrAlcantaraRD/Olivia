@@ -8,6 +8,10 @@ export default function RegisterLayout() {
       }}
     >
       <Stack.Screen name="index" />
+      <Stack.Screen
+        name="execute-register"
+        options={{ presentation: 'modal' }}
+      />
     </Stack>
   );
 }

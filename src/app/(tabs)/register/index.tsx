@@ -3,7 +3,6 @@ import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
-import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import { useGetListActiveModule } from '@/domain/module/hook/get-list-active-module.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 import {
@@ -28,19 +27,6 @@ export default function RegisterScreen() {
     notifyAdapter,
   });
 
-  const handlerOnSelectAction = (code: MODULE_KEY_ENUM) => {
-    switch (code) {
-      case MODULE_KEY_ENUM.CIC:
-        goToRegister();
-        break;
-      case MODULE_KEY_ENUM.STOOL:
-      case MODULE_KEY_ENUM.ENEMA:
-      case MODULE_KEY_ENUM.URINE:
-      case MODULE_KEY_ENUM.MEDICATION:
-        break;
-    }
-  };
-
   const handlerGetList = async () => {
     await execute();
   };
@@ -56,13 +42,19 @@ export default function RegisterScreen() {
         <TypographyTitle
           i18nKey="page.register.title"
           accessibilityRole="header"
+          testID="page.register.title"
         />
-        <TypographySmall i18nKey="page.register.subtitle" variant="light" />
+        <TypographySmall
+          testID="page.register.subtitle"
+          i18nKey="page.register.subtitle"
+          variant="light"
+        />
       </View>
 
       {/* Quick Actions */}
       <View className="gap-4">
         <TypographyHeading
+          testID="page.register.quick_actions"
           i18nKey="page.register.quick_actions"
           accessibilityRole="header"
         />
@@ -70,12 +62,11 @@ export default function RegisterScreen() {
         {Array.isArray(items) &&
           items.map((module) => (
             <ModuleCard
+              testID={`page.register.module-card.${module.code}`}
               key={module.id}
               module={module}
-              testID="register"
-              isSelected={false}
-              onSelect={() => {
-                goToRegister();
+              onPress={() => {
+                goToRegister(module.id);
               }}
             />
           ))}

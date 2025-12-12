@@ -1,31 +1,32 @@
+import { useLocalSearchParams } from 'expo-router';
 import { useEffect } from 'react';
 
 import { useAdapters } from '@/adapter';
+import type { TID } from '@/domain/core/schemas/id.schema';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { useCreateRecord } from '@/domain/module/hook/create-record.hook';
-import { useGetListActiveModule } from '@/domain/module/hook/get-list-active-module.hook';
+import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { ModuleWizard } from '@/ui/components/organisms/module-wizard/module-wizard.organism';
 
 export default function ExecuteRegister() {
+  const { moduleID } = useLocalSearchParams<{ moduleID: string }>();
+
   const {
-    moduleAdapter,
     notifyAdapter,
     recordAdapter,
     recordFieldAdapter,
     loggerAdapter,
     navigationAdapter,
+    moduleFieldAdapter,
   } = useAdapters();
 
-  const {
-    isExecuting: isModulesLoading,
-    execute: executeGetModules,
-    items: modules,
-  } = useGetListActiveModule({
-    loggerAdapter,
-    moduleAdapter,
-    notifyAdapter,
-  });
+  const { isExecuting: isModulesLoading, execute: executeGetModuleFieldList } =
+    useGetListModuleField({
+      loggerAdapter,
+      moduleFieldAdapter,
+      notifyAdapter,
+    });
 
   // wire create record hook
   const { isExecuting: isSaving, execute: executeCreateRecord } =
@@ -36,8 +37,8 @@ export default function ExecuteRegister() {
       recordFieldAdapter,
     });
 
-  const loadModules = async () => {
-    await executeGetModules();
+  const handlerLoadModuleFieldList = async (moduleID: TID) => {
+    await executeGetModuleFieldList({ moduleID });
   };
 
   const handleOnComplete = async (values: TRecordCreate) => {
@@ -49,22 +50,20 @@ export default function ExecuteRegister() {
   };
 
   useEffect(() => {
-    loadModules();
-  }, []);
+    if (moduleID) handlerLoadModuleFieldList(Number(moduleID));
+  }, [moduleID]);
 
   return (
     <ScreenLayout
       testID="execute-register"
       isLoading={isModulesLoading || isSaving}
     >
-      {modules.map((module) => (
-        <ModuleWizard
-          key={`module-wizard.${module.code}`}
-          testID={`module-wizard.${module.code}`}
-          module={module}
-          onComplete={handleOnComplete}
-        />
-      ))}
+      <ModuleWizard
+        key={`module-wizard.module.${moduleID}`}
+        testID={`module-wizard.module.${moduleID}`}
+        moduleID={Number(moduleID)}
+        onComplete={handleOnComplete}
+      />
     </ScreenLayout>
   );
 }

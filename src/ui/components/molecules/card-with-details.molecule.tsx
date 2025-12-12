@@ -10,29 +10,29 @@ import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface CardWithDetailsProps {
   icon: IconName;
-  titleKey?: Ti18nKeys;
-  subtitleKey?: Ti18nKeys;
-  descriptionKey?: Ti18nKeys;
+  title?: Ti18nKeys;
+  subtitle?: Ti18nKeys;
+  description?: Ti18nKeys;
   isSelected: boolean;
-  onSelect: () => void;
+  onPress: () => void;
   testID: string;
 }
 
 export function CardWithDetails({
   icon,
-  titleKey,
-  subtitleKey,
-  descriptionKey,
+  title,
+  subtitle,
+  description,
   isSelected,
-  onSelect,
+  onPress,
   testID,
 }: CardWithDetailsProps) {
   return (
     <SelectableCard
       isSelected={isSelected}
-      onSelect={onSelect}
+      onPress={onPress}
       className="p-4 mb-4"
-      testID={`${testID}.card`}
+      testID={`${testID}.selectable-card`}
     >
       <View className="flex-row items-center gap-4">
         {/* Icon */}
@@ -40,25 +40,32 @@ export function CardWithDetails({
 
         {/* Content */}
         <View className="flex-1">
-          {titleKey && (
-            <TypographyTitle className="mb-2" size="lg" i18nKey={titleKey} />
+          {title && (
+            <TypographyTitle
+              testID={`${testID}.title`}
+              className="mb-2"
+              size="lg"
+              i18nKey={title}
+            />
           )}
 
-          {subtitleKey && (
+          {subtitle && (
             <TypographyParagraph
+              testID={`${testID}.subtitle`}
               variant="light"
               className="mb-2"
               size="sm"
               weight="medium"
-              i18nKey={subtitleKey}
+              i18nKey={subtitle}
             />
           )}
 
-          {descriptionKey && (
+          {description && (
             <TypographyParagraph
+              testID={`${testID}.description`}
               variant="default"
               size="sm"
-              i18nKey={descriptionKey}
+              i18nKey={description}
             />
           )}
         </View>

@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import type { TModule } from '@/domain/module/entity/module.entity';
 import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import type { IconName } from '@/ui/components/atoms/icon.atom';
@@ -8,17 +9,11 @@ import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface CardWithDetailsProps {
   module: TModule;
-  isSelected: boolean;
-  onSelect: () => void;
+  onPress: () => void;
   testID: string;
 }
 
-export function ModuleCard({
-  module,
-  isSelected,
-  onSelect,
-  testID,
-}: CardWithDetailsProps) {
+export function ModuleCard({ module, onPress, testID }: CardWithDetailsProps) {
   const getIconFromModuleCode = useCallback(
     (code: MODULE_KEY_ENUM): IconName => {
       const mapIcon: Record<MODULE_KEY_ENUM, IconName> = {
@@ -33,6 +28,8 @@ export function ModuleCard({
     },
     []
   );
+
+  BASE_LOGGER.error(module);
 
   const getTitleFromModuleCode = useCallback(
     (code: MODULE_KEY_ENUM): Ti18nKeys => {
@@ -71,11 +68,11 @@ export function ModuleCard({
     <CardWithDetails
       key={module.id}
       icon={getIconFromModuleCode(module.code)}
-      titleKey={getTitleFromModuleCode(module.code)}
-      descriptionKey={getDescriptionFromModuleCode(module.code)}
-      isSelected={isSelected}
-      onSelect={onSelect}
-      testID={`${testID}.module-card.${module.code}`}
+      title={getTitleFromModuleCode(module.code)}
+      description={getDescriptionFromModuleCode(module.code)}
+      isSelected={false}
+      onPress={onPress}
+      testID={`${testID}.card-with-details`}
     />
   );
 }

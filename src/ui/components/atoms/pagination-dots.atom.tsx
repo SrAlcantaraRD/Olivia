@@ -2,23 +2,22 @@ import { useEffect, useRef, useState } from 'react';
 import { Animated, View } from 'react-native';
 
 interface PaginationDotsProps {
-  total: number;
   currentIndex: number;
   activeColor: string;
   inactiveColor: string;
-  /** Optional array of unique keys for each dot */
-  keys?: string[];
+  keys: string[];
   /** Maximum width available for all dots */
   maxWidth?: number;
+  testID: string;
 }
 
 export function AtomPaginationDots({
-  total,
   currentIndex,
   activeColor,
   inactiveColor,
   keys,
   maxWidth,
+  testID,
 }: PaginationDotsProps) {
   const [containerWidth, setContainerWidth] = useState<number | undefined>(
     maxWidth
@@ -34,10 +33,10 @@ export function AtomPaginationDots({
     }
 
     const gapSize = 8;
-    const totalGaps = (total - 1) * gapSize;
+    const totalGaps = (keys.length - 1) * gapSize;
     const availableWidth = width - totalGaps; // Si tenemos n dots, uno activo (3 unidades) y (n-1) inactivos (1 unidad cada uno)
     // Total unidades = 3 + (n-1) = n + 2
-    const totalUnits = total + 2;
+    const totalUnits = keys.length + 2;
     const unitWidth = availableWidth / totalUnits;
 
     return {
@@ -57,9 +56,10 @@ export function AtomPaginationDots({
         }
       }}
     >
-      {Array.from({ length: total }).map((_, index) => (
+      {keys.map((key, index) => (
         <PaginationDot
-          key={keys?.[index] ?? `dot-${index}`}
+          key={`dot-${key}`}
+          testID={`${testID}.dot-${keys}`}
           isActive={index === currentIndex}
           isPassed={index < currentIndex}
           activeColor={activeColor}
@@ -79,6 +79,7 @@ interface PaginationDotProps {
   inactiveColor: string;
   activeWidth: number;
   inactiveWidth: number;
+  testID: string;
 }
 
 function PaginationDot({
@@ -88,6 +89,7 @@ function PaginationDot({
   inactiveColor,
   activeWidth,
   inactiveWidth,
+  testID,
 }: PaginationDotProps) {
   const widthAnim = useRef(
     new Animated.Value(isActive ? activeWidth : inactiveWidth)
@@ -141,6 +143,7 @@ function PaginationDot({
 
   return (
     <Animated.View
+      testID={`${testID}.container`}
       style={{
         width: widthAnim,
         height: heightAnim,
