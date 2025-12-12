@@ -25,7 +25,7 @@ export function Sparkline({
         height={height}
         color={color}
         hideRules
-        hideVerticalLines
+        showVerticalLines={false}
         hideDataPoints
         startFillColor={color}
         endFillColor={color}

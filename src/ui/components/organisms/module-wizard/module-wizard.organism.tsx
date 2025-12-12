@@ -9,6 +9,12 @@ import { ModuleFieldWrapper } from '@/ui/components/organisms/module-wizard/modu
 import { useModuleWizard } from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
+// FIXME: Simplificate processing field values parsing
+export function parseFieldValues(values: string | undefined): string[] {
+  if (!values) return [];
+  return JSON.parse(values);
+}
+
 interface ModuleWizardProps {
   moduleID: number;
   onComplete: (data: TRecordCreate) => void;

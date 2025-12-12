@@ -37,7 +37,6 @@ export function PieChartAtom({ values, height = 220 }: PieChartProps) {
     <View style={{ height }}>
       <PieChart
         data={data}
-        height={height}
         innerRadius={40}
         donut
         showText

@@ -11,14 +11,22 @@ import type { ParentSetupFormData, Relationship } from '../types';
 import { INITIAL_FORM_DATA } from '../types';
 
 export function useParentSetupForm() {
-  const { carerAdapter, patientAdapter, moduleAdapter, notifyAdapter } =
-    useAdapters();
+  const {
+    carerAdapter,
+    patientAdapter,
+    moduleAdapter,
+    notifyAdapter,
+    cacheAdapter,
+    secureStoreAdapter,
+  } = useAdapters();
   const { execute, isExecuting } = useSetupParent({
     loggerAdapter: BASE_LOGGER,
     notifyAdapter,
     carerAdapter,
     patientAdapter,
     moduleAdapter,
+    cacheAdapter,
+    secureStoreAdapter,
   });
 
   const [formData, setFormData] =

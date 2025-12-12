@@ -26,7 +26,6 @@ export function BarChartAtom({
         spacing={8}
         color={color}
         frontColor={color}
-        showValuesOnTopOfBars
       />
     </View>
   );
