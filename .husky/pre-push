@@ -1,3 +1,7 @@
+echo "🧪 Running typescript check..."
+npx typecheck
+
+echo "🧪 Running unit test..."
 pnpm test
 
 echo "🧪 Running unit tests..."

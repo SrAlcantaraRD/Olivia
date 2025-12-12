@@ -25,6 +25,7 @@
     "biome:lint": "npx @biomejs/biome lint --write ./",
     "biome:check": "npx @biomejs/biome check --write ./",
     "db:generate": "drizzle-kit generate --config src/database/drizzle.config.ts",
+    "typecheck": "tsc -p tsconfig.spec.json --noEmit",
     "prepare": "husky"
   },
   "dependencies": {
