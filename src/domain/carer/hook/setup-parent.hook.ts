@@ -11,6 +11,7 @@ import type {
   IHookResponse,
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
+import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
 import type { IPatientPort } from '@/domain/patient/port/patient.port';
@@ -21,6 +22,8 @@ export function useSetupParent(adapters: {
   carerAdapter: ICarerPort;
   patientAdapter: IPatientPort;
   moduleAdapter: IModulePort;
+  cacheAdapter: ICachePort;
+  secureStoreAdapter: ICachePort;
 }): IUseHook<TRequestSetupParent, TResponseSetupParent> {
   const [isExecuting, setExecuting] = useState<boolean>(false);
 
@@ -30,6 +33,8 @@ export function useSetupParent(adapters: {
     carerAdapter,
     patientAdapter,
     moduleAdapter,
+    cacheAdapter,
+    secureStoreAdapter,
   } = adapters;
 
   const execute = useCallback(
@@ -47,7 +52,9 @@ export function useSetupParent(adapters: {
           loggerAdapter,
           carerAdapter,
           patientAdapter,
-          moduleAdapter
+          moduleAdapter,
+          cacheAdapter,
+          secureStoreAdapter
         );
 
         const response = await usecase.execute(data);

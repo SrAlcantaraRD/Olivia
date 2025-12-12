@@ -51,7 +51,6 @@ export function useGetRecordFieldDistribution(adapters: {
                 cacheKey
               );
             if (cached && cached.length > 0) {
-              saveItems(cached);
               return { success: true, data: cached };
             }
           } catch (err) {
@@ -97,9 +96,6 @@ export function useGetRecordFieldDistribution(adapters: {
   return {
     execute,
     isExecuting: false,
-    items: getItems() ?? [],
-  } as unknown as IUseHook<
-    { fieldID: number; moduleID?: number; startDate?: Date; endDate?: Date },
-    { value: string; count: number }[]
-  >;
+    items: [],
+  };
 }

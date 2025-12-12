@@ -49,7 +49,7 @@ export function useCreateRecord(adapters: {
           description: 'common.success',
         });
 
-        return { success: true };
+        return { success: true, data: undefined };
       } catch (error) {
         console.error(error);
         return { success: false };

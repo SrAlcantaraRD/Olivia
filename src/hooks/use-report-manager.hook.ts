@@ -186,7 +186,7 @@ export function useReportManager(options?: {
 
   return {
     visibleModules,
-    stats: statsItems ?? [],
+    stats: statsItems?.countsByModule ?? [],
     globalTrend: trendItems ?? [],
     trendByModule,
     timeRange,

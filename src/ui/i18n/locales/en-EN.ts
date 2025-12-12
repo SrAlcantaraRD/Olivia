@@ -318,6 +318,8 @@ export const enEN = Object.freeze({
   'hook.get-record-trend.error': 'Error getting record trend',
 
   'test.reset-db': 'Reset Database for Testing',
+  'hook.create-record.error-title': 'Record Creation Failed',
+  'hook.create-record.success-title': 'Record Created Successfully',
 } as const);
 
 type RecursiveKeyOf<TObj extends object> = {
