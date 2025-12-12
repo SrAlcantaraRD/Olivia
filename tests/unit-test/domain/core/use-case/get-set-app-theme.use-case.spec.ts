@@ -1,49 +1,51 @@
-import type { ICachePort } from '@/domain/core/port/cache.port';
 import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
 import { GetAppThemeUseCase } from '@/domain/core/use-case/get-app-theme.use-case';
 import { SetAppThemeUseCase } from '@/domain/core/use-case/set-app-theme.use-case';
-import { mockCachePort, mockLoggerPort } from '../../mocks/mock.port';
+import { mockCachePort, mockLoggerPort } from '../mocks/mock.port';
 
 describe('AppTheme use-cases', () => {
-  let mockCacheAdapter: jest.Mocked<Pick<ICachePort, 'get' | 'set' | 'delete'>>;
-  const mockLogger = mockLoggerPort();
+  const prepareSuiteCase = () => {
+    const loggerAdapter = mockLoggerPort();
+    const cacheAdapter = mockCachePort();
 
-  beforeEach(() => {
-    mockCacheAdapter = mockCachePort();
-  });
+    return { loggerAdapter, cacheAdapter };
+  };
+
+  beforeEach(() => jest.clearAllMocks());
 
   it('GetAppThemeUseCase returns cached theme when present', async () => {
-    (mockCacheAdapter.get as jest.Mock).mockResolvedValue('dark');
-    const usecase = new GetAppThemeUseCase(
-      mockLogger,
-      mockCacheAdapter as ICachePort
-    );
-    const resp = await usecase.execute();
-    expect(resp.success).toBe(true);
-    expect(resp.details).toBe('dark');
-    expect(mockCacheAdapter.get).toHaveBeenCalledWith(CACHE_KEY_ENUM.APP_THEME);
+    const { loggerAdapter, cacheAdapter } = prepareSuiteCase();
+
+    const usecase = new GetAppThemeUseCase(loggerAdapter, cacheAdapter);
+
+    const response = await usecase.execute();
+
+    expect(response.success).toBe(true);
+
+    if (response.success) {
+      expect(response.details).toBe('dark');
+    }
+    expect(cacheAdapter.get).toHaveBeenCalledWith(CACHE_KEY_ENUM.APP_THEME);
   });
 
   it('GetAppThemeUseCase returns null when no cached theme', async () => {
-    (mockCacheAdapter.get as jest.Mock).mockResolvedValue(null);
-    const usecase = new GetAppThemeUseCase(
-      mockLogger,
-      mockCacheAdapter as ICachePort
-    );
+    const { loggerAdapter, cacheAdapter } = prepareSuiteCase();
+    (cacheAdapter.get as jest.Mock).mockResolvedValue(null);
+    const usecase = new GetAppThemeUseCase(loggerAdapter, cacheAdapter);
     const resp = await usecase.execute();
     expect(resp.success).toBe(true);
-    expect(resp.details).toBeNull();
+    if (resp.success) {
+      expect(resp.details).toBeUndefined();
+    }
   });
 
   it('SetAppThemeUseCase persists theme', async () => {
-    (mockCacheAdapter.set as jest.Mock).mockResolvedValue(undefined);
-    const usecase = new SetAppThemeUseCase(
-      mockLogger,
-      mockCacheAdapter as ICachePort
-    );
+    const { loggerAdapter, cacheAdapter } = prepareSuiteCase();
+    (cacheAdapter.set as jest.Mock).mockResolvedValue(undefined);
+    const usecase = new SetAppThemeUseCase(loggerAdapter, cacheAdapter);
     const resp = await usecase.execute({ theme: 'dark' });
     expect(resp.success).toBe(true);
-    expect(mockCacheAdapter.set).toHaveBeenCalledWith(
+    expect(cacheAdapter.set).toHaveBeenCalledWith(
       CACHE_KEY_ENUM.APP_THEME,
       'dark'
     );

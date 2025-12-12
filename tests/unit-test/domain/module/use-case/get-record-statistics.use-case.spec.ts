@@ -25,8 +25,8 @@ describe('[UseCase] GetRecordStatisticsUseCase', () => {
     });
 
     const resp = await useCase.execute({
-      start: 0,
-      end: Math.floor(Date.now() / 1000),
+      startDate: new Date(0),
+      endDate: new Date(Math.floor(Date.now() / 1000) * 1000),
     });
     expect(resp.success).toBe(true);
     if (resp.success) {

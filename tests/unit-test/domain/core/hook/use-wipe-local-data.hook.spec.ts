@@ -10,7 +10,7 @@ import {
 
 // mock dropDatabase to avoid touching real DB
 jest.mock('@/database/config/drop-database.config', () => ({
-  dropDatabase: jest.fn().mockResolvedValue(undefined),
+  dropDatabase: (jest.fn() as any).mockResolvedValue(undefined),
 }));
 
 describe('useWipeLocalData', () => {

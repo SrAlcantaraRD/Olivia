@@ -11,17 +11,18 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations (clean)', () => {
   it('getFieldDistribution uses database.execute when available (no moduleID)', async () => {
     const adapter = new SQLiteRecordAdapter();
 
-    const mockExecute = jest.fn().mockResolvedValue([{ value: 'A', count: 2 }]);
+    const mockExecute = (jest.fn() as any).mockResolvedValue([
+      { value: 'A', count: 2 },
+    ]);
     // inject fake database object with execute
-    (adapter as unknown as { database: { execute: unknown } }).database = {
-      // using non-strict cast for test convenience
-      execute: mockExecute as unknown,
-    } as unknown;
+    (adapter as any).database = {
+      execute: mockExecute,
+    };
 
     const result = await adapter.getFieldDistribution({
       fieldID: 1,
-      start: 0,
-      end: 1000,
+      startDate: new Date(0),
+      endDate: new Date(1000),
     });
 
     expect(mockExecute).toHaveBeenCalled();
@@ -36,7 +37,7 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations (clean)', () => {
     const fakeDb = {
       query: {
         RECORD: {
-          findMany: jest.fn().mockResolvedValue([
+          findMany: (jest.fn() as any).mockResolvedValue([
             {
               id: 1,
               moduleID: 1,
@@ -64,13 +65,13 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations (clean)', () => {
           ]),
         },
       },
-    } as unknown as Record<string, unknown>;
+    } as any;
 
-    (adapter as unknown as { database: unknown }).database = fakeDb as unknown;
+    (adapter as any).database = fakeDb;
 
     const result = await adapter.getCountsByModule({
-      startDate: nowEpoch - 100,
-      endDate: nowEpoch,
+      startDate: new Date((nowEpoch - 100) * 1000),
+      endDate: new Date(nowEpoch * 1000),
     });
 
     expect(Array.isArray(result)).toBe(true);
@@ -84,16 +85,16 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations (clean)', () => {
 
   it('getCountsByDay uses database.execute when available', async () => {
     const adapter = new SQLiteRecordAdapter();
-    const mockExecute = jest
-      .fn()
-      .mockResolvedValue([{ day: '2025-12-01', count: 3 }]);
-    (adapter as unknown as { database: { execute: unknown } }).database = {
-      execute: mockExecute as unknown,
-    } as unknown;
+    const mockExecute = (jest.fn() as any).mockResolvedValue([
+      { day: '2025-12-01', count: 3 },
+    ]);
+    (adapter as any).database = {
+      execute: mockExecute,
+    };
 
     const res = await adapter.getCountsByDay({
-      start: 0,
-      end: Math.floor(Date.now() / 1000),
+      startDate: new Date(0),
+      endDate: new Date(Math.floor(Date.now() / 1000) * 1000),
     });
     expect(mockExecute).toHaveBeenCalled();
     expect(res).toEqual([{ day: '2025-12-01', count: 3 }]);

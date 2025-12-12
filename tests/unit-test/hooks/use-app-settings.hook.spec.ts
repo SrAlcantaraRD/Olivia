@@ -24,9 +24,7 @@ describe('useAppSettings hook', () => {
       set: jest.fn(),
     };
     jest.spyOn(Uniwind, 'setTheme').mockImplementation(() => {});
-    jest
-      .spyOn(i18n, 'changeLanguage')
-      .mockImplementation(() => Promise.resolve());
+    jest.spyOn(i18n, 'changeLanguage').mockResolvedValue({} as any);
   });
 
   afterEach(() => {

@@ -6,17 +6,19 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
   it('getFieldDistribution uses database.execute when available (no moduleID)', async () => {
     const adapter = new SQLiteRecordAdapter();
 
-    const mockExecute = jest.fn().mockResolvedValue([{ value: 'A', count: 2 }]);
+    const mockExecute = jest
+      .fn<() => Promise<{ value: string; count: number }[]>>()
+      .mockResolvedValue([{ value: 'A', count: 2 }]);
     // inject fake database object with execute
     (adapter as unknown as { database: { execute: unknown } }).database = {
       // using non-strict cast for test convenience
       execute: mockExecute as unknown,
-    } as unknown;
+    };
 
     const result = await adapter.getFieldDistribution({
       fieldID: 1,
-      start: 0,
-      end: 1000,
+      startDate: new Date(0),
+      endDate: new Date(1000),
     });
 
     expect(mockExecute).toHaveBeenCalled();
@@ -26,16 +28,18 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
   it('getFieldDistribution uses database.execute when available (with moduleID)', async () => {
     const adapter = new SQLiteRecordAdapter();
 
-    const mockExecute = jest.fn().mockResolvedValue([{ value: 'B', count: 1 }]);
+    const mockExecute = jest
+      .fn<() => Promise<{ value: string; count: number }[]>>()
+      .mockResolvedValue([{ value: 'B', count: 1 }]);
     (adapter as unknown as { database: unknown }).database = {
-      execute: mockExecute as unknown,
+      execute: mockExecute,
     } as unknown;
 
     const result = await adapter.getFieldDistribution({
       fieldID: 2,
       moduleID: 5,
-      start: 0,
-      end: 1000,
+      startDate: new Date(0),
+      endDate: new Date(1000),
     });
 
     expect(mockExecute).toHaveBeenCalled();
@@ -50,32 +54,45 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
     const fakeDb = {
       query: {
         RECORD: {
-          findMany: jest.fn().mockResolvedValue([
-            {
-              id: 1,
-              moduleID: 1,
-              status: 1,
-              data: '{}',
-              synced: 0,
-              createdAt: nowEpoch,
-            },
-            {
-              id: 2,
-              moduleID: 1,
-              status: 1,
-              data: '{}',
-              synced: 0,
-              createdAt: nowEpoch,
-            },
-            {
-              id: 3,
-              moduleID: 2,
-              status: 1,
-              data: '{}',
-              synced: 0,
-              createdAt: nowEpoch,
-            },
-          ]),
+          findMany: jest
+            .fn<
+              () => Promise<
+                {
+                  id: number;
+                  moduleID: number;
+                  status: number;
+                  data: string;
+                  synced: number;
+                  createdAt: number;
+                }[]
+              >
+            >()
+            .mockResolvedValue([
+              {
+                id: 1,
+                moduleID: 1,
+                status: 1,
+                data: '{}',
+                synced: 0,
+                createdAt: nowEpoch,
+              },
+              {
+                id: 2,
+                moduleID: 1,
+                status: 1,
+                data: '{}',
+                synced: 0,
+                createdAt: nowEpoch,
+              },
+              {
+                id: 3,
+                moduleID: 2,
+                status: 1,
+                data: '{}',
+                synced: 0,
+                createdAt: nowEpoch,
+              },
+            ]),
         },
       },
     } as unknown as Record<string, unknown>;
@@ -83,8 +100,8 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
     (adapter as unknown as { database: unknown }).database = fakeDb as unknown;
 
     const result = await adapter.getCountsByModule({
-      startDate: nowEpoch - 100,
-      endDate: nowEpoch,
+      startDate: new Date((nowEpoch - 100) * 1000),
+      endDate: new Date(nowEpoch * 1000),
     });
 
     expect(Array.isArray(result)).toBe(true);
@@ -103,16 +120,18 @@ describe('SQLiteRecordAdapter aggregations', () => {
   it('getFieldDistribution uses database.execute when available (no moduleID)', async () => {
     const adapter = new SQLiteRecordAdapter();
 
-    const mockExecute = jest.fn().mockResolvedValue([{ value: 'A', count: 2 }]);
+    const mockExecute = jest
+      .fn<() => Promise<{ value: string; count: number }[]>>()
+      .mockResolvedValue([{ value: 'A', count: 2 }]);
     // inject fake database object with execute
     (adapter as unknown as { database: { execute: unknown } }).database = {
-      execute: mockExecute as any,
-    } as any;
+      execute: mockExecute as unknown,
+    };
 
     const result = await adapter.getFieldDistribution({
       fieldID: 1,
-      start: 0,
-      end: 1000,
+      startDate: new Date(0),
+      endDate: new Date(1000),
     });
 
     expect(mockExecute).toHaveBeenCalled();
@@ -127,41 +146,54 @@ describe('SQLiteRecordAdapter aggregations', () => {
     const fakeDb = {
       query: {
         RECORD: {
-          findMany: jest.fn().mockResolvedValue([
-            {
-              id: 1,
-              moduleID: 1,
-              status: 1,
-              data: '{}',
-              synced: 0,
-              createdAt: nowEpoch,
-            },
-            {
-              id: 2,
-              moduleID: 1,
-              status: 1,
-              data: '{}',
-              synced: 0,
-              createdAt: nowEpoch,
-            },
-            {
-              id: 3,
-              moduleID: 2,
-              status: 1,
-              data: '{}',
-              synced: 0,
-              createdAt: nowEpoch,
-            },
-          ]),
+          findMany: jest
+            .fn<
+              () => Promise<
+                {
+                  id: number;
+                  moduleID: number;
+                  status: number;
+                  data: string;
+                  synced: number;
+                  createdAt: number;
+                }[]
+              >
+            >()
+            .mockResolvedValue([
+              {
+                id: 1,
+                moduleID: 1,
+                status: 1,
+                data: '{}',
+                synced: 0,
+                createdAt: nowEpoch,
+              },
+              {
+                id: 2,
+                moduleID: 1,
+                status: 1,
+                data: '{}',
+                synced: 0,
+                createdAt: nowEpoch,
+              },
+              {
+                id: 3,
+                moduleID: 2,
+                status: 1,
+                data: '{}',
+                synced: 0,
+                createdAt: nowEpoch,
+              },
+            ]),
         },
       },
     } as unknown as Record<string, unknown>;
 
-    (adapter as unknown as { database: unknown }).database = fakeDb as any;
+    (adapter as unknown as { database: unknown }).database = fakeDb as unknown;
 
     const result = await adapter.getCountsByModule({
-      startDate: nowEpoch - 100,
-      endDate: nowEpoch,
+      startDate: new Date((nowEpoch - 100) * 1000),
+      endDate: new Date(nowEpoch * 1000),
     });
 
     expect(Array.isArray(result)).toBe(true);
@@ -178,14 +210,18 @@ describe('SQLiteRecordAdapter aggregations', () => {
   it('calls database.execute with correct SQL when execute is available (no moduleID)', async () => {
     const adapter = new SQLiteRecordAdapter();
 
-    const mockExecute = jest.fn().mockResolvedValue([{ value: 'A', count: 2 }]);
+    const mockExecute = jest
+      .fn<() => Promise<{ value: string; count: number }[]>>()
+      .mockResolvedValue([{ value: 'A', count: 2 }]);
     // inject fake database object with execute
-    (adapter as any).database = { execute: mockExecute } as any;
+    (adapter as unknown as { database: unknown }).database = {
+      execute: mockExecute,
+    } as unknown;
 
     const result = await adapter.getFieldDistribution({
       fieldID: 1,
-      start: 0,
-      end: 1000,
+      startDate: new Date(0),
+      endDate: new Date(1000),
     });
 
     expect(mockExecute).toHaveBeenCalled();
@@ -195,14 +231,18 @@ describe('SQLiteRecordAdapter aggregations', () => {
   it('calls database.execute with correct SQL when execute is available (with moduleID)', async () => {
     const adapter = new SQLiteRecordAdapter();
 
-    const mockExecute = jest.fn().mockResolvedValue([{ value: 'B', count: 1 }]);
-    (adapter as any).database = { execute: mockExecute } as any;
+    const mockExecute = jest
+      .fn<() => Promise<{ value: string; count: number }[]>>()
+      .mockResolvedValue([{ value: 'B', count: 1 }]);
+    (adapter as unknown as { database: unknown }).database = {
+      execute: mockExecute,
+    } as unknown;
 
     const result = await adapter.getFieldDistribution({
       fieldID: 2,
       moduleID: 5,
-      start: 0,
-      end: 1000,
+      startDate: new Date(0),
+      endDate: new Date(1000),
     });
 
     expect(mockExecute).toHaveBeenCalled();
@@ -255,12 +295,12 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
     }
     const db = (adapter as unknown as { database: IDbQueryStub }).database;
     (db.query.RECORD.findMany as unknown as jest.Mock).mockResolvedValue(
-      mockRecords
+      mockRecords as never
     );
 
     const result = await adapter.getCountsByModule({
-      startDate: nowEpoch - 100,
-      endDate: nowEpoch,
+      startDate: new Date((nowEpoch - 100) * 1000),
+      endDate: new Date(nowEpoch * 1000),
     });
     expect(result).toEqual(
       expect.arrayContaining([

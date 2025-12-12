@@ -6,6 +6,7 @@ export function mockModulePort(
   overrides?: Partial<Record<keyof IModulePort, jest.Mock>>
 ): jest.Mocked<IModulePort> {
   return {
+    getAll: jest.fn(),
     batchActivate: jest.fn(),
     ...overrides,
   } satisfies jest.Mocked<IModulePort>;

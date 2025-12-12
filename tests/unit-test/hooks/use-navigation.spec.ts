@@ -88,7 +88,7 @@ describe('useNavigation', () => {
       useNavigation({ navigationAdapter: mockNavigationAdapter })
     );
 
-    result.current.goToRegister();
+    result.current.goToRegister(1);
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
       '/(tabs)/register/execute-register'

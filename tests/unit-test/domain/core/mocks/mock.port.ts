@@ -1,7 +1,7 @@
 /// <reference types="jest" />
 
+import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { ICachePort } from '@/domain/core/port/cache.port';
-import type { TLoggerPort } from '@/domain/core/port/logger.port';
 
 export function mockLoggerPort(
   overrides?: Partial<Record<keyof TLoggerPort, jest.Mock>>
@@ -31,6 +31,7 @@ export function mockCachePort(
     delete: jest.fn().mockResolvedValue(undefined),
     get: jest.fn().mockResolvedValue(null),
     set: jest.fn().mockResolvedValue(undefined),
+    clearAll: jest.fn().mockResolvedValue(undefined),
     ...overrides,
   } satisfies jest.Mocked<ICachePort>;
 }

@@ -1,3 +1,4 @@
+import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { ICachePort } from '@/domain/core/port/cache.port';
 import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
 import { GetAppLocaleUseCase } from '@/domain/core/use-case/get-app-locale.use-case';
@@ -25,7 +26,9 @@ describe('AppLocale use-cases', () => {
     );
     const resp = await usecase.execute();
     expect(resp.success).toBe(true);
-    expect(resp.details).toBe('es-ES');
+    if (resp.success) {
+      expect(resp.details).toBe('es-ES');
+    }
     expect(mockCacheAdapter.get).toHaveBeenCalledWith(
       CACHE_KEY_ENUM.APP_LOCALE
     );
@@ -39,7 +42,9 @@ describe('AppLocale use-cases', () => {
     );
     const resp = await usecase.execute();
     expect(resp.success).toBe(true);
-    expect(resp.details).toBeNull();
+    if (resp.success) {
+      expect(resp.details).toBeUndefined();
+    }
   });
 
   it('SetAppLocaleUseCase persists locale', async () => {

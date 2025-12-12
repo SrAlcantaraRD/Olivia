@@ -7,8 +7,6 @@ export function mockPatientPort(
 ): jest.Mocked<IPatientPort> {
   return {
     create: jest.fn(),
-    getById: jest.fn(),
-    getAll: jest.fn(),
     ...overrides,
   } satisfies jest.Mocked<IPatientPort>;
 }

@@ -1,7 +1,12 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 
 import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
 import { WipeLocalDataUseCase } from '@/domain/core/use-case/wipe-local-data.use-case';
+import {
+  mockCachePort,
+  mockLoggerPort,
+  mockSecureStorePort,
+} from '../mocks/mock.port';
 
 describe('[UseCase] WipeLocalDataUseCase', () => {
   it('deletes cache keys, secure keys and drops the database', async () => {
