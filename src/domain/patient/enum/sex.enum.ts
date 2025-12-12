@@ -14,7 +14,7 @@ export const getSexTypeFromValue = (value: string): SEX_ENUM => {
 
   const type = types.find((column) => column === value);
 
-  if (!type) {
+  if (typeof type === 'undefined') {
     throw new ErrorCannotParseSchema(
       'SEX',
       `Value "${value}" is not a valid sex.`

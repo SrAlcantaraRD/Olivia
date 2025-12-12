@@ -14,9 +14,9 @@ export const getStatusFromValue = (value: number): STATUS_ENUM => {
     (data) => typeof data === 'number'
   );
 
-  const type = types.find((column) => column === value);
+  const type = types.find((type) => Number(type) === Number(value));
 
-  if (!type) {
+  if (typeof type === 'undefined') {
     throw new ErrorCannotParseSchema(
       'STATUS_ENUM',
       `Value "${value}" is not a valid STATUS_ENUM.`

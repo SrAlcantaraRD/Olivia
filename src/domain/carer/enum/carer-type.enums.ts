@@ -13,7 +13,7 @@ export const getCarerTypeFromValue = (value: string): CARER_TYPE_ENUM => {
 
   const type = types.find((column) => column === value);
 
-  if (!type) {
+  if (typeof type === 'undefined') {
     throw new ErrorCannotParseSchema(
       'CARER_TYPE',
       `Value "${value}" is not a valid carer type.`

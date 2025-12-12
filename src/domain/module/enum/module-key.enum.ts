@@ -17,7 +17,7 @@ export const getModuleKeyFromValue = (value: string): MODULE_KEY_ENUM => {
 
   const type = types.find((column) => column === value);
 
-  if (!type) {
+  if (typeof type === 'undefined') {
     throw new ErrorCannotParseSchema(
       'MODULE_KEY',
       `Value "${value}" is not a valid module key.`

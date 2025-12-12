@@ -20,7 +20,7 @@ export const getAutonomyLevelFromValue = (
 
   const type = types.find((column) => column === value);
 
-  if (!type) {
+  if (typeof type === 'undefined') {
     throw new ErrorCannotParseSchema(
       'AUTONOMY_LEVEL',
       `Value "${value}" is not a valid autonomy level.`

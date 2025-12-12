@@ -16,7 +16,7 @@ export const getModuleFieldTypeFromValue = (
 
   const type = types.find((column) => column === value);
 
-  if (!type) {
+  if (typeof type === 'undefined') {
     throw new ErrorCannotParseSchema(
       'MODULE_FIELD_TYPE',
       `Value "${value}" is not a valid module field type.`
