@@ -60,7 +60,9 @@ export class SQLiteModuleAdapter implements IModulePort {
 
   public async getAll(): Promise<TModule[]> {
     const list = await this.database.query.MODULE.findMany({
-      with: {},
+      with: {
+        fieldList: true,
+      },
     });
 
     return list.map(SQLiteModuleAdapter.toDomainEntity);
