@@ -109,9 +109,8 @@ export default function ReportScreen() {
                 ? moduleTrend
                 : Array(numDays).fill(0);
               return (
-                <>
+                <View key={`module-${moduleId}`} className="gap-4">
                   <StatCardWithTrend
-                    key={`stat.bar.${moduleId}`}
                     module={m}
                     value={count}
                     data={trend}
@@ -119,14 +118,13 @@ export default function ReportScreen() {
                     onPress={() => goToReportHistoryByModule(String(moduleId))}
                   />
                   <StatCardWithTrend
-                    key={`stat.line.${moduleId}`}
                     module={m}
                     value={count}
                     data={trend}
                     chartVariant="line"
                     onPress={() => goToReportHistoryByModule(String(moduleId))}
                   />
-                </>
+                </View>
               );
             })}
           </View>
