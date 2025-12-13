@@ -11,7 +11,7 @@ function isTi18nKey(value: string | undefined): value is Ti18nKeys {
   return Object.hasOwn(enEN, value);
 }
 
-const FALLBACK_TITLE: Ti18nKeys = 'parent-setup.modules.unknown.title';
+const _FALLBACK_TITLE: Ti18nKeys = 'parent-setup.modules.unknown.title';
 const FALLBACK_DESCRIPTION: Ti18nKeys =
   'parent-setup.modules.unknown.description';
 

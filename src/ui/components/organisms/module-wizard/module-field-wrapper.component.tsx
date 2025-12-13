@@ -12,7 +12,7 @@ function parseFieldValues(valuesStr: string | undefined): string[] {
     const parsed = JSON.parse(valuesStr);
     if (Array.isArray(parsed)) return parsed.map((v) => String(v));
     return [String(parsed)];
-  } catch (err) {
+  } catch (_err) {
     return valuesStr
       .split(',')
       .map((v) => v.trim())
