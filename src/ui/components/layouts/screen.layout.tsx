@@ -40,7 +40,7 @@ export function ScreenLayout({
         className={cn(isLoading ? 'opacity-50' : '', styles?.content)}
       >
         {(title || subtitle) && (
-          <CardAtom variant="transparent" className="mb-4 gap-4 px-0">
+          <CardAtom variant="transparent" className="gap-4 px-0">
             {title && (
               <TypographyTitle
                 testID="screen.settings.title"

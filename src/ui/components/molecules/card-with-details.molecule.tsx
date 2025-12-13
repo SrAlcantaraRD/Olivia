@@ -31,7 +31,6 @@ export function CardWithDetails({
     <SelectableCard
       isSelected={isSelected}
       onPress={onPress}
-      className="p-4 mb-4"
       testID={`${testID}.selectable-card`}
     >
       <View className="flex-row items-center gap-4">
