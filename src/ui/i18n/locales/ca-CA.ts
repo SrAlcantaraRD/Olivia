@@ -12,13 +12,13 @@ export const caCA = Object.freeze({
   'start-onboarding': 'Començar',
   'add-register': 'Afegir registre',
 
-  'page.app_settings.section_theme': 'Tema',
-  'page.app_settings.section_language': 'Idioma',
-  'page.app_settings.language.english': 'Anglès',
-  'page.app_settings.language.spanish': 'Espanyol',
-  'page.app_settings.language.catalan': 'Català',
-  'page.app_settings.action.switch_to_dark': 'Canviar a Mode Fosc',
-  'page.app_settings.action.switch_to_light': 'Canviar a Mode Clar',
+  'page.app-settings.section-theme': 'Tema',
+  'page.app-settings.section-language': 'Idioma',
+  'page.app-settings.language.english': 'Anglès',
+  'page.app-settings.language.spanish': 'Espanyol',
+  'page.app-settings.language.catalan': 'Català',
+  'page.app-settings.action.switch-to-dark': 'Canviar a Mode Fosc',
+  'page.app-settings.action.switch-to-light': 'Canviar a Mode Clar',
 
   // Splash Screen
   'splash-screen.app-name': 'Oliva',
@@ -123,7 +123,7 @@ export const caCA = Object.freeze({
     'Error carregant estadístiques de registres',
   'common.optional': 'Opcional',
   'common.required': 'Obligatori',
-  'common.view_all': 'Veure tot',
+  'common.view-all': 'Veure tot',
   'common.number': '{{value}}',
 
   // Tab navigation
@@ -134,9 +134,9 @@ export const caCA = Object.freeze({
   // Page: Register Tab
   'page.register.title': 'Registre',
   'page.register.subtitle': 'Registra cateterismes, deposicions i medicació',
-  'page.register.quick_actions': 'Accions ràpides',
-  'page.register.recent_activity': 'Activitat recent',
-  'page.register.no_recent_activity': 'No hi ha activitat recent',
+  'page.register.quick-actions': 'Accions ràpides',
+  'page.register.recent-activity': 'Activitat recent',
+  'page.register.no-recent-activity': 'No hi ha activitat recent',
 
   // Page: Report Tab
   'page.report.title': 'Informe',
@@ -144,163 +144,163 @@ export const caCA = Object.freeze({
   'page.report.filters': 'Filtres',
   'page.report.statistics': 'Estadístiques',
   'page.report.history': 'Història',
-  'page.report.no_history': 'No hi ha registres a la història',
+  'page.report.no-history': 'No hi ha registres a la història',
 
   // Page: History Detail
-  'page.history_detail.title': 'Detall de la Història',
-  'page.history_detail.placeholder':
+  'page.history-detail.title': 'Detall de la Història',
+  'page.history-detail.placeholder':
     'Contingut detallat de la història pròximament',
-  'page.history_detail.select_field': 'Selecciona un camp',
-  'page.history_detail.no_fields':
+  'page.history-detail.select-field': 'Selecciona un camp',
+  'page.history-detail.no-fields':
     'No hi ha camps disponibles per a aquest mòdul',
-  'page.history_detail.no_data':
+  'page.history-detail.no-data':
     'No hi ha dades per a aquest camp en el rang seleccionat',
 
   // Page: Settings Tab
   'page.settings.title': 'Configuració',
   'page.settings.subtitle': "Gestiona perfil, cuidadors i ajustos de l'app",
-  'page.settings.section_child': 'Nen/a',
-  'page.settings.section_carers': 'Cuidadors',
-  'page.settings.section_app': 'Aplicació',
-  'page.settings.section_danger': 'Zona de perill',
-  'page.settings.child_profile': 'Perfil del nen/a',
-  'page.settings.child_profile_desc': 'Dades personals i diagnòstic',
-  'page.settings.manage_carers': 'Gestiona cuidadors',
-  'page.settings.manage_carers_desc': 'Afegeix o elimina cuidadors',
-  'page.settings.app_settings': "Ajustos de l'app",
-  'page.settings.app_settings_desc': 'Tema, idioma i privacitat',
+  'page.settings.section-child': 'Nen/a',
+  'page.settings.section-carers': 'Cuidadors',
+  'page.settings.section-app': 'Aplicació',
+  'page.settings.section-danger': 'Zona de perill',
+  'page.settings.child-profile': 'Perfil del nen/a',
+  'page.settings.child-profile-desc': 'Dades personals i diagnòstic',
+  'page.settings.manage-carers': 'Gestiona cuidadors',
+  'page.settings.manage-carers-desc': 'Afegeix o elimina cuidadors',
+  'page.settings.app-settings': "Ajustos de l'app",
+  'page.settings.app-settings-desc': 'Tema, idioma i privacitat',
   'page.settings.about': 'Sobre',
-  'page.settings.about_desc': 'Versió i informació legal',
+  'page.settings.about-desc': 'Versió i informació legal',
   'page.settings.logout': 'Tanca sessió',
 
   // Page: Settings Detail Screens
-  'page.child_profile.title': 'Perfil del Nen/a',
-  'page.child_profile.placeholder': 'Formulari de perfil pròximament',
-  'page.carer_management.title': 'Gestió de Cuidadors',
-  'page.carer_management.placeholder': 'Llista de cuidadors pròximament',
-  'page.app_settings.title': "Configuració de l'App",
-  'page.app_settings.subtitle': "Personalitza la teva experiència a l'app",
+  'page.child-profile.title': 'Perfil del Nen/a',
+  'page.child-profile.placeholder': 'Formulari de perfil pròximament',
+  'page.carer-management.title': 'Gestió de Cuidadors',
+  'page.carer-management.placeholder': 'Llista de cuidadors pròximament',
+  'page.app-settings.title': "Configuració de l'App",
+  'page.app-settings.subtitle': "Personalitza la teva experiència a l'app",
 
   // About screen
   'page.about.title': 'Sobre',
   'page.about.placeholder': 'Versió i informació legal',
 
   // Page: Logout confirmation
-  'page.settings.logout_confirm.title': 'Aquesta acció és irreversible',
-  'page.settings.logout_confirm.warning':
+  'page.settings.logout-confirm.title': 'Aquesta acció és irreversible',
+  'page.settings.logout-confirm.warning':
     'Aquesta acció eliminarà totes les dades emmagatzemades en aquest dispositiu per a aquest perfil. No es pot desfer.',
-  'page.settings.logout_confirm.summary_title': 'Resum de la teva informació',
-  'page.settings.logout_confirm.time_registered': 'Temps registrat',
-  'page.settings.logout_confirm.total_records': 'Registres totals',
-  'page.settings.logout_confirm.cic': 'CIC',
-  'page.settings.logout_confirm.stools': 'Deposicions',
-  'page.settings.logout_confirm.enemas': 'Enemes',
-  'page.settings.logout_confirm.medication': 'Medicació',
-  'page.settings.logout_confirm.confirm_question':
+  'page.settings.logout-confirm.summary-title': 'Resum de la teva informació',
+  'page.settings.logout-confirm.time-registered': 'Temps registrat',
+  'page.settings.logout-confirm.total-records': 'Registres totals',
+  'page.settings.logout-confirm.cic': 'CIC',
+  'page.settings.logout-confirm.stools': 'Deposicions',
+  'page.settings.logout-confirm.enemas': 'Enemes',
+  'page.settings.logout-confirm.medication': 'Medicació',
+  'page.settings.logout-confirm.confirm-question':
     'Estàs segur que vols eliminar tot? Això no es pot desfer.',
-  'page.settings.logout_confirm.delete_warning':
+  'page.settings.logout-confirm.delete-warning':
     "Acció d'eliminació sol·licitada",
-  'page.settings.logout_confirm.time_registered_value': '{{count}} dies',
-  'page.settings.logout_confirm.total_records_value': '{{count}}',
+  'page.settings.logout-confirm.time-registered-value': '{{count}} dies',
+  'page.settings.logout-confirm.total-records-value': '{{count}}',
 
   // Page: CIC Registration Wizard - Volume
-  'page.cic_register.volume.title': "Volum d'orina",
-  'page.cic_register.volume.description': 'Selecciona el volum observat',
-  'page.cic_register.volume.low': 'Baix',
-  'page.cic_register.volume.normal': 'Normal',
-  'page.cic_register.volume.high': 'Alt',
+  'page.cic-register.volume.title': "Volum d'orina",
+  'page.cic-register.volume.description': 'Selecciona el volum observat',
+  'page.cic-register.volume.low': 'Baix',
+  'page.cic-register.volume.normal': 'Normal',
+  'page.cic-register.volume.high': 'Alt',
 
   // Page: CIC Registration Wizard - Color
-  'page.cic_register.color.title': "Color de l'orina",
-  'page.cic_register.color.description': 'Selecciona el color observat',
-  'page.cic_register.color.transparent': 'Transparent',
-  'page.cic_register.color.light_yellow': 'Groc clar',
-  'page.cic_register.color.dark_yellow': 'Groc fosc',
-  'page.cic_register.color.abnormal': 'Anòmal',
+  'page.cic-register.color.title': "Color de l'orina",
+  'page.cic-register.color.description': 'Selecciona el color observat',
+  'page.cic-register.color.transparent': 'Transparent',
+  'page.cic-register.color.light-yellow': 'Groc clar',
+  'page.cic-register.color.dark-yellow': 'Groc fosc',
+  'page.cic-register.color.abnormal': 'Anòmal',
 
   // Page: CIC Registration Wizard - Turbidity
-  'page.cic_register.turbidity.title': 'Turbidesa',
-  'page.cic_register.turbidity.description':
+  'page.cic-register.turbidity.title': 'Turbidesa',
+  'page.cic-register.turbidity.description':
     'Selecciona la turbidesa observada',
-  'page.cic_register.turbidity.clear': 'Clara',
-  'page.cic_register.turbidity.slight': 'Lleu',
-  'page.cic_register.turbidity.high': 'Alta',
+  'page.cic-register.turbidity.clear': 'Clara',
+  'page.cic-register.turbidity.slight': 'Lleu',
+  'page.cic-register.turbidity.high': 'Alta',
 
   // Page: CIC Registration Wizard - Discomfort
-  'page.cic_register.discomfort.title': 'Hi ha hagut molèsties?',
-  'page.cic_register.discomfort.description':
+  'page.cic-register.discomfort.title': 'Hi ha hagut molèsties?',
+  'page.cic-register.discomfort.description':
     'Indica si el nen/na ha presentat molèsties',
-  'page.cic_register.discomfort.none': 'No',
-  'page.cic_register.discomfort.slight': 'Lleu',
-  'page.cic_register.discomfort.pain': 'Dolor',
-  'page.cic_register.discomfort.note_label': 'Descriu el dolor (opcional)',
-  'page.cic_register.discomfort.note_placeholder':
+  'page.cic-register.discomfort.none': 'No',
+  'page.cic-register.discomfort.slight': 'Lleu',
+  'page.cic-register.discomfort.pain': 'Dolor',
+  'page.cic-register.discomfort.note-label': 'Descriu el dolor (opcional)',
+  'page.cic-register.discomfort.note-placeholder':
     "P. ex.: Dolor a l'inici del cateterisme",
 
   // Page: CIC Registration Wizard - Summary
-  'page.cic_register.summary.title': 'Resum del registre',
-  'page.cic_register.summary.description':
+  'page.cic-register.summary.title': 'Resum del registre',
+  'page.cic-register.summary.description':
     'Confirma que tot és correcte abans de desar',
-  'page.cic_register.summary.volume_label': 'Volum',
-  'page.cic_register.summary.color_label': 'Color',
-  'page.cic_register.summary.turbidity_label': 'Turbidesa',
-  'page.cic_register.summary.discomfort_label': 'Molèsties',
-  'page.cic_register.summary.notes_label': 'Notes addicionals (opcional)',
-  'page.cic_register.summary.notes_placeholder':
+  'page.cic-register.summary.volume-label': 'Volum',
+  'page.cic-register.summary.color-label': 'Color',
+  'page.cic-register.summary.turbidity-label': 'Turbidesa',
+  'page.cic-register.summary.discomfort-label': 'Molèsties',
+  'page.cic-register.summary.notes-label': 'Notes addicionals (opcional)',
+  'page.cic-register.summary.notes-placeholder':
     'Afegeix notes addicionals si ho desitges',
-  'page.cic_register.summary.save_button': 'Desa registre',
-  'page.cic_register.summary.success': 'Registre desat correctament',
-  'page.cic_register.summary.error': 'Error desant el registre',
+  'page.cic-register.summary.save-button': 'Desa registre',
+  'page.cic-register.summary.success': 'Registre desat correctament',
+  'page.cic-register.summary.error': 'Error desant el registre',
 
   // Components
-  'component.register_cic_button.label': 'Registrar Cateterisme (CIC)',
-  'component.register_cic_button.subtitle': 'Cateterisme Intermitent Net',
-  'component.register_cic_button.description':
+  'component.register-cic-button.label': 'Registrar Cateterisme (CIC)',
+  'component.register-cic-button.subtitle': 'Cateterisme Intermitent Net',
+  'component.register-cic-button.description':
     'Registra volum, color i incomoditat',
-  'component.register_stool_button.label': 'Registrar Deposició',
-  'component.register_stool_button.subtitle': 'Moviment Intestinal',
-  'component.register_stool_button.description':
+  'component.register-stool-button.label': 'Registrar Deposició',
+  'component.register-stool-button.subtitle': 'Moviment Intestinal',
+  'component.register-stool-button.description':
     'Seguiment de consistència i freqüència',
-  'component.register_medication_button.label': 'Registrar Medicació',
-  'component.register_medication_button.subtitle': 'Administració de Medicines',
-  'component.register_medication_button.description':
+  'component.register-medication-button.label': 'Registrar Medicació',
+  'component.register-medication-button.subtitle': 'Administració de Medicines',
+  'component.register-medication-button.description':
     'Registra medicació i dosi',
-  'component.filter_button.label': 'Filtres',
-  'component.filter_button.all_types': 'Tots els tipus',
-  'component.stat_card.cic_label': 'Cateterismes',
-  'component.stat_card.stool_label': 'Deposicions',
-  'component.stat_card.medication_label': 'Medicació',
-  'component.stat_card.today': 'Avui',
-  'page.report.debug_stats': 'Depurar: estadístiques',
-  'page.report.debug_trendItems': 'Depurar: elements de tendència',
+  'component.filter-button.label': 'Filtres',
+  'component.filter-button.all-types': 'Tots els tipus',
+  'component.stat-card.cic-label': 'Cateterismes',
+  'component.stat-card.stool-label': 'Deposicions',
+  'component.stat-card.medication-label': 'Medicació',
+  'component.stat-card.today': 'Avui',
+  'page.report.debug-stats': 'Depurar: estadístiques',
+  'page.report.debug-trendItems': 'Depurar: elements de tendència',
 
   // History detail ranges
-  'page.history_detail.range.today': 'Avui',
-  'page.history_detail.range.7d': 'Últims 7 dies',
-  'page.history_detail.range.30d': 'Últims 30 dies',
-  'page.history_detail.range.90d': 'Últims 90 dies',
+  'page.history-detail.range.today': 'Avui',
+  'page.history-detail.range.7d': 'Últims 7 dies',
+  'page.history-detail.range.30d': 'Últims 30 dies',
+  'page.history-detail.range.90d': 'Últims 90 dies',
 
   // Accessibility
-  'a11y.button.register_cic': 'Botó per registrar cateterisme',
-  'a11y.button.register_stool': 'Botó per registrar deposició',
-  'a11y.button.register_medication': 'Botó per registrar medicació',
-  'a11y.button.open_filters': 'Obrir filtres',
-  'a11y.button.view_all_history': 'Veure tota la història',
-  'a11y.button.child_profile': 'Veure perfil del nen',
-  'a11y.button.manage_carers': 'Gestionar cuidadors',
-  'a11y.button.app_settings': "Ajustos de l'aplicació",
+  'a11y.button.register-cic': 'Botó per registrar cateterisme',
+  'a11y.button.register-stool': 'Botó per registrar deposició',
+  'a11y.button.register-medication': 'Botó per registrar medicació',
+  'a11y.button.open-filters': 'Obrir filtres',
+  'a11y.button.view-all-history': 'Veure tota la història',
+  'a11y.button.child-profile': 'Veure perfil del nen',
+  'a11y.button.manage-carers': 'Gestionar cuidadors',
+  'a11y.button.app-settings': "Ajustos de l'aplicació",
   'a11y.button.about': 'Sobre',
   'a11y.button.logout': 'Tanca sessió',
-  'a11y.hint.opens_cic_form': 'Obre el formulari de registre de cateterisme',
-  'a11y.hint.opens_stool_form': 'Obre el formulari de registre de deposició',
-  'a11y.hint.opens_medication_form':
+  'a11y.hint.opens-cic-form': 'Obre el formulari de registre de cateterisme',
+  'a11y.hint.opens-stool-form': 'Obre el formulari de registre de deposició',
+  'a11y.hint.opens-medication-form':
     'Obre el formulari de registre de medicació',
-  'a11y.hint.opens_filter_modal': 'Obre la modal de filtres',
-  'a11y.hint.opens_child_profile': 'Obre la pantalla de perfil del nen',
-  'a11y.hint.opens_carer_management': 'Obre la pantalla de gestió de cuidadors',
-  'a11y.hint.opens_app_settings': "Obre la pantalla d'ajustos de l'aplicació",
-  'a11y.hint.opens_about': 'Obre la pantalla sobre',
-  'a11y.hint.logout_action': 'Tanca la teva sessió actual',
+  'a11y.hint.opens-filter-modal': 'Obre la modal de filtres',
+  'a11y.hint.opens-child-profile': 'Obre la pantalla de perfil del nen',
+  'a11y.hint.opens-carer-management': 'Obre la pantalla de gestió de cuidadors',
+  'a11y.hint.opens-app-settings': "Obre la pantalla d'ajustos de l'aplicació",
+  'a11y.hint.opens-about': 'Obre la pantalla sobre',
+  'a11y.hint.logout-action': 'Tanca la teva sessió actual',
   // Modal Screen
   'modal.title': 'Això és un modal',
   'modal.go-home': 'Ves a la pantalla principal',
@@ -335,4 +335,5 @@ export const caCA = Object.freeze({
   'hook.create-record.success-title': 'Registre Creat Exitosament',
   'hook.get-record-field-distribution.error':
     'Error obtenint distribució del camp',
+  'page.settings.section-configuration': 'Configuració',
 } satisfies Record<Ti18nKeys, string>);
