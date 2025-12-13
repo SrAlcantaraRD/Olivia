@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useThemeColor } from 'heroui-native';
 import { useEffect, useMemo, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
@@ -17,6 +17,7 @@ import { computeTimeRange } from '@/hooks/use-report-manager.hook';
 import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import PieChartAtom from '@/ui/components/atoms/pie-chart.atom';
+import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
 import {
   TypographyHeading,
   TypographyParagraph,
@@ -119,18 +120,18 @@ export default function HistoryDetailScreen() {
             />
             <View className="flex-row gap-2">
               {TIME_RANGE_VALUES.map((r) => (
-                <Pressable
+                <SelectableCard
                   key={`range-${r}`}
+                  isSelected={range === r}
                   onPress={() => setRange(r)}
-                  className={`px-3 py-2 rounded-xl ${
-                    range === r ? 'bg-default-100' : 'bg-default-50'
-                  }`}
+                  testID={`page.history-detail.range.${r}`}
+                  className="px-3 py-2"
                 >
                   <TypographySmall
-                    testID={`page.history-detail.range.${r}`}
+                    testID={`page.history-detail.range.${r}.label`}
                     i18nKey={TIME_RANGE_I18N_MAP[r]}
                   />
-                </Pressable>
+                </SelectableCard>
               ))}
             </View>
           </View>
@@ -150,23 +151,21 @@ export default function HistoryDetailScreen() {
             ) : fields && fields.length > 0 ? (
               <View className="flex-row flex-wrap gap-2">
                 {fields.map((f) => (
-                  <Pressable
+                  <SelectableCard
                     key={`field-${f.id}`}
+                    isSelected={selectedFieldId === f.id}
                     onPress={() => setSelectedFieldId(f.id)}
-                    accessibilityRole="button"
-                    accessibilityLabel={f.title}
+                    testID={`page.history-detail.field.${f.id}`}
+                    className="p-3"
                   >
-                    <CardAtom
-                      className={`p-3 ${selectedFieldId === f.id ? 'bg-default-100' : 'bg-default-50'}`}
-                    >
-                      <Text style={{ fontSize: 16, color: foregroundColor }}>
-                        {f.title}
-                      </Text>
-                      <Text style={{ fontSize: 12, color: mutedColor }}>
-                        {String(f.type)}
-                      </Text>
-                    </CardAtom>
-                  </Pressable>
+                    <TypographyParagraph
+                      testID=""
+                      i18nKey="common.raw-value"
+                      values={{
+                        value: f.title,
+                      }}
+                    />
+                  </SelectableCard>
                 ))}
               </View>
             ) : (
