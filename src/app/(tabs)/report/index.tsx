@@ -9,7 +9,10 @@ import type { TModule } from '@/domain/module/entity/module.entity';
 import type { TRecord } from '@/domain/module/entity/record.entity';
 import { useGetRecentRecords } from '@/domain/module/hook/get-recent-records.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
-import { useModuleStatistics } from '@/hooks/use-report-manager.hook';
+import {
+  getModuleStatisticsData,
+  useModuleStatistics,
+} from '@/hooks/use-report-manager.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
 import {
@@ -20,6 +23,7 @@ import {
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { HistoryRow } from '@/ui/components/molecules/history-row.molecule';
 import { StatCardWithTrend } from '@/ui/components/molecules/stat-card-with-trend.molecule';
+
 export default function ReportScreen() {
   const report = useModuleStatistics();
   const { recordAdapter, notifyAdapter, navigationAdapter } = useAdapters();
@@ -45,9 +49,6 @@ export default function ReportScreen() {
     };
   }, []);
 
-  // Visible modules come from the report manager
-  const visibleModules = report.visibleModules;
-
   return (
     <ScreenLayout
       testID="page.report"
@@ -62,26 +63,24 @@ export default function ReportScreen() {
         <View className="gap-6">
           {/* Range Selector */}
           <View className="flex-row gap-4">
-            {/* TODO: convertir en card pequeñas y presionales */}
-            {TIME_RANGE_VALUES.map((r) => (
+            {TIME_RANGE_VALUES.map((range) => (
               <SelectableCard
-                key={`screen.range-select.${r}`}
-                testID={`screen.range-select.${r}`}
-                isSelected={report.range === r}
-                onPress={() => report.setRange(r)}
+                key={`screen.range-select.${range}`}
+                testID={`screen.range-select.${range}`}
+                isSelected={report.range === range}
+                onPress={() => report.setRange(range)}
                 className="h-20 w-20 justify-center items-center"
               >
                 <TypographyParagraph
-                  testID={`screen.range-select.label-${r}`}
+                  testID={`screen.range-select.label-${range}`}
                   i18nKey="common.raw-value"
-                  values={{ value: r }}
+                  values={{ value: range }}
                 />
               </SelectableCard>
             ))}
           </View>
 
           {/* Statistics Cards */}
-          {/* FIXME: REFACTORIZAR PARA psar unicaemnte el module */}
           <View className="gap-4">
             <TypographyHeading
               testID="page.report.statistics"
@@ -89,38 +88,24 @@ export default function ReportScreen() {
               accessibilityRole="header"
             />
 
-            {/* Summary cards for each module */}
-
             {/* Dynamic stat cards */}
-            {visibleModules.map((m: TModule) => {
-              const moduleId = m.id;
-              const item = report.stats?.find((s) => s.moduleID === moduleId);
-              const count = item?.count ?? 0;
-              const moduleTrend = report.trendByModule[moduleId];
-              const numDays =
-                Math.floor(
-                  (report.timeRange.endDate.getTime() -
-                    report.timeRange.startDate.getTime()) /
-                    (24 * 60 * 60 * 1000)
-                ) + 1;
-              const trend = moduleTrend?.length
-                ? moduleTrend
-                : Array(numDays).fill(0);
+            {report.visibleModules.map((module: TModule) => {
+              const { count, trend } = getModuleStatisticsData(module, report);
               return (
-                <View key={`module-${moduleId}`} className="gap-4">
+                <View key={`module-${module.id}`} className="gap-4">
                   <StatCardWithTrend
-                    module={m}
+                    module={module}
                     value={count}
                     data={trend}
                     chartVariant="bar"
-                    onPress={() => goToReportHistoryByModule(String(moduleId))}
+                    onPress={() => goToReportHistoryByModule(String(module.id))}
                   />
                   <StatCardWithTrend
-                    module={m}
+                    module={module}
                     value={count}
                     data={trend}
                     chartVariant="line"
-                    onPress={() => goToReportHistoryByModule(String(moduleId))}
+                    onPress={() => goToReportHistoryByModule(String(module.id))}
                   />
                 </View>
               );

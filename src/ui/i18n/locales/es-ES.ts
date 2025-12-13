@@ -50,6 +50,7 @@ export const esES = Object.freeze({
 
   // Page: History Detail
   'page.history-detail.title': 'Detalle del Historial',
+  'page.history-detail.subtitle': 'Vista detallada de tus registros',
   'page.history-detail.placeholder':
     'Contenido del historial detallado próximamente',
   'page.history-detail.select-field': 'Selecciona un campo',

@@ -24,6 +24,7 @@ import {
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
+import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 
 export default function HistoryDetailScreen() {
   const { moduleId, moduleID } = useLocalSearchParams<{
@@ -100,36 +101,34 @@ export default function HistoryDetailScreen() {
   }, [fields, selectedFieldId]);
 
   return (
-    <View className="flex-1 bg-background">
+    <ScreenLayout
+      testID="screen.history-detail"
+      title="page.history-detail.title"
+      subtitle="page.history-detail.subtitle"
+    >
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ padding: 16 }}
         contentInsetAdjustmentBehavior="automatic"
+        showsVerticalScrollIndicator={false}
       >
         <View className="gap-6">
-          <TypographyTitle
-            testID="page.history-detail.title"
-            i18nKey="page.history-detail.title"
-            accessibilityRole="header"
-          />
-
           <View className="gap-2">
             <TypographyHeading
               testID="page.history-detail.select-field"
               i18nKey="page.history-detail.select-field"
             />
             <View className="flex-row gap-2">
-              {TIME_RANGE_VALUES.map((r) => (
+              {TIME_RANGE_VALUES.map((_range) => (
                 <SelectableCard
-                  key={`range-${r}`}
-                  isSelected={range === r}
-                  onPress={() => setRange(r)}
-                  testID={`page.history-detail.range.${r}`}
+                  key={`range-${_range}`}
+                  isSelected={range === _range}
+                  onPress={() => setRange(_range)}
+                  testID={`page.history-detail.range.${_range}`}
                   className="px-3 py-2"
                 >
                   <TypographySmall
-                    testID={`page.history-detail.range.${r}.label`}
-                    i18nKey={TIME_RANGE_I18N_MAP[r]}
+                    testID={`page.history-detail.range.${_range}.label`}
+                    i18nKey={TIME_RANGE_I18N_MAP[_range]}
                   />
                 </SelectableCard>
               ))}
@@ -260,6 +259,6 @@ export default function HistoryDetailScreen() {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </ScreenLayout>
   );
 }

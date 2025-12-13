@@ -10,6 +10,43 @@ import { useGetRecordTrend } from '@/domain/module/hook/get-record-trend.hook';
 
 export type RangeKey = TIME_RANGE_ENUM;
 
+interface ModuleStatisticsData {
+  count: number;
+  trend: number[];
+  numDays: number;
+}
+
+interface ReportData {
+  stats?: Array<{ moduleID: number; count: number }>;
+  trendByModule: Record<number, number[]>;
+  timeRange: { startDate: Date; endDate: Date };
+}
+
+/**
+ * Calculate statistics data for a given module within a report.
+ * Encapsulates the logic for count, trend, and numDays calculations.
+ */
+export function getModuleStatisticsData(
+  module: TModule,
+  report: ReportData
+): ModuleStatisticsData {
+  const moduleId = module.id;
+  const item = report.stats?.find((s) => s.moduleID === moduleId);
+  const count = item?.count ?? 0;
+  const moduleTrend = report.trendByModule[moduleId];
+
+  const numDays =
+    Math.floor(
+      (report.timeRange.endDate.getTime() -
+        report.timeRange.startDate.getTime()) /
+        (24 * 60 * 60 * 1000)
+    ) + 1;
+
+  const trend = moduleTrend?.length ? moduleTrend : Array(numDays).fill(0);
+
+  return { count, trend, numDays };
+}
+
 export function computeTimeRange(range: RangeKey) {
   const end = endOfDay(new Date());
   const today = startOfDay(end);

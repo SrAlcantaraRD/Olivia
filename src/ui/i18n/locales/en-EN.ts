@@ -137,6 +137,7 @@ export const enEN = Object.freeze({
 
   // Page: History Detail
   'page.history-detail.title': 'History Detail',
+  'page.history-detail.subtitle': 'Detailed view of your records',
   'page.history-detail.placeholder': 'Detailed history content coming soon',
   'page.history-detail.select-field': 'Select a field',
   'page.history-detail.no-fields': 'No fields available for this module',

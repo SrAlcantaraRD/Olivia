@@ -148,6 +148,7 @@ export const caCA = Object.freeze({
 
   // Page: History Detail
   'page.history-detail.title': 'Detall de la Història',
+  'page.history-detail.subtitle': 'Vista detallada dels teus registres',
   'page.history-detail.placeholder':
     'Contingut detallat de la història pròximament',
   'page.history-detail.select-field': 'Selecciona un camp',
