@@ -1,6 +1,12 @@
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { CardAtom } from '@/ui/components/atoms/card.atom';
+import {
+  TypographySubtitle,
+  TypographyTitle,
+} from '@/ui/components/atoms/typography.atom';
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 import { cn } from '@/ui/lib/utils';
 
 interface ScreenLayoutProps {
@@ -10,6 +16,8 @@ interface ScreenLayoutProps {
   styles?: {
     content?: string;
   };
+  title?: Ti18nKeys;
+  subtitle?: Ti18nKeys;
 }
 
 export function ScreenLayout({
@@ -17,6 +25,8 @@ export function ScreenLayout({
   testID,
   styles,
   isLoading = false,
+  title,
+  subtitle,
 }: ScreenLayoutProps) {
   const insets = useSafeAreaInsets();
 
@@ -29,6 +39,28 @@ export function ScreenLayout({
       <ScreenContentLayout
         className={cn(isLoading ? 'opacity-50' : '', styles?.content)}
       >
+        {(title || subtitle) && (
+          <CardAtom variant="transparent" className="mb-4 gap-4 px-0">
+            {title && (
+              <TypographyTitle
+                testID="screen.settings.title"
+                i18nKey={title}
+                accessibilityRole="header"
+                className="mb-0"
+              />
+            )}
+            {subtitle && (
+              <TypographySubtitle
+                size="lg"
+                testID="screen.settings.subtitle"
+                accessibilityRole="header"
+                i18nKey={subtitle}
+                variant="light"
+              />
+            )}
+          </CardAtom>
+        )}
+
         {children}
       </ScreenContentLayout>
     </View>

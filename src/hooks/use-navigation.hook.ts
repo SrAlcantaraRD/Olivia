@@ -64,6 +64,10 @@ export const useNavigation = (adapters: {
     navigateTo('/(tabs)/settings/log-out');
   }, []);
 
+  const goToAbout = useCallback(() => {
+    navigateTo('/(tabs)/settings/about');
+  }, []);
+
   // Add more as needed
 
   return {
@@ -80,5 +84,6 @@ export const useNavigation = (adapters: {
     goToChildProfile,
     goToCarerManagement,
     goToLogOut,
+    goToAbout,
   };
 };

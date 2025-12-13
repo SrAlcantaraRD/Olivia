@@ -80,7 +80,7 @@ export const esES = Object.freeze({
   'page.carer_management.title': 'Gestión de Cuidadores',
   'page.carer_management.placeholder': 'Lista de cuidadores próximamente',
   'page.app_settings.title': 'Configuración de la App',
-  'page.app_settings.placeholder': 'Personaliza tu experiencia en la app',
+  'page.app_settings.subtitle': 'Personaliza tu experiencia en la app',
   'page.app_settings.section_theme': 'Tema',
   'page.app_settings.section_language': 'Idioma',
   'page.app_settings.language.english': 'Inglés',
@@ -88,6 +88,10 @@ export const esES = Object.freeze({
   'page.app_settings.language.catalan': 'Catalán',
   'page.app_settings.action.switch_to_dark': 'Cambiar a Modo Oscuro',
   'page.app_settings.action.switch_to_light': 'Cambiar a Modo Claro',
+
+  // About screen
+  'page.about.title': 'Acerca de',
+  'page.about.placeholder': 'Versión e información legal',
 
   // Página: Confirmación de borrado / logout
   'page.settings.logout_confirm.title': 'Esta acción es irreversible',

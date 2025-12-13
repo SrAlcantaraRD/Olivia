@@ -179,7 +179,11 @@ export const caCA = Object.freeze({
   'page.carer_management.title': 'Gestió de Cuidadors',
   'page.carer_management.placeholder': 'Llista de cuidadors pròximament',
   'page.app_settings.title': "Configuració de l'App",
-  'page.app_settings.placeholder': "Personalitza la teva experiència a l'app",
+  'page.app_settings.subtitle': "Personalitza la teva experiència a l'app",
+
+  // About screen
+  'page.about.title': 'Sobre',
+  'page.about.placeholder': 'Versió i informació legal',
 
   // Page: Logout confirmation
   'page.settings.logout_confirm.title': 'Aquesta acció és irreversible',

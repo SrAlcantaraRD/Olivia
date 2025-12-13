@@ -166,7 +166,7 @@ export const enEN = Object.freeze({
   'page.carer_management.title': 'Carer Management',
   'page.carer_management.placeholder': 'Carer list coming soon',
   'page.app_settings.title': 'App Settings',
-  'page.app_settings.placeholder': 'Customize your app experience',
+  'page.app_settings.subtitle': 'Customize your app experience',
   'page.app_settings.section_theme': 'Theme',
   'page.app_settings.section_language': 'Language',
   'page.app_settings.language.english': 'English',
@@ -174,6 +174,10 @@ export const enEN = Object.freeze({
   'page.app_settings.language.catalan': 'Catalan',
   'page.app_settings.action.switch_to_dark': 'Switch to Dark Mode',
   'page.app_settings.action.switch_to_light': 'Switch to Light Mode',
+
+  // About screen
+  'page.about.title': 'About',
+  'page.about.placeholder': 'Version and legal information',
 
   // Page: Logout confirmation
   'page.settings.logout_confirm.title': 'This action is irreversible',
