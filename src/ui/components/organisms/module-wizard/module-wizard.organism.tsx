@@ -1,10 +1,8 @@
 import { useMemo } from 'react';
-import { View } from 'react-native';
 
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
-import { FormPage } from '@/ui/components/molecules/form-page.molecule';
 import { Wizard } from '@/ui/components/molecules/wizard.molecule';
 import { ModuleFieldWrapper } from '@/ui/components/organisms/module-wizard/module-field-wrapper.component';
 import { useModuleWizard } from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';

@@ -1,9 +1,8 @@
 import { tz } from '@date-fns/tz';
 import { formatDistanceToNowStrict } from 'date-fns';
-import { type FC, useCallback, useMemo } from 'react';
+import type { FC } from 'react';
 import { Pressable, View } from 'react-native';
 
-import type { TModule } from '@/domain/module/entity/module.entity';
 import type { TRecord } from '@/domain/module/entity/record.entity';
 import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import { CardAtom } from '@/ui/components/atoms/card.atom';

@@ -8,11 +8,12 @@ import {
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import * as SplashScreen from 'expo-splash-screen';
 import { Suspense, useEffect } from 'react';
+import { I18nextProvider } from 'react-i18next';
 import { ActivityIndicator, Image, Platform, StyleSheet } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import Toast, { type ToastConfig } from 'react-native-toast-message';
 
-import '@/ui/i18n/i18n';
+import i18n from '@/ui/i18n/i18n';
 import 'react-native-reanimated';
 import '../global.css';
 
@@ -140,8 +141,10 @@ export default function RootLayout() {
                     },
                   }}
                 >
-                  <RootNavigator />
-                  <Toast config={toastConfig as ToastConfig} />
+                  <I18nextProvider i18n={i18n}>
+                    <RootNavigator />
+                    <Toast config={toastConfig as ToastConfig} />
+                  </I18nextProvider>
                 </HeroUINativeProvider>
               </SettingsProvider>
             </AppThemeProvider>

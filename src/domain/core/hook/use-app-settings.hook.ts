@@ -56,7 +56,7 @@ export function useAppSettings(adapters: {
       return response.details;
     }
 
-    return ELocaleCode.ES;
+    return ELocaleCode.es_ES;
   }, [loggerAdapter, cacheAdapter]);
 
   const setLocale = useCallback(

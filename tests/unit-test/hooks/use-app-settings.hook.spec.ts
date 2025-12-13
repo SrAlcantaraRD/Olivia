@@ -58,10 +58,10 @@ describe('useAppSettings hook', () => {
     );
 
     await act(async () => {
-      await result.current.setLocale(ELocaleCode.ES);
+      await result.current.setLocale(ELocaleCode.es_ES);
     });
 
-    expect(i18n.changeLanguage).toHaveBeenCalledWith(ELocaleCode.ES);
+    expect(i18n.changeLanguage).toHaveBeenCalledWith(ELocaleCode.es_ES);
     expect(
       (mockCacheAdapter.set as jest.Mock).mock.calls.length
     ).toBeGreaterThan(0);

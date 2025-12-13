@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import type { TModule } from '@/domain/module/entity/module.entity';
 import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import type { IconName } from '@/ui/components/atoms/icon.atom';

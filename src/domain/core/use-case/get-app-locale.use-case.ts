@@ -29,14 +29,14 @@ export class GetAppLocaleUseCase extends BaseUseCase<
       if (!locale) {
         await this.cacheAdapter.set<TResponseGetAppLocale>(
           CACHE_KEY_ENUM.APP_LOCALE,
-          ELocaleCode.ES
+          ELocaleCode.es_ES
         );
       }
 
       return {
         success: true,
         message: 'common.success',
-        details: locale ?? ELocaleCode.ES,
+        details: locale ?? ELocaleCode.es_ES,
       };
     } catch (error) {
       this.logError('GetAppLocaleUseCase', error as unknown);

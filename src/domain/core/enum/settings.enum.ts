@@ -4,7 +4,7 @@ export enum EThemeMode {
 }
 
 export enum ELocaleCode {
-  EN = 'en-EN',
-  ES = 'es-ES',
-  CA = 'ca-CA',
+  en_EN = 'en-EN',
+  es_ES = 'es-ES',
+  ca_CA = 'ca-CA',
 }

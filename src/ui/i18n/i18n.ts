@@ -8,10 +8,6 @@ import { enEN } from './locales/en-EN';
 import { esES } from './locales/es-ES';
 
 const resources = {
-  // Short codes (legacy)
-  en: { translation: enEN },
-  es: { translation: esES },
-  ca: { translation: caCA },
   // Long codes mapping to same resources
   'en-EN': { translation: enEN },
   'es-ES': { translation: esES },
@@ -25,6 +21,11 @@ i18n.use(initReactI18next).init({
   fallbackLng: 'en-EN',
   interpolation: {
     escapeValue: false, // react already safes from xss
+  },
+  react: {
+    bindI18n: 'languageChanged loaded',
+    bindI18nStore: 'added removed',
+    useSuspense: false,
   },
 });
 

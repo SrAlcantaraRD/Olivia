@@ -51,21 +51,21 @@ export default function AppSettingsScreen() {
           <SettingsRow
             iconName="globe"
             titleKey="page.app-settings.language.english"
-            onPress={() => void setLocale(ELocaleCode.EN)}
+            onPress={() => void setLocale(ELocaleCode.en_EN)}
             testID="page.app-settings.button.change-language-english"
             hasDivider
           />
           <SettingsRow
             iconName="globe"
             titleKey="page.app-settings.language.spanish"
-            onPress={() => void setLocale(ELocaleCode.ES)}
+            onPress={() => void setLocale(ELocaleCode.es_ES)}
             testID="page.app-settings.button.change-language-spanish"
             hasDivider
           />
           <SettingsRow
             iconName="globe"
             titleKey="page.app-settings.language.catalan"
-            onPress={() => void setLocale(ELocaleCode.CA)}
+            onPress={() => void setLocale(ELocaleCode.ca_CA)}
             testID="page.app-settings.button.change-language-catalan"
           />
         </CardAtom>
