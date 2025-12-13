@@ -27,22 +27,22 @@ export default function AppSettingsScreen() {
   return (
     <ScreenLayout
       testID="screen.app-settings"
-      title="page.app_settings.title"
-      subtitle="page.app_settings.subtitle"
+      title="page.app-settings.title"
+      subtitle="page.app-settings.subtitle"
     >
       <View className="gap-12">
         {/* Theme */}
         <CardAtom>
           <SettingsRow
             iconName={isLight ? 'sunny' : 'moon'}
-            titleKey="page.app_settings.section_theme"
+            titleKey="page.app-settings.section-theme"
             captionKey={
               currentTheme === 'dark'
-                ? 'page.app_settings.action.switch_to_light'
-                : 'page.app_settings.action.switch_to_dark'
+                ? 'page.app-settings.action.switch-to-light'
+                : 'page.app-settings.action.switch-to-dark'
             }
             onPress={onToggleTheme}
-            testID="page.app_settings.button.toggle-theme"
+            testID="page.app-settings.button.toggle-theme"
           />
         </CardAtom>
 
@@ -50,21 +50,21 @@ export default function AppSettingsScreen() {
         <CardAtom>
           <SettingsRow
             iconName="globe"
-            titleKey="page.app_settings.language.english"
+            titleKey="page.app-settings.language.english"
             onPress={() => void setLocale(ELocaleCode.EN)}
             testID="page.app-settings.button.change-language-english"
             hasDivider
           />
           <SettingsRow
             iconName="globe"
-            titleKey="page.app_settings.language.spanish"
+            titleKey="page.app-settings.language.spanish"
             onPress={() => void setLocale(ELocaleCode.ES)}
             testID="page.app-settings.button.change-language-spanish"
             hasDivider
           />
           <SettingsRow
             iconName="globe"
-            titleKey="page.app_settings.language.catalan"
+            titleKey="page.app-settings.language.catalan"
             onPress={() => void setLocale(ELocaleCode.CA)}
             testID="page.app-settings.button.change-language-catalan"
           />

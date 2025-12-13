@@ -15,15 +15,15 @@ export default function CarerManagementScreen() {
       >
         <View className="gap-6">
           <TypographyTitle
-            testID="screen.settings.carer_management.title"
-            i18nKey="page.carer_management.title"
+            testID="screen.settings.carer-management.title"
+            i18nKey="page.carer-management.title"
             accessibilityRole="header"
           />
 
           <View className="p-4 bg-default-100 rounded-lg">
             <TypographyParagraph
-              testID="screen.settings.carer_management.placeholder"
-              i18nKey="page.carer_management.placeholder"
+              testID="screen.settings.carer-management.placeholder"
+              i18nKey="page.carer-management.placeholder"
               variant="light"
               size="sm"
               className="text-center"

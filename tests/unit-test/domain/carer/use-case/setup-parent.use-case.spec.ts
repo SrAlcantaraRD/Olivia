@@ -8,7 +8,7 @@ import type { TID } from '@/domain/core/schemas/id.schema';
 import { mockLoggerPort } from '../../core/mocks/mock.port';
 import { mockModuleEntity } from '../../module/mocks/mock.entities';
 import { mockModulePort } from '../../module/mocks/mock.port';
-import { mockPatientCreateDTO } from '../../patient/mocks/mock.dtos';
+import { mockPatientCreate } from '../../patient/mocks/mock.dtos';
 import { mockPatientPort } from '../../patient/mocks/mock.port';
 import { mockCarerCreate } from '../mocks/mock.entities';
 import { mockCarerPort } from '../mocks/mock.port';
@@ -51,7 +51,7 @@ describe('[UseCase] - Setup Parent', () => {
       prepareSuiteCase();
 
     const carerDTO = mockCarerCreate();
-    const patientDTO = mockPatientCreateDTO();
+    const patientDTO = mockPatientCreate();
     const moduleList = [99];
 
     moduleAdapter.batchActivate.mockResolvedValueOnce(undefined);
@@ -82,7 +82,7 @@ describe('[UseCase] - Setup Parent', () => {
       prepareSuiteCase();
 
     const carerDTO = mockCarerCreate();
-    const patientDTO = mockPatientCreateDTO();
+    const patientDTO = mockPatientCreate();
     const moduleList: TID[] = [];
 
     carerAdapter.create.mockRejectedValueOnce(
@@ -103,7 +103,7 @@ describe('[UseCase] - Setup Parent', () => {
       prepareSuiteCase();
 
     const carerDTO = mockCarerCreate();
-    const patientDTO = mockPatientCreateDTO();
+    const patientDTO = mockPatientCreate();
     const moduleList: TID[] = [];
 
     patientAdapter.create.mockRejectedValueOnce(
@@ -123,7 +123,7 @@ describe('[UseCase] - Setup Parent', () => {
     const { useCase, carerAdapter, patientAdapter, moduleAdapter } =
       prepareSuiteCase();
     const carerDTO = mockCarerCreate();
-    const patientDTO = mockPatientCreateDTO();
+    const patientDTO = mockPatientCreate();
     const moduleList = [mockModuleEntity().id];
 
     moduleAdapter.batchActivate.mockRejectedValueOnce(

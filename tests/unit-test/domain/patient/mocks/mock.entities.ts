@@ -16,6 +16,7 @@ export const mockPatientEntity = (
   sex: SEX_ENUM.FEMALE,
   autonomyLevel: AUTONOMY_LEVEL_ENUM.LOW,
   status: 1,
+  createdAt: new Date('2024-01-01T00:00:00.000Z'),
   ...overrides,
 });
 

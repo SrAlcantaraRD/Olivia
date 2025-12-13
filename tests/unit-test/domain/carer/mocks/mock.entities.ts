@@ -10,6 +10,7 @@ export const mockCarerEntity = (overrides: Partial<TCarer> = {}): TCarer => ({
   isPrimary: true,
   pinHash: 'hashed-pin-123',
   status: 1,
+  createdAt: new Date('2026-01-01T00:00:00Z'),
   ...overrides,
 });
 

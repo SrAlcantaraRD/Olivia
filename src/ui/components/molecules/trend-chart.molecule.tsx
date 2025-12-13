@@ -26,8 +26,7 @@ export function TrendChart({
   testID,
 }: TrendChartProps) {
   const { height: windowHeight } = useWindowDimensions();
-  const resolvedHeight =
-    height ?? (variant === 'bar' ? Math.floor(windowHeight * 0.4) : 40);
+  const resolvedHeight = Math.floor(windowHeight * 0.4);
 
   const sanitized: number[] = (data || []).map((v) => {
     const n = Number(v);
@@ -64,7 +63,6 @@ export function TrendChart({
     return (
       <BarChartAtom
         values={values}
-        height={resolvedHeight}
         color={color}
         secondaryColor={secondaryColor}
         showAxisLabels={false}

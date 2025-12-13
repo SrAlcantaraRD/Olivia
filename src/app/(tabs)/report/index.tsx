@@ -142,7 +142,7 @@ export default function ReportScreen() {
               {recentRecordList.length === 0 ? (
                 <TypographySmall
                   testID="page.report.no-history"
-                  i18nKey="page.report.no_history"
+                  i18nKey="page.report.no-history"
                   variant="light"
                   className="text-center"
                 />

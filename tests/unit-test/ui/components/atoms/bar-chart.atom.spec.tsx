@@ -6,7 +6,7 @@ jest.mock('react-native-gifted-charts', () => ({
   LineChart: () => null,
 }));
 
-import BarChartAtom from '@/ui/components/atoms/bar-chart.atom';
+import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 
 describe('BarChartAtom', () => {
   it('renders without crashing with values', () => {
@@ -16,7 +16,9 @@ describe('BarChartAtom', () => {
       { value: 'C', count: 2 },
     ];
 
-    const { toJSON } = render(<BarChartAtom values={values} />);
+    const { toJSON } = render(
+      <BarChartAtom values={values} testID="test.bar-chart" />
+    );
 
     expect(toJSON()).toBeTruthy();
   });

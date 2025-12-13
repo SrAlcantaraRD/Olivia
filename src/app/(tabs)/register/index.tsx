@@ -41,8 +41,8 @@ export default function RegisterScreen() {
       {/* Quick Actions */}
       <View className="gap-4">
         <TypographyHeading
-          testID="page.register.quick_actions"
-          i18nKey="page.register.quick_actions"
+          testID="page.register.quick-actions"
+          i18nKey="page.register.quick-actions"
           accessibilityRole="header"
         />
 

@@ -17,6 +17,7 @@ export const mockModuleFieldEntity = (
   values: '',
   order: 1,
   status: 1,
+  createdAt: new Date('2026-01-01T00:00:00Z'),
   ...overrides,
 });
 
@@ -29,5 +30,6 @@ export const mockModuleEntity = (
   isActive: true,
   code: MODULE_KEY_ENUM.CIC,
   status: 1,
+  createdAt: new Date('2026-01-01T00:00:00Z'),
   ...overrides,
 });

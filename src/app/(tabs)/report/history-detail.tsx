@@ -125,25 +125,25 @@ export default function HistoryDetailScreen() {
         <View className="gap-6">
           <TypographyTitle
             testID="page.history-detail.title"
-            i18nKey="page.history_detail.title"
+            i18nKey="page.history-detail.title"
             accessibilityRole="header"
           />
 
           <View className="gap-2">
             <TypographyHeading
               testID="page.history-detail.select-field"
-              i18nKey="page.history_detail.select_field"
+              i18nKey="page.history-detail.select-field"
             />
             <View className="flex-row gap-2">
               {(['today', '7d', '30d', '90d'] as const).map((r) => {
                 const rangeKey =
                   r === 'today'
-                    ? 'page.history_detail.range.today'
+                    ? 'page.history-detail.range.today'
                     : r === '7d'
-                      ? 'page.history_detail.range.7d'
+                      ? 'page.history-detail.range.7d'
                       : r === '30d'
-                        ? 'page.history_detail.range.30d'
-                        : 'page.history_detail.range.90d';
+                        ? 'page.history-detail.range.30d'
+                        : 'page.history-detail.range.90d';
 
                 return (
                   <Pressable
@@ -164,7 +164,7 @@ export default function HistoryDetailScreen() {
           <View className="gap-3">
             <TypographyHeading
               testID="page.history-detail.select-field.secondary"
-              i18nKey="page.history_detail.select_field"
+              i18nKey="page.history-detail.select-field"
             />
             {isLoadingFields ? (
               <CardAtom className="p-4 bg-default-100">
@@ -199,7 +199,7 @@ export default function HistoryDetailScreen() {
               <CardAtom className="p-4 bg-default-100">
                 <TypographyParagraph
                   testID="page.history-detail.no-fields"
-                  i18nKey="page.history_detail.no_fields"
+                  i18nKey="page.history-detail.no-fields"
                 />
               </CardAtom>
             )}
@@ -208,7 +208,7 @@ export default function HistoryDetailScreen() {
           <View>
             <TypographyHeading
               testID="page.history-detail.section-title"
-              i18nKey="page.history_detail.title"
+              i18nKey="page.history-detail.title"
             />
             {isLoadingDistribution ? (
               <CardAtom className="p-4 bg-default-100">
@@ -280,7 +280,7 @@ export default function HistoryDetailScreen() {
               <CardAtom className="p-4 bg-default-100">
                 <TypographyParagraph
                   testID="page.history-detail.no-data"
-                  i18nKey="page.history_detail.no_data"
+                  i18nKey="page.history-detail.no-data"
                 />
               </CardAtom>
             )}

@@ -267,7 +267,7 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
         <Accordion.Content className="px-5">
           <TypographyParagraph
             className={classNames.contentText}
-            i18nKey={'welcome'}
+            i18nKey="welcome"
             testID={`screen.component.accordion.${item.id}.content`}
           >
             {item.content}

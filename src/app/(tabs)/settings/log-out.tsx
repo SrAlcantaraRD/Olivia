@@ -83,9 +83,9 @@ export default function LogoutConfirmScreen() {
 
   // typed i18n keys used in this screen (cast to Ti18nKeys so the atom types align)
   const K_TIME_REGISTERED =
-    'page.settings.logout_confirm.time_registered_value' as Ti18nKeys;
+    'page.settings.logout-confirm.time_registered_value' as Ti18nKeys;
   const K_TOTAL_RECORDS =
-    'page.settings.logout_confirm.total_records_value' as Ti18nKeys;
+    'page.settings.logout-confirm.total_records_value' as Ti18nKeys;
   const K_COMMON_NUMBER = 'common.number' as Ti18nKeys;
 
   const onDelete = async () => {
@@ -93,14 +93,14 @@ export default function LogoutConfirmScreen() {
     if (resp.success) {
       notifyAdapter.success({
         title: 'common.success',
-        description: 'page.settings.logout_confirm.delete_warning',
+        description: 'page.settings.logout-confirm.delete-warning',
       });
       // Replace stack with index/root
       router.replace('/');
     } else {
       notifyAdapter.error({
         title: 'common.error',
-        description: 'page.settings.logout_confirm.delete_warning',
+        description: 'page.settings.logout-confirm.delete-warning',
       });
     }
   };
@@ -115,14 +115,14 @@ export default function LogoutConfirmScreen() {
         <View className="gap-6">
           <TypographyTitle
             testID="screen.settings.logout-confirm.title"
-            i18nKey="page.settings.logout_confirm.title"
+            i18nKey="page.settings.logout-confirm.title"
             accessibilityRole="header"
           />
 
           <CardAtom className="p-4 bg-danger/10 border border-danger-soft-hover">
             <TypographyParagraph
               testID="screen.settings.logout-confirm.warning"
-              i18nKey="page.settings.logout_confirm.warning"
+              i18nKey="page.settings.logout-confirm.warning"
               className="font-medium text-danger"
             />
           </CardAtom>
@@ -130,7 +130,7 @@ export default function LogoutConfirmScreen() {
           <View className="p-4 bg-default-100 rounded-lg">
             <TypographySmall
               testID="screen.settings.logout-confirm.summary-title"
-              i18nKey="page.settings.logout_confirm.summary_title"
+              i18nKey="page.settings.logout-confirm.summary-title"
               className="font-semibold text-default-400 uppercase"
             />
 
@@ -138,7 +138,7 @@ export default function LogoutConfirmScreen() {
               <View className="flex-row justify-between">
                 <TypographySmall
                   testID="page.settings.logout-confirm.time-registered"
-                  i18nKey="page.settings.logout_confirm.time_registered"
+                  i18nKey="page.settings.logout-confirm.time-registered"
                   variant="light"
                 />
                 <TypographySmall
@@ -152,7 +152,7 @@ export default function LogoutConfirmScreen() {
               <View className="flex-row justify-between">
                 <TypographySmall
                   testID="page.settings.logout-confirm.total-records"
-                  i18nKey="page.settings.logout_confirm.total_records"
+                  i18nKey="page.settings.logout-confirm.total-records"
                   variant="light"
                 />
                 <TypographySmall
@@ -165,12 +165,12 @@ export default function LogoutConfirmScreen() {
 
               <View className="flex-row justify-between">
                 <TypographySmall
-                  testID="screen.settings.logout_confirm.cic"
-                  i18nKey="page.settings.logout_confirm.cic"
+                  testID="screen.settings.logout-confirm.cic"
+                  i18nKey="page.settings.logout-confirm.cic"
                   variant="light"
                 />
                 <TypographySmall
-                  testID="screen.settings.logout_confirm.cic_value"
+                  testID="screen.settings.logout-confirm.cic_value"
                   i18nKey={K_COMMON_NUMBER}
                   values={{
                     value:
@@ -183,12 +183,12 @@ export default function LogoutConfirmScreen() {
 
               <View className="flex-row justify-between">
                 <TypographySmall
-                  testID="screen.settings.logout_confirm.stools"
-                  i18nKey="page.settings.logout_confirm.stools"
+                  testID="screen.settings.logout-confirm.stools"
+                  i18nKey="page.settings.logout-confirm.stools"
                   variant="light"
                 />
                 <TypographySmall
-                  testID="screen.settings.logout_confirm.stools_value"
+                  testID="screen.settings.logout-confirm.stools_value"
                   i18nKey={K_COMMON_NUMBER}
                   values={{
                     value:
@@ -201,12 +201,12 @@ export default function LogoutConfirmScreen() {
 
               <View className="flex-row justify-between">
                 <TypographySmall
-                  testID="screen.settings.logout_confirm.enemas"
-                  i18nKey="page.settings.logout_confirm.enemas"
+                  testID="screen.settings.logout-confirm.enemas"
+                  i18nKey="page.settings.logout-confirm.enemas"
                   variant="light"
                 />
                 <TypographySmall
-                  testID="screen.settings.logout_confirm.enemas_value"
+                  testID="screen.settings.logout-confirm.enemas_value"
                   i18nKey={K_COMMON_NUMBER}
                   values={{
                     value:
@@ -219,12 +219,12 @@ export default function LogoutConfirmScreen() {
 
               <View className="flex-row justify-between">
                 <TypographySmall
-                  testID="screen.settings.logout_confirm.medication"
-                  i18nKey="page.settings.logout_confirm.medication"
+                  testID="screen.settings.logout-confirm.medication"
+                  i18nKey="page.settings.logout-confirm.medication"
                   variant="light"
                 />
                 <TypographySmall
-                  testID="screen.settings.logout_confirm.medication_value"
+                  testID="screen.settings.logout-confirm.medication_value"
                   i18nKey={K_COMMON_NUMBER}
                   values={{
                     value:
@@ -238,8 +238,8 @@ export default function LogoutConfirmScreen() {
           </View>
 
           <TypographyHeading
-            testID="screen.settings.logout_confirm.confirm_question"
-            i18nKey="page.settings.logout_confirm.confirm_question"
+            testID="screen.settings.logout-confirm.confirm-question"
+            i18nKey="page.settings.logout-confirm.confirm-question"
             accessibilityRole="header"
           />
 

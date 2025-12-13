@@ -85,7 +85,7 @@ export const ModuleFieldWrapper: FC<ModuleFieldWrapperProps> = ({
   return (
     <TypographyParagraph
       testID={`${testID}.field.${field.title}.unsupported`}
-      i18nKey="component.register_stool_button.description"
+      i18nKey="component.register-stool-button.description"
     />
   );
 };

@@ -2,7 +2,7 @@ import type { TPatientCreate } from '@/domain/patient/entity/patient.entity';
 import { AUTONOMY_LEVEL_ENUM } from '@/domain/patient/enum/autonomy-level.enum';
 import { SEX_ENUM } from '@/domain/patient/enum/sex.enum';
 
-export function mockPatientCreateDTO(): TPatientCreate {
+export function mockPatientCreate(): TPatientCreate {
   return {
     name: 'Test Patient',
     birthDate: 1577836800, // 2020-01-01

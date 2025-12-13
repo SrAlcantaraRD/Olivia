@@ -17,6 +17,7 @@ export function Sparkline({
   color = '#4f46e5',
 }: SparklineProps) {
   const { width: windowWidth } = useWindowDimensions();
+  const resolvedHeight = Math.floor(windowWidth * 0.4);
   // sanitize data: coerce to number and replace non-finite values with 0
   const sanitized: number[] = (data || []).map((v) => {
     const n = Number(v);
@@ -40,7 +41,7 @@ export function Sparkline({
       <LineChart
         data={chartData}
         width={chartWidth}
-        height={height}
+        height={resolvedHeight}
         color={color}
         hideRules
         showVerticalLines={false}

@@ -5,6 +5,7 @@ import { BarChart } from 'react-native-gifted-charts';
 
 interface BarChartProps {
   values: { value: string; count: number }[];
+  height?: number;
   color?: string;
   secondaryColor?: string;
   showLine?: boolean;

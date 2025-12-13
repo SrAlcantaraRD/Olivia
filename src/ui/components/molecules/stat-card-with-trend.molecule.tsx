@@ -110,7 +110,7 @@ export function StatCardWithTrend({
             />
           ) : (
             <TypographySmall
-              i18nKey="page.report.no_history"
+              i18nKey="page.report.no-history"
               testID={`screen.stat-card.${String(titleKey)}.no-trend-data`}
               variant="light"
               className="text-center"

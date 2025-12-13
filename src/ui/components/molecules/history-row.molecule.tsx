@@ -1,17 +1,27 @@
 import { tz } from '@date-fns/tz';
 import { formatDistanceToNowStrict } from 'date-fns';
-import type { FC } from 'react';
+import { type FC, useCallback, useMemo } from 'react';
 import { Pressable, View } from 'react-native';
 
+import type { TModule } from '@/domain/module/entity/module.entity';
 import type { TRecord } from '@/domain/module/entity/record.entity';
+import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
-import { IconAtom } from '@/ui/components/atoms/icon.atom';
+import { IconAtom, type IconName } from '@/ui/components/atoms/icon.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
 
 interface HistoryRowProps {
   record: TRecord;
   onPress?: () => void;
 }
+
+const MODULE_ICON_MAP: Record<MODULE_KEY_ENUM, IconName> = Object.freeze({
+  [MODULE_KEY_ENUM.CIC]: 'bandage',
+  [MODULE_KEY_ENUM.URINE]: 'water',
+  [MODULE_KEY_ENUM.STOOL]: 'nutrition',
+  [MODULE_KEY_ENUM.MEDICATION]: 'medical',
+  [MODULE_KEY_ENUM.ENEMA]: 'trending-up',
+});
 
 export const HistoryRow: FC<HistoryRowProps> = ({ record, onPress }) => {
   const moduleName = record.module?.name ?? String(record.moduleID ?? '');
@@ -29,7 +39,9 @@ export const HistoryRow: FC<HistoryRowProps> = ({ record, onPress }) => {
               justifyContent: 'center',
             }}
           >
-            <IconAtom name={record.module?.icon ?? 'document'} />
+            <IconAtom
+              name={MODULE_ICON_MAP[record.module?.code ?? MODULE_KEY_ENUM.CIC]}
+            />
           </View>
           <View>
             <TypographySmall
