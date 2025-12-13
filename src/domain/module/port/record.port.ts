@@ -8,6 +8,7 @@ export interface IRecordPort {
   create(data: TRecordCreate): Promise<TRecord>;
   getByID(id: TID): Promise<TRecord | null>;
   getAll(): Promise<TRecord[]>;
+  getRecentRecords(limit?: number): Promise<TRecord[]>;
   // Aggregations for reports
   getCountsByModule(criteria?: {
     startDate?: Date;

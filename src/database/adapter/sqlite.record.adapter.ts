@@ -110,6 +110,19 @@ export class SQLiteRecordAdapter implements IRecordPort {
     return list.map(SQLiteRecordAdapter.toDomainEntity);
   }
 
+  public async getRecentRecords(limit = 10): Promise<TRecord[]> {
+    const rows = await this.database
+      .select()
+      .from(DB_SCHEMA.RECORD)
+      .where(eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE))
+      .orderBy(DB_SCHEMA.RECORD.createdAt, 'desc')
+      .limit(limit);
+
+    return (rows as TRecordAdapterEntity[]).map(
+      SQLiteRecordAdapter.toDomainEntity
+    );
+  }
+
   public async getCountsByModule(criteria?: {
     startDate?: Date;
     endDate?: Date;

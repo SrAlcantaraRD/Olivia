@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
@@ -24,13 +24,7 @@ export function useGetRecentRecords(adapters: {
     async (limit = 10): Promise<IHookResponse<TRecord[]>> => {
       startLoading();
       try {
-        const all = await recordAdapter.getAll();
-        const sorted = (all ?? []).slice().sort((a: TRecord, b: TRecord) => {
-          const ta = a.createdAt ? Number(a.createdAt) : 0;
-          const tb = b.createdAt ? Number(b.createdAt) : 0;
-          return tb - ta;
-        });
-        const items = sorted.slice(0, limit);
+        const items = await recordAdapter.getRecentRecords(limit);
         return { success: true, data: items };
       } catch (_error) {
         notifyAdapter.error({
