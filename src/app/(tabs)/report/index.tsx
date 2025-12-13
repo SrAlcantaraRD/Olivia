@@ -119,7 +119,7 @@ export default function ReportScreen() {
                     onPress={() => goToReportHistoryByModule(String(moduleId))}
                   />
                   <StatCardWithTrend
-                    key={`stat.line${moduleId}`}
+                    key={`stat.line.${moduleId}`}
                     module={m}
                     value={count}
                     data={trend}

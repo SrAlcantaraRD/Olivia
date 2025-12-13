@@ -45,7 +45,6 @@ export function ScreenLayout({
             key={`header-${title}-${subtitle}`}
             entering={FadeInRight.duration(250)}
             exiting={FadeOutLeft.duration(200)}
-            className="mb-8"
           >
             <CardAtom variant="transparent" className="gap-4 px-0">
               {title && (
