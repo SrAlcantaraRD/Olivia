@@ -61,25 +61,23 @@ export default function ReportScreen() {
       >
         <View className="gap-6">
           {/* Range Selector */}
-          <View className="gap-2">
-            <View className="flex-row justify-between items-center py-4 px-2">
-              {/* TODO: convertir en card pequeñas y presionales */}
-              {TIME_RANGE_VALUES.map((r) => (
-                <SelectableCard
-                  key={`report-range-select-${r}`}
-                  testID=""
-                  isSelected={report.range === r}
-                  onPress={() => report.setRange(r)}
-                  className="h-20 w-20 justify-center items-center"
-                >
-                  <TypographyParagraph
-                    testID="scree"
-                    i18nKey="common.raw-value"
-                    values={{ value: r }}
-                  />
-                </SelectableCard>
-              ))}
-            </View>
+          <View className="flex-row gap-4">
+            {/* TODO: convertir en card pequeñas y presionales */}
+            {TIME_RANGE_VALUES.map((r) => (
+              <SelectableCard
+                key={`screen.range-select.${r}`}
+                testID={`screen.range-select.${r}`}
+                isSelected={report.range === r}
+                onPress={() => report.setRange(r)}
+                className="h-20 w-20 justify-center items-center"
+              >
+                <TypographyParagraph
+                  testID={`screen.range-select.label-${r}`}
+                  i18nKey="common.raw-value"
+                  values={{ value: r }}
+                />
+              </SelectableCard>
+            ))}
           </View>
 
           {/* Statistics Cards */}
