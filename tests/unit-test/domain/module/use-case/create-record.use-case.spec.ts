@@ -6,8 +6,8 @@ import type {
   TRecord,
   TRecordCreate,
 } from '@/domain/module/entity/record.entity';
-import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import type { IRecordPort } from '@/domain/module/port/record.port';
+import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import { CreateRecordUseCase } from '@/domain/module/use-case/create-record.use-case';
 
 describe('[UseCase] CreateRecordUseCase', () => {

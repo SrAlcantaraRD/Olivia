@@ -1,6 +1,6 @@
 import type { TPatientCreate } from '@/domain/patient/entity/patient.entity';
-import { SEX_ENUM } from '@/domain/patient/enum/sex.enum';
 import { AUTONOMY_LEVEL_ENUM } from '@/domain/patient/enum/autonomy-level.enum';
+import { SEX_ENUM } from '@/domain/patient/enum/sex.enum';
 
 export function mockPatientCreateDTO(): TPatientCreate {
   return {

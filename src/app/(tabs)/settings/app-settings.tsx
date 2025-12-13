@@ -19,7 +19,7 @@ export default function AppSettingsScreen() {
     cacheAdapter,
   });
 
-  const { currentTheme, isDark, isLight } = useAppTheme();
+  const { currentTheme, isLight } = useAppTheme();
 
   const onToggleTheme = useCallback(() => {
     const newTheme = isLight ? EThemeMode.DARK : EThemeMode.LIGHT;

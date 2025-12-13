@@ -48,6 +48,22 @@ export const useNavigation = (adapters: {
     navigateTo('/(onboarding)');
   }, []);
 
+  const goToAppSettings = useCallback(() => {
+    navigateTo('/(tabs)/settings/app-settings');
+  }, []);
+
+  const goToChildProfile = useCallback(() => {
+    navigateTo('/(tabs)/settings/child-profile');
+  }, []);
+
+  const goToCarerManagement = useCallback(() => {
+    navigateTo('/(tabs)/settings/carer-management');
+  }, []);
+
+  const goToLogOut = useCallback(() => {
+    navigateTo('/(tabs)/settings/log-out');
+  }, []);
+
   // Add more as needed
 
   return {
@@ -60,5 +76,9 @@ export const useNavigation = (adapters: {
     goToRegister: goToRegister,
     goToFilterHistory,
     goToOnboarding,
+    goToAppSettings,
+    goToChildProfile,
+    goToCarerManagement,
+    goToLogOut,
   };
 };

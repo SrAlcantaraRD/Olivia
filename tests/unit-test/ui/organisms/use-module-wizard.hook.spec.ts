@@ -2,8 +2,8 @@ import { describe, expect, it } from '@jest/globals';
 import { act, renderHook } from '@testing-library/react-native';
 
 import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
-import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TModule } from '@/domain/module/entity/module.entity';
+import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import { MODULE_FIELD_TYPE_ENUM } from '@/domain/module/enum/module-field-type.enum';
 import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import { useModuleWizard } from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';

@@ -5,8 +5,8 @@ import type {
   TRecord,
   TRecordCreate,
 } from '@/domain/module/entity/record.entity';
-import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import type { IRecordPort } from '@/domain/module/port/record.port';
+import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 
 export class CreateRecordUseCase extends BaseUseCase<TRecordCreate, TRecord> {
   constructor(

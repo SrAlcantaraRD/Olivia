@@ -13,7 +13,7 @@ export default function SettingsLayout() {
         name="carer-management"
         options={{ presentation: 'card' }}
       />
-      <Stack.Screen name="app-settings" options={{ presentation: 'card' }} />
+      <Stack.Screen name="app-settings" options={{ presentation: 'modal' }} />
       <Stack.Screen name="log-out" options={{ presentation: 'modal' }} />
     </Stack>
   );

@@ -9,8 +9,8 @@ import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
-import type { TRequestGetModuleFieldList } from '@/domain/module/use-case-schema/get-module-field-list.use-case-schema';
 import { GetModuleFieldListUseCase } from '@/domain/module/use-case/get-module-field-list.use-case';
+import type { TRequestGetModuleFieldList } from '@/domain/module/use-case-schema/get-module-field-list.use-case-schema';
 
 export function useGetListModuleField(adapters: {
   loggerAdapter: TLoggerPort;

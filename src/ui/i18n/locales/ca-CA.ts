@@ -14,11 +14,11 @@ export const caCA = Object.freeze({
 
   'page.app_settings.section_theme': 'Tema',
   'page.app_settings.section_language': 'Idioma',
-  'page.app_settings.language.english': 'English',
-  'page.app_settings.language.spanish': 'Español',
+  'page.app_settings.language.english': 'Anglès',
+  'page.app_settings.language.spanish': 'Espanyol',
   'page.app_settings.language.catalan': 'Català',
-  'page.app_settings.action.switch_to_dark': 'Canvia a mode fosc',
-  'page.app_settings.action.switch_to_light': 'Canvia a mode clar',
+  'page.app_settings.action.switch_to_dark': 'Canviar a Mode Fosc',
+  'page.app_settings.action.switch_to_light': 'Canviar a Mode Clar',
 
   // Splash Screen
   'splash-screen.app-name': 'Oliva',
@@ -178,8 +178,8 @@ export const caCA = Object.freeze({
   'page.child_profile.placeholder': 'Formulari de perfil pròximament',
   'page.carer_management.title': 'Gestió de Cuidadors',
   'page.carer_management.placeholder': 'Llista de cuidadors pròximament',
-  'page.app_settings.title': "Ajustos de l'Aplicació",
-  'page.app_settings.placeholder': "Ajustos de l'aplicació pròximament",
+  'page.app_settings.title': "Configuració de l'App",
+  'page.app_settings.placeholder': "Personalitza la teva experiència a l'app",
 
   // Page: Logout confirmation
   'page.settings.logout_confirm.title': 'Aquesta acció és irreversible',
