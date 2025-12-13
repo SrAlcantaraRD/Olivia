@@ -25,7 +25,7 @@ export function useGetRecordFieldDistribution(adapters: {
   { value: string; count: number }[]
 > {
   const {
-    actions: { saveItems, getItems, startLoading, stopLoading },
+    actions: { startLoading, stopLoading },
   } = useListStore('report-field-distribution');
 
   const { loggerAdapter, recordAdapter, notifyAdapter, cacheAdapter } =

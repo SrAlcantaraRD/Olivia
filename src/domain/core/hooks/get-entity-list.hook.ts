@@ -45,7 +45,7 @@ export function useGetEntityList<T extends TBaseEntity>(
       console.error(error);
       return { success: false };
     } finally {
-      // stopLoading();
+      stopLoading();
     }
   }, []);
 

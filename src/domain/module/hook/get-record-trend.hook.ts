@@ -19,7 +19,7 @@ export function useGetRecordTrend(adapters: {
   { day: string; count: number }[]
 > {
   const {
-    actions: { saveItems, getItems, startLoading, stopLoading },
+    actions: { getItems, startLoading, stopLoading },
   } = useListStore('report-trend');
 
   const { loggerAdapter, recordAdapter, notifyAdapter } = adapters;
