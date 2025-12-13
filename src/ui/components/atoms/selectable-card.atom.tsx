@@ -7,6 +7,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { CardAtom } from '@/ui/components/atoms/card.atom';
+
 interface SelectableCardProps {
   isSelected: boolean;
   onPress: () => void;
@@ -57,7 +59,7 @@ export function SelectableCard({
         className="absolute inset-0 rounded-3xl"
       />
 
-      {children}
+      <CardAtom variant="transparent">{children}</CardAtom>
     </Pressable>
   );
 }

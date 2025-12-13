@@ -1,5 +1,5 @@
 // no direct React import required for modern JSX runtime
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 
 interface SparklineProps {
@@ -13,15 +13,18 @@ export function Sparkline({
   height = 40,
   color = '#4f46e5',
 }: SparklineProps) {
+  const { width: windowWidth } = useWindowDimensions();
   if (!data || data.length === 0) return <View style={{ height }} />;
 
-  const chartData = data.map((v, i) => ({ value: v, label: `${i}` }));
+  // approximate width minus screen padding/margins (20 left + 20 right + card padding)
+  const chartWidth = Math.max(200, windowWidth - 20 - 20 - 48);
 
+  const chartData = data.map((v, i) => ({ value: v, label: `${i}` }));
   return (
     <View>
       <LineChart
         data={chartData}
-        width={200}
+        width={chartWidth}
         height={height}
         color={color}
         hideRules
@@ -34,5 +37,3 @@ export function Sparkline({
     </View>
   );
 }
-
-export default Sparkline;

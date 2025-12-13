@@ -35,7 +35,7 @@ export const ThemeToggle: FC = () => {
         try {
           const usecase = new SetAppThemeUseCase(BASE_LOGGER, cacheAdapter);
           usecase.execute({ theme: newTheme });
-        } catch (e) {
+        } catch (_e) {
           // ignore persistence errors
         }
       }}
