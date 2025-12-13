@@ -109,7 +109,7 @@ export function useReportManager(options?: {
         });
 
         setTrendByModule((prev) => ({ ...prev, [moduleId]: counts }));
-      } catch (err) {
+      } catch (_err) {
         // on failure, keep previous or set zeros
         setTrendByModule((prev) => ({
           ...prev,
@@ -156,7 +156,7 @@ export function useReportManager(options?: {
       // per-module trends for visible modules
       await fetchModuleTrends(visibleModules ?? []);
       setIsLoadingTrend(false);
-    } catch (err) {
+    } catch (_err) {
       setIsLoadingStats(false);
       setIsLoadingTrend(false);
       notifyAdapter.error({

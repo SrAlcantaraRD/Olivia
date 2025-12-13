@@ -68,6 +68,14 @@ export const useNavigation = (adapters: {
     navigateTo('/(tabs)/settings/about');
   }, []);
 
+  const goToReportHistoryByModule = useCallback((moduleId: string) => {
+    navigateTo(`/(tabs)/report/history-detail?moduleId=${moduleId}`);
+  }, []);
+
+  const goToReportHistoryByRecord = useCallback((recordId: string) => {
+    navigateTo(`/(tabs)/report/history-detail?recordId=${recordId}`);
+  }, []);
+
   // Add more as needed
 
   return {
@@ -85,5 +93,7 @@ export const useNavigation = (adapters: {
     goToCarerManagement,
     goToLogOut,
     goToAbout,
+    goToReportHistoryByModule,
+    goToReportHistoryByRecord,
   };
 };

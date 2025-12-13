@@ -48,7 +48,7 @@ export function useSplashCarerValidation(adapters: {
         navigationAdapter.navigateTo('/(tabs)/register');
 
         return { success: true, data: response.details };
-      } catch (error) {
+      } catch (_error) {
         notifyAdapter.error({
           title: 'common.error',
           description: 'common.error',
