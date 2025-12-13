@@ -1,12 +1,16 @@
 import { useThemeColor } from 'heroui-native';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import type { TModule } from '@/domain/module/entity/module.entity';
 import type { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { IconAtom, type IconName } from '@/ui/components/atoms/icon.atom';
 import { Sparkline } from '@/ui/components/atoms/sparkline.atom';
-import { TypographySmall } from '@/ui/components/atoms/typography.atom';
+import {
+  TypographySmall,
+  TypographyTitle,
+} from '@/ui/components/atoms/typography.atom';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface StatCardWithTrendProps {
@@ -22,8 +26,6 @@ export function StatCardWithTrend({
   data = [],
   onPress,
 }: StatCardWithTrendProps) {
-  const fg = useThemeColor('foreground');
-
   const MODULE_META_BY_KEY: Partial<
     Record<
       MODULE_KEY_ENUM,
@@ -45,6 +47,29 @@ export function StatCardWithTrend({
     : (module.name ?? '')) as unknown as Ti18nKeys;
 
   const iconName = meta?.icon;
+
+  // log at debug level to avoid spamming error logs in production
+  BASE_LOGGER.debug({ data });
+
+  // sanitize incoming series and compute whether there's meaningful data
+  const sanitizedSeries: number[] = (data || []).map((v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  });
+
+  const hasMeaningfulData = sanitizedSeries.some((v) => v > 0);
+
+  // normalization: scale to 0..100 to make small peaks visible
+  let normalizedSeries: number[] = sanitizedSeries;
+  if (hasMeaningfulData) {
+    const min = Math.min(...sanitizedSeries);
+    const max = Math.max(...sanitizedSeries);
+    if (max !== min) {
+      normalizedSeries = sanitizedSeries.map((v) =>
+        Math.round(((v - min) / (max - min)) * 100)
+      );
+    }
+  }
 
   return (
     <Pressable
@@ -75,19 +100,23 @@ export function StatCardWithTrend({
               testID={`screen.stat-card.${String(titleKey)}`}
             />
           </View>
-          <View>
-            <IconAtom name="chevron-forward" className="text-default-300" />
-          </View>
         </View>
-        <View className="mb-2">
-          <View>
-            <Text style={{ color: fg }} className="text-3xl font-bold">
-              {value}
-            </Text>
-          </View>
-          <View className="mt-2">
-            <Sparkline data={data} height={36} color={chipColor} />
-          </View>
+        <View className="gap-2">
+          <TypographyTitle
+            i18nKey="common.raw-value"
+            className="text-default-400"
+            testID={`screen.stat-card.${String(titleKey)}.total_label`}
+            values={{ value: value }}
+          />
+          {hasMeaningfulData ? (
+            <Sparkline data={normalizedSeries} height={36} color={chipColor} />
+          ) : (
+            <TypographySmall
+              i18nKey="page.report.no_history"
+              variant="light"
+              className="text-center"
+            />
+          )}
         </View>
       </CardAtom>
     </Pressable>

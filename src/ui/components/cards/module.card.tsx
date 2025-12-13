@@ -35,8 +35,6 @@ export function ModuleCard({
     []
   );
 
-  BASE_LOGGER.error(module);
-
   const getTitleFromModuleCode = useCallback(
     (code: MODULE_KEY_ENUM): Ti18nKeys => {
       const mapTitle: Record<MODULE_KEY_ENUM, Ti18nKeys> = {

@@ -68,10 +68,6 @@ export class SQLiteRecordFieldAdapter implements IRecordFieldPort {
       where: (row, { eq }) => eq(row.status, 1),
     });
 
-    BASE_LOGGER.error(
-      `Fetching all record fields from the database: ${list.length} found.`
-    );
-
     return list.map(SQLiteRecordFieldAdapter.toDomainEntity);
   }
 

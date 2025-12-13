@@ -28,6 +28,7 @@ export default function SettingsScreen() {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
+        {/* TODO: Añadir avatar del carer logueada y nombre */}
         <View className="gap-12">
           {/* Child Profile Section */}
           <CardAtom>
