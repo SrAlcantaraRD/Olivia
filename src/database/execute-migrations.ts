@@ -17,7 +17,7 @@ export const useInitDb = () => {
     try {
       const keys = Object.keys(migrations.migrations || {});
       BASE_LOGGER.info(`[useInitDb] Bundled migrations: ${keys.join(',')}`);
-    } catch (err) {
+    } catch (_err) {
       /* ignore */
     }
 
@@ -39,7 +39,7 @@ export const useInitDb = () => {
       success: schemaMigrations.success,
       error: schemaMigrations.error,
     };
-  } catch (error) {
-    return { success: false, error };
+  } catch (_error) {
+    return { success: false, error: _error };
   }
 };
