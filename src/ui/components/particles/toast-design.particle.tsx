@@ -25,11 +25,6 @@ interface CustomToastProps extends RNToastBaseProps {
 }
 
 interface BaseToastProps {
-  iconName: IconName;
-  iconBgColor: string;
-  auraColor: string;
-}
-interface BaseToastProps {
   text1?: Ti18nKeys;
   text2?: Ti18nKeys;
   iconName: IconName;
