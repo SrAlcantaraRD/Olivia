@@ -5,9 +5,15 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
+import {
+  TIME_RANGE_ENUM,
+  TIME_RANGE_I18N_MAP,
+  TIME_RANGE_VALUES,
+} from '@/domain/core/enum/time-range.enum';
 import type { TID } from '@/domain/core/schemas/id.schema';
 import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import { useGetRecordFieldDistribution } from '@/domain/module/hook/get-record-field-distribution.hook';
+import { computeTimeRange } from '@/hooks/use-report-manager.hook';
 import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import PieChartAtom from '@/ui/components/atoms/pie-chart.atom';
@@ -58,34 +64,11 @@ export default function HistoryDetailScreen() {
   }, [moduleId, moduleID]);
 
   const [selectedFieldId, setSelectedFieldId] = useState<number | null>(null);
-  const [range, setRange] = useState<'30d' | '90d' | '7d' | 'today'>('30d');
+  const [range, setRange] = useState<TIME_RANGE_ENUM>(
+    TIME_RANGE_ENUM.MONTH_30D
+  );
 
-  const timeRange: {
-    startDate?: Date;
-    endDate?: Date;
-  } = useMemo(() => {
-    const endDate = new Date();
-    const dayMs = 24 * 60 * 60 * 1000;
-    const startOfToday = new Date(endDate.getTime());
-    startOfToday.setHours(0, 0, 0, 0);
-    let startDate = new Date(startOfToday.getTime() - 29 * dayMs);
-    switch (range) {
-      case 'today': {
-        startDate = startOfToday;
-        break;
-      }
-      case '7d':
-        startDate = new Date(startOfToday.getTime() - 6 * dayMs);
-        break;
-      case '30d':
-        startDate = new Date(startOfToday.getTime() - 29 * dayMs);
-        break;
-      case '90d':
-        startDate = new Date(startOfToday.getTime() - 89 * dayMs);
-        break;
-    }
-    return { startDate, endDate };
-  }, [range]);
+  const timeRange = useMemo(() => computeTimeRange(range), [range]);
 
   useEffect(() => {
     if (moduleIdValue === null) return;
@@ -135,29 +118,20 @@ export default function HistoryDetailScreen() {
               i18nKey="page.history-detail.select-field"
             />
             <View className="flex-row gap-2">
-              {(['today', '7d', '30d', '90d'] as const).map((r) => {
-                const rangeKey =
-                  r === 'today'
-                    ? 'page.history-detail.range.today'
-                    : r === '7d'
-                      ? 'page.history-detail.range.7d'
-                      : r === '30d'
-                        ? 'page.history-detail.range.30d'
-                        : 'page.history-detail.range.90d';
-
-                return (
-                  <Pressable
-                    key={`range-${r}`}
-                    onPress={() => setRange(r)}
-                    className={`px-3 py-2 rounded-xl ${range === r ? 'bg-default-100' : 'bg-default-50'}`}
-                  >
-                    <TypographySmall
-                      testID={`page.history-detail.range.${r}`}
-                      i18nKey={rangeKey}
-                    />
-                  </Pressable>
-                );
-              })}
+              {TIME_RANGE_VALUES.map((r) => (
+                <Pressable
+                  key={`range-${r}`}
+                  onPress={() => setRange(r)}
+                  className={`px-3 py-2 rounded-xl ${
+                    range === r ? 'bg-default-100' : 'bg-default-50'
+                  }`}
+                >
+                  <TypographySmall
+                    testID={`page.history-detail.range.${r}`}
+                    i18nKey={TIME_RANGE_I18N_MAP[r]}
+                  />
+                </Pressable>
+              ))}
             </View>
           </View>
 

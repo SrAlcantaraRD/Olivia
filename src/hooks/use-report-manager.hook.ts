@@ -1,35 +1,35 @@
+import { addDays, endOfDay, format, startOfDay, subDays } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useAdapters } from '@/adapter';
+import { TIME_RANGE_ENUM } from '@/domain/core/enum/time-range.enum';
 import type { TModule } from '@/domain/module/entity/module.entity';
 import { useGetListActiveModule } from '@/domain/module/hook/get-list-active-module.hook';
 import { useGetRecordStatistics } from '@/domain/module/hook/get-record-statistics.hook';
 import { useGetRecordTrend } from '@/domain/module/hook/get-record-trend.hook';
 
-type RangeKey = 'today' | '7d' | '30d' | '90d';
+export type RangeKey = TIME_RANGE_ENUM;
 
 export function computeTimeRange(range: RangeKey) {
-  const end = new Date();
-  const dayMs = 24 * 60 * 60 * 1000;
-  const startOfToday = new Date(end.getTime());
-  startOfToday.setHours(0, 0, 0, 0);
+  const end = endOfDay(new Date());
+  const today = startOfDay(end);
 
-  let start = new Date(startOfToday.getTime());
+  let start: Date;
   switch (range) {
-    case 'today':
-      start = startOfToday;
+    case TIME_RANGE_ENUM.TODAY:
+      start = today;
       break;
-    case '7d':
+    case TIME_RANGE_ENUM.WEEK_7D:
       // include today + previous 6 full days
-      start = new Date(startOfToday.getTime() - 6 * dayMs);
+      start = subDays(today, 6);
       break;
-    case '30d':
+    case TIME_RANGE_ENUM.MONTH_30D:
       // include today + previous 29 full days
-      start = new Date(startOfToday.getTime() - 29 * dayMs);
+      start = subDays(today, 29);
       break;
-    case '90d':
+    case TIME_RANGE_ENUM.QUARTER_90D:
       // include today + previous 89 full days
-      start = new Date(startOfToday.getTime() - 89 * dayMs);
+      start = subDays(today, 89);
       break;
   }
 
@@ -39,14 +39,14 @@ export function computeTimeRange(range: RangeKey) {
   };
 }
 
-export function useReportManager(options?: {
+export function useModuleStatistics(options?: {
   defaultRange?: RangeKey;
   perModuleConcurrency?: number;
 }) {
   const { recordAdapter, notifyAdapter, moduleAdapter, loggerAdapter } =
     useAdapters();
 
-  const defaultRange = options?.defaultRange ?? '7d';
+  const defaultRange = options?.defaultRange ?? TIME_RANGE_ENUM.WEEK_7D;
   const concurrency = options?.perModuleConcurrency ?? 4;
 
   // domain hooks (they expect adapters)
@@ -109,9 +109,8 @@ export function useReportManager(options?: {
         });
 
         const counts = Array.from({ length: numDays }, (_, i) => {
-          const ts = timeRange.startDate.getTime() + i * 24 * 60 * 60 * 1000;
-          const d = new Date(ts);
-          const day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+          const d = addDays(timeRange.startDate, i);
+          const day = format(d, 'yyyy-MM-dd');
           return dayMap[day] ?? 0;
         });
 
@@ -209,4 +208,8 @@ export function useReportManager(options?: {
   } as const;
 }
 
-export type TUseReportManager = ReturnType<typeof useReportManager>;
+export type TUseModuleStatistics = ReturnType<typeof useModuleStatistics>;
+
+// Backward compatibility alias
+export const useReportManager = useModuleStatistics;
+export type TUseReportManager = TUseModuleStatistics;

@@ -1,8 +1,9 @@
+import { TIME_RANGE_ENUM } from '@/domain/core/enum/time-range.enum';
 import { computeTimeRange } from '@/hooks/use-report-manager.hook';
 
 describe('computeTimeRange', () => {
   it('returns today range with start at 00:00 local', () => {
-    const { startDate, endDate } = computeTimeRange('today');
+    const { startDate, endDate } = computeTimeRange(TIME_RANGE_ENUM.TODAY);
     const now = new Date();
     expect(endDate.getFullYear()).toBe(now.getFullYear());
     expect(startDate.getHours()).toBe(0);
@@ -11,7 +12,7 @@ describe('computeTimeRange', () => {
   });
 
   it('returns 7d range approximately 7 days apart', () => {
-    const { startDate, endDate } = computeTimeRange('7d');
+    const { startDate, endDate } = computeTimeRange(TIME_RANGE_ENUM.WEEK_7D);
     const diffDays = Math.round(
       (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)
     );
@@ -19,8 +20,8 @@ describe('computeTimeRange', () => {
   });
 
   it('returns 30d and 90d ranges', () => {
-    const r30 = computeTimeRange('30d');
-    const r90 = computeTimeRange('90d');
+    const r30 = computeTimeRange(TIME_RANGE_ENUM.MONTH_30D);
+    const r90 = computeTimeRange(TIME_RANGE_ENUM.QUARTER_90D);
     const diff30 = Math.round(
       (r30.endDate.getTime() - r30.startDate.getTime()) / (24 * 60 * 60 * 1000)
     );

@@ -4,6 +4,7 @@ import { ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
+import { TIME_RANGE_VALUES } from '@/domain/core/enum/time-range.enum';
 import type { TModule } from '@/domain/module/entity/module.entity';
 import type { TRecord } from '@/domain/module/entity/record.entity';
 import { useGetRecentRecords } from '@/domain/module/hook/get-recent-records.hook';
@@ -63,7 +64,7 @@ export default function ReportScreen() {
           <View className="gap-2">
             <View className="flex-row justify-between items-center py-4 px-2">
               {/* TODO: convertir en card pequeñas y presionales */}
-              {(['today', '7d', '30d', '90d'] as const).map((r) => (
+              {TIME_RANGE_VALUES.map((r) => (
                 <SelectableCard
                   key={`report-range-select-${r}`}
                   testID=""

@@ -1,3 +1,4 @@
+import { fromUnixTime } from 'date-fns';
 import { and, count, desc, eq, gte, lte, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 
@@ -47,15 +48,16 @@ export class SQLiteRecordAdapter implements IRecordPort {
   }
 
   public static toDomainEntity(entity: TRecordAdapterEntity): TRecord {
-    const createdAt =
-      entity.createdAt instanceof Date
-        ? entity.createdAt
-        : new Date(
-            // heuristics: seconds are ~1e9, millis are ~1e12
-            entity.createdAt < 1_000_000_000_000
-              ? entity.createdAt * 1000
-              : entity.createdAt
-          );
+    let createdAt: Date;
+    if (entity.createdAt instanceof Date) {
+      createdAt = entity.createdAt;
+    } else {
+      // heuristic: seconds are ~1e9, millis are ~1e12
+      const isSeconds = entity.createdAt < 1_000_000_000_000;
+      createdAt = isSeconds
+        ? fromUnixTime(entity.createdAt)
+        : new Date(entity.createdAt);
+    }
 
     return {
       id: entity.id,

@@ -1,3 +1,4 @@
+import { getUnixTime } from 'date-fns';
 import { useCallback, useState } from 'react';
 
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
@@ -38,12 +39,8 @@ export function useGetRecordFieldDistribution(adapters: {
     }): Promise<IHookResponse<{ value: string; count: number }[]>> => {
       setIsExecuting(true);
       try {
-        const startEpoch = data.startDate
-          ? Math.floor(data.startDate.getTime() / 1000)
-          : 0;
-        const endEpoch = data.endDate
-          ? Math.floor(data.endDate.getTime() / 1000)
-          : 0;
+        const startEpoch = data.startDate ? getUnixTime(data.startDate) : 0;
+        const endEpoch = data.endDate ? getUnixTime(data.endDate) : 0;
 
         const cacheKey = buildCacheKey(
           CACHE_KEY_ENUM.REPORT_DISTRIBUTION,

@@ -1,3 +1,4 @@
+import { differenceInDays, parseISO } from 'date-fns';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -63,10 +64,8 @@ export default function LogoutConfirmScreen() {
   const daysRegistered = useMemo(() => {
     if (!earliestDay) return '0';
     try {
-      const d = new Date(`${earliestDay}T00:00:00Z`);
-      const diff = Math.floor(
-        (Date.now() - d.getTime()) / (1000 * 60 * 60 * 24)
-      );
+      const d = parseISO(earliestDay);
+      const diff = differenceInDays(new Date(), d);
       return String(diff);
     } catch (_err) {
       return '0';
@@ -82,12 +81,11 @@ export default function LogoutConfirmScreen() {
   });
 
   // typed i18n keys used in this screen (cast to Ti18nKeys so the atom types align)
-  const K_TIME_REGISTERED =
-    'page.settings.logout-confirm.time_registered_value' as Ti18nKeys;
-  const K_TOTAL_RECORDS =
-    'page.settings.logout-confirm.total_records_value' as Ti18nKeys;
-  const K_COMMON_NUMBER = 'common.number' as Ti18nKeys;
-
+  const K_TIME_REGISTERED: Ti18nKeys =
+    'page.settings.logout-confirm.time-registered-value';
+  const K_TOTAL_RECORDS: Ti18nKeys =
+    'page.settings.logout-confirm.total-records-value';
+  const K_COMMON_NUMBER: Ti18nKeys = 'common.number';
   const onDelete = async () => {
     const resp = await executeWipe();
     if (resp.success) {
