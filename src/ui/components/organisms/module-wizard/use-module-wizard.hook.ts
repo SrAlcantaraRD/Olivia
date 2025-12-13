@@ -87,7 +87,7 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
   const selectOptionAndNext = useCallback(
     (fieldId: number, value: string) => {
       setFieldValue(fieldId, value);
-      setTimeout(() => goToNextStep(), 150);
+      setTimeout(() => goToNextStep(), 500);
     },
     [goToNextStep, setFieldValue]
   );

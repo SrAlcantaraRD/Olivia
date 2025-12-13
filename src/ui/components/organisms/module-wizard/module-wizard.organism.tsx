@@ -3,6 +3,7 @@ import { View } from 'react-native';
 
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
+import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { FormPage } from '@/ui/components/molecules/form-page.molecule';
 import { Wizard } from '@/ui/components/molecules/wizard.molecule';
 import { ModuleFieldWrapper } from '@/ui/components/organisms/module-wizard/module-field-wrapper.component';
@@ -49,27 +50,19 @@ export function ModuleWizard({
       steps.map((step) => ({
         id: step.id,
         content: (
-          <FormPage
-            key={`page-${step.id}`}
-            testID={`${testID}.form-page.step.${step.id}`}
-            step={{
-              id: step.id,
-              titleKey: step.titleKey,
-              descriptionKey: step.descriptionKey,
-              content: (
-                <View className="mt-4">
-                  <ModuleFieldWrapper
-                    step={step as StepItem}
-                    values={values}
-                    setFieldValue={setFieldValue}
-                    selectOptionAndNext={selectOptionAndNext}
-                    testID={testID}
-                  />
-                </View>
-              ),
-              isValid: step.isValid,
-            }}
-          />
+          <ScreenLayout
+            testID={`${testID}.screen.step.${step.id}`}
+            title={step.titleKey}
+            subtitle={step.descriptionKey}
+          >
+            <ModuleFieldWrapper
+              step={step as StepItem}
+              values={values}
+              setFieldValue={setFieldValue}
+              selectOptionAndNext={selectOptionAndNext}
+              testID={testID}
+            />
+          </ScreenLayout>
         ),
         isValid: step.isValid,
       })),

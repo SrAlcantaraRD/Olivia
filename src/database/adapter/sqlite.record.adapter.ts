@@ -1,4 +1,4 @@
-import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
+import { and, count, desc, eq, gte, lte, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 
 import {
@@ -47,10 +47,20 @@ export class SQLiteRecordAdapter implements IRecordPort {
   }
 
   public static toDomainEntity(entity: TRecordAdapterEntity): TRecord {
+    const createdAt =
+      entity.createdAt instanceof Date
+        ? entity.createdAt
+        : new Date(
+            // heuristics: seconds are ~1e9, millis are ~1e12
+            entity.createdAt < 1_000_000_000_000
+              ? entity.createdAt * 1000
+              : entity.createdAt
+          );
+
     return {
       id: entity.id,
       status: getStatusFromValue(entity.status),
-      createdAt: entity.createdAt,
+      createdAt,
 
       carerID: entity.carerID,
       moduleID: entity.moduleID,
@@ -70,10 +80,6 @@ export class SQLiteRecordAdapter implements IRecordPort {
         recordFields: entity.recordFields.map(
           SQLiteRecordFieldAdapter.toDomainEntity
         ),
-      }),
-      // include createdAt (stored as unix epoch seconds)
-      ...(entity.createdAt !== undefined && {
-        createdAt: Number(entity.createdAt),
       }),
     } satisfies TRecord;
   }
@@ -115,7 +121,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
       .select()
       .from(DB_SCHEMA.RECORD)
       .where(eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE))
-      .orderBy(DB_SCHEMA.RECORD.createdAt, 'desc')
+      .orderBy(desc(DB_SCHEMA.RECORD.createdAt))
       .limit(limit);
 
     return (rows as TRecordAdapterEntity[]).map(
@@ -156,8 +162,8 @@ export class SQLiteRecordAdapter implements IRecordPort {
     moduleID?: number;
   }): Promise<{ day: string; count: number }[]> {
     const { startDate, endDate, moduleID } = criteria || {};
-    // createdAt is stored as unix epoch seconds in DB
-    const dayExpr = sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`;
+    // createdAt is stored as unix epoch seconds in DB; group by LOCAL day to match user expectations
+    const dayExpr = sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch', 'localtime'))`;
 
     type TDayCountRow = { day: string; count: number };
 

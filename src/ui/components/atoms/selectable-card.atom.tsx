@@ -4,6 +4,7 @@ import { Pressable } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
+  withSequence,
   withTiming,
 } from 'react-native-reanimated';
 
@@ -26,36 +27,40 @@ export function SelectableCard({
 }: SelectableCardProps) {
   const accentColor = useThemeColor('accent');
 
-  // Animated value for border opacity
   const borderOpacity = useSharedValue(isSelected ? 1 : 0);
+  const borderWidth = useSharedValue(isSelected ? 2 : 0);
 
   useEffect(() => {
-    borderOpacity.value = withTiming(isSelected ? 1 : 0, { duration: 300 });
+    borderOpacity.value = withTiming(isSelected ? 1 : 0, { duration: 600 });
+    if (isSelected) {
+      borderWidth.value = withSequence(
+        withTiming(4, { duration: 300 }),
+        withTiming(2, { duration: 300 })
+      );
+    } else {
+      borderWidth.value = withSequence(
+        withTiming(4, { duration: 300 }),
+        withTiming(0, { duration: 300 })
+      );
+    }
   }, [isSelected, borderOpacity]);
 
   const animatedBorderStyle = useAnimatedStyle(() => {
     return {
       borderColor: accentColor,
       opacity: borderOpacity.value,
+      borderWidth: borderWidth.value,
     };
   });
 
   return (
     <Pressable
       onPress={onPress}
-      // className={`rounded-3xl relative ${className} shadow-primary-500/30`}
-      className={`rounded-3xl relative ${className} shadow-[0px_1px_20px_-1px_rgb(0,139,194)]`}
+      className={`rounded-3xl relative ${className} bg-accent-soft`}
       testID={`${testID}.pressable`}
     >
-      {/* Animated border */}
       <Animated.View
-        style={[
-          {
-            borderWidth: 2,
-            borderColor: accentColor,
-          },
-          animatedBorderStyle,
-        ]}
+        style={animatedBorderStyle}
         className="absolute inset-0 rounded-3xl"
       />
 

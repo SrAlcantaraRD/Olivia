@@ -108,13 +108,24 @@ export default function ReportScreen() {
                 ? moduleTrend
                 : Array(numDays).fill(0);
               return (
-                <StatCardWithTrend
-                  key={`stat-${moduleId}`}
-                  module={m}
-                  value={count}
-                  data={trend}
-                  onPress={() => goToReportHistoryByModule(String(moduleId))}
-                />
+                <>
+                  <StatCardWithTrend
+                    key={`stat.bar.${moduleId}`}
+                    module={m}
+                    value={count}
+                    data={trend}
+                    chartVariant="bar"
+                    onPress={() => goToReportHistoryByModule(String(moduleId))}
+                  />
+                  <StatCardWithTrend
+                    key={`stat.line${moduleId}`}
+                    module={m}
+                    value={count}
+                    data={trend}
+                    chartVariant="line"
+                    onPress={() => goToReportHistoryByModule(String(moduleId))}
+                  />
+                </>
               );
             })}
           </View>

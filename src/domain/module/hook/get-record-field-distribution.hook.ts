@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import {
@@ -11,7 +11,6 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
-import { useListStore } from '@/domain/core/stores/list.store';
 import type { IRecordPort } from '@/domain/module/port/record.port';
 import { GetRecordFieldDistributionUseCase } from '@/domain/module/use-case/get-record-field-distribution.use-case';
 
@@ -24,9 +23,8 @@ export function useGetRecordFieldDistribution(adapters: {
   { fieldID: number; moduleID?: number; startDate?: Date; endDate?: Date },
   { value: string; count: number }[]
 > {
-  const {
-    actions: { startLoading, stopLoading },
-  } = useListStore('report-field-distribution');
+  const [items, setItems] = useState<{ value: string; count: number }[]>([]);
+  const [isExecuting, setIsExecuting] = useState(false);
 
   const { loggerAdapter, recordAdapter, notifyAdapter, cacheAdapter } =
     adapters;
@@ -38,7 +36,7 @@ export function useGetRecordFieldDistribution(adapters: {
       startDate?: Date;
       endDate?: Date;
     }): Promise<IHookResponse<{ value: string; count: number }[]>> => {
-      startLoading();
+      setIsExecuting(true);
       try {
         const startEpoch = data.startDate
           ? Math.floor(data.startDate.getTime() / 1000)
@@ -63,6 +61,7 @@ export function useGetRecordFieldDistribution(adapters: {
                 cacheKey
               );
             if (cached && cached.length > 0) {
+              setItems(cached);
               return { success: true, data: cached };
             }
           } catch (err) {
@@ -94,20 +93,22 @@ export function useGetRecordFieldDistribution(adapters: {
             console.warn('cache.set failed', err);
           }
         }
+
+        setItems(response.details.values);
         return { success: true, data: response.details.values };
       } catch (error) {
         console.error(error);
         return { success: false };
       } finally {
-        stopLoading();
+        setIsExecuting(false);
       }
     },
-    [loggerAdapter, recordAdapter, notifyAdapter]
+    [loggerAdapter, recordAdapter, notifyAdapter, cacheAdapter]
   );
 
   return {
     execute,
-    isExecuting: false,
-    items: [],
+    isExecuting,
+    items,
   };
 }

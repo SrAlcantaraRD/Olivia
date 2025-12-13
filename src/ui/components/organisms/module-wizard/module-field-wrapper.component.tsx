@@ -51,40 +51,40 @@ export const ModuleFieldWrapper: FC<ModuleFieldWrapperProps> = ({
   selectOptionAndNext,
   testID,
 }) => {
-  const f = step.field;
+  const field = step.field;
 
-  if (f.type === MODULE_FIELD_TYPE_ENUM.SELECT) {
-    const options = parseFieldValues(f.values || '');
+  if (field.type === MODULE_FIELD_TYPE_ENUM.SELECT) {
+    const options = parseFieldValues(field.values || '');
     return (
-      <View>
+      <View className="flex-col gap-4">
         {options.map((option) => (
           <CardWithDetails
             key={`option-${option}`}
             icon="mic-circle"
             title={option as unknown as Ti18nKeys}
-            isSelected={values[f.id] === option}
-            onPress={() => selectOptionAndNext(f.id, option)}
-            testID={`${testID}.field.${f.id}.option.${option}`}
+            isSelected={values[field.id] === option}
+            onPress={() => selectOptionAndNext(field.id, option)}
+            testID={`${testID}.field.${field.id}.option.${option}`}
           />
         ))}
       </View>
     );
   }
 
-  if (f.type === MODULE_FIELD_TYPE_ENUM.TEXT) {
+  if (field.type === MODULE_FIELD_TYPE_ENUM.TEXT) {
     return (
       <TextFieldAtom
         label={step.titleKey}
         placeholder={step.descriptionKey}
-        value={values[f.id] ?? ''}
-        onChangeText={(text) => setFieldValue(f.id, text)}
+        value={values[field.id] ?? ''}
+        onChangeText={(text) => setFieldValue(field.id, text)}
       />
     );
   }
 
   return (
     <TypographyParagraph
-      testID={`${testID}.field.${f.title}.unsupported`}
+      testID={`${testID}.field.${field.title}.unsupported`}
       i18nKey="component.register_stool_button.description"
     />
   );

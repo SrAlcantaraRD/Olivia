@@ -6,11 +6,11 @@ import type { TModule } from '@/domain/module/entity/module.entity';
 import type { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { IconAtom, type IconName } from '@/ui/components/atoms/icon.atom';
-import { Sparkline } from '@/ui/components/atoms/sparkline.atom';
 import {
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
+import { TrendChart } from '@/ui/components/molecules/trend-chart.molecule';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface StatCardWithTrendProps {
@@ -18,6 +18,7 @@ interface StatCardWithTrendProps {
   value: number | string;
   data?: number[];
   onPress?: () => void;
+  chartVariant?: 'line' | 'bar';
 }
 
 export function StatCardWithTrend({
@@ -25,6 +26,7 @@ export function StatCardWithTrend({
   value,
   data = [],
   onPress,
+  chartVariant = 'line',
 }: StatCardWithTrendProps) {
   const MODULE_META_BY_KEY: Partial<
     Record<
@@ -59,17 +61,7 @@ export function StatCardWithTrend({
 
   const hasMeaningfulData = sanitizedSeries.some((v) => v > 0);
 
-  // normalization: scale to 0..100 to make small peaks visible
-  let normalizedSeries: number[] = sanitizedSeries;
-  if (hasMeaningfulData) {
-    const min = Math.min(...sanitizedSeries);
-    const max = Math.max(...sanitizedSeries);
-    if (max !== min) {
-      normalizedSeries = sanitizedSeries.map((v) =>
-        Math.round(((v - min) / (max - min)) * 100)
-      );
-    }
-  }
+  // normalization moved to `TrendChart` to keep responsibilities separated
 
   return (
     <Pressable
@@ -109,10 +101,17 @@ export function StatCardWithTrend({
             values={{ value: value }}
           />
           {hasMeaningfulData ? (
-            <Sparkline data={normalizedSeries} height={36} color={chipColor} />
+            <TrendChart
+              data={sanitizedSeries}
+              height={chartVariant === 'bar' ? undefined : 36}
+              color={chipColor}
+              variant={chartVariant}
+              testID={`screen.stat-card.${String(titleKey)}.trend-chart`}
+            />
           ) : (
             <TypographySmall
               i18nKey="page.report.no_history"
+              testID={`screen.stat-card.${String(titleKey)}.no-trend-data`}
               variant="light"
               className="text-center"
             />

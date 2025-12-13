@@ -10,20 +10,26 @@ type RangeKey = 'today' | '7d' | '30d' | '90d';
 
 export function computeTimeRange(range: RangeKey) {
   const end = new Date();
-  let start = new Date(end.getTime());
+  const dayMs = 24 * 60 * 60 * 1000;
+  const startOfToday = new Date(end.getTime());
+  startOfToday.setHours(0, 0, 0, 0);
 
+  let start = new Date(startOfToday.getTime());
   switch (range) {
     case 'today':
-      start.setHours(0, 0, 0, 0);
+      start = startOfToday;
       break;
     case '7d':
-      start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
+      // include today + previous 6 full days
+      start = new Date(startOfToday.getTime() - 6 * dayMs);
       break;
     case '30d':
-      start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+      // include today + previous 29 full days
+      start = new Date(startOfToday.getTime() - 29 * dayMs);
       break;
     case '90d':
-      start = new Date(end.getTime() - 90 * 24 * 60 * 60 * 1000);
+      // include today + previous 89 full days
+      start = new Date(startOfToday.getTime() - 89 * dayMs);
       break;
   }
 
@@ -104,7 +110,8 @@ export function useReportManager(options?: {
 
         const counts = Array.from({ length: numDays }, (_, i) => {
           const ts = timeRange.startDate.getTime() + i * 24 * 60 * 60 * 1000;
-          const day = new Date(ts).toISOString().slice(0, 10);
+          const d = new Date(ts);
+          const day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
           return dayMap[day] ?? 0;
         });
 

@@ -1,4 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
+import { useThemeColor } from 'heroui-native';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
@@ -7,7 +8,7 @@ import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import type { TID } from '@/domain/core/schemas/id.schema';
 import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import { useGetRecordFieldDistribution } from '@/domain/module/hook/get-record-field-distribution.hook';
-import BarChartAtom from '@/ui/components/atoms/bar-chart.atom';
+import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import PieChartAtom from '@/ui/components/atoms/pie-chart.atom';
 import {
@@ -18,28 +19,43 @@ import {
 } from '@/ui/components/atoms/typography.atom';
 
 export default function HistoryDetailScreen() {
-  const { moduleID } = useLocalSearchParams<{ moduleID: string }>();
+  const { moduleId, moduleID } = useLocalSearchParams<{
+    moduleId?: string;
+    moduleID?: string;
+  }>();
   const { moduleFieldAdapter, recordAdapter, notifyAdapter, cacheAdapter } =
     useAdapters();
 
-  const { execute: executeGetModuleFieldList, items: fields } =
-    useGetListModuleField({
-      loggerAdapter: BASE_LOGGER,
-      moduleFieldAdapter,
-      notifyAdapter,
-    });
+  const foregroundColor = useThemeColor('foreground');
+  const mutedColor = useThemeColor('muted');
 
-  const { execute: executeGetDistribution, items: distributionItems } =
-    useGetRecordFieldDistribution({
-      loggerAdapter: BASE_LOGGER,
-      recordAdapter,
-      notifyAdapter,
-      cacheAdapter,
-    });
+  const {
+    execute: executeGetModuleFieldList,
+    items: fields,
+    isExecuting: isLoadingFields,
+  } = useGetListModuleField({
+    loggerAdapter: BASE_LOGGER,
+    moduleFieldAdapter,
+    notifyAdapter,
+  });
 
-  const handlerLoadModuleFieldList = async (moduleID: TID) => {
-    await executeGetModuleFieldList({ moduleID });
-  };
+  const {
+    execute: executeGetDistribution,
+    items: distributionItems,
+    isExecuting: isLoadingDistribution,
+  } = useGetRecordFieldDistribution({
+    loggerAdapter: BASE_LOGGER,
+    recordAdapter,
+    notifyAdapter,
+    cacheAdapter,
+  });
+
+  const moduleIdValue: TID | null = useMemo(() => {
+    const raw = moduleId ?? moduleID;
+    if (!raw) return null;
+    const parsed = Number(raw);
+    return Number.isFinite(parsed) ? parsed : null;
+  }, [moduleId, moduleID]);
 
   const [selectedFieldId, setSelectedFieldId] = useState<number | null>(null);
   const [range, setRange] = useState<'30d' | '90d' | '7d' | 'today'>('30d');
@@ -49,47 +65,55 @@ export default function HistoryDetailScreen() {
     endDate?: Date;
   } = useMemo(() => {
     const endDate = new Date();
-    let startDate = new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const dayMs = 24 * 60 * 60 * 1000;
+    const startOfToday = new Date(endDate.getTime());
+    startOfToday.setHours(0, 0, 0, 0);
+    let startDate = new Date(startOfToday.getTime() - 29 * dayMs);
     switch (range) {
       case 'today': {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        startDate = today;
+        startDate = startOfToday;
         break;
       }
       case '7d':
-        startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+        startDate = new Date(startOfToday.getTime() - 6 * dayMs);
         break;
       case '30d':
-        startDate = new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000);
+        startDate = new Date(startOfToday.getTime() - 29 * dayMs);
         break;
       case '90d':
-        startDate = new Date(endDate.getTime() - 90 * 24 * 60 * 60 * 1000);
+        startDate = new Date(startOfToday.getTime() - 89 * dayMs);
         break;
     }
     return { startDate, endDate };
   }, [range]);
 
   useEffect(() => {
-    if (moduleID) handlerLoadModuleFieldList(Number(moduleID));
-  }, [moduleID]);
+    if (moduleIdValue === null) return;
+    void executeGetModuleFieldList({ moduleID: moduleIdValue });
+  }, [executeGetModuleFieldList, moduleIdValue]);
 
   useEffect(() => {
-    if (selectedFieldId) {
-      executeGetDistribution({
-        fieldID: selectedFieldId,
-        moduleID: moduleID ? Number(moduleID) : undefined,
-        startDate: timeRange.startDate,
-        endDate: timeRange.endDate,
-      });
-    }
-  }, [selectedFieldId, timeRange.startDate, timeRange.endDate]);
+    if (selectedFieldId === null) return;
+    if (moduleIdValue === null) return;
+    void executeGetDistribution({
+      fieldID: selectedFieldId,
+      moduleID: moduleIdValue,
+      startDate: timeRange.startDate,
+      endDate: timeRange.endDate,
+    });
+  }, [
+    executeGetDistribution,
+    moduleIdValue,
+    selectedFieldId,
+    timeRange.startDate,
+    timeRange.endDate,
+  ]);
 
   useEffect(() => {
-    if (!selectedFieldId && fields && fields.length > 0) {
-      setSelectedFieldId(fields[0].id);
-    }
-  }, [fields]);
+    if (selectedFieldId !== null) return;
+    if (!fields || fields.length === 0) return;
+    setSelectedFieldId(fields[0].id);
+  }, [fields, selectedFieldId]);
 
   return (
     <View className="flex-1 bg-background">
@@ -142,7 +166,14 @@ export default function HistoryDetailScreen() {
               testID="page.history-detail.select-field.secondary"
               i18nKey="page.history_detail.select_field"
             />
-            {fields && fields.length > 0 ? (
+            {isLoadingFields ? (
+              <CardAtom className="p-4 bg-default-100">
+                <TypographyParagraph
+                  testID="page.history-detail.fields.loading"
+                  i18nKey="common.loading"
+                />
+              </CardAtom>
+            ) : fields && fields.length > 0 ? (
               <View className="flex-row flex-wrap gap-2">
                 {fields.map((f) => (
                   <Pressable
@@ -154,8 +185,10 @@ export default function HistoryDetailScreen() {
                     <CardAtom
                       className={`p-3 ${selectedFieldId === f.id ? 'bg-default-100' : 'bg-default-50'}`}
                     >
-                      <Text style={{ fontSize: 16 }}>{f.title}</Text>
-                      <Text style={{ fontSize: 12, color: '#6b7280' }}>
+                      <Text style={{ fontSize: 16, color: foregroundColor }}>
+                        {f.title}
+                      </Text>
+                      <Text style={{ fontSize: 12, color: mutedColor }}>
                         {String(f.type)}
                       </Text>
                     </CardAtom>
@@ -177,11 +210,21 @@ export default function HistoryDetailScreen() {
               testID="page.history-detail.section-title"
               i18nKey="page.history_detail.title"
             />
-            {distributionItems && distributionItems.length > 0 ? (
+            {isLoadingDistribution ? (
+              <CardAtom className="p-4 bg-default-100">
+                <TypographyParagraph
+                  testID="page.history-detail.distribution.loading"
+                  i18nKey="common.loading"
+                />
+              </CardAtom>
+            ) : distributionItems && distributionItems.length > 0 ? (
               <CardAtom className="p-4 bg-default-100">
                 <PieChartAtom values={distributionItems} />
                 <View className="mt-6">
-                  <BarChartAtom values={distributionItems} height={180} />
+                  <BarChartAtom
+                    values={distributionItems}
+                    testID="page.history-detail.distribution.bar-chart"
+                  />
                 </View>
                 <View className="mt-4">
                   {(() => {
@@ -218,9 +261,13 @@ export default function HistoryDetailScreen() {
                                 backgroundColor: color,
                               }}
                             />
-                            <Text style={{ fontSize: 16 }}>{d.value}</Text>
+                            <Text
+                              style={{ fontSize: 16, color: foregroundColor }}
+                            >
+                              {d.value}
+                            </Text>
                           </View>
-                          <Text style={{ fontSize: 12, color: '#6b7280' }}>
+                          <Text style={{ fontSize: 12, color: mutedColor }}>
                             {d.count} · {pct}%
                           </Text>
                         </View>
