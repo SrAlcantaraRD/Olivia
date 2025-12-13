@@ -9,7 +9,7 @@ import type { TModule } from '@/domain/module/entity/module.entity';
 import type { TRecord } from '@/domain/module/entity/record.entity';
 import { useGetRecentRecords } from '@/domain/module/hook/get-recent-records.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
-import { useReportManager } from '@/hooks/use-report-manager.hook';
+import { useModuleStatistics } from '@/hooks/use-report-manager.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
 import {
@@ -21,7 +21,7 @@ import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { HistoryRow } from '@/ui/components/molecules/history-row.molecule';
 import { StatCardWithTrend } from '@/ui/components/molecules/stat-card-with-trend.molecule';
 export default function ReportScreen() {
-  const report = useReportManager();
+  const report = useModuleStatistics();
   const { recordAdapter, notifyAdapter, navigationAdapter } = useAdapters();
   const { goToReportHistoryByModule, goToReportHistoryByRecord } =
     useNavigation({ navigationAdapter });

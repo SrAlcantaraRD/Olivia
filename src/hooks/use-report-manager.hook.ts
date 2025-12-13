@@ -207,9 +207,3 @@ export function useModuleStatistics(options?: {
     getModuleSeries,
   } as const;
 }
-
-export type TUseModuleStatistics = ReturnType<typeof useModuleStatistics>;
-
-// Backward compatibility alias
-export const useReportManager = useModuleStatistics;
-export type TUseReportManager = TUseModuleStatistics;
