@@ -44,6 +44,7 @@ export class SQLiteRecordFieldAdapter implements IRecordFieldPort {
     return {
       id: entity.id,
       status: getStatusFromValue(entity.status),
+      createdAt: entity.createdAt,
 
       recordID: entity.recordID,
       fieldID: entity.fieldID,

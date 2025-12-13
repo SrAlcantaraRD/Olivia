@@ -35,6 +35,7 @@ export class SQLiteCarerAdapter implements ICarerPort {
     return {
       id: entity.id,
       status: getStatusFromValue(entity.status),
+      createdAt: entity.createdAt,
 
       name: entity.name,
       type: getCarerTypeFromValue(entity.type),

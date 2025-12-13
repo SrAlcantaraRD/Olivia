@@ -6,6 +6,7 @@ import { IDSchema } from '@/domain/core/schemas/id.schema';
 export const BaseEntitySchema = z.object({
   id: IDSchema,
   status: statusSchema,
+  createdAt: z.date(),
 });
 
 export type TBaseEntity = z.infer<typeof BaseEntitySchema>;

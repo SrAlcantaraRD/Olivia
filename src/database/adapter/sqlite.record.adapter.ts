@@ -50,6 +50,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
     return {
       id: entity.id,
       status: getStatusFromValue(entity.status),
+      createdAt: entity.createdAt,
 
       carerID: entity.carerID,
       moduleID: entity.moduleID,
@@ -69,6 +70,10 @@ export class SQLiteRecordAdapter implements IRecordPort {
         recordFields: entity.recordFields.map(
           SQLiteRecordFieldAdapter.toDomainEntity
         ),
+      }),
+      // include createdAt (stored as unix epoch seconds)
+      ...(entity.createdAt !== undefined && {
+        createdAt: Number(entity.createdAt),
       }),
     } satisfies TRecord;
   }

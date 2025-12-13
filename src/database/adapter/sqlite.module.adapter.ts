@@ -40,6 +40,7 @@ export class SQLiteModuleAdapter implements IModulePort {
     return {
       id: entity.id,
       status: getStatusFromValue(entity.status),
+      createdAt: entity.createdAt,
 
       code: getModuleKeyFromValue(entity.code),
       name: entity.name,

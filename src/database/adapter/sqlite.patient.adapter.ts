@@ -30,13 +30,13 @@ export class SQLitePatientAdapter implements IPatientPort {
   public static toDomainEntity(entity: TPatientAdapterEntity): TPatient {
     return {
       id: entity.id,
+      status: getStatusFromValue(entity.status),
+      createdAt: entity.createdAt,
 
       name: entity.name,
       birthDate: entity.birthDate,
       sex: getSexTypeFromValue(entity.sex),
       autonomyLevel: getAutonomyLevelFromValue(entity.autonomyLevel),
-
-      status: getStatusFromValue(entity.status),
     } satisfies TPatient;
   }
 
