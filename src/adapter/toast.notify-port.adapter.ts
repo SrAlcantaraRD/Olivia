@@ -5,6 +5,7 @@ import type {
   INotifyPort,
 } from '@/domain/core/port/notify.port';
 
+// TODO: Remove and use HeroUI Native Toast from https://github.com/heroui-inc/heroui-native-example/blob/main/src/components/toast/use-shared-state.ts
 export class ToastUINotifyPortAdapter implements INotifyPort {
   private showToast(
     type: 'success' | 'error' | 'info' | 'delete',
@@ -14,10 +15,10 @@ export class ToastUINotifyPortAdapter implements INotifyPort {
       type,
       text1: params.title,
       text2: params.description,
-      position: 'bottom',
-      visibilityTime: 500,
+      position: 'top',
+      visibilityTime: 5000,
       autoHide: true,
-      bottomOffset: 10,
+      topOffset: 160,
     });
   }
 
