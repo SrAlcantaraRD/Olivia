@@ -8,7 +8,7 @@ export default function ReportLayout() {
       }}
     >
       <Stack.Screen name="index" />
-      <Stack.Screen name="history-detail" options={{ presentation: 'card' }} />
+      <Stack.Screen name="history-detail" options={{ presentation: 'modal' }} />
     </Stack>
   );
 }

@@ -1,15 +1,11 @@
 import { useCallback } from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { ELocaleCode, EThemeMode } from '@/domain/core/enum/settings.enum';
 import { useAppSettings } from '@/domain/core/hook/use-app-settings.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
-import {
-  TypographyParagraph,
-  TypographyTitle,
-} from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { SettingsRow } from '@/ui/components/molecules/settings-row.molecule';
 import { useAppTheme } from '@/ui/themes/app-theme-context';

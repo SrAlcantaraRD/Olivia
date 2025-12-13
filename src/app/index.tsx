@@ -71,7 +71,7 @@ export default function SplashScreen() {
   };
 
   useEffect(() => {
-    notifyAdapter.loading({
+    notifyAdapter.success({
       title: 'welcome',
       description: 'common.view_all',
     });

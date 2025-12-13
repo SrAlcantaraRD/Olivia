@@ -3,12 +3,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { useAdapters } from '@/adapter';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
-import {
-  TypographyParagraph,
-  TypographySmall,
-  TypographySubtitle,
-  TypographyTitle,
-} from '@/ui/components/atoms/typography.atom';
+import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { SettingsRow } from '@/ui/components/molecules/settings-row.molecule';
 
@@ -28,7 +23,11 @@ export default function SettingsScreen() {
       title="page.settings.title"
       subtitle="page.settings.subtitle"
     >
-      <ScrollView className="flex-1" contentInsetAdjustmentBehavior="automatic">
+      <ScrollView
+        className="flex-1"
+        contentInsetAdjustmentBehavior="automatic"
+        showsVerticalScrollIndicator={false}
+      >
         <View className="gap-12">
           {/* Child Profile Section */}
           <CardAtom>

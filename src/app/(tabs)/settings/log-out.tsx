@@ -41,7 +41,7 @@ export default function LogoutConfirmScreen() {
         if (Array.isArray(days) && days.length > 0) {
           setEarliestDay(days[0].day);
         }
-      } catch (err) {
+      } catch (_err) {
         // ignore
       }
     })();
@@ -63,12 +63,12 @@ export default function LogoutConfirmScreen() {
   const daysRegistered = useMemo(() => {
     if (!earliestDay) return '0';
     try {
-      const d = new Date(earliestDay + 'T00:00:00Z');
+      const d = new Date(`${earliestDay}T00:00:00Z`);
       const diff = Math.floor(
         (Date.now() - d.getTime()) / (1000 * 60 * 60 * 24)
       );
       return String(diff);
-    } catch (err) {
+    } catch (_err) {
       return '0';
     }
   }, [earliestDay]);
