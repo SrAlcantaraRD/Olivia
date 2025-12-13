@@ -8,14 +8,14 @@ export default function SettingsLayout() {
       }}
     >
       <Stack.Screen name="index" />
-      <Stack.Screen name="child-profile" options={{ presentation: 'card' }} />
+      <Stack.Screen name="child-profile" options={{ presentation: 'modal' }} />
       <Stack.Screen
         name="carer-management"
-        options={{ presentation: 'card' }}
+        options={{ presentation: 'modal' }}
       />
       <Stack.Screen name="app-settings" options={{ presentation: 'modal' }} />
       <Stack.Screen name="log-out" options={{ presentation: 'modal' }} />
-      <Stack.Screen name="about" options={{ presentation: 'card' }} />
+      <Stack.Screen name="about" options={{ presentation: 'modal' }} />
     </Stack>
   );
 }
