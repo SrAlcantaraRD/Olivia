@@ -11,6 +11,7 @@ import { TypographySmall } from '@/ui/components/atoms/typography.atom';
 
 interface HistoryRowProps {
   record: TRecord;
+  testID: string;
   onPress?: () => void;
 }
 
@@ -22,7 +23,11 @@ const MODULE_ICON_MAP: Record<MODULE_KEY_ENUM, IconName> = Object.freeze({
   [MODULE_KEY_ENUM.ENEMA]: 'trending-up',
 });
 
-export const HistoryRow: FC<HistoryRowProps> = ({ record, onPress }) => {
+export const HistoryRow: FC<HistoryRowProps> = ({
+  record,
+  onPress,
+  testID,
+}) => {
   const moduleName = record.module?.name ?? String(record.moduleID ?? '');
 
   return (
@@ -45,7 +50,7 @@ export const HistoryRow: FC<HistoryRowProps> = ({ record, onPress }) => {
           <View>
             <TypographySmall
               i18nKey="common.raw-value"
-              testID="${testID}.moduel-name"
+              testID={`${testID}.moduel-name`}
               values={{
                 value: moduleName,
               }}
@@ -55,7 +60,7 @@ export const HistoryRow: FC<HistoryRowProps> = ({ record, onPress }) => {
             <TypographySmall
               variant="light"
               i18nKey="common.raw-value"
-              testID="${testID}.moduel-name"
+              testID={`${testID}.moduel-name`}
               values={{
                 value: formatDistanceToNowStrict(record.createdAt, {
                   addSuffix: true,

@@ -21,6 +21,7 @@ import {
   TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { HistoryList } from '@/ui/components/molecules/history-list.molecule';
 import { HistoryRow } from '@/ui/components/molecules/history-row.molecule';
 import { StatCardWithTrend } from '@/ui/components/molecules/stat-card-with-trend.molecule';
 
@@ -121,27 +122,19 @@ export default function ReportScreen() {
             />
 
             <CardAtom>
-              {recentRecordList.length === 0 ? (
-                <TypographySmall
-                  testID="page.report.no-history"
-                  i18nKey="page.report.no-history"
-                  variant="light"
-                  className="text-center"
-                />
-              ) : (
-                <View className="gap-4 divide-y divide-default-100 rounded-md overflow-hidden">
-                  {recentRecordList.map((recentRecord) => (
-                    //TODO: Use a flat-list
-                    <HistoryRow
-                      key={`screen.report.history-record.${recentRecord.id}`}
-                      record={recentRecord}
-                      onPress={() =>
-                        goToReportHistoryByRecord(String(recentRecord.id))
-                      }
-                    />
-                  ))}
-                </View>
-              )}
+              <HistoryList<TRecord>
+                items={recentRecordList}
+                testID="screen.report.history"
+                emptyI18nKey="page.report.no-history"
+                keyExtractor={(item) => String(item.id)}
+                renderItem={(item) => (
+                  <HistoryRow
+                    record={item}
+                    onPress={() => goToReportHistoryByRecord(String(item.id))}
+                    testID={`screen.report.history.item.${item.id}`}
+                  />
+                )}
+              />
             </CardAtom>
           </View>
         </View>
