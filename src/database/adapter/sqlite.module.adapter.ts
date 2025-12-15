@@ -1,5 +1,4 @@
 import { inArray } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/expo-sqlite';
 
 import {
   SQLiteModuleFieldAdapter,
@@ -9,9 +8,11 @@ import {
   SQLiteRecordAdapter,
   type TRecordAdapterEntity,
 } from '@/database/adapter/sqlite.record.adapter';
-import { SQLITE_DB } from '@/database/config/database.config';
+import {
+  buildAdapterClient,
+  type TAppDatabase,
+} from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
-import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
 import {
   getStatusFromValue,
   STATUS_ENUM,
@@ -29,11 +30,8 @@ export type TModuleAdapterEntity = typeof DB_SCHEMA.MODULE.$inferSelect & {
 export class SQLiteModuleAdapter implements IModulePort {
   private readonly database;
 
-  constructor() {
-    this.database = drizzle(SQLITE_DB, {
-      schema: DB_SCHEMA,
-      logger: new DrizzleLogger('Module Adapter'),
-    });
+  constructor(database?: TAppDatabase) {
+    this.database = database ?? buildAdapterClient('Module');
   }
 
   public static toDomainEntity(entity: TModuleAdapterEntity): TModule {

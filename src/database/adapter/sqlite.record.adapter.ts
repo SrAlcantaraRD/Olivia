@@ -1,6 +1,5 @@
 import { fromUnixTime } from 'date-fns';
 import { and, count, desc, eq, gte, lte, sql } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/expo-sqlite';
 
 import {
   SQLiteCarerAdapter,
@@ -14,9 +13,11 @@ import {
   SQLiteRecordFieldAdapter,
   type TRecordFieldAdapterEntity,
 } from '@/database/adapter/sqlite.record-field.adapter';
-import { SQLITE_DB } from '@/database/config/database.config';
+import {
+  buildAdapterClient,
+  type TAppDatabase,
+} from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
-import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
 import {
   getStatusFromValue,
   STATUS_ENUM,
@@ -35,16 +36,13 @@ export type TRecordAdapterEntity = typeof DB_SCHEMA.RECORD.$inferSelect & {
   recordFields?: TRecordFieldAdapterEntity[];
 };
 
-export type TRecordAdapterInsert = typeof DB_SCHEMA.RECORD.$inferInsert;
+type TRecordAdapterInsert = typeof DB_SCHEMA.RECORD.$inferInsert;
 
 export class SQLiteRecordAdapter implements IRecordPort {
-  private readonly database;
+  private readonly database: TAppDatabase;
 
-  constructor() {
-    this.database = drizzle(SQLITE_DB, {
-      schema: DB_SCHEMA,
-      logger: new DrizzleLogger('Record Adapter'),
-    });
+  constructor(database?: TAppDatabase) {
+    this.database = database ?? buildAdapterClient('Record');
   }
 
   public static toDomainEntity(entity: TRecordAdapterEntity): TRecord {
@@ -165,11 +163,9 @@ export class SQLiteRecordAdapter implements IRecordPort {
   }): Promise<{ day: string; count: number }[]> {
     const { startDate, endDate, moduleID } = criteria || {};
     // createdAt is stored as unix epoch seconds in DB; group by LOCAL day to match user expectations
-    const dayExpr = sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch', 'localtime'))`;
+    const dayExpr = sql<string>`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch', 'localtime'))`;
 
-    type TDayCountRow = { day: string; count: number };
-
-    const rows = (await this.database
+    const rows = await this.database
       .select({
         day: dayExpr.as('day'),
         count: count(DB_SCHEMA.RECORD.id).as('count'),
@@ -184,7 +180,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
         )
       )
       .groupBy(dayExpr)
-      .orderBy(dayExpr)) as TDayCountRow[];
+      .orderBy(dayExpr);
 
     return rows;
   }
@@ -196,9 +192,8 @@ export class SQLiteRecordAdapter implements IRecordPort {
     endDate?: Date;
   }): Promise<{ value: string; count: number }[]> {
     const { fieldID, moduleID, startDate, endDate = new Date() } = criteria;
-    type TFieldCountRow = { value: string; count: number };
 
-    const rows = (await this.database
+    const rows = await this.database
       .select({
         value: DB_SCHEMA.RECORD_FIELD.value,
         count: count(DB_SCHEMA.RECORD_FIELD.id).as('count'),
@@ -217,7 +212,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
           ...(moduleID ? [eq(DB_SCHEMA.RECORD.moduleID, moduleID)] : [])
         )
       )
-      .groupBy(DB_SCHEMA.RECORD_FIELD.value)) as TFieldCountRow[];
+      .groupBy(DB_SCHEMA.RECORD_FIELD.value);
 
     return rows;
   }

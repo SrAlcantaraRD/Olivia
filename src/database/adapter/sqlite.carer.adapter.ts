@@ -1,15 +1,15 @@
-import { drizzle } from 'drizzle-orm/expo-sqlite';
-
 import {
   SQLiteRecordAdapter,
   type TRecordAdapterEntity,
 } from '@/database/adapter/sqlite.record.adapter';
-import { SQLITE_DB } from '@/database/config/database.config';
+import {
+  buildAdapterClient,
+  type TAppDatabase,
+} from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
 import type { TCarer, TCarerCreate } from '@/domain/carer/entity/carer.entity';
 import { getCarerTypeFromValue } from '@/domain/carer/enum/carer-type.enums';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
-import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import {
   getStatusFromValue,
@@ -20,15 +20,13 @@ import type { TID } from '@/domain/core/schemas/id.schema';
 export type TCarerAdapterEntity = typeof DB_SCHEMA.CARER.$inferSelect & {
   recordList?: TRecordAdapterEntity[];
 };
+type TCarerAdapterInsert = typeof DB_SCHEMA.CARER.$inferInsert;
 
 export class SQLiteCarerAdapter implements ICarerPort {
   private readonly database;
 
-  constructor() {
-    this.database = drizzle(SQLITE_DB, {
-      schema: DB_SCHEMA,
-      logger: new DrizzleLogger('Carer Adapter'),
-    });
+  constructor(database?: TAppDatabase) {
+    this.database = database ?? buildAdapterClient('Carer');
   }
 
   public static toDomainEntity(entity: TCarerAdapterEntity): TCarer {
@@ -57,7 +55,7 @@ export class SQLiteCarerAdapter implements ICarerPort {
         isPrimary: dto.isPrimary ? 1 : 0,
         pinHash: dto.pinHash,
         status: STATUS_ENUM.ACTIVE,
-      })
+      } satisfies TCarerAdapterInsert)
       .returning();
 
     return SQLiteCarerAdapter.toDomainEntity(item);
