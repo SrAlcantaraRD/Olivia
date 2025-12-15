@@ -7,6 +7,7 @@ module.exports = {
   testMatch: [
     '<rootDir>/tests/unit-test/**/*.test.{ts,tsx}',
     '<rootDir>/tests/unit-test/**/*.spec.{ts,tsx}',
+    '<rootDir>/tests/integration/**/*.spec.{ts,tsx}',
   ],
   cache: false,
   collectCoverageFrom: [
