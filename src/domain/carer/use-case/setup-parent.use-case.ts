@@ -56,15 +56,7 @@ export class SetupParentUseCase extends BaseUseCase<
 
       await this.moduleAdapter.batchActivate(moduleList);
 
-      // persist cache for quick access (non-sensitive in regular cache, sensitive pin in secure store)
-      const cachedCarer = {
-        id: createdCarer.id,
-        name: createdCarer.name,
-        type: createdCarer.type,
-        isPrimary: createdCarer.isPrimary,
-      } as const;
-
-      await this.cacheAdapter.set(CACHE_KEY_ENUM.CARER, cachedCarer);
+      await this.cacheAdapter.set(CACHE_KEY_ENUM.CARER, createdCarer);
 
       // pinHash is sensitive; persist in secure store
       if (createdCarer.pinHash) {
