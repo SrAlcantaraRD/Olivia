@@ -47,10 +47,10 @@ const WEIGHT_CLASS: Record<TypographyWeight, string> = {
 
 // Base typography styles
 const BASE_STYLES = {
-  title: 'tracking-tight mb-4',
-  subtitle: 'tracking-tight mb-3',
-  heading: 'tracking-tight mb-2',
-  paragraph: 'leading-relaxed',
+  title: 'tracking-wide font-serif antialiased',
+  subtitle: 'tracking-wide font-serif antialiased',
+  heading: 'tracking-wide font-serif antialiased',
+  paragraph: 'tracking-wide leading-relaxed font-serif antialiased',
 };
 
 function typographyVariants({
