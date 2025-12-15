@@ -20,6 +20,16 @@ jest.mock('expo-router', () => ({
 
 jest.mock('expo/src/winter/runtime.native.ts', () => ({}));
 
+// jest.mock('@/domain/core/adapter/logger.adapter', () => ({
+//   BASE_LOGGER: {
+//     debug: jest.fn(),
+//     info: jest.fn(),
+//     warn: jest.fn(),
+//     error: jest.fn(),
+//     setSeverity: jest.fn(),
+//   },
+// }));
+
 // Mock de expo-font
 jest.mock('expo-font', () => ({
   loadAsync: jest.fn(),
