@@ -2,6 +2,7 @@
 
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { ICachePort } from '@/domain/core/port/cache.port';
+import type { INotifyPort } from '@/domain/core/port/notify.port';
 
 export function mockLoggerPort(
   overrides?: Partial<Record<keyof TLoggerPort, jest.Mock>>
@@ -39,3 +40,16 @@ export function mockCachePort(
 export const mockSecureStorePort = (
   overrides?: Partial<Record<keyof ICachePort, jest.Mock>>
 ) => mockCachePort(overrides);
+
+export const mockNotifyPort = (
+  overrides?: Partial<Record<keyof INotifyPort, jest.Mock>>
+) => {
+  return {
+    error: jest.fn(),
+    info: jest.fn(),
+    success: jest.fn(),
+    warning: jest.fn(),
+    loading: jest.fn(),
+    ...overrides,
+  } satisfies jest.Mocked<INotifyPort>;
+};
