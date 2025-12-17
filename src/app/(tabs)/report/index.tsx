@@ -18,7 +18,6 @@ import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
 import {
   TypographyHeading,
   TypographyParagraph,
-  TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { HistoryList } from '@/ui/components/molecules/history-list.molecule';
