@@ -262,3 +262,74 @@ En detalle:
 - Posterior degradación a especificación técnica
 
 ---
+
+
+
+Tab nueva: Resumen
+   •   (tabs)/summary/_layout
+      → Layout del stack de “Resumen” (header, theme, gestures, etc.)
+   •   (tabs)/summary/index
+      → Home “Resumen”
+         - Datos fijados
+            - por defecto, uno card por cada modulo activo, cuyo wireframe seria:
+            ```
+               +--------------------------------------------------+
+               |  [logo] [nombre]                    [hh:mm]  (>) | -> hh:mm | ultimo registro [o días desde el último]
+               +                           +------------------+   |
+               |                           |     BAR CHART    |   | -> las barras de dias pasado accent vs primary
+               |                           |    LAST 7 DAYS   |   |
+               +  [today count]            +------------------+   |
+               +--------------------------------------------------+
+            ```
+         - Acceso a “Mostrar todos los datos”
+         - Acceso a “Tendencias”
+         - Datos importantes (highlights)
+
+Rutas Summary (listas / hubs)
+   •   (tabs)/summary/all-data
+      → “Mostrar todos los datos de salud”
+         - Lista de módulos activos
+         - Analisis detallado de los datos, medias, comparaciones y patrónes
+   •   (tabs)/summary/trends/index
+      → “Tendencias”
+         - Lista de tendencias [Si se detectan]
+				 - Lista card de modulos de medias últimas 26 semanas agrupadas por semana
+   •   (tabs)/summary/highlights/index
+      → “Datos importantes”
+         - Lista completa de insights / highlights
+
+Rutas Summary (detalle – plantilla única)
+   •   (tabs)/summary/detail/module/[moduleId]
+      → Detalle de módulo
+         - Ej: CIC, Stool, Medicación
+   •   (tabs)/summary/detail/module/[moduleId]/field/[fieldId]
+      → Detalle de campo dentro de un módulo
+         - Ej: CIC.volumeMl, Stool.bristolType
+   •   (tabs)/summary/detail/trend/[trendId]
+      → Detalle de tendencia
+         - Misma plantilla que módulo/campo
+
+Accesos comunes dentro de Summary (navegación interna)
+   •   Desde Home → (tabs)/summary/all-data
+      (row “Mostrar todos los datos de salud”)
+   •   Desde Home → (tabs)/summary/trends/index
+      (row “Tendencias”)
+   •   Desde Home → (tabs)/summary/highlights/index
+      (row “Mostrar todos los datos importantes”)
+
+Acciones funcionales desde pantallas de detalle
+   •   Opción: “Fijar en Resumen”
+      → Persiste pin (module / field / trend)
+      → Afecta a (tabs)/summary/index
+         (sección “Datos fijados”)
+
+   •   Opción: “Mostrar todos los datos”
+      → Si estás en module detail
+         → (tabs)/summary/all-data
+            (con foco/scroll al módulo)
+      → Si estás en field detail
+         → (tabs)/summary/detail/module/[moduleId]
+            (opcional foco al field)
+      → Si estás en trend detail
+         → (tabs)/summary/all-data
+            o al módulo/campo base del trend

@@ -6,20 +6,19 @@ Este documento describe el esquema de la base de datos local de la aplicación O
 
 ```mermaid
 erDiagram
-    PACIENTE ||--o{ RUTINA : tiene
-    CUIDADOR ||--o{ RUTINA : registra
-    CUIDADOR ||--o{ SYNC_PAYLOAD : genera
+    CARER ||--o{ RECORD : realiza
+    CARER ||--o{ MODULE : activa
 
-    MODULO ||--o{ RUTINA : define_tipo
-    MODULO ||--|{ MODULO_CAMPOS : compone
+    MODULE ||--o{ RECORD : define_tipo
+    MODULE ||--|{ MODULE_FIELD : compone
 
-    RUTINA ||--|{ RUTINA_CAMPOS : contiene
-    MODULO_CAMPOS ||--o{ RUTINA_CAMPOS : estructura
+    RECORD ||--|{ RECORD_FIELD : contiene
+    MODULE_FIELD ||--o{ RECORD_FIELD : estructura
 ```
 
 
 Relaciones principales:
-- `routines` está relacionada con `carers`, `children` y `modules`.
-- `module_fields` pertenece a `modules`.
-- `routine_fields` conecta `routines` y `module_fields`.
-- `sync_payloads` está relacionada con `carers`.
+- `record` está relacionada con `carer` y `module`.
+- `module-field` pertenece a `module`.
+- `record-field` conecta `record` y `module-field`.
+- `sync_payloads` está relacionada con `carer`.
