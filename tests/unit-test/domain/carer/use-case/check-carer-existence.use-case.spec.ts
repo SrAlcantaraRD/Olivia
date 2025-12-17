@@ -6,7 +6,9 @@ describe('[UseCase] - CheckCarerExistence', () => {
   const prepareSuiteCase = () => {
     const carerPort = mockCarerPort();
     const loggerPort = mockLoggerPort();
+
     const useCase = new CheckCarerExistenceUseCase(loggerPort, carerPort);
+
     return { useCase, carerPort, loggerPort };
   };
 

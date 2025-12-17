@@ -7,6 +7,54 @@ import {
   mockModuleFieldEntity,
 } from '../../domain/module/mocks/mock.entities';
 
+const mockField = mockModuleFieldEntity({ required: true });
+
+jest.mock('@/domain/module/use-case/get-module-field-list.use-case', () => ({
+  GetModuleFieldListUseCase: jest.fn().mockImplementation(() => ({
+    execute: jest.fn().mockResolvedValue({
+      success: true,
+      details: { items: [mockField] },
+    }),
+  })),
+}));
+
+jest.mock('@/domain/module/hook/get-list-module-field.hook', () => ({
+  useGetListModuleField: jest.fn(() => ({
+    execute: jest.fn(),
+    items: [mockField],
+  })),
+}));
+
+jest.mock('expo-sqlite', () => ({
+  openDatabaseSync: jest.fn(() => ({})),
+}));
+
+jest.mock('drizzle-orm/expo-sqlite', () => ({
+  drizzle: jest.fn(() => ({
+    select: jest.fn(() => ({
+      from: jest.fn(() => ({
+        where: jest.fn(() => ({
+          all: jest.fn(() => []),
+        })),
+      })),
+    })),
+  })),
+}));
+
+jest.mock('@/database/config/database.config', () => ({
+  DB_CLIENT: {
+    select: jest.fn(() => ({
+      from: jest.fn(() => ({
+        where: jest.fn(() => ({
+          all: jest.fn(() => []),
+        })),
+      })),
+    })),
+  },
+  SQLITE_DB: {},
+  buildAdapterClient: jest.fn(),
+}));
+
 describe('[Hook] useModuleWizard', () => {
   it('creates steps from module field and handles select option navigation', () => {
     const mockField = mockModuleFieldEntity();

@@ -33,7 +33,7 @@ describe('useWipeLocalData', () => {
     });
 
     expect((resp as { success: boolean }).success).toBe(true);
-    expect(mockCache.delete).toHaveBeenCalled();
-    expect(mockSecure.delete).toHaveBeenCalled();
+    expect(mockCache.clearAll).toHaveBeenCalled();
+    expect(mockSecure.clearAll).toHaveBeenCalled();
   });
 });

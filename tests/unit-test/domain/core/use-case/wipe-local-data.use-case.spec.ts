@@ -1,6 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
 import { WipeLocalDataUseCase } from '@/domain/core/use-case/wipe-local-data.use-case';
 import {
   mockCachePort,
@@ -8,8 +7,13 @@ import {
   mockSecureStorePort,
 } from '../mocks/mock.port';
 
+// mock dropDatabase to avoid touching real DB
+jest.mock('@/database/config/drop-database.config', () => ({
+  dropDatabase: jest.fn().mockResolvedValue(undefined),
+}));
+
 describe('[UseCase] WipeLocalDataUseCase', () => {
-  it('deletes cache keys, secure keys and drops the database', async () => {
+  it('clears cache, secure keys and drops the database', async () => {
     const mockCache = mockCachePort();
     const mockSecure = mockSecureStorePort();
     const mockLogger = mockLoggerPort();
@@ -20,9 +24,8 @@ describe('[UseCase] WipeLocalDataUseCase', () => {
 
     expect(resp.success).toBe(true);
 
-    const keys = Object.values(CACHE_KEY_ENUM);
-    // ensure delete called for each key on both adapters
-    expect(mockCache.delete).toHaveBeenCalledTimes(keys.length);
-    expect(mockSecure.delete).toHaveBeenCalledTimes(keys.length);
+    // ensure clearAll called on both adapters
+    expect(mockCache.clearAll).toHaveBeenCalled();
+    expect(mockSecure.clearAll).toHaveBeenCalled();
   });
 });

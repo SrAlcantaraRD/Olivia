@@ -52,8 +52,10 @@ describe('[UseCase] - Setup Parent', () => {
 
     const carerDTO = mockCarerCreate();
     const patientDTO = mockPatientCreate();
-    const moduleList = [99];
+    const moduleList = [mockModuleEntity().id];
 
+    carerAdapter.create.mockResolvedValue({ id: 'carer-001' });
+    patientAdapter.create.mockResolvedValue({ id: 'patient-001' });
     moduleAdapter.batchActivate.mockResolvedValueOnce(undefined);
 
     const response = await useCase.execute({

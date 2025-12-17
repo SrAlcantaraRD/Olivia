@@ -1,18 +1,74 @@
+const mockedDb = {
+  select: jest.fn(() => ({
+    from: jest.fn(() => ({
+      where: jest.fn(() => ({
+        limit: jest.fn(() => ({
+          all: jest.fn(() => []),
+        })),
+      })),
+    })),
+  })),
+  insert: jest.fn(() => ({
+    values: jest.fn(() => ({
+      onConflictDoNothing: jest.fn(() => ({
+        execute: jest.fn(),
+      })),
+    })),
+  })),
+  update: jest.fn(() => ({
+    set: jest.fn(() => ({
+      where: jest.fn(() => ({
+        execute: jest.fn(),
+      })),
+    })),
+  })),
+  delete: jest.fn(() => ({
+    where: jest.fn(() => ({
+      execute: jest.fn(),
+    })),
+  })),
+  query: {
+    RECORD: {
+      findMany: jest.fn(),
+    },
+  },
+};
+
+jest.mock('drizzle-orm/expo-sqlite', () => ({
+  drizzle: jest.fn(() => mockedDb),
+}));
+
+jest.mock('@/database/config/database.config', () => ({
+  DB_CLIENT: mockedDb,
+  SQLITE_DB: {},
+  buildAdapterClient: jest.fn(() => mockedDb),
+}));
+
 import { jest } from '@jest/globals';
 
 import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
 
 describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
   it('getFieldDistribution uses database.execute when available (no moduleID)', async () => {
-    const adapter = new SQLiteRecordAdapter();
+    const adapter = new SQLiteRecordAdapter(mockedDb);
 
     const mockExecute = jest
-      .fn<() => Promise<{ value: string; count: number }[]>>()
-      .mockResolvedValue([{ value: 'A', count: 2 }]);
+      .fn<() => Promise<{ rows: { value: string; count: number }[] }>>()
+      .mockResolvedValue({ rows: [{ value: 'A', count: 2 }] });
     // inject fake database object with execute
-    (adapter as unknown as { database: { execute: unknown } }).database = {
-      // using non-strict cast for test convenience
-      execute: mockExecute as unknown,
+    (adapter as unknown as { database: unknown }).database = {
+      execute: mockExecute,
+      select: jest.fn(() => ({
+        from: jest.fn(() => ({
+          innerJoin: jest.fn(() => ({
+            where: jest.fn(() => ({
+              groupBy: jest.fn(() => ({
+                toSQL: jest.fn(() => 'sql'),
+              })),
+            })),
+          })),
+        })),
+      })),
     };
 
     const result = await adapter.getFieldDistribution({
@@ -47,7 +103,7 @@ describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
   });
 
   it('getCountsByModule falls back to in-memory when execute is not available', async () => {
-    const adapter = new SQLiteRecordAdapter();
+    const adapter = new SQLiteRecordAdapter(mockedDb);
 
     const nowEpoch = Math.floor(Date.now() / 1000);
     // Provide a stubbed query.RECORD.findMany
@@ -118,7 +174,7 @@ import { describe, expect, it } from '@jest/globals';
 
 describe('SQLiteRecordAdapter aggregations', () => {
   it('getFieldDistribution uses database.execute when available (no moduleID)', async () => {
-    const adapter = new SQLiteRecordAdapter();
+    const adapter = new SQLiteRecordAdapter(mockedDb);
 
     const mockExecute = jest
       .fn<() => Promise<{ value: string; count: number }[]>>()
@@ -139,7 +195,7 @@ describe('SQLiteRecordAdapter aggregations', () => {
   });
 
   it('getCountsByModule falls back to in-memory when execute is not available', async () => {
-    const adapter = new SQLiteRecordAdapter();
+    const adapter = new SQLiteRecordAdapter(mockedDb);
 
     const nowEpoch = Math.floor(Date.now() / 1000);
     // Provide a stubbed query.RECORD.findMany
@@ -208,7 +264,7 @@ describe('SQLiteRecordAdapter aggregations', () => {
 
 describe('SQLiteRecordAdapter aggregations', () => {
   it('calls database.execute with correct SQL when execute is available (no moduleID)', async () => {
-    const adapter = new SQLiteRecordAdapter();
+    const adapter = new SQLiteRecordAdapter(mockedDb);
 
     const mockExecute = jest
       .fn<() => Promise<{ value: string; count: number }[]>>()
@@ -229,7 +285,7 @@ describe('SQLiteRecordAdapter aggregations', () => {
   });
 
   it('calls database.execute with correct SQL when execute is available (with moduleID)', async () => {
-    const adapter = new SQLiteRecordAdapter();
+    const adapter = new SQLiteRecordAdapter(mockedDb);
 
     const mockExecute = jest
       .fn<() => Promise<{ value: string; count: number }[]>>()
@@ -254,7 +310,7 @@ describe('SQLiteRecordAdapter aggregations', () => {
 
 describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
   it('getCountsByModule aggregates counts correctly', async () => {
-    const adapter = new SQLiteRecordAdapter();
+    const adapter = new SQLiteRecordAdapter(mockedDb);
 
     const nowEpoch = Math.floor(Date.now() / 1000);
     // Spy on the database query method to return a curated list

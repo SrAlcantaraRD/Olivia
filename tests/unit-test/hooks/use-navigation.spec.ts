@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react-native';
+import type { Href } from 'expo-router';
 
 import type { INavigationPort } from '@/domain/ports/navigation.port';
 import { useNavigation } from '@/hooks/use-navigation.hook';
@@ -21,7 +22,7 @@ describe('useNavigation', () => {
     result.current.navigateTo('/(onboarding)/role-selection');
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(onboarding)/role-selection'
+      '/(onboarding)/role-selection' satisfies Href
     );
   });
 
@@ -43,7 +44,7 @@ describe('useNavigation', () => {
     result.current.goToRoleSelection();
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(onboarding)/role-selection'
+      '/(onboarding)/role-selection' satisfies Href
     );
   });
 
@@ -55,7 +56,7 @@ describe('useNavigation', () => {
     result.current.goToParentSetup();
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(onboarding)/parent-setup'
+      '/(onboarding)/parent-setup' satisfies Href
     );
   });
 
@@ -67,7 +68,7 @@ describe('useNavigation', () => {
     result.current.goToConfirmLink();
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(caregiver-setup)/confirm-link'
+      '/(caregiver-setup)/confirm-link' satisfies Href satisfies Href
     );
   });
 
@@ -79,7 +80,7 @@ describe('useNavigation', () => {
     result.current.goToScanQr();
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(caregiver-setup)/scan-qr'
+      '/(caregiver-setup)/scan-qr' satisfies Href
     );
   });
 
@@ -91,7 +92,7 @@ describe('useNavigation', () => {
     result.current.goToRegister(1);
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(tabs)/register/execute-register'
+      '/(tabs)/register/execute-register?moduleID=1' satisfies Href
     );
   });
 
@@ -103,7 +104,7 @@ describe('useNavigation', () => {
     result.current.goToFilterHistory();
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(modals)/modal-filter-history'
+      '/(modals)/modal-filter-history' satisfies Href
     );
   });
 
@@ -115,7 +116,7 @@ describe('useNavigation', () => {
     result.current.goToOnboarding();
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(onboarding)'
+      '/(onboarding)' satisfies Href
     );
   });
 });

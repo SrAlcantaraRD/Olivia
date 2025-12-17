@@ -20,34 +20,82 @@ jest.mock('expo-router', () => ({
 
 jest.mock('expo/src/winter/runtime.native.ts', () => ({}));
 
-// jest.mock('@/domain/core/adapter/logger.adapter', () => ({
-//   BASE_LOGGER: {
-//     debug: jest.fn(),
-//     info: jest.fn(),
-//     warn: jest.fn(),
-//     error: jest.fn(),
-//     setSeverity: jest.fn(),
-//   },
-// }));
-
-// Mock de expo-font
-jest.mock('expo-font', () => ({
-  loadAsync: jest.fn(),
-  isLoaded: jest.fn(() => true),
+// Mock de expo-sqlite
+jest.mock('expo-sqlite', () => ({
+  openDatabaseSync: jest.fn(() => ({
+    // Mock database object
+  })),
 }));
 
-// Mock de expo-splash-screen
-jest.mock('expo-splash-screen', () => ({
-  hideAsync: jest.fn(),
-  preventAutoHideAsync: jest.fn(),
+// Mock de drizzle-orm/expo-sqlite
+jest.mock('drizzle-orm/expo-sqlite', () => ({
+  drizzle: jest.fn(() => ({
+    select: jest.fn(() => ({
+      from: jest.fn(() => ({
+        where: jest.fn(() => ({
+          limit: jest.fn(() => ({
+            all: jest.fn(() => []),
+          })),
+        })),
+      })),
+    })),
+    insert: jest.fn(() => ({
+      values: jest.fn(() => ({
+        onConflictDoNothing: jest.fn(() => ({
+          execute: jest.fn(),
+        })),
+      })),
+    })),
+    update: jest.fn(() => ({
+      set: jest.fn(() => ({
+        where: jest.fn(() => ({
+          execute: jest.fn(),
+        })),
+      })),
+    })),
+    delete: jest.fn(() => ({
+      where: jest.fn(() => ({
+        execute: jest.fn(),
+      })),
+    })),
+  })),
 }));
 
-// Mock de react-native-reanimated
-jest.mock('react-native-reanimated', () => {
-  const Reanimated = require('react-native-reanimated/mock');
-  Reanimated.default.call = () => {};
-  return Reanimated;
-});
+// Mock de database config
+jest.mock('@/database/config/database.config', () => ({
+  DB_CLIENT: {
+    select: jest.fn(() => ({
+      from: jest.fn(() => ({
+        where: jest.fn(() => ({
+          limit: jest.fn(() => ({
+            all: jest.fn(() => []),
+          })),
+        })),
+      })),
+    })),
+    insert: jest.fn(() => ({
+      values: jest.fn(() => ({
+        onConflictDoNothing: jest.fn(() => ({
+          execute: jest.fn(),
+        })),
+      })),
+    })),
+    update: jest.fn(() => ({
+      set: jest.fn(() => ({
+        where: jest.fn(() => ({
+          execute: jest.fn(),
+        })),
+      })),
+    })),
+    delete: jest.fn(() => ({
+      where: jest.fn(() => ({
+        execute: jest.fn(),
+      })),
+    })),
+  },
+  SQLITE_DB: {},
+  buildAdapterClient: jest.fn(),
+}));
 
 // Mock de expo-haptics
 jest.mock('expo-haptics', () => ({

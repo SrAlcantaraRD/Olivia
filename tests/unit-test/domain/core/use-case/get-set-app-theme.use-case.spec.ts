@@ -15,6 +15,7 @@ describe('AppTheme use-cases', () => {
 
   it('GetAppThemeUseCase returns cached theme when present', async () => {
     const { loggerAdapter, cacheAdapter } = prepareSuiteCase();
+    cacheAdapter.get.mockResolvedValue('dark');
 
     const usecase = new GetAppThemeUseCase(loggerAdapter, cacheAdapter);
 
@@ -28,14 +29,14 @@ describe('AppTheme use-cases', () => {
     expect(cacheAdapter.get).toHaveBeenCalledWith(CACHE_KEY_ENUM.APP_THEME);
   });
 
-  it('GetAppThemeUseCase returns null when no cached theme', async () => {
+  it('GetAppThemeUseCase returns default theme when no cached theme', async () => {
     const { loggerAdapter, cacheAdapter } = prepareSuiteCase();
-    (cacheAdapter.get as jest.Mock).mockResolvedValue(null);
+    cacheAdapter.get.mockResolvedValue(null);
     const usecase = new GetAppThemeUseCase(loggerAdapter, cacheAdapter);
     const resp = await usecase.execute();
     expect(resp.success).toBe(true);
     if (resp.success) {
-      expect(resp.details).toBeUndefined();
+      expect(resp.details).toBe('light');
     }
   });
 

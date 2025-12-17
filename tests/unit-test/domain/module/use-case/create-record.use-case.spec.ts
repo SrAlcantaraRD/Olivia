@@ -1,45 +1,54 @@
 import { describe, expect, it } from '@jest/globals';
 
-import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 import type {
   TRecord,
   TRecordCreate,
 } from '@/domain/module/entity/record.entity';
-import type { IRecordPort } from '@/domain/module/port/record.port';
-import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import { CreateRecordUseCase } from '@/domain/module/use-case/create-record.use-case';
+import { mockLoggerPort } from '../../core/mocks/mock.port';
+import { mockRecordCreate, mockRecordEntity } from '../mocks/mock.entities';
+import { mockRecordFieldPort, mockRecordPort } from '../mocks/mock.port';
 
 describe('[UseCase] CreateRecordUseCase', () => {
-  it('calls adapter.create and returns success', async () => {
-    const mockRecord: TRecord = {
-      id: 1,
-      moduleID: 1,
-      data: JSON.stringify({ values: { 1: 'a' } }),
-      synced: false,
-      status: STATUS_ENUM.ACTIVE,
-    } as TRecord;
-
-    const mockAdapter: IRecordPort = {
-      create: jest.fn().mockResolvedValue(mockRecord),
-    } as unknown as IRecordPort;
+  const prepareSuiteCase = () => {
+    // Arrange
+    const loggerAdapter = mockLoggerPort();
+    const recordAdapter = mockRecordPort();
+    const recordFieldAdapter = mockRecordFieldPort();
 
     const useCase = new CreateRecordUseCase({
-      loggerAdapter: { info: () => {} } as unknown as TLoggerPort,
-      recordAdapter: mockAdapter,
-      recordFieldAdapter: {} as unknown as IRecordFieldPort,
+      loggerAdapter,
+      recordAdapter,
+      recordFieldAdapter,
     });
-    const payload: TRecordCreate = {
+
+    return { useCase, loggerAdapter, recordAdapter, recordFieldAdapter };
+  };
+
+  beforeEach(() => jest.clearAllMocks());
+
+  it('calls adapter.create and returns success', async () => {
+    const { recordAdapter, recordFieldAdapter, useCase } = prepareSuiteCase();
+
+    const mockRecord: TRecord = mockRecordEntity({
+      status: STATUS_ENUM.ACTIVE,
+    });
+
+    const payload: TRecordCreate = mockRecordCreate({
       moduleID: 1,
       data: mockRecord.data,
       synced: false,
-    } as TRecordCreate;
+    });
+
+    recordAdapter.create.mockResolvedValue(mockRecord);
+    recordFieldAdapter.batchCreate.mockResolvedValue([]);
 
     const resp = await useCase.execute(payload);
     expect(resp.success).toBe(true);
     if (resp.success) {
       expect(resp.details).toEqual(mockRecord);
     }
-    expect(mockAdapter.create).toHaveBeenCalledWith(payload);
+    expect(recordAdapter.create).toHaveBeenCalledWith(payload);
   });
 });
