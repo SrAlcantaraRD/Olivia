@@ -9,6 +9,12 @@ import { SQLiteModuleAdapter } from '@/database/adapter/sqlite.module.adapter';
 import { SQLitePatientAdapter } from '@/database/adapter/sqlite.patient.adapter';
 import { SQLiteRecordFieldAdapter } from '@/database/adapter/sqlite.record-field.adapter';
 import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
+import { FakeDataSummaryDetailAdapter } from '@/database/adapter/fake-data.summary-detail.adapter';
+import { FakeDataSummaryHighlightAdapter } from '@/database/adapter/fake-data.summary-highlight.adapter';
+import { FakeDataSummaryModuleAdapter } from '@/database/adapter/fake-data.summary-module.adapter';
+import { FakeDataSummaryPinsAdapter } from '@/database/adapter/fake-data.summary-pins.adapter';
+import { FakeDataSummarySnapshotAdapter } from '@/database/adapter/fake-data.summary-snapshot.adapter';
+import { FakeDataSummaryTrendAdapter } from '@/database/adapter/fake-data.summary-trend.adapter';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import {
   BASE_LOGGER,
@@ -22,6 +28,12 @@ import type { IModulePort } from '@/domain/module/port/module.port';
 import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import type { IRecordPort } from '@/domain/module/port/record.port';
 import type { IPatientPort } from '@/domain/patient/port/patient.port';
+import type { ISummaryDetailPort } from '@/domain/summary/port/summary-detail.port';
+import type { ISummaryHighlightPort } from '@/domain/summary/port/summary-highlight.port';
+import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
+import type { ISummaryPinsPort } from '@/domain/summary/port/summary-pins.port';
+import type { ISummarySnapshotPort } from '@/domain/summary/port/summary-snapshot.port';
+import type { ISummaryTrendPort } from '@/domain/summary/port/summary-trend.port';
 
 interface IAdapters {
   cacheAdapter: ICachePort;
@@ -35,6 +47,12 @@ interface IAdapters {
   recordAdapter: IRecordPort;
   recordFieldAdapter: IRecordFieldPort;
   secureStoreAdapter: ICachePort;
+  summaryDetailAdapter: ISummaryDetailPort;
+  summaryHighlightAdapter: ISummaryHighlightPort;
+  summaryModuleAdapter: ISummaryModulePort;
+  summaryPinsAdapter: ISummaryPinsPort;
+  summarySnapshotAdapter: ISummarySnapshotPort;
+  summaryTrendAdapter: ISummaryTrendPort;
 }
 
 export const useAdapters = (): Readonly<IAdapters> => {
@@ -50,6 +68,13 @@ export const useAdapters = (): Readonly<IAdapters> => {
   const recordAdapter = new SQLiteRecordAdapter();
   const recordFieldAdapter = new SQLiteRecordFieldAdapter();
 
+  const summaryModuleAdapter = new FakeDataSummaryModuleAdapter();
+  const summaryDetailAdapter = new FakeDataSummaryDetailAdapter();
+  const summaryTrendAdapter = new FakeDataSummaryTrendAdapter();
+  const summaryHighlightAdapter = new FakeDataSummaryHighlightAdapter();
+  const summaryPinsAdapter = new FakeDataSummaryPinsAdapter();
+  const summarySnapshotAdapter = new FakeDataSummarySnapshotAdapter();
+
   const secureStoreAdapter = new SecureStoreCacheAdapter();
   // const cacheAdapter = new SecureStoreCacheAdapter();
 
@@ -63,6 +88,12 @@ export const useAdapters = (): Readonly<IAdapters> => {
     recordAdapter,
     navigationAdapter,
     recordFieldAdapter,
+    summaryDetailAdapter,
+    summaryHighlightAdapter,
+    summaryModuleAdapter,
+    summaryPinsAdapter,
+    summarySnapshotAdapter,
+    summaryTrendAdapter,
     cacheAdapter: secureStoreAdapter,
     secureStoreAdapter,
   });
