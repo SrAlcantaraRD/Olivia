@@ -1,7 +1,7 @@
 import { TIME_RANGE_ENUM } from '@/domain/core/enum/time-range.enum';
 import { computeTimeRange } from '@/hooks/use-report-manager.hook';
 
-describe('computeTimeRange', () => {
+describe('[Hook] uuseComputeTimeRange', () => {
   it('returns today range with start at 00:00 local', () => {
     const { startDate, endDate } = computeTimeRange(TIME_RANGE_ENUM.TODAY);
     const now = new Date();

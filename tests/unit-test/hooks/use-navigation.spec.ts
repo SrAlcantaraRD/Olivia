@@ -1,10 +1,10 @@
 import { renderHook } from '@testing-library/react-native';
 import type { Href } from 'expo-router';
 
-import type { INavigationPort } from '@/domain/ports/navigation.port';
+import type { INavigationPort } from '@/domain/core/port/navigation.port';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 
-describe('useNavigation', () => {
+describe('[Hook] useNavigation', () => {
   let mockNavigationAdapter: jest.Mocked<INavigationPort>;
 
   beforeEach(() => {
