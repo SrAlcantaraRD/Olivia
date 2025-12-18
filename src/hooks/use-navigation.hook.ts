@@ -40,6 +40,10 @@ export const useNavigation = (adapters: {
     navigateTo(`/(tabs)/register/execute-register?moduleID=${moduleID}`);
   }, []);
 
+  const goToRegisterHome = useCallback(() => {
+    navigateTo('/(tabs)/register');
+  }, []);
+
   const goToFilterHistory = useCallback(() => {
     navigateTo('/(modals)/modal-filter-history');
   }, []);
@@ -76,6 +80,39 @@ export const useNavigation = (adapters: {
     navigateTo(`/(tabs)/report/history-detail?recordId=${recordId}`);
   }, []);
 
+  const goToSummaryHome = useCallback(() => {
+    navigateTo('/(tabs)/summary');
+  }, []);
+
+  const goToSummaryAllData = useCallback(() => {
+    navigateTo('/(tabs)/summary/all-data');
+  }, []);
+
+  const goToSummaryTrends = useCallback(() => {
+    navigateTo('/(tabs)/summary/trends');
+  }, []);
+
+  const goToSummaryHighlights = useCallback(() => {
+    navigateTo('/(tabs)/summary/highlights');
+  }, []);
+
+  const goToSummaryModuleDetail = useCallback((moduleId: string) => {
+    navigateTo(`/(tabs)/summary/detail/module/${moduleId}`);
+  }, []);
+
+  const goToSummaryFieldDetail = useCallback(
+    (moduleId: string, fieldId: string) => {
+      navigateTo(
+        `/(tabs)/summary/detail/module/${moduleId}/field/${fieldId}`
+      );
+    },
+    []
+  );
+
+  const goToSummaryTrendDetail = useCallback((trendId: string) => {
+    navigateTo(`/(tabs)/summary/detail/trend/${trendId}`);
+  }, []);
+
   // Add more as needed
 
   return {
@@ -86,6 +123,7 @@ export const useNavigation = (adapters: {
     goToConfirmLink,
     goToScanQr,
     goToRegister: goToRegister,
+    goToRegisterHome,
     goToFilterHistory,
     goToOnboarding,
     goToAppSettings,
@@ -95,5 +133,12 @@ export const useNavigation = (adapters: {
     goToAbout,
     goToReportHistoryByModule,
     goToReportHistoryByRecord,
+    goToSummaryHome,
+    goToSummaryAllData,
+    goToSummaryTrends,
+    goToSummaryHighlights,
+    goToSummaryModuleDetail,
+    goToSummaryFieldDetail,
+    goToSummaryTrendDetail,
   };
 };

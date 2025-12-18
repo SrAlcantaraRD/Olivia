@@ -13,6 +13,7 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INavigationPort } from '@/domain/core/port/navigation.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
+import { useNavigation } from '@/hooks/use-navigation.hook';
 
 export function useSplashCarerValidation(adapters: {
   loggerAdapter: TLoggerPort;
@@ -26,6 +27,7 @@ export function useSplashCarerValidation(adapters: {
 
   const { loggerAdapter, notifyAdapter, carerAdapter, navigationAdapter } =
     adapters;
+  const { goToRegisterHome } = useNavigation({ navigationAdapter });
 
   const execute = useCallback(
     async (
@@ -44,8 +46,7 @@ export function useSplashCarerValidation(adapters: {
           return { success: false };
         }
 
-        // TODO: ¿Should use useNavigation hook?
-        navigationAdapter.navigateTo('/(tabs)/register');
+        goToRegisterHome();
 
         return { success: true, data: response.details };
       } catch (_error) {
@@ -58,7 +59,7 @@ export function useSplashCarerValidation(adapters: {
         setExecuting(false);
       }
     },
-    [loggerAdapter, notifyAdapter, carerAdapter]
+    [loggerAdapter, notifyAdapter, carerAdapter, goToRegisterHome]
   );
 
   return {

@@ -118,6 +118,7 @@ export const enEN = Object.freeze({
   // Tab navigation
   'tab.register': 'Register',
   'tab.report': 'Report',
+  'tab.summary': 'Summary',
   'tab.settings': 'Settings',
 
   // Page: Register Tab
@@ -134,6 +135,60 @@ export const enEN = Object.freeze({
   'page.report.statistics': 'Statistics',
   'page.report.history': 'History',
   'page.report.no-history': 'No records in history',
+
+  // Page: Summary Tab
+  'page.summary.title': 'Summary',
+  'page.summary.subtitle': 'A quick overview of health data',
+  'page.summary.section.pinned': 'Pinned data',
+  'page.summary.section.modules': 'Modules',
+  'page.summary.pins-empty': 'Pin items to see them here',
+  'page.summary.modules-empty': 'No module summaries available',
+  'page.summary.today-count': 'Today: {{value}}',
+  'page.summary.all-data': 'Show all health data',
+  'page.summary.trends': 'Trends',
+  'page.summary.highlights': 'Highlights',
+
+  // Page: Summary All Data
+  'page.summary-all-data.title': 'All health data',
+  'page.summary-all-data.subtitle': 'Browse modules and details',
+  'page.summary-all-data.heading': 'Active modules',
+  'page.summary-all-data.empty': 'No active modules yet',
+
+  // Page: Summary Trends
+  'page.summary-trends.title': 'Trends',
+  'page.summary-trends.subtitle': 'Detected patterns and changes',
+  'page.summary-trends.heading': 'Recent trends',
+  'page.summary-trends.empty': 'No trends available yet',
+
+  // Page: Summary Highlights
+  'page.summary-highlights.title': 'Highlights',
+  'page.summary-highlights.subtitle': 'Important insights',
+  'page.summary-highlights.heading': 'Highlights',
+  'page.summary-highlights.empty': 'No highlights available yet',
+
+  // Page: Summary Detail
+  'page.summary-detail.title': 'Summary detail',
+  'page.summary-detail.subtitle': 'Detail view',
+  'page.summary-detail.heading': 'Detail information',
+
+  // Summary Trends (fake data)
+  'summary.trend.cic.up.title': 'CIC increasing in recent weeks',
+  'summary.trend.cic.up.description': 'Your CIC count has risen lately.',
+  'summary.trend.stool.stable.title': 'Stool pattern stable',
+  'summary.trend.stool.stable.description':
+    'Stool frequency has remained steady.',
+
+  // Summary Highlights (fake data)
+  'summary.highlight.cic.high.title': 'CIC above usual average',
+  'summary.highlight.cic.high.description':
+    'Your CIC average is above the usual range.',
+  'summary.highlight.urine.up.title': 'Urine volume increasing',
+  'summary.highlight.urine.up.description':
+    'Daily urine volume shows an upward trend.',
+
+  // Summary Detail placeholders
+  'summary.detail.comparison.default': 'Compared to your average',
+  'summary.detail.projection.default': 'Projection not available yet',
 
   // Page: History Detail
   'page.history-detail.title': 'History Detail',

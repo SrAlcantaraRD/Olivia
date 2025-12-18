@@ -129,6 +129,7 @@ export const caCA = Object.freeze({
   // Tab navigation
   'tab.register': 'Registre',
   'tab.report': 'Informe',
+  'tab.summary': 'Resum',
   'tab.settings': 'Configuració',
 
   // Page: Register Tab
@@ -145,6 +146,60 @@ export const caCA = Object.freeze({
   'page.report.statistics': 'Estadístiques',
   'page.report.history': 'Història',
   'page.report.no-history': 'No hi ha registres a la història',
+
+  // Page: Summary Tab
+  'page.summary.title': 'Resum',
+  'page.summary.subtitle': 'Vista ràpida de dades de salut',
+  'page.summary.section.pinned': 'Dades fixades',
+  'page.summary.section.modules': 'Mòduls',
+  'page.summary.pins-empty': 'Fixa elements per veure-los aquí',
+  'page.summary.modules-empty': 'No hi ha mòduls per mostrar',
+  'page.summary.today-count': 'Avui: {{value}}',
+  'page.summary.all-data': 'Mostrar totes les dades de salut',
+  'page.summary.trends': 'Tendències',
+  'page.summary.highlights': 'Dades importants',
+
+  // Page: Summary All Data
+  'page.summary-all-data.title': 'Totes les dades de salut',
+  'page.summary-all-data.subtitle': 'Explora mòduls i detalls',
+  'page.summary-all-data.heading': 'Mòduls actius',
+  'page.summary-all-data.empty': 'Encara no hi ha mòduls actius',
+
+  // Page: Summary Trends
+  'page.summary-trends.title': 'Tendències',
+  'page.summary-trends.subtitle': 'Patrons i canvis detectats',
+  'page.summary-trends.heading': 'Tendències recents',
+  'page.summary-trends.empty': 'No hi ha tendències disponibles',
+
+  // Page: Summary Highlights
+  'page.summary-highlights.title': 'Dades importants',
+  'page.summary-highlights.subtitle': 'Insights rellevants',
+  'page.summary-highlights.heading': 'Dades importants',
+  'page.summary-highlights.empty': 'No hi ha dades importants encara',
+
+  // Page: Summary Detail
+  'page.summary-detail.title': 'Detall del resum',
+  'page.summary-detail.subtitle': 'Vista detallada',
+  'page.summary-detail.heading': 'Informació detallada',
+
+  // Summary Trends (fake data)
+  'summary.trend.cic.up.title': "CIC a l'alça les darreres setmanes",
+  'summary.trend.cic.up.description': 'El teu recompte de CIC ha pujat.',
+  'summary.trend.stool.stable.title': 'Patró de deposicions estable',
+  'summary.trend.stool.stable.description':
+    'La freqüència de deposicions es manté estable.',
+
+  // Summary Highlights (fake data)
+  'summary.highlight.cic.high.title': 'CIC per sobre de l’habitual',
+  'summary.highlight.cic.high.description':
+    'La mitjana de CIC està per sobre del rang habitual.',
+  'summary.highlight.urine.up.title': "Volum d'orina en augment",
+  'summary.highlight.urine.up.description':
+    "El volum diari d'orina mostra una pujada.",
+
+  // Summary Detail placeholders
+  'summary.detail.comparison.default': 'Comparat amb la teva mitjana',
+  'summary.detail.projection.default': 'Projecció no disponible encara',
 
   // Page: History Detail
   'page.history-detail.title': 'Detall de la Història',

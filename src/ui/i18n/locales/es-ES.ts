@@ -31,6 +31,7 @@ export const esES = Object.freeze({
   // Tab navigation
   'tab.register': 'Registro',
   'tab.report': 'Reporte',
+  'tab.summary': 'Resumen',
   'tab.settings': 'Configuración',
 
   // Page: Register Tab
@@ -47,6 +48,60 @@ export const esES = Object.freeze({
   'page.report.statistics': 'Estadísticas',
   'page.report.history': 'Historial',
   'page.report.no-history': 'No hay registros en el historial',
+
+  // Page: Summary Tab
+  'page.summary.title': 'Resumen',
+  'page.summary.subtitle': 'Vista rápida de datos de salud',
+  'page.summary.section.pinned': 'Datos fijados',
+  'page.summary.section.modules': 'Módulos',
+  'page.summary.pins-empty': 'Fija elementos para verlos aquí',
+  'page.summary.modules-empty': 'No hay módulos para mostrar',
+  'page.summary.today-count': 'Hoy: {{value}}',
+  'page.summary.all-data': 'Mostrar todos los datos de salud',
+  'page.summary.trends': 'Tendencias',
+  'page.summary.highlights': 'Datos importantes',
+
+  // Page: Summary All Data
+  'page.summary-all-data.title': 'Todos los datos de salud',
+  'page.summary-all-data.subtitle': 'Explora módulos y detalles',
+  'page.summary-all-data.heading': 'Módulos activos',
+  'page.summary-all-data.empty': 'No hay módulos activos todavía',
+
+  // Page: Summary Trends
+  'page.summary-trends.title': 'Tendencias',
+  'page.summary-trends.subtitle': 'Patrones y cambios detectados',
+  'page.summary-trends.heading': 'Tendencias recientes',
+  'page.summary-trends.empty': 'No hay tendencias disponibles',
+
+  // Page: Summary Highlights
+  'page.summary-highlights.title': 'Datos importantes',
+  'page.summary-highlights.subtitle': 'Insights relevantes',
+  'page.summary-highlights.heading': 'Datos importantes',
+  'page.summary-highlights.empty': 'No hay datos importantes aún',
+
+  // Page: Summary Detail
+  'page.summary-detail.title': 'Detalle de resumen',
+  'page.summary-detail.subtitle': 'Vista detallada',
+  'page.summary-detail.heading': 'Información detallada',
+
+  // Summary Trends (fake data)
+  'summary.trend.cic.up.title': 'CIC en aumento en las últimas semanas',
+  'summary.trend.cic.up.description': 'Tu recuento de CIC ha subido.',
+  'summary.trend.stool.stable.title': 'Patrón de deposiciones estable',
+  'summary.trend.stool.stable.description':
+    'La frecuencia de deposiciones se mantiene.',
+
+  // Summary Highlights (fake data)
+  'summary.highlight.cic.high.title': 'CIC por encima de lo habitual',
+  'summary.highlight.cic.high.description':
+    'La media de CIC está por encima del rango habitual.',
+  'summary.highlight.urine.up.title': 'Volumen de orina en aumento',
+  'summary.highlight.urine.up.description':
+    'El volumen diario de orina muestra una subida.',
+
+  // Summary Detail placeholders
+  'summary.detail.comparison.default': 'Comparado con tu media',
+  'summary.detail.projection.default': 'Proyección no disponible aún',
 
   // Page: History Detail
   'page.history-detail.title': 'Detalle del Historial',
