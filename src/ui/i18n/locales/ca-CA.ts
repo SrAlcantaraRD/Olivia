@@ -119,6 +119,7 @@ export const caCA = Object.freeze({
   'common.loading': 'Carregant...',
   'common.error': 'Error',
   'common.success': 'Èxit',
+  'error.no-carer-found': "No s'ha trobat cuidador",
   'hook.get-record-statistics.error':
     'Error carregant estadístiques de registres',
   'common.optional': 'Opcional',
@@ -188,6 +189,8 @@ export const caCA = Object.freeze({
   'page.summary-detail.trend': 'Tendència',
   'page.summary-detail.trend-empty': 'No disponible',
   'page.summary-detail.highlights': 'Dades importants',
+  'page.summary-detail.fields': 'Camps',
+  'page.summary-detail.fields-empty': 'No hi ha camps disponibles',
 
   // Summary Trends (fake data)
   'summary.trend.cic.up.title': "CIC a l'alça les darreres setmanes",
@@ -234,6 +237,8 @@ export const caCA = Object.freeze({
   'page.settings.app-settings-desc': 'Tema, idioma i privacitat',
   'page.settings.about': 'Sobre',
   'page.settings.about-desc': 'Versió i informació legal',
+  'page.settings.add-demo-data': 'Afegeix Dades de Demo',
+  'page.settings.add-demo-data-desc': 'Afegeix registres de mostra per proves',
   'page.settings.logout': 'Tanca sessió',
 
   // Page: Settings Detail Screens
@@ -396,6 +401,12 @@ export const caCA = Object.freeze({
   'test.reset-db': 'Restablir Base de Dades per a Proves',
   'hook.create-record.error-title': 'Error en Crear Registre',
   'hook.create-record.success-title': 'Registre Creat Exitosament',
+  'hook.add-demo-data.error-title': 'Error en Afegir Dades de Demo',
+  'hook.add-demo-data.success-title': 'Dades de Demo Afegides Exitosament',
+  'hook.add-demo-data.success-description':
+    "Les dades de demo s'han afegit exitosament",
+  'hook.add-demo-data.error-description':
+    'Va ocórrer un error en afegir les dades de demo',
   'hook.get-record-field-distribution.error':
     'Error obtenint distribució del camp',
   'page.settings.section-configuration': 'Configuració',

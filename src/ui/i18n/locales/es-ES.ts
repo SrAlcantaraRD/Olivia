@@ -22,6 +22,7 @@ export const esES = Object.freeze({
   'common.loading': 'Cargando...',
   'common.error': 'Error',
   'common.success': 'Éxito',
+  'error.no-carer-found': 'No se encontró cuidador',
   'hook.get-record-statistics.error':
     'Error al cargar estadísticas de registros',
   'common.optional': 'Opcional',
@@ -90,6 +91,8 @@ export const esES = Object.freeze({
   'page.summary-detail.trend': 'Tendencia',
   'page.summary-detail.trend-empty': 'No disponible',
   'page.summary-detail.highlights': 'Datos importantes',
+  'page.summary-detail.fields': 'Campos',
+  'page.summary-detail.fields-empty': 'No hay campos disponibles',
 
   // Summary Trends (fake data)
   'summary.trend.cic.up.title': 'CIC en aumento en las últimas semanas',
@@ -135,6 +138,9 @@ export const esES = Object.freeze({
   'page.settings.app-settings-desc': 'Tema, idioma y privacidad',
   'page.settings.about': 'Acerca de',
   'page.settings.about-desc': 'Versión e información legal',
+  'page.settings.add-demo-data': 'Añadir Datos de Demo',
+  'page.settings.add-demo-data-desc':
+    'Añadir registros de muestra para pruebas',
   'page.settings.logout': 'Cerrar sesión',
 
   // Page: Settings Detail Screens
@@ -395,6 +401,12 @@ export const esES = Object.freeze({
   'test.reset-db': 'Restablecer Base de Datos para Pruebas',
   'hook.create-record.error-title': 'Error al Crear Registro',
   'hook.create-record.success-title': 'Registro Creado Exitosamente',
+  'hook.add-demo-data.error-title': 'Error al Añadir Datos de Demo',
+  'hook.add-demo-data.success-title': 'Datos de Demo Añadidos Exitosamente',
+  'hook.add-demo-data.success-description':
+    'Los datos de demo se han añadido exitosamente',
+  'hook.add-demo-data.error-description':
+    'Ocurrió un error al añadir los datos de demo',
   'hook.get-record-field-distribution.error':
     'Error obteniendo distribución del campo',
   'page.settings.section-configuration': 'Configuración',

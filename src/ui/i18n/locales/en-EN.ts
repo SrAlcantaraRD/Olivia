@@ -110,6 +110,7 @@ export const enEN = Object.freeze({
   'common.loading': 'Loading...',
   'common.error': 'Error',
   'common.success': 'Success',
+  'error.no-carer-found': 'No carer found',
   'hook.get-record-statistics.error': 'Error loading record statistics',
   'common.optional': 'Optional',
   'common.required': 'Required',
@@ -177,6 +178,9 @@ export const enEN = Object.freeze({
   'page.summary-detail.trend': 'Trend',
   'page.summary-detail.trend-empty': 'Not available',
   'page.summary-detail.highlights': 'Highlights',
+  'page.summary-detail.fields': 'Fields',
+  'page.summary-detail.fields-empty': 'No fields available',
+  'page.summary-detail.empty': 'No data for this period',
 
   // Summary Trends (fake data)
   'summary.trend.cic.up.title': 'CIC increasing in recent weeks',
@@ -222,6 +226,8 @@ export const enEN = Object.freeze({
   'page.settings.app-settings-desc': 'Theme, language, and privacy',
   'page.settings.about': 'About',
   'page.settings.about-desc': 'Version and legal information',
+  'page.settings.add-demo-data': 'Add Demo Data',
+  'page.settings.add-demo-data-desc': 'Add sample records for testing',
   'page.settings.logout': 'Log out',
 
   // Page: Settings Detail Screens
@@ -389,6 +395,12 @@ export const enEN = Object.freeze({
   'test.reset-db': 'Reset Database for Testing',
   'hook.create-record.error-title': 'Record Creation Failed',
   'hook.create-record.success-title': 'Record Created Successfully',
+  'hook.add-demo-data.error-title': 'Demo Data Addition Failed',
+  'hook.add-demo-data.success-title': 'Demo Data Added Successfully',
+  'hook.add-demo-data.success-description':
+    'Demo data has been added successfully',
+  'hook.add-demo-data.error-description':
+    'An error occurred while adding demo data',
   'hook.get-record-field-distribution.error':
     'Error getting field distribution',
 } as const);
