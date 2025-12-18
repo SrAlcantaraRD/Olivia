@@ -7,6 +7,7 @@ import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { SUMMARY_DETAIL_TYPE_ENUM } from '@/domain/summary/enum/summary-detail-type.enum';
 import { SUMMARY_PERIOD_ENUM } from '@/domain/summary/enum/summary-period.enum';
 import { useGetSummaryDetail } from '@/domain/summary/hook/get-summary-detail.hook';
+import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import {
   TypographyHeading,
@@ -14,6 +15,8 @@ import {
   TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
+import { SummaryPeriodSelector } from '@/ui/components/molecules/summary-period-selector.molecule';
 
 export default function SummaryFieldDetailScreen() {
   const params = useLocalSearchParams<{
@@ -41,6 +44,11 @@ export default function SummaryFieldDetailScreen() {
     });
   }, [moduleId, fieldId]);
 
+  const chartValues = detailHook.items.series.map((item) => ({
+    value: '',
+    count: item.value,
+  }));
+
   return (
     <ScreenLayout
       testID="page.summary-detail-field"
@@ -52,35 +60,62 @@ export default function SummaryFieldDetailScreen() {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
-        <View className="gap-4">
-          <CardAtom>
-            <TypographyHeading
-              testID="page.summary-detail.heading"
-              i18nKey="page.summary-detail.heading"
-              accessibilityRole="header"
-            />
+        <View className="gap-6">
+          <SummaryPeriodSelector
+            options={['D', 'S', 'M', '6M', 'A']}
+            selected="S"
+            testID="page.summary-detail.period"
+          />
+
+          <CardAtom className="p-4 rounded-3xl">
             <TypographySmall
-              i18nKey="common.raw-value"
-              values={{ value: `${moduleId}:${fieldId}` }}
-              testID="page.summary-detail.field-id"
+              testID="page.summary-detail.average-label"
+              i18nKey="page.summary-detail.average-label"
               variant="light"
             />
+            <TypographyHeading
+              testID="page.summary-detail.average-value"
+              i18nKey="common.raw-value"
+              values={{ value: detailHook.items.average ?? 0 }}
+            />
+            <TypographySmall
+              testID="page.summary-detail.range"
+              i18nKey="page.summary-detail.range-placeholder"
+              variant="light"
+            />
+            <View className="mt-4">
+              <BarChartAtom
+                values={chartValues}
+                showAxisLabels={false}
+                testID="page.summary-detail.chart"
+              />
+            </View>
           </CardAtom>
 
-          <CardAtom>
-            <TypographyParagraph
-              i18nKey="common.raw-value"
-              values={{ value: detailHook.items.titleKey }}
-              testID="page.summary-detail.titleKey"
-              className="font-medium"
-            />
-            <TypographySmall
-              i18nKey="common.raw-value"
-              values={{ value: detailHook.items.descriptionKey }}
-              testID="page.summary-detail.descriptionKey"
-              variant="light"
-            />
+          <CardAtom className="p-4 rounded-3xl">
+            <View className="flex-row items-center justify-between">
+              <TypographyParagraph
+                testID="page.summary-detail.trend"
+                i18nKey="page.summary-detail.trend"
+              />
+              <TypographySmall
+                testID="page.summary-detail.trend-empty"
+                i18nKey="page.summary-detail.trend-empty"
+                variant="light"
+              />
+            </View>
           </CardAtom>
+
+          <SummaryInsightCard
+            titleKey="page.summary-detail.highlights"
+            descriptionKey={detailHook.items.descriptionKey}
+            iconName="flame"
+            metricValue={detailHook.items.average ?? 0}
+            metricLabel=""
+            chartValues={detailHook.items.series.map((item) => item.value)}
+            chartAverage={detailHook.items.average}
+            testID="page.summary-detail.insight"
+          />
         </View>
       </ScrollView>
     </ScreenLayout>

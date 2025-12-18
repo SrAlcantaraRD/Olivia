@@ -102,9 +102,7 @@ export const useNavigation = (adapters: {
 
   const goToSummaryFieldDetail = useCallback(
     (moduleId: string, fieldId: string) => {
-      navigateTo(
-        `/(tabs)/summary/detail/module/${moduleId}/field/${fieldId}`
-      );
+      navigateTo(`/(tabs)/summary/detail/module/${moduleId}/field/${fieldId}`);
     },
     []
   );

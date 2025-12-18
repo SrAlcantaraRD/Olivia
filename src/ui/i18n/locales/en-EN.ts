@@ -144,6 +144,8 @@ export const enEN = Object.freeze({
   'page.summary.pins-empty': 'Pin items to see them here',
   'page.summary.modules-empty': 'No module summaries available',
   'page.summary.today-count': 'Today: {{value}}',
+  'page.summary.metric-label.today': 'Today',
+  'page.summary.metric-label.steps': 'steps',
   'page.summary.all-data': 'Show all health data',
   'page.summary.trends': 'Trends',
   'page.summary.highlights': 'Highlights',
@@ -170,6 +172,11 @@ export const enEN = Object.freeze({
   'page.summary-detail.title': 'Summary detail',
   'page.summary-detail.subtitle': 'Detail view',
   'page.summary-detail.heading': 'Detail information',
+  'page.summary-detail.average-label': 'Average',
+  'page.summary-detail.range-placeholder': '7-13 Dec 2025',
+  'page.summary-detail.trend': 'Trend',
+  'page.summary-detail.trend-empty': 'Not available',
+  'page.summary-detail.highlights': 'Highlights',
 
   // Summary Trends (fake data)
   'summary.trend.cic.up.title': 'CIC increasing in recent weeks',

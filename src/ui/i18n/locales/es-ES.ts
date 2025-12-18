@@ -57,6 +57,8 @@ export const esES = Object.freeze({
   'page.summary.pins-empty': 'Fija elementos para verlos aquí',
   'page.summary.modules-empty': 'No hay módulos para mostrar',
   'page.summary.today-count': 'Hoy: {{value}}',
+  'page.summary.metric-label.today': 'Hoy',
+  'page.summary.metric-label.steps': 'pasos',
   'page.summary.all-data': 'Mostrar todos los datos de salud',
   'page.summary.trends': 'Tendencias',
   'page.summary.highlights': 'Datos importantes',
@@ -83,6 +85,11 @@ export const esES = Object.freeze({
   'page.summary-detail.title': 'Detalle de resumen',
   'page.summary-detail.subtitle': 'Vista detallada',
   'page.summary-detail.heading': 'Información detallada',
+  'page.summary-detail.average-label': 'Promedio',
+  'page.summary-detail.range-placeholder': '7-13 dic 2025',
+  'page.summary-detail.trend': 'Tendencia',
+  'page.summary-detail.trend-empty': 'No disponible',
+  'page.summary-detail.highlights': 'Datos importantes',
 
   // Summary Trends (fake data)
   'summary.trend.cic.up.title': 'CIC en aumento en las últimas semanas',

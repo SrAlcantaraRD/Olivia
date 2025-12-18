@@ -155,6 +155,8 @@ export const caCA = Object.freeze({
   'page.summary.pins-empty': 'Fixa elements per veure-los aquí',
   'page.summary.modules-empty': 'No hi ha mòduls per mostrar',
   'page.summary.today-count': 'Avui: {{value}}',
+  'page.summary.metric-label.today': 'Avui',
+  'page.summary.metric-label.steps': 'passos',
   'page.summary.all-data': 'Mostrar totes les dades de salut',
   'page.summary.trends': 'Tendències',
   'page.summary.highlights': 'Dades importants',
@@ -181,6 +183,11 @@ export const caCA = Object.freeze({
   'page.summary-detail.title': 'Detall del resum',
   'page.summary-detail.subtitle': 'Vista detallada',
   'page.summary-detail.heading': 'Informació detallada',
+  'page.summary-detail.average-label': 'Mitjana',
+  'page.summary-detail.range-placeholder': '7-13 des 2025',
+  'page.summary-detail.trend': 'Tendència',
+  'page.summary-detail.trend-empty': 'No disponible',
+  'page.summary-detail.highlights': 'Dades importants',
 
   // Summary Trends (fake data)
   'summary.trend.cic.up.title': "CIC a l'alça les darreres setmanes",

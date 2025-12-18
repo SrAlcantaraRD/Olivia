@@ -1,17 +1,15 @@
 import React from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { useGetSummaryTrends } from '@/domain/summary/hook/get-summary-trends.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
-import { CardAtom } from '@/ui/components/atoms/card.atom';
-import {
-  TypographyHeading,
-  TypographyParagraph,
-  TypographySmall,
-} from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
+import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
+
+const DEFAULT_TREND_SERIES = [2, 4, 3, 5, 3, 2, 4, 3, 5, 4, 3, 2];
 
 export default function SummaryTrendsScreen() {
   const { summaryTrendAdapter, notifyAdapter, navigationAdapter } =
@@ -39,36 +37,33 @@ export default function SummaryTrendsScreen() {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
-        <View className="gap-4">
-          <TypographyHeading
+        <View className="gap-6">
+          <SummarySectionHeader
+            titleKey="page.summary-trends.heading"
             testID="page.summary-trends.heading"
-            i18nKey="page.summary-trends.heading"
-            accessibilityRole="header"
           />
 
           {trendsHook.items.length === 0 ? (
-            <CardAtom>
-              <TypographySmall
-                i18nKey="page.summary-trends.empty"
-                testID="page.summary-trends.empty"
-                variant="light"
-              />
-            </CardAtom>
+            <SummaryInsightCard
+              titleKey="page.summary-trends.empty"
+              descriptionKey="page.summary-trends.empty"
+              iconName="alert"
+              chartValues={DEFAULT_TREND_SERIES}
+              chartAverage={3}
+              testID="page.summary-trends.empty"
+            />
           ) : (
             trendsHook.items.map((trend) => (
-              <CardAtom key={`summary-trend-${trend.id}`}>
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => goToSummaryTrendDetail(trend.id)}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <TypographyParagraph
-                    i18nKey={trend.titleKey}
-                    testID={`page.summary-trends.item.${trend.id}`}
-                    className="font-medium"
-                  />
-                </Pressable>
-              </CardAtom>
+              <SummaryInsightCard
+                key={`summary-trend-${trend.id}`}
+                titleKey={trend.titleKey}
+                descriptionKey={trend.descriptionKey}
+                iconName="flame"
+                chartValues={DEFAULT_TREND_SERIES}
+                chartAverage={3}
+                onPress={() => goToSummaryTrendDetail(trend.id)}
+                testID={`page.summary-trends.item.${trend.id}`}
+              />
             ))
           )}
         </View>

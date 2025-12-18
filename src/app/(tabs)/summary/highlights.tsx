@@ -1,22 +1,23 @@
 import React from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { useGetSummaryHighlights } from '@/domain/summary/hook/get-summary-highlights.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
-import { CardAtom } from '@/ui/components/atoms/card.atom';
-import {
-  TypographyHeading,
-  TypographyParagraph,
-  TypographySmall,
-} from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
+import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
+import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
+
+const DEFAULT_HIGHLIGHT_SERIES = [1, 3, 2, 4, 2, 3, 4];
 
 export default function SummaryHighlightsScreen() {
+  const { t } = useTranslation();
   const { summaryHighlightAdapter, notifyAdapter, navigationAdapter } =
     useAdapters();
-  const { goToSummaryHome, goToSummaryModuleDetail } = useNavigation({
+  const { goToSummaryAllData, goToSummaryModuleDetail } = useNavigation({
     navigationAdapter,
   });
 
@@ -41,45 +42,55 @@ export default function SummaryHighlightsScreen() {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
-        <View className="gap-4">
-          <TypographyHeading
+        <View className="gap-6">
+          <SummaryRow
+            iconName="heart"
+            titleKey="page.summary.all-data"
+            onPress={goToSummaryAllData}
+            testID="page.summary-highlights.all-data"
+          />
+
+          <SummarySectionHeader
+            titleKey="page.summary-highlights.heading"
             testID="page.summary-highlights.heading"
-            i18nKey="page.summary-highlights.heading"
-            accessibilityRole="header"
           />
 
           {highlightsHook.items.length === 0 ? (
-            <CardAtom>
-              <TypographySmall
-                i18nKey="page.summary-highlights.empty"
-                testID="page.summary-highlights.empty"
-                variant="light"
-              />
-            </CardAtom>
+            <SummaryInsightCard
+              titleKey="page.summary-highlights.empty"
+              descriptionKey="page.summary-highlights.empty"
+              iconName="alert"
+              chartValues={DEFAULT_HIGHLIGHT_SERIES}
+              chartAverage={3}
+              testID="page.summary-highlights.empty"
+            />
           ) : (
             highlightsHook.items.map((highlight) => (
-              <CardAtom key={`summary-highlight-${highlight.id}`}>
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => {
-                    if (highlight.moduleId) {
-                      goToSummaryModuleDetail(String(highlight.moduleId));
-                      return;
-                    }
-
-                    goToSummaryHome();
-                  }}
-                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-                >
-                  <TypographyParagraph
-                    i18nKey={highlight.titleKey}
-                    testID={`page.summary-highlights.item.${highlight.id}`}
-                    className="font-medium"
-                  />
-                </Pressable>
-              </CardAtom>
+              <SummaryInsightCard
+                key={`summary-highlight-${highlight.id}`}
+                titleKey={highlight.titleKey}
+                descriptionKey={highlight.descriptionKey}
+                iconName="flame"
+                metricValue={3502}
+                metricLabel={t('page.summary.metric-label.steps')}
+                chartValues={DEFAULT_HIGHLIGHT_SERIES}
+                chartAverage={3}
+                onPress={() => {
+                  if (highlight.moduleId) {
+                    goToSummaryModuleDetail(String(highlight.moduleId));
+                  }
+                }}
+                testID={`page.summary-highlights.item.${highlight.id}`}
+              />
             ))
           )}
+
+          <SummaryRow
+            iconName="sparkles"
+            titleKey="page.summary.highlights"
+            onPress={goToSummaryAllData}
+            testID="page.summary-highlights.show-all"
+          />
         </View>
       </ScrollView>
     </ScreenLayout>
