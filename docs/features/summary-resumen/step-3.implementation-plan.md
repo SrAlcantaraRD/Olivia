@@ -67,6 +67,7 @@ Fuentes
 - `SummaryHighlightPort`: list highlights.
 - `SummaryPinsPort`: CRUD + ordering.
 - `SummaryAnalysisPort`: generateAnalysis placeholder.
+- `SummarySnapshotPort`: get/set snapshots en cache (sin TTL).
 - Aceptacion: ports cubren necesidades del PSD.
 
 1.4 Use-cases
