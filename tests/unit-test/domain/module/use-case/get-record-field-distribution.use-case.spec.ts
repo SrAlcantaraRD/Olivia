@@ -32,6 +32,10 @@ describe('[UseCase] - GetRecordFieldDistribution', () => {
 
       // Assert
       expect(resp.success).toBe(true);
+
+      if (!resp.success) {
+        throw new Error('Expected success response');
+      }
       expect(resp.details.values).toEqual(mockValues);
       expect(recordAdapter.getFieldDistribution).toHaveBeenCalledWith({
         fieldID: 1,

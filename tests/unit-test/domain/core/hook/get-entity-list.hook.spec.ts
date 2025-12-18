@@ -3,7 +3,9 @@
 import { act, renderHook } from '@testing-library/react-native';
 
 import type { TBaseEntity } from '@/domain/core/entity/base-entity.entity';
+import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 import { useGetEntityList } from '@/domain/core/hooks/get-entity-list.hook';
+import type { IHookResponse } from '@/domain/core/interface/hook.interface';
 import { mockNotifyPort } from '@/tests/mocks/core.port.mock';
 
 interface MockEntity extends TBaseEntity {
@@ -28,7 +30,21 @@ describe('[Hook] - GetEntityList', () => {
       )
     );
 
-    return { hook: result.current, ...adapters };
+    const execute = async () => {
+      let response: IHookResponse<MockEntity[]> | undefined;
+
+      await act(async () => {
+        response = await result.current.execute();
+      });
+
+      if (!response) {
+        throw new Error('Expected hook response');
+      }
+
+      return response;
+    };
+
+    return { result, execute, ...adapters };
   };
 
   beforeEach(() => {
@@ -37,18 +53,25 @@ describe('[Hook] - GetEntityList', () => {
 
   describe('Happy Path', () => {
     it('fetches entities successfully when adapter returns data', async () => {
-      const { hook, mockAdapter } = prepareSuiteCase();
-      const items: MockEntity[] = [{ id: 1, name: 'Test' }];
+      const { execute, mockAdapter } = prepareSuiteCase();
+      const items: MockEntity[] = [
+        {
+          id: 1,
+          name: 'Test',
+          status: STATUS_ENUM.ACTIVE,
+          createdAt: new Date('2026-01-01T00:00:00.000Z'),
+        },
+      ];
       mockAdapter.getAll.mockResolvedValue(items);
 
       // Act
-      let response;
-      await act(async () => {
-        response = await hook.execute();
-      });
+      const response = await execute();
 
       // Assert
       expect(response.success).toBe(true);
+      if (!response.success) {
+        throw new Error('Expected success hook response');
+      }
       expect(response.data).toEqual(items);
       expect(mockAdapter.getAll).toHaveBeenCalled();
     });

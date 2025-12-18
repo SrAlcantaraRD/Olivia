@@ -12,7 +12,30 @@ describe('[Hook] - UseAppSettings', () => {
     // Arrange
     const loggerAdapter = mockLoggerPort();
     const cacheAdapter = mockCachePort();
-    return { loggerAdapter, cacheAdapter };
+
+    const adapters = { loggerAdapter, cacheAdapter };
+
+    const { result } = renderHook(() => useAppSettings(adapters));
+
+    const setTheme = async (theme: EThemeMode) => {
+      await act(async () => {
+        await result.current.setTheme(theme);
+      });
+    };
+
+    const setLocale = async (locale: ELocaleCode) => {
+      await act(async () => {
+        await result.current.setLocale(locale);
+      });
+    };
+
+    const initSettings = async () => {
+      await act(async () => {
+        await result.current.initSettings();
+      });
+    };
+
+    return { result, setTheme, setLocale, initSettings, ...adapters };
   };
 
   beforeEach(() => {
@@ -28,19 +51,10 @@ describe('[Hook] - UseAppSettings', () => {
   });
 
   it('applies theme and persists when setTheme called', async () => {
-    const { loggerAdapter, cacheAdapter } = prepareSuiteCase();
+    const { setTheme, cacheAdapter } = prepareSuiteCase();
 
     // Act
-    const { result } = renderHook(() =>
-      useAppSettings({
-        loggerAdapter,
-        cacheAdapter,
-      })
-    );
-
-    await act(async () => {
-      await result.current.setTheme(EThemeMode.DARK);
-    });
+    await setTheme(EThemeMode.DARK);
 
     // Assert
     expect(Uniwind.setTheme).toHaveBeenCalledWith(EThemeMode.DARK);
@@ -48,19 +62,10 @@ describe('[Hook] - UseAppSettings', () => {
   });
 
   it('changes language and persists when setLocale called', async () => {
-    const { loggerAdapter, cacheAdapter } = prepareSuiteCase();
+    const { setLocale, cacheAdapter } = prepareSuiteCase();
 
     // Act
-    const { result } = renderHook(() =>
-      useAppSettings({
-        loggerAdapter,
-        cacheAdapter,
-      })
-    );
-
-    await act(async () => {
-      await result.current.setLocale(ELocaleCode.es_ES);
-    });
+    await setLocale(ELocaleCode.es_ES);
 
     // Assert
     expect(i18n.changeLanguage).toHaveBeenCalledWith(ELocaleCode.es_ES);
@@ -68,21 +73,12 @@ describe('[Hook] - UseAppSettings', () => {
   });
 
   it('persists defaults when initSettings called with empty cache', async () => {
-    const { loggerAdapter, cacheAdapter } = prepareSuiteCase();
+    const { initSettings, cacheAdapter } = prepareSuiteCase();
     cacheAdapter.get.mockResolvedValue(null);
     cacheAdapter.set.mockResolvedValue(undefined);
 
     // Act
-    const { result } = renderHook(() =>
-      useAppSettings({
-        loggerAdapter,
-        cacheAdapter,
-      })
-    );
-
-    await act(async () => {
-      await result.current.initSettings();
-    });
+    await initSettings();
 
     // Assert
     expect(cacheAdapter.set).toHaveBeenCalled();

@@ -3,7 +3,10 @@
 import { act, renderHook } from '@testing-library/react-native';
 
 import { useSetupParent } from '@/domain/carer/hook/setup-parent.hook';
-import type { TResponseSetupParent } from '@/domain/carer/use-case-schema/setup-parent.use-case-schema';
+import type {
+  TRequestSetupParent,
+  TResponseSetupParent,
+} from '@/domain/carer/use-case-schema/setup-parent.use-case-schema';
 import type { IHookResponse } from '@/domain/core/interface/hook.interface';
 import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
 import {
@@ -33,20 +36,7 @@ describe('[Hook] - SetupParent', () => {
     const cacheAdapter = mockCachePort();
     const secureStoreAdapter = mockCachePort();
 
-    const { result } = renderHook(() =>
-      useSetupParent({
-        loggerAdapter,
-        notifyAdapter,
-        carerAdapter,
-        patientAdapter,
-        moduleAdapter,
-        cacheAdapter,
-        secureStoreAdapter,
-      })
-    );
-
-    return {
-      hook: result.current,
+    const adapters = {
       loggerAdapter,
       notifyAdapter,
       carerAdapter,
@@ -55,6 +45,28 @@ describe('[Hook] - SetupParent', () => {
       cacheAdapter,
       secureStoreAdapter,
     };
+
+    const { result } = renderHook(() => useSetupParent(adapters));
+
+    const execute = async (data: TRequestSetupParent) => {
+      let response: IHookResponse<TResponseSetupParent> | undefined;
+
+      await act(async () => {
+        response = await result.current.execute(data);
+      });
+
+      if (!response) {
+        throw new Error('Expected hook response');
+      }
+
+      return response;
+    };
+
+    return {
+      result,
+      execute,
+      ...adapters,
+    };
   };
 
   beforeEach(() => jest.clearAllMocks());
@@ -62,7 +74,7 @@ describe('[Hook] - SetupParent', () => {
   describe('Happy Path', () => {
     it('executes successfully and notifies success', async () => {
       const {
-        hook,
+        execute,
         carerAdapter,
         patientAdapter,
         moduleAdapter,
@@ -83,13 +95,10 @@ describe('[Hook] - SetupParent', () => {
       cacheAdapter.set.mockResolvedValue(undefined);
       secureStoreAdapter.set.mockResolvedValue(undefined);
 
-      let response: IHookResponse<TResponseSetupParent>;
-      await act(async () => {
-        response = await hook.execute({
-          parent: carerDTO,
-          patient: patientDTO,
-          moduleList,
-        });
+      const response = await execute({
+        parent: carerDTO,
+        patient: patientDTO,
+        moduleList,
       });
 
       expect(response.success).toBe(true);
@@ -117,7 +126,7 @@ describe('[Hook] - SetupParent', () => {
 
   describe('Negative Path', () => {
     it('handles error and notifies failure', async () => {
-      const { hook, carerAdapter, notifyAdapter } = prepareSuiteCase();
+      const { execute, carerAdapter, notifyAdapter } = prepareSuiteCase();
 
       const carerDTO = mockCarerCreate();
       const patientDTO = mockPatientCreate();
@@ -125,13 +134,10 @@ describe('[Hook] - SetupParent', () => {
 
       carerAdapter.create.mockRejectedValue(new Error('Database error'));
 
-      let response: IHookResponse<TResponseSetupParent>;
-      await act(async () => {
-        response = await hook.execute({
-          parent: carerDTO,
-          patient: patientDTO,
-          moduleList,
-        });
+      const response = await execute({
+        parent: carerDTO,
+        patient: patientDTO,
+        moduleList,
       });
 
       expect(response.success).toBe(false);

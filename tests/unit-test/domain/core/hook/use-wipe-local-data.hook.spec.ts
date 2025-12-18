@@ -14,28 +14,37 @@ describe('[Hook] - UseWipeLocalData', () => {
     const loggerAdapter = mockLoggerPort();
     const cacheAdapter = mockCachePort();
     const secureStoreAdapter = mockSecureStorePort();
-    return { loggerAdapter, cacheAdapter, secureStoreAdapter };
+
+    const adapters = { loggerAdapter, cacheAdapter, secureStoreAdapter };
+
+    const { result } = renderHook(() => useWipeLocalData(adapters));
+
+    const execute = async () => {
+      let response:
+        | Awaited<ReturnType<(typeof result.current)['execute']>>
+        | undefined;
+
+      await act(async () => {
+        response = await result.current.execute();
+      });
+
+      if (!response) {
+        throw new Error('Expected hook response');
+      }
+
+      return response;
+    };
+
+    return { result, execute, ...adapters };
   };
 
   beforeEach(() => jest.clearAllMocks());
 
   it('executes wipe successfully when called', async () => {
-    const { loggerAdapter, cacheAdapter, secureStoreAdapter } =
-      prepareSuiteCase();
+    const { execute, cacheAdapter, secureStoreAdapter } = prepareSuiteCase();
 
     // Act
-    const { result } = renderHook(() =>
-      useWipeLocalData({
-        loggerAdapter,
-        cacheAdapter,
-        secureStoreAdapter,
-      })
-    );
-
-    let response;
-    await act(async () => {
-      response = await result.current.execute();
-    });
+    const response = await execute();
 
     // Assert
     expect(response.success).toBe(true);

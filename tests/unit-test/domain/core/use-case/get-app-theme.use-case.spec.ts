@@ -26,6 +26,9 @@ describe('[UseCase] - GetAppTheme', () => {
       const response = await useCase.execute();
 
       expect(response.success).toBe(true);
+      if (!response.success) {
+        throw new Error('Expected success response');
+      }
       expect(response.details).toBe(theme);
       expect(cacheAdapter.get).toHaveBeenCalledWith(CACHE_KEY_ENUM.APP_THEME);
       expect(cacheAdapter.set).not.toHaveBeenCalled();
@@ -39,6 +42,9 @@ describe('[UseCase] - GetAppTheme', () => {
       const response = await useCase.execute();
 
       expect(response.success).toBe(true);
+      if (!response.success) {
+        throw new Error('Expected success response');
+      }
       expect(response.details).toBe(EThemeMode.LIGHT);
       expect(cacheAdapter.get).toHaveBeenCalledWith(CACHE_KEY_ENUM.APP_THEME);
       expect(cacheAdapter.set).toHaveBeenCalledWith(

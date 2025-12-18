@@ -35,6 +35,10 @@ describe('[UseCase] - GetRecordStatistics', () => {
 
       // Assert
       expect(resp.success).toBe(true);
+
+      if (!resp.success) {
+        throw new Error('Expected success response');
+      }
       expect(resp.details.countsByModule).toEqual(mockCounts);
       expect(recordAdapter.getCountsByModule).toHaveBeenCalled();
     });

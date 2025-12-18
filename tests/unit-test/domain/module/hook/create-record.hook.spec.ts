@@ -2,8 +2,14 @@
 
 import { act, renderHook } from '@testing-library/react-native';
 
+import type { IHookResponse } from '@/domain/core/interface/hook.interface';
+import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { useCreateRecord } from '@/domain/module/hook/create-record.hook';
 import { mockLoggerPort, mockNotifyPort } from '@/tests/mocks/core.port.mock';
+import {
+  mockRecordCreate,
+  mockRecordEntity,
+} from '@/tests/mocks/module-field.entity.mock';
 import {
   mockRecordFieldPort,
   mockRecordPort,
@@ -16,41 +22,52 @@ describe('[Hook] - CreateRecord', () => {
     const recordAdapter = mockRecordPort();
     const recordFieldAdapter = mockRecordFieldPort();
     const notifyAdapter = mockNotifyPort();
-    return { loggerAdapter, recordAdapter, recordFieldAdapter, notifyAdapter };
+
+    const adapters = {
+      loggerAdapter,
+      recordAdapter,
+      recordFieldAdapter,
+      notifyAdapter,
+    };
+
+    const { result } = renderHook(() => useCreateRecord(adapters));
+
+    const execute = async (data: TRecordCreate) => {
+      let response: IHookResponse<void> | undefined;
+
+      await act(async () => {
+        response = await result.current.execute(data);
+      });
+
+      if (!response) {
+        throw new Error('Expected hook response');
+      }
+
+      return response;
+    };
+
+    return { result, execute, ...adapters };
   };
 
   beforeEach(() => jest.clearAllMocks());
 
   describe('Happy Path', () => {
     it('creates record successfully when useCase succeeds', async () => {
-      const {
-        loggerAdapter,
-        recordAdapter,
-        recordFieldAdapter,
-        notifyAdapter,
-      } = prepareSuiteCase();
-      const record = { id: 1, data: {}, synced: true };
+      const { execute, recordAdapter, recordFieldAdapter, notifyAdapter } =
+        prepareSuiteCase();
+      const record = mockRecordEntity({ id: 1 });
       recordAdapter.create.mockResolvedValue(record);
       recordFieldAdapter.batchCreate.mockResolvedValue([]);
 
       // Act
-      const { result } = renderHook(() =>
-        useCreateRecord({
-          loggerAdapter,
-          recordAdapter,
-          recordFieldAdapter,
-          notifyAdapter,
+      const response = await execute(
+        mockRecordCreate({
+          moduleID: 1,
+          synced: false,
+          data: record.data,
+          fieldList: [],
         })
       );
-
-      let response;
-      await act(async () => {
-        response = await result.current.execute({
-          moduleID: 1,
-          data: {},
-          synced: false,
-        });
-      });
 
       // Assert
       expect(response.success).toBe(true);

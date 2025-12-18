@@ -4,6 +4,7 @@ import { describe, expect, it } from '@jest/globals';
 
 import { GetModuleFieldListUseCase } from '@/domain/module/use-case/get-module-field-list.use-case';
 import { mockLoggerPort } from '@/tests/mocks/core.port.mock';
+import { mockModuleFieldEntity } from '@/tests/mocks/module-field.entity.mock';
 import { mockModuleFieldPort } from '@/tests/mocks/module-field.port.mock';
 
 describe('[UseCase] - GetModuleFieldList', () => {
@@ -23,10 +24,10 @@ describe('[UseCase] - GetModuleFieldList', () => {
   describe('Happy Path', () => {
     it('returns fields for specified module when adapter returns data', async () => {
       const { unit, moduleFieldAdapter } = prepareSuiteCase();
-      const moduleID = 'module-123';
+      const moduleID = 123;
       const fields = [
-        { id: 'field1', name: 'Field1', moduleId: moduleID },
-        { id: 'field2', name: 'Field2', moduleId: moduleID },
+        mockModuleFieldEntity({ id: 1, moduleId: moduleID, title: 'Field1' }),
+        mockModuleFieldEntity({ id: 2, moduleId: moduleID, title: 'Field2' }),
       ];
       moduleFieldAdapter.getAllByModuleId.mockResolvedValue(fields);
 
@@ -35,6 +36,10 @@ describe('[UseCase] - GetModuleFieldList', () => {
 
       // Assert
       expect(response.success).toBe(true);
+
+      if (!response.success) {
+        throw new Error('Expected success response');
+      }
       expect(response.details.items).toEqual(fields);
       expect(moduleFieldAdapter.getAllByModuleId).toHaveBeenCalledWith(
         moduleID

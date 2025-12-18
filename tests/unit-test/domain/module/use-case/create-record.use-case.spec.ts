@@ -56,6 +56,10 @@ describe('[UseCase] - CreateRecord', () => {
 
       // Assert
       expect(resp.success).toBe(true);
+
+      if (!resp.success) {
+        throw new Error('Expected success response');
+      }
       expect(resp.details).toEqual(mockRecord);
       expect(recordAdapter.create).toHaveBeenCalledWith(payload);
     });

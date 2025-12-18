@@ -26,6 +26,9 @@ describe('[UseCase] - GetAppLocale', () => {
       const response = await useCase.execute();
 
       expect(response.success).toBe(true);
+      if (!response.success) {
+        throw new Error('Expected success response');
+      }
       expect(response.details).toBe(locale);
       expect(cacheAdapter.get).toHaveBeenCalledWith(CACHE_KEY_ENUM.APP_LOCALE);
       expect(cacheAdapter.set).not.toHaveBeenCalled();
@@ -39,6 +42,9 @@ describe('[UseCase] - GetAppLocale', () => {
       const response = await useCase.execute();
 
       expect(response.success).toBe(true);
+      if (!response.success) {
+        throw new Error('Expected success response');
+      }
       expect(response.details).toBe(ELocaleCode.es_ES);
       expect(cacheAdapter.get).toHaveBeenCalledWith(CACHE_KEY_ENUM.APP_LOCALE);
       expect(cacheAdapter.set).toHaveBeenCalledWith(

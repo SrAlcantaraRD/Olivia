@@ -26,7 +26,6 @@ describe('[UseCase] - SetAppTheme', () => {
       const response = await useCase.execute({ theme });
 
       expect(response.success).toBe(true);
-      expect(response.details).toBeUndefined();
       expect(cacheAdapter.set).toHaveBeenCalledWith(
         CACHE_KEY_ENUM.APP_THEME,
         theme

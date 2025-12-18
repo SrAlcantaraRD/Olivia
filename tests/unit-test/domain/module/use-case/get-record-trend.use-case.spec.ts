@@ -35,6 +35,10 @@ describe('[UseCase] - GetRecordTrend', () => {
 
       // Assert
       expect(resp.success).toBe(true);
+
+      if (!resp.success) {
+        throw new Error('Expected success response');
+      }
       expect(resp.details.series).toEqual(mockSeries);
       expect(recordAdapter.getCountsByDay).toHaveBeenCalled();
     });

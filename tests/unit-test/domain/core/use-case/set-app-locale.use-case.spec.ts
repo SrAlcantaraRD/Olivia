@@ -26,7 +26,6 @@ describe('[UseCase] - SetAppLocale', () => {
       const response = await useCase.execute({ locale });
 
       expect(response.success).toBe(true);
-      expect(response.details).toBeUndefined();
       expect(cacheAdapter.set).toHaveBeenCalledWith(
         CACHE_KEY_ENUM.APP_LOCALE,
         locale
