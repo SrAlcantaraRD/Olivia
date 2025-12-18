@@ -79,6 +79,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
       data: data.data,
       synced: data.synced ? STATUS_ENUM.ACTIVE : STATUS_ENUM.INACTIVE,
       status: STATUS_ENUM.ACTIVE,
+      createdAt: data.createdAt,
     } satisfies TRecordAdapterInsert;
 
     const [record] = await this.database

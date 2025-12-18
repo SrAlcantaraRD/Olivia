@@ -96,6 +96,7 @@ describe('[Integration][Adapter] SQLiteRecordAdapter', () => {
       data: '{"hello":"world"}',
       synced: false,
       fieldList: [],
+      createdAt: new Date(),
     });
 
     expect(created.id).toBeGreaterThan(0);

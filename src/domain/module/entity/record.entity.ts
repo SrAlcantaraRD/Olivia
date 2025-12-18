@@ -25,5 +25,6 @@ export type TRecord = z.infer<typeof RecordSchema> & {
 };
 
 export type TRecordCreate = z.infer<typeof RecordCreateSchema> & {
+  createdAt: Date;
   fieldList: TRecordFieldCreate[];
 };
