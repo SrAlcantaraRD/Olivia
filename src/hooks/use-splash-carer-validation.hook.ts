@@ -1,18 +1,18 @@
 import { useCallback, useState } from 'react';
 
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
-import { CheckCarerExistenceUseCase } from '@/domain/carer/use-case/check-carer-existence.use-case';
 import type {
   TCheckCarerExistenceRequest,
   TCheckCarerExistenceResponse,
 } from '@/domain/carer/use-case-schema/check-carer-existence.use-case-schema';
+import { CheckCarerExistenceUseCase } from '@/domain/carer/use-case/check-carer-existence.use-case';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
   IHookResponse,
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
+import type { INavigationPort } from '@/domain/core/port/navigation.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
-import type { INavigationPort } from '@/domain/ports/navigation.port';
 
 export function useSplashCarerValidation(adapters: {
   loggerAdapter: TLoggerPort;

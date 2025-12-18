@@ -1,8 +1,8 @@
 import type { Href } from 'expo-router';
 import { useCallback } from 'react';
 
+import type { INavigationPort } from '@/domain/core/port/navigation.port';
 import type { TID } from '@/domain/core/schemas/id.schema';
-import type { INavigationPort } from '@/domain/ports/navigation.port';
 
 export type AppRoute = Href;
 

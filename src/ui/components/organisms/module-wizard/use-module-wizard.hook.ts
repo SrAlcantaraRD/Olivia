@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useAdapters } from '@/adapter';
+import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
+import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
+import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
+import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 import { enEN } from '@/ui/i18n/locales/en-EN';
 
@@ -18,12 +21,18 @@ const FALLBACK_DESCRIPTION: Ti18nKeys =
 export interface IModuleWizardOptions {
   moduleID: number;
   initialValues: Record<number, string>;
+  onComplete?: (data: TRecordCreate) => void;
+  adapters: {
+    loggerAdapter: TLoggerPort;
+    moduleFieldAdapter: IModuleFieldPort;
+    notifyAdapter: INotifyPort;
+  };
 }
 
 export function useModuleWizard(opts: IModuleWizardOptions) {
-  const { moduleID, initialValues } = opts;
+  const { moduleID, initialValues, onComplete, adapters } = opts;
 
-  const { loggerAdapter, moduleFieldAdapter, notifyAdapter } = useAdapters();
+  const { loggerAdapter, moduleFieldAdapter, notifyAdapter } = adapters;
 
   const { execute: executeGetModuleFieldList, items: moduleFieldItems } =
     useGetListModuleField({
@@ -87,9 +96,30 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
   const selectOptionAndNext = useCallback(
     (fieldId: number, value: string) => {
       setFieldValue(fieldId, value);
-      setTimeout(() => goToNextStep(), 500);
+      setTimeout(() => {
+        if (currentStep + 1 >= totalSteps) {
+          const payload: TRecordCreate = {
+            moduleID,
+            carerID: 0,
+            data: JSON.stringify({ ...values, [fieldId]: value }),
+            synced: false,
+            fieldList: [{ fieldID: fieldId, value }],
+          };
+          onComplete?.(payload);
+        } else {
+          goToNextStep();
+        }
+      }, 500);
     },
-    [goToNextStep, setFieldValue]
+    [
+      goToNextStep,
+      setFieldValue,
+      currentStep,
+      totalSteps,
+      onComplete,
+      moduleID,
+      values,
+    ]
   );
 
   const currentField = fieldList[currentStep];

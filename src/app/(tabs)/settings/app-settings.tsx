@@ -1,28 +1,18 @@
-import { useCallback } from 'react';
 import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
-import { ELocaleCode, EThemeMode } from '@/domain/core/enum/settings.enum';
+import { ELocaleCode } from '@/domain/core/enum/settings.enum';
 import { useAppSettings } from '@/domain/core/hook/use-app-settings.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { SettingsRow } from '@/ui/components/molecules/settings-row.molecule';
-import { useAppTheme } from '@/ui/themes/app-theme-context';
 
 export default function AppSettingsScreen() {
-  const { cacheAdapter } = useAdapters();
-  const { setTheme, setLocale } = useAppSettings({
-    loggerAdapter: BASE_LOGGER,
+  const { cacheAdapter, loggerAdapter } = useAdapters();
+  const { isLight, isDark, toggleTheme, setLocale } = useAppSettings({
+    loggerAdapter,
     cacheAdapter,
   });
-
-  const { currentTheme, isLight } = useAppTheme();
-
-  const onToggleTheme = useCallback(() => {
-    const newTheme = isLight ? EThemeMode.DARK : EThemeMode.LIGHT;
-    void setTheme(newTheme);
-  }, [isLight, setTheme]);
 
   return (
     <ScreenLayout
@@ -37,11 +27,11 @@ export default function AppSettingsScreen() {
             iconName={isLight ? 'sunny' : 'moon'}
             titleKey="page.app-settings.section-theme"
             captionKey={
-              currentTheme === 'dark'
+              isDark
                 ? 'page.app-settings.action.switch-to-light'
                 : 'page.app-settings.action.switch-to-dark'
             }
-            onPress={onToggleTheme}
+            onPress={toggleTheme}
             testID="page.app-settings.button.toggle-theme"
           />
         </CardAtom>

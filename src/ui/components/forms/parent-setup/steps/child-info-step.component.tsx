@@ -30,6 +30,7 @@ export function ChildInfoStep({
           value={name}
           onChangeText={onNameChange}
           isRequired
+          testID="child-name-input"
         />
       </View>
 
@@ -42,6 +43,7 @@ export function ChildInfoStep({
           onChangeText={onBirthDateChange}
           keyboardType="numbers-and-punctuation"
           isRequired
+          testID="child-birthdate-input"
         />
       </View>
 
@@ -52,6 +54,7 @@ export function ChildInfoStep({
           placeholder="parent-setup.child-info.diagnosis-placeholder"
           value={diagnosis}
           onChangeText={onDiagnosisChange}
+          testID="child-diagnosis-input"
         />
         <TypographySmall
           className="text-muted ml-1 mt-1"

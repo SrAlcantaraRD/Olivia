@@ -1,44 +1,29 @@
 import { Ionicons } from '@expo/vector-icons';
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
-import * as Haptics from 'expo-haptics';
 import type { FC } from 'react';
-import { Platform, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
 import Animated, { FadeOut, ZoomIn } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
 
 import { useAdapters } from '@/adapter';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
-import { EThemeMode } from '@/domain/core/enum/settings.enum';
-import { SetAppThemeUseCase } from '@/domain/core/use-case/set-app-theme.use-case';
+import { useAppSettings } from '@/domain/core/hook/use-app-settings.hook';
 import { cn } from '@/ui/lib/utils';
-import { useAppTheme } from '@/ui/themes/app-theme-context';
 
 const StyledIonicons = withUniwind(Ionicons);
 
 export const ThemeToggle: FC = () => {
-  const { toggleTheme, isLight } = useAppTheme();
-  const { cacheAdapter } = useAdapters();
+  const { cacheAdapter, loggerAdapter } = useAdapters();
+  const { toggleTheme, isLight } = useAppSettings({
+    loggerAdapter,
+    cacheAdapter,
+  });
 
   const isLGAvailable = isLiquidGlassAvailable();
 
   return (
     <Pressable
-      onPress={() => {
-        if (Platform.OS === 'ios') {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        }
-        // Toggle visually
-        const newTheme = isLight ? EThemeMode.DARK : EThemeMode.LIGHT;
-        toggleTheme();
-
-        // Persist via use-case (fire-and-forget)
-        try {
-          const usecase = new SetAppThemeUseCase(BASE_LOGGER, cacheAdapter);
-          usecase.execute({ theme: newTheme });
-        } catch (_e) {
-          // ignore persistence errors
-        }
-      }}
+      testID="button.toggle-theme"
+      onPress={toggleTheme}
       className={cn('p-3', isLGAvailable && 'px-2.5 py-0')}
     >
       {isLight ? (

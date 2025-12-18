@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { useAdapters } from '@/adapter';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
@@ -25,6 +26,8 @@ export function ModuleWizard({
   onComplete,
   testID,
 }: ModuleWizardProps) {
+  const { loggerAdapter, moduleFieldAdapter, notifyAdapter } = useAdapters();
+
   const {
     currentStep,
     steps,
@@ -33,7 +36,12 @@ export function ModuleWizard({
     goToPreviousStep,
     setFieldValue,
     selectOptionAndNext,
-  } = useModuleWizard({ moduleID, initialValues: {} });
+  } = useModuleWizard({
+    moduleID,
+    initialValues: {},
+    onComplete,
+    adapters: { loggerAdapter, moduleFieldAdapter, notifyAdapter },
+  });
 
   type StepItem = {
     id: string;

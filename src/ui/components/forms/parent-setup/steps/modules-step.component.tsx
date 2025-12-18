@@ -38,7 +38,7 @@ export function ModulesStep({
         <ModuleCard
           key={module.id}
           module={module}
-          testID="parent-setup"
+          testID={`module-${module.code}`}
           isSelected={selectedModules.has(module.id)}
           onPress={() => onToggleModule(module.id)}
         />
