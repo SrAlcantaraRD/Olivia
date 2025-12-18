@@ -1,131 +1,201 @@
-## Plan de Implementación Detallado
+## Plan de Implementacion Detallado - Resumen (Tab)
 
 Fecha: 2025-12-18
 
-Este plan detalla las tareas y subtareas para implementar la pestaña "Resumen" de manera incremental, siguiendo Clean Architecture y las reglas de la app Oliva. Cada tarea incluye criterios de aceptación, dependencias y estimación aproximada (en horas/días).
+Objetivo
+- Implementar la pestaña "Resumen" siguiendo Clean Architecture, con orden de trabajo: Domain -> Adapters -> Use-cases -> Hooks -> UI.
 
-### Fase 1: Preparación y Estructura (1-2 días)
-**Objetivo:** Establecer la base técnica y documental sin código funcional.
+Fuentes
+- PRD: `docs/features/summary-resumen/summary-resumen-prd.md`
+- PSD: `docs/features/summary-resumen/summary-resumen-psd.md`
+- Wireframes: `docs/features/summary-resumen/step-2.wireframe.md`
+- Wireframe refinement: `docs/features/summary-resumen/step-3.wireframe-refinement.md`
 
-1. **Refinar documentación y wireframes**
-   - Subtarea 1.1: Actualizar `summary-resumen-plan.md` con decisiones finales (e.g., rutas, adapters).
-   - Subtarea 1.2: Completar wireframes detallados para cada pantalla (Home, hubs, detalle).
-   - Subtarea 1.3: Definir contratos de datos (e.g., `SummaryModule`) en domain.
-   - Criterios: Documento aprobado, wireframes en formato txt .
-   - Dependencias: Ninguna.
 
-2. **Crear estructura de carpetas y archivos base**
-   - Subtarea 2.1: Crear carpetas en `src/app/(tabs)/summary/` con `_layout.tsx`, `index.tsx`, etc.
-   - Subtarea 2.2: Crear archivos base en `src/domain/summary/` (entities, ports, use-cases).
-   - Subtarea 2.3: Crear archivos base en `src/database/adapter/summary/` y `src/hooks/summary/`.
-   - Criterios: Estructura creada, archivos con skeletons (imports básicos).
-   - Dependencias: Tarea 1.
+## Orden de implementacion (macro)
+1. Domain (entities -> enums -> ports -> use-cases)
+2. Adapters (db/cache/service)
+3. Hooks (orquestan domain + adapters)
+4. UI (screens -> components -> detalle)
+5. QA (tests + validacion manual)
 
-3. **Configurar i18n base**
-   - Subtarea 3.1: Añadir keys estáticas en `src/ui/i18n/` (ES y EN) para titles, buttons, empty states.
-   - Subtarea 3.2: Verificar interpolación para keys dinámicas.
-   - Criterios: Keys compilables sin errores.
-   - Dependencias: Tarea 1.
 
-### Fase 2: Implementación de UI y Navegación (2-3 días)
-**Objetivo:** Pantallas estáticas con navegación funcional.
 
-4. **Implementar layout y Home (index.tsx)**
-   - Subtarea 4.1: Crear `_layout.tsx` con header y navegación básica.
-   - Subtarea 4.2: Implementar `index.tsx` con secciones estáticas (placeholders para cards y rows).
-   - Subtarea 4.3: Añadir navegación a hubs (all-data, trends, highlights).
-   - Criterios: Pantalla renderiza sin errores, navegación funciona.
-   - Dependencias: Fase 1.
 
-5. **Implementar hubs (all-data, trends, highlights)**
-   - Subtarea 5.1: Crear `all-data.tsx` con lista estática de módulos.
-   - Subtarea 5.2: Crear `trends/index.tsx` con lista placeholder de trends.
-   - Subtarea 5.3: Crear `highlights/index.tsx` con lista placeholder de insights.
-   - Subtarea 5.4: Añadir navegación desde hubs a detalles.
-   - Criterios: Hubs renderizan, navegación a detalles (aunque vacíos).
-   - Dependencias: Tarea 4.
+## Fase 0 - Alineacion y setup (0.5 - 1 dia)
 
-6. **Implementar plantilla de detalle**
-   - Subtarea 6.1: Crear `detail/module.tsx` con estructura base (selector periodo, charts placeholders, descripción i18n).
-   - Subtarea 6.2: Crear `detail/module-field.tsx` y `detail/trend.tsx` reutilizando plantilla.
-   - Subtarea 6.3: Añadir opciones ("Fijar", "Mostrar todos").
-   - Criterios: Detalles renderizan con placeholders, opciones visibles.
-   - Dependencias: Tarea 5.
+0.1 Validar rutas y naming
+- Definir rutas finales con Expo Router (summary vs resumen, detail paths).
+- Rutas acordadas:
+  - `src/app/(tabs)/summary/index.tsx`
+  - `src/app/(tabs)/summary/all-data.tsx`
+  - `src/app/(tabs)/summary/trends.tsx`
+  - `src/app/(tabs)/summary/highlights.tsx`
+  - `src/app/(tabs)/summary/detail/module/[moduleId].tsx`
+  - `src/app/(tabs)/summary/detail/module/[moduleId]/field/[fieldId].tsx`
+  - `src/app/(tabs)/summary/detail/trend/[trendId].tsx`
+- Confirmar estructura de carpetas y nomenclatura.
+- Aceptacion: rutas definidas y documentadas, no hay ambiguedad.
 
-### Fase 3: Integración de Datos y Lógica (3-4 días)
-**Objetivo:** Conectar datos reales, hooks y persistencia.
+0.2 Definir contratos minimos (SummaryModule, SummaryPin, SummaryTrend)
+- Validar shape y keys de i18n necesarias.
+- Aceptacion: contratos listos para implementar en domain.
 
-7. **Implementar domain y adapters para datos**
-   - Subtarea 7.1: Definir entities y ports en `src/domain/summary/`.
-   - Subtarea 7.2: Crear adapters en `src/database/adapter/summary/` para queries (reusar report-manager).
-   - Subtarea 7.3: Implementar use-cases para aggregation (todayCount, last7Days, etc.).
-   - Criterios: Ports definidos, adapters básicos funcionales.
-   - Dependencias: Fase 2.
+0.3 Mapa de dependencias
+- Identificar reuso de `get-active-module-list.use-case.ts` para modulos activos dinamicos.
+- Validar flow: hook -> use-case -> adapter -> BBDD (sin acceso directo desde UI).
+- Persistencia de pins via `cache.port.ts` (MMKV), sin limite de pins.
+- i18n: ES/CA/EN.
+- Aceptacion: lista de modulos y fuentes de datos validada.
 
-8. **Crear hooks para UI**
-   - Subtarea 8.1: Implementar `use-summary-data.hook.ts` para popular cards.
-   - Subtarea 8.2: Implementar `use-pins.hook.ts` con MMKV para persistencia.
-   - Subtarea 8.3: Integrar hooks en pantallas (reemplazar placeholders).
-   - Criterios: Datos dinámicos en UI, pins persisten.
-   - Dependencias: Tarea 7.
 
-9. **Implementar componentes reutilizables**
-   - Subtarea 9.1: Crear `SummaryCard` con BarChartMini.
-   - Subtarea 9.2: Crear `PinnedSection` con drag-and-drop.
-   - Subtarea 9.3: Crear `ListRow` con iconos.
-   - Criterios: Componentes renderizan correctamente, accesibles.
-   - Dependencias: Tarea 8.
+## Fase 1 - Domain (1 - 2 dias)
 
-### Fase 4: Funcionalidades Avanzadas y AI (2-3 días)
-**Objetivo:** Completar features transversales y placeholders.
+1.1 Entidades y tipos base
+- Crear `SummaryModule`, `SummaryField`, `SummaryTrend`, `SummaryPin`, `SummaryPeriod`.
+- Aceptacion: types exportados desde `src/domain/summary` sin errores TS.
 
-10. **Implementar "Fijar en Resumen"**
-    - Subtarea 10.1: Añadir lógica en detalles para pin/unpin.
-    - Subtarea 10.2: Actualizar Home para mostrar pins ordenados.
-    - Subtarea 10.3: Soporte para reordenar en PinnedSection.
-    - Criterios: Pins persisten y afectan Home.
-    - Dependencias: Tarea 9.
+1.2 Enums y constantes
+- Periodos: Day, Week, Month, HalfYear, Year.
+- Pin types: module, field, trend.
+- Aceptacion: enums usados por use-cases y hooks.
 
-11. **Añadir análisis AI placeholder**
-    - Subtarea 11.1: Crear `src/services/analysis/aiAnalysis.stub.ts` con interfaz.
-    - Subtarea 11.2: Integrar en detalles con loading y regenerate.
-    - Subtarea 11.3: Definir `AnalysisInput` (moduleId, rango, stats).
-    - Criterios: Placeholder muestra texto básico.
-    - Dependencias: Tarea 10.
+1.3 Ports (interfaces)
+- `SummaryDataPort`: read aggregates (today, last7, averages, trends, highlights).
+- `SummaryPinsPort`: CRUD + ordering.
+- `SummaryAnalysisPort`: generateAnalysis placeholder.
+- Aceptacion: ports cubren necesidades del PSD.
 
-12. **Implementar estados vacíos y validaciones**
-    - Subtarea 12.1: Añadir empty states en todas las pantallas.
-    - Subtarea 12.2: Validar histórico insuficiente (>=5 días).
-    - Subtarea 12.3: Mensajes i18n para "No data yet", etc.
-    - Criterios: No NaN, UX clara en estados vacíos.
-    - Dependencias: Tarea 11.
+1.4 Use-cases
+- `GetSummaryHomeUseCase` (cards + pinned section).
+- `GetSummaryModulesUseCase` (all-data list).
+- `GetSummaryTrendsUseCase` (trends list).
+- `GetSummaryHighlightsUseCase` (highlights list).
+- `GetSummaryDetailUseCase` (detail template data by type).
+- `PinSummaryItemUseCase`, `UnpinSummaryItemUseCase`, `ReorderSummaryPinsUseCase`.
+- Aceptacion: use-cases retornan domain-only models, sin dependencias UI.
 
-### Fase 5: Tests y Refinamiento (2-3 días)
-**Objetivo:** Validar y pulir.
 
-13. **Añadir tests unitarios e integration**
-    - Subtarea 13.1: Tests para hooks (summary data, pins).
-    - Subtarea 13.2: Snapshots para componentes (SummaryCard).
-    - Subtarea 13.3: Integration para navegación (Home -> Detail -> Pin).
-    - Criterios: Cobertura >80%, tests pasan.
-    - Dependencias: Fase 4.
+## Fase 2 - Adapters (1 - 2 dias)
 
-14. **Refinamiento y QA manual**
-    - Subtarea 14.1: Revisar accesibilidad y i18n.
-    - Subtarea 14.2: Pruebas en device/simulador.
-    - Subtarea 14.3: Ajustes basados en feedback.
-    - Criterios: Funcionalidad completa, sin bugs críticos.
-    - Dependencias: Tarea 13.
+2.1 Data adapter (query/aggregation)
+- Implementar `SummaryDataAdapter` usando Drizzle y/o `use-report-manager`.
+- Agregados minimos: todayCount, last7Days, previousPeriodAverage.
+- Aceptacion: adapter retorna datos reales o fallback seguro.
 
-15. **PR y merge**
-    - Subtarea 15.1: Crear PR con descripción detallada.
-    - Subtarea 15.2: Code review y merge.
-    - Criterios: Aprobado y merged.
-    - Dependencias: Tarea 14.
+2.2 Cache/Pins adapter
+- Implementar adapter MMKV o secure-store para pins.
+- Soporte: create, remove, list, reorder.
+- Aceptacion: persiste y recupera orden correctamente.
 
-### Notas Generales
-- **Estimaciones:** Aproximadas; ajustar según progreso.
-- **Dependencias Técnicas:** Reusar `use-report-manager`, MMKV adapter, i18n setup.
-- **Riesgos:** Cambios en domain podrían afectar; validar temprano.
-- **Métricas de Éxito:** MVP funcional, navegación fluida, datos agregados correctos.
-- **Próximo:** Empezar con Fase 1 tras aprobación.
+2.3 Analysis adapter (placeholder)
+- Implementar `aiAnalysis.stub.ts` y port.
+- Aceptacion: retorna texto placeholder estable.
+
+
+## Fase 3 - Hooks (1 - 2 dias)
+
+3.1 Hook de home
+- `use-summary-home.hook.ts`: cards + pinned section.
+- Manejar loading/empty/error.
+- Aceptacion: hook usable por `summary/index`.
+
+3.2 Hook de listados
+- `use-summary-modules.hook.ts` (all-data).
+- `use-summary-trends.hook.ts`.
+- `use-summary-highlights.hook.ts`.
+- Aceptacion: datos mock/real inyectables.
+
+3.3 Hook de detalle
+- `use-summary-detail.hook.ts`: data, period selector, analysis.
+- Aceptacion: soporta module/field/trend con un shape comun.
+
+3.4 Hook de pins
+- `use-summary-pins.hook.ts`: pin/unpin/reorder.
+- Aceptacion: cambios reflejados en home.
+
+
+## Fase 4 - UI base y navegacion (2 - 3 dias)
+
+4.1 Layout y rutas
+- Crear `(tabs)/summary/_layout.tsx` con Stack.
+- Crear placeholders en rutas definidas.
+- Aceptacion: navegacion funcional.
+
+4.2 Pantalla Home
+- Secciones: Pinned, Show all, Trends, Highlights.
+- Integrar hook home (con placeholders si no hay data).
+- Aceptacion: render estable con empty states.
+
+4.3 Hubs
+- `all-data`, `trends`, `highlights` con listas.
+- Navegacion a detalle correspondiente.
+- Aceptacion: listas navegables.
+
+
+## Fase 5 - UI detalle y componentes (2 - 3 dias)
+
+5.1 Plantilla de detalle
+- Implementar layout con period selector, charts placeholders, description, analysis.
+- Aceptacion: usable para module/field/trend.
+
+5.2 Componentes reutilizables
+- `SummaryCard`, `BarChartMini`, `PinnedSection`, `ListRow`.
+- Aceptacion: componentes independientes, accesibles.
+
+5.3 Pinned interactions
+- Integrar pin/unpin y reorder en detalle + home.
+- Aceptacion: persistencia local y actualizacion UI.
+
+
+## Fase 6 - Estados especiales y i18n (1 - 2 dias)
+
+6.1 i18n keys
+- Agregar keys ES/EN para summary.*.
+- Aceptacion: no hay claves faltantes.
+
+6.2 Empty states
+- Sin datos, sin historico, sin tendencias.
+- Aceptacion: mensajes claros y consistentes.
+
+6.3 Validaciones
+- Evitar NaN, valores negativos, fechas invalidas.
+- Aceptacion: UI nunca muestra valores rotos.
+
+
+## Fase 7 - Tests y QA (2 - 3 dias)
+
+7.1 Unit tests
+- Hooks: home, detail, pins.
+- Use-cases: agregaciones basicas.
+- UI components: SummaryCard, BarChartMini, ...
+- Aceptacion: tests pasan.
+
+7.2 Integration tests
+- Flow: Home -> Detail -> Pin -> Home.
+- Aceptacion: navegacion y estado correcto.
+
+7.3 QA manual
+- iOS/Android, estados vacios, performance basica.
+- Aceptacion: sin bugs bloqueantes.
+
+
+
+## Dependencias y riesgos
+- Reuso de `use-report-manager` y datos locales.
+- Persistencia MMKV debe estar disponible.
+- Charts pueden requerir optimizacion (memoization).
+
+
+## Entregables
+- Rutas Summary funcionales.
+- Home + hubs + detail con data real y placeholders donde aplique.
+- Pins persistentes.
+- Documentacion i18n y tests base.
+
+
+## Cobertura de la implementacion
+- Cubrir todos los requisitos del PRD y PSD.
+- Asegurar UX consistente con wireframes y guidelines.
+- Mantener Clean Architecture y separation of concerns.
+- Proveer base para futuras mejoras (AI analysis, custom modules).
