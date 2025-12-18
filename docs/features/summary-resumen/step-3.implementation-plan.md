@@ -36,10 +36,12 @@ Fuentes
   - `src/app/(tabs)/summary/detail/trend/[trendId].tsx`
 - Confirmar estructura de carpetas y nomenclatura.
 - Aceptacion: rutas definidas y documentadas, no hay ambiguedad.
+ - Estado: ✅
 
 0.2 Definir contratos minimos (SummaryModule, SummaryPin, SummaryTrend)
 - Validar shape y keys de i18n necesarias.
 - Aceptacion: contratos listos para implementar en domain.
+ - Estado: ✅
 
 0.3 Mapa de dependencias
 - Identificar reuso de `get-active-module-list.use-case.ts` para modulos activos dinamicos.
@@ -47,6 +49,7 @@ Fuentes
 - Persistencia de pins via `cache.port.ts` (MMKV), sin limite de pins.
 - i18n: ES/CA/EN.
 - Aceptacion: lista de modulos y fuentes de datos validada.
+ - Estado: ✅
 
 
 ## Fase 1 - Domain (1 - 2 dias)
@@ -54,11 +57,13 @@ Fuentes
 1.1 Entidades y tipos base
 - Crear `SummaryModule`, `SummaryField`, `SummaryTrend`, `SummaryPin`, `SummaryPeriod`.
 - Aceptacion: types exportados desde `src/domain/summary` sin errores TS.
+ - Estado: ✅
 
 1.2 Enums y constantes
 - Periodos: Day, Week, Month, HalfYear, Year.
 - Pin types: module, field, trend.
 - Aceptacion: enums usados por use-cases y hooks.
+ - Estado: ✅
 
 1.3 Ports (interfaces)
 - `SummaryModulePort`: read module summaries (today, last7, averages).
@@ -69,6 +74,7 @@ Fuentes
 - `SummaryAnalysisPort`: generateAnalysis placeholder.
 - `SummarySnapshotPort`: get/set snapshots en cache (sin TTL).
 - Aceptacion: ports cubren necesidades del PSD.
+ - Estado: ✅
 
 1.4 Use-cases
 - `GetSummaryHomeUseCase` (cards + pinned section).
@@ -79,9 +85,16 @@ Fuentes
 - `PinSummaryItemUseCase`, `UnpinSummaryItemUseCase`, `ReorderSummaryPinsUseCase`.
 - `RefreshSummarySnapshotsUseCase` (recalcula y guarda snapshots).
 - Aceptacion: use-cases retornan domain-only models, sin dependencias UI.
+ - Estado: ✅
 
 
 ## Fase 2 - Adapters (1 - 2 dias)
+
+2.0 FakeData adapters (temporales)
+- `FakeData<entity>Adapter` implementa cada `Summary*Port`.
+- Objetivo: desbloquear UI sin tocar cache/BBDD.
+- Aceptacion: hooks funcionan con datos mock.
+ - Estado: ✅
 
 2.1 Data adapter (query/aggregation)
 - Implementar adapters por entidad usando Drizzle y/o `use-report-manager`.
@@ -110,25 +123,31 @@ Fuentes
 - `use-summary-home.hook.ts`: cards + pinned section.
 - Manejar loading/empty/error.
 - Aceptacion: hook usable por `summary/index`.
+ - Estado: ✅
 
 3.2 Hook de listados
 - `use-summary-modules.hook.ts` (all-data).
 - `use-summary-trends.hook.ts`.
 - `use-summary-highlights.hook.ts`.
 - Aceptacion: datos mock/real inyectables.
+ - Estado: ✅
 
 3.3 Hook de detalle
 - `use-summary-detail.hook.ts`: data, period selector, analysis.
 - Aceptacion: soporta module/field/trend con un shape comun.
+ - Estado: ✅
 
 3.4 Hook de pins
 - `use-summary-pins.hook.ts`: pin/unpin/reorder.
 - Aceptacion: cambios reflejados en home.
+ - Estado: ✅
 
 3.5 Hook de refresh
 - `use-summary-refresh.hook.ts`: ejecuta refresh manual (pull-to-refresh, entry).
 - Aceptacion: dispara el recalculo de snapshots sin TTL.
  - Nota: hook y use-case quedaran como skeletons con mocks hasta la fase final.
+ - Estado: ⏳
+ - TODO: renombrar `refresh-summary-snapshots.hook.ts` a `use-summary-refresh.hook.ts`.
 
 3.6 Puntos de invocacion del refresh (documentado, sin implementar)
 - App open (cold start).
@@ -136,6 +155,7 @@ Fuentes
 - Pull-to-refresh manual en Home.
 - Al crear/editar un record (si aplica).
 - Aceptacion: puntos de invocacion definidos en este documento.
+ - Estado: ✅
 
 
 ## Fase 4 - UI base y navegacion (2 - 3 dias)
@@ -144,16 +164,19 @@ Fuentes
 - Crear `(tabs)/summary/_layout.tsx` con Stack.
 - Crear placeholders en rutas definidas.
 - Aceptacion: navegacion funcional.
+ - Estado: ✅
 
 4.2 Pantalla Home
 - Secciones: Pinned, Show all, Trends, Highlights.
 - Integrar hook home (con placeholders si no hay data).
 - Aceptacion: render estable con empty states.
+ - Estado: ✅
 
 4.3 Hubs
 - `all-data`, `trends`, `highlights` con listas.
 - Navegacion a detalle correspondiente.
 - Aceptacion: listas navegables.
+ - Estado: ✅
 
 
 ## Fase 5 - UI detalle y componentes (2 - 3 dias)
