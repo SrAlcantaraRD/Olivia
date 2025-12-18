@@ -1,33 +1,42 @@
 import { useMemo } from 'react';
 
-import { useAdapters } from '@/adapter';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
+import { ModuleFieldSelectValuesFromJsonStringSchema } from '@/domain/module/schemas/module-field-values.schema';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { Wizard } from '@/ui/components/molecules/wizard.molecule';
 import { ModuleFieldWrapper } from '@/ui/components/organisms/module-wizard/module-field-wrapper.component';
-import { useModuleWizard } from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';
+import {
+  type IModuleWizardAdapters,
+  useModuleWizard,
+} from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 // FIXME: Simplificate processing field values parsing
 export function parseFieldValues(values: string | undefined): string[] {
   if (!values) return [];
-  return JSON.parse(values);
+
+  const trimmed = values.trim();
+  if (!trimmed) return [];
+
+  const result = ModuleFieldSelectValuesFromJsonStringSchema.safeParse(trimmed);
+  if (!result.success) return [];
+  return result.data;
 }
 
 interface ModuleWizardProps {
   moduleID: number;
   onComplete: (data: TRecordCreate) => void;
   testID: string;
+  adapters: IModuleWizardAdapters;
 }
 
 export function ModuleWizard({
   moduleID,
   onComplete,
   testID,
+  adapters,
 }: ModuleWizardProps) {
-  const { loggerAdapter, moduleFieldAdapter, notifyAdapter } = useAdapters();
-
   const {
     currentStep,
     steps,
@@ -40,7 +49,7 @@ export function ModuleWizard({
     moduleID,
     initialValues: {},
     onComplete,
-    adapters: { loggerAdapter, moduleFieldAdapter, notifyAdapter },
+    adapters,
   });
 
   type StepItem = {

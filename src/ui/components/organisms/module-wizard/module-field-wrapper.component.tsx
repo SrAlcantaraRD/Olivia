@@ -2,22 +2,20 @@ import type { FC } from 'react';
 import { View } from 'react-native';
 
 import { MODULE_FIELD_TYPE_ENUM } from '@/domain/module/enum/module-field-type.enum';
+import { ModuleFieldSelectValuesFromJsonStringSchema } from '@/domain/module/schemas/module-field-values.schema';
 import { TextFieldAtom } from '@/ui/components/atoms/text-field.atom';
 import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
 import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
 
 function parseFieldValues(valuesStr: string | undefined): string[] {
-  if (!valuesStr || valuesStr.length === 0) return [];
-  try {
-    const parsed = JSON.parse(valuesStr);
-    if (Array.isArray(parsed)) return parsed.map((v) => String(v));
-    return [String(parsed)];
-  } catch (_err) {
-    return valuesStr
-      .split(',')
-      .map((v) => v.trim())
-      .filter(Boolean);
-  }
+  if (!valuesStr) return [];
+
+  const trimmed = valuesStr.trim();
+  if (!trimmed) return [];
+
+  const result = ModuleFieldSelectValuesFromJsonStringSchema.safeParse(trimmed);
+  if (!result.success) return [];
+  return result.data;
 }
 
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
