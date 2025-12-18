@@ -18,15 +18,17 @@ const _FALLBACK_TITLE: Ti18nKeys = 'parent-setup.modules.unknown.title';
 const FALLBACK_DESCRIPTION: Ti18nKeys =
   'parent-setup.modules.unknown.description';
 
+export interface IModuleWizardAdapters {
+  loggerAdapter: TLoggerPort;
+  moduleFieldAdapter: IModuleFieldPort;
+  notifyAdapter: INotifyPort;
+}
+
 export interface IModuleWizardOptions {
   moduleID: number;
   initialValues: Record<number, string>;
   onComplete?: (data: TRecordCreate) => void;
-  adapters: {
-    loggerAdapter: TLoggerPort;
-    moduleFieldAdapter: IModuleFieldPort;
-    notifyAdapter: INotifyPort;
-  };
+  adapters: IModuleWizardAdapters;
 }
 
 export function useModuleWizard(opts: IModuleWizardOptions) {
