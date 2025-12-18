@@ -60,6 +60,11 @@ Refinamiento de wireframes basado en feedback. Estilo rápido con ASCII para cla
 - PinnedSection: Drag-and-drop para ordenar.
 - Default: 1 card por módulo si no hay pins.
 - Empty: "Añade tu primer registro para ver estadísticas".
+- Estilo visual (mockup):
+  - Fondo oscuro con gradiente cálido arriba (naranja/marrón suave).
+  - Cards con esquinas redondeadas grandes y fondo gris oscuro.
+  - Accent naranja para iconos, líneas de media y métricas destacadas.
+  - Rows tipo "pill" con icono a la izquierda y chevron a la derecha.
 - SummaryCard ASCII:
 ```
   +--------------------------------------------------+
@@ -99,6 +104,7 @@ Refinamiento de wireframes basado en feedback. Estilo rápido con ASCII para cla
 - Header: Back button + título i18n.
 - Foco: Scroll a módulo si viene de detalle.
 - Grupos: Separadores visuales entre categorías.
+- Estilo visual (mockup): rows tipo pill, icono a la izquierda, texto con jerarquía clara.
 
 ---
 
@@ -123,6 +129,7 @@ Refinamiento de wireframes basado en feedback. Estilo rápido con ASCII para cla
 **Refinamientos:**
 - TrendCard: Icon (↑↓→) + descripción corta + chevron.
 - Placeholder: Texto motivacional si vacío.
+- Estilo visual (mockup): card grande con mini chart y línea de media naranja.
 
 ---
 
@@ -145,6 +152,7 @@ Refinamiento de wireframes basado en feedback. Estilo rápido con ASCII para cla
 **Refinamientos:**
 - Preview: Bullet + texto corto.
 - Navegación: A módulo/campo relevante.
+- Estilo visual (mockup): cards similares a SummaryCard con mini chart inferior.
 
 ---
 
@@ -211,6 +219,11 @@ Refinamiento de wireframes basado en feedback. Estilo rápido con ASCII para cla
 - Charts: Placeholder con nota de optimización.
 - Análisis: Loading skeleton + regenerate button.
 - Fijar: Toggle con feedback.
+- Estilo visual (mockup):
+  - Selector de periodo en chips con fondo oscuro.
+  - Chart principal con barras naranjas sobre fondo negro.
+  - Comparativa mensual con barras horizontales (accent vs muted).
+  - Sección "Acerca de" como card con texto largo.
 
 ---
 
