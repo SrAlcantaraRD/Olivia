@@ -1,4 +1,5 @@
 import { useThemeColor } from 'heroui-native';
+import { useState } from 'react';
 import { View } from 'react-native';
 
 import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
@@ -10,6 +11,7 @@ interface SummaryMiniBarChartProps {
   height?: number;
   showLabels?: boolean;
   labels?: string[];
+  highlightLastBar?: boolean;
   testID: string;
 }
 
@@ -19,11 +21,13 @@ export function SummaryMiniBarChart({
   height = 72,
   showLabels = true,
   labels,
+  highlightLastBar = true,
   testID,
 }: SummaryMiniBarChartProps) {
   const accentColor = useThemeColor('accent');
   const mutedColor = useThemeColor('muted');
   const backgroundColor = useThemeColor('background');
+  const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
   const safeValues = values.length > 0 ? values : [0];
   const max = Math.max(...safeValues, 1);
@@ -36,18 +40,34 @@ export function SummaryMiniBarChart({
       : ['D', 'L', 'M', 'X', 'J', 'V', 'S'].slice(0, values.length);
 
   const barValues = values.map((value) => ({ value: '', count: value }));
+  const barColors = values.map((_, index) => {
+    if (highlightLastBar && index === values.length - 1) return accentColor;
+    return mutedColor;
+  });
 
   return (
     <View testID={testID} className="w-full">
-      <View style={{ height }} className="w-full">
-        <BarChartAtom
-          values={barValues}
-          height={height}
-          color={mutedColor}
-          secondaryColor={mutedColor}
-          showAxisLabels={false}
-          testID={`${testID}.bars`}
-        />
+      <View
+        className="w-full"
+        style={{ height }}
+        onLayout={({ nativeEvent }) =>
+          setContainerWidth(nativeEvent.layout.width - 16)
+        }
+      >
+        {containerWidth ? (
+          <BarChartAtom
+            values={barValues}
+            height={height}
+            width={containerWidth}
+            color={mutedColor}
+            secondaryColor={mutedColor}
+            barColors={barColors}
+            showAxisLabels={false}
+            testID={`${testID}.bars`}
+          />
+        ) : (
+          <View style={{ height }} />
+        )}
         {avgRatio !== null && (
           <View
             style={{

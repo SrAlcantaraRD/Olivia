@@ -6,8 +6,10 @@ import { BarChart } from 'react-native-gifted-charts';
 interface BarChartProps {
   values: { value: string; count: number }[];
   height?: number;
+  width?: number;
   color?: string;
   secondaryColor?: string;
+  barColors?: string[];
   showLine?: boolean;
   showAxisLabels?: boolean;
   testID: string;
@@ -16,8 +18,10 @@ interface BarChartProps {
 export function BarChartAtom({
   values,
   height,
+  width,
   color = '#4f46e5',
   secondaryColor,
+  barColors,
   showLine = false,
   showAxisLabels = true,
   testID,
@@ -29,7 +33,9 @@ export function BarChartAtom({
   if (!values || values.length === 0)
     return <View style={{ height: resolvedHeight }} />;
 
-  const chartWidth = Math.max(240, windowWidth - 20 - 20 - 48);
+  const maxWidth = Math.max(240, windowWidth - 20 - 20 - 48);
+  const chartWidth =
+    typeof width === 'number' ? Math.min(width, maxWidth) : maxWidth;
 
   // For distribution charts we cap to top 20 (readability).
   // For compact trend charts we prefer the MOST RECENT values that fit on screen.
@@ -50,8 +56,8 @@ export function BarChartAtom({
   const data = sanitized.map((v, index) => ({
     value: v.value,
     label: v.label,
-    frontColor: index % 2 === 0 ? color : alt,
-    gradientColor: index % 2 === 0 ? color : alt,
+    frontColor: barColors?.[index] ?? (index % 2 === 0 ? color : alt),
+    gradientColor: barColors?.[index] ?? (index % 2 === 0 ? color : alt),
   }));
 
   // Fit bars into available width to avoid horizontal scroll hiding recent bars.
@@ -86,8 +92,8 @@ export function BarChartAtom({
       <BarChart
         data={data}
         height={resolvedHeight}
-        width={chartWidth}
-        barWidth={barWidth}
+        width={windowWidth}
+        barWidth={(barWidth / values.length) * 10}
         initialSpacing={10}
         spacing={spacing}
         barBorderRadius={4}
@@ -95,10 +101,13 @@ export function BarChartAtom({
         yAxisThickness={0}
         xAxisType={'dashed'}
         xAxisColor={showAxisLabels ? color : 'transparent'}
+        xAxisThickness={showAxisLabels ? 1 : 0}
         yAxisTextStyle={{ color: showAxisLabels ? color : 'transparent' }}
         stepValue={stepValue}
         maxValue={maxValue}
         noOfSections={noOfSections}
+        rulesColor={showAxisLabels ? color : 'transparent'}
+        rulesThickness={showAxisLabels ? 1 : 0}
         yAxisLabelTexts={yAxisLabelTexts}
         labelWidth={showAxisLabels ? 40 : 0}
         xAxisLabelTextStyle={{

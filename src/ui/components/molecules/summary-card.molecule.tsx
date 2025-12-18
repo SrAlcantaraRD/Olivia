@@ -23,6 +23,8 @@ interface SummaryCardProps {
   iconName?: IconName;
   chartValues?: number[];
   chartAverage?: number | null;
+  showAverageLine?: boolean;
+  highlightLastBar?: boolean;
   onPress?: () => void;
   testID: string;
 }
@@ -35,6 +37,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
   iconName,
   chartValues = [],
   chartAverage,
+  showAverageLine = false,
   onPress,
   testID,
 }) => {
@@ -43,12 +46,12 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
   const foregroundColor = useThemeColor('foreground');
 
   return (
-    <CardAtom className="p-4 rounded-3xl">
-      <Pressable
-        accessibilityRole="button"
-        onPress={onPress}
-        style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}
-      >
+    <Pressable
+      accessibilityRole="button"
+      onPress={onPress}
+      style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}
+    >
+      <CardAtom className="p-4">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center gap-3">
             {iconName && (
@@ -73,7 +76,8 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
               testID={`${testID}.title`}
               i18nKey="common.raw-value"
               values={{ value: title }}
-              className="font-semibold"
+              className="font-semibold text-lg"
+              variant="primary"
             />
           </View>
 
@@ -84,6 +88,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
                 i18nKey="common.raw-value"
                 values={{ value: timeLabel }}
                 variant="light"
+                className="text-xs"
               />
             )}
             <StyledIonicons
@@ -96,31 +101,35 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
 
         <View className="flex-row items-end justify-between gap-4">
           <View className="flex-1">
-            <TypographyHeading
-              testID={`${testID}.metric`}
-              i18nKey="common.raw-value"
-              values={{ value: metricValue }}
-              className="text-3xl"
-              style={{ color: foregroundColor }}
-            />
-            <TypographySmall
-              testID={`${testID}.metric-label`}
-              i18nKey="common.raw-value"
-              values={{ value: metricLabel }}
-              variant="light"
-            />
+            <View className="flex-row items-end gap-2">
+              <TypographyHeading
+                testID={`${testID}.metric`}
+                i18nKey="common.raw-value"
+                values={{ value: metricValue }}
+                className="text-4xl"
+                style={{ color: foregroundColor }}
+              />
+              <TypographyParagraph
+                testID={`${testID}.metric-label`}
+                i18nKey="common.raw-value"
+                values={{ value: metricLabel }}
+                variant="light"
+                className="text-base"
+              />
+            </View>
           </View>
 
-          <View className="flex-[1.4]">
+          <View className="flex-[1.3]">
             <SummaryMiniBarChart
               testID={`${testID}.chart`}
               values={chartValues}
-              average={chartAverage ?? null}
-              showLabels
+              average={showAverageLine ? (chartAverage ?? null) : null}
+              showLabels={false}
+              highlightLastBar
             />
           </View>
         </View>
-      </Pressable>
-    </CardAtom>
+      </CardAtom>
+    </Pressable>
   );
 };

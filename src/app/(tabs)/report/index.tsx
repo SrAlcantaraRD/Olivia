@@ -22,6 +22,7 @@ import {
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { HistoryList } from '@/ui/components/molecules/history-list.molecule';
 import { HistoryRow } from '@/ui/components/molecules/history-row.molecule';
+import { PinnedSection } from '@/ui/components/molecules/pinned-section.molecule';
 import { StatCardWithTrend } from '@/ui/components/molecules/stat-card-with-trend.molecule';
 
 export default function ReportScreen() {
@@ -63,21 +64,30 @@ export default function ReportScreen() {
         <View className="gap-6">
           {/* Range Selector */}
           <View className="flex-row gap-4">
-            {TIME_RANGE_VALUES.map((range) => (
-              <SelectableCard
-                key={`screen.range-select.${range}`}
-                testID={`screen.range-select.${range}`}
-                isSelected={report.range === range}
-                onPress={() => report.setRange(range)}
-                className="h-20 w-20 justify-center items-center"
-              >
-                <TypographyParagraph
-                  testID={`screen.range-select.label-${range}`}
-                  i18nKey="common.raw-value"
-                  values={{ value: range }}
-                />
-              </SelectableCard>
-            ))}
+            <PinnedSection
+              titleKey="page.summary.section.pinned"
+              actionKey={
+                TIME_RANGE_VALUES.length > 0 ? 'common.edit' : undefined
+              }
+              onActionPress={() => {}}
+              testID="page.summary.pinned"
+            >
+              {TIME_RANGE_VALUES.map((range) => (
+                <SelectableCard
+                  key={`screen.range-select.${range}`}
+                  testID={`screen.range-select.${range}`}
+                  isSelected={report.range === range}
+                  onPress={() => report.setRange(range)}
+                  className="h-20 w-20 justify-center items-center"
+                >
+                  <TypographyParagraph
+                    testID={`screen.range-select.label-${range}`}
+                    i18nKey="common.raw-value"
+                    values={{ value: range }}
+                  />
+                </SelectableCard>
+              ))}
+            </PinnedSection>
           </View>
 
           {/* Statistics Cards */}

@@ -189,12 +189,12 @@ Fuentes
 5.2 Componentes reutilizables
 - `SummaryCard`, `BarChartMini`, `PinnedSection`, `ListRow`.
 - Aceptacion: componentes independientes, accesibles.
- - Estado: ✅ (pendiente: PinnedSection)
+ - Estado: ✅
 
 5.3 Pinned interactions
 - Integrar pin/unpin y reorder en detalle + home.
 - Aceptacion: persistencia local y actualizacion UI.
- - Estado: ⏳
+ - Estado: ⏳ (pin/unpin listo, reorder pendiente)
 
 
 ## Fase 6 - Estados especiales y i18n (1 - 2 dias)
