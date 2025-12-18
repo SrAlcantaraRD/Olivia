@@ -12,8 +12,8 @@ import type { ISummaryHighlightPort } from '@/domain/summary/port/summary-highli
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
 import type { ISummarySnapshotPort } from '@/domain/summary/port/summary-snapshot.port';
 import type { ISummaryTrendPort } from '@/domain/summary/port/summary-trend.port';
-import type { TRequestRefreshSummarySnapshots } from '@/domain/summary/use-case-schema/refresh-summary-snapshots.use-case-schema';
 import { RefreshSummarySnapshotsUseCase } from '@/domain/summary/use-case/refresh-summary-snapshots.use-case';
+import type { TRequestRefreshSummarySnapshots } from '@/domain/summary/use-case-schema/refresh-summary-snapshots.use-case-schema';
 
 export function useRefreshSummarySnapshots(adapters: {
   loggerAdapter: TLoggerPort;

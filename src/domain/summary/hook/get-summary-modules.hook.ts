@@ -6,11 +6,11 @@ import type {
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
+import { useListStore } from '@/domain/core/stores/list.store';
 import type { TSummaryModule } from '@/domain/summary/entity/summary-module.entity';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
 import { GetSummaryModulesUseCase } from '@/domain/summary/use-case/get-summary-modules.use-case';
 import type { TRequestGetSummaryModules } from '@/domain/summary/use-case-schema/get-summary-modules.use-case-schema';
-import { useListStore } from '@/domain/core/stores/list.store';
 
 export function useGetSummaryModules(adapters: {
   loggerAdapter: TLoggerPort;

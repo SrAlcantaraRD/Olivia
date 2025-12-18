@@ -6,10 +6,10 @@ import type {
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
+import { useListStore } from '@/domain/core/stores/list.store';
 import type { TSummaryHighlight } from '@/domain/summary/entity/summary-highlight.entity';
 import type { ISummaryHighlightPort } from '@/domain/summary/port/summary-highlight.port';
 import { GetSummaryHighlightsUseCase } from '@/domain/summary/use-case/get-summary-highlights.use-case';
-import { useListStore } from '@/domain/core/stores/list.store';
 
 export function useGetSummaryHighlights(adapters: {
   loggerAdapter: TLoggerPort;
