@@ -94,6 +94,11 @@ export const esES = Object.freeze({
   'page.summary-detail.fields': 'Campos',
   'page.summary-detail.fields-empty': 'No hay campos disponibles',
   'page.summary-detail.empty': 'No hay datos para este periodo',
+  'page.summary-detail.actions': 'Acciones',
+  'page.summary-detail.pin': 'Fijar en Resumen',
+  'page.summary-detail.unpin': 'Quitar de Resumen',
+  'page.summary-detail.back-to-module': 'Volver al módulo',
+  'page.summary-detail.back-to-summary': 'Volver a Resumen',
 
   // Summary Trends (fake data)
   'summary.trend.cic.up.title': 'CIC en aumento en las últimas semanas',

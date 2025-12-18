@@ -2,6 +2,7 @@ import { useThemeColor } from 'heroui-native';
 import type React from 'react';
 import { Pressable, View } from 'react-native';
 
+import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
 
 interface SummaryPeriodSelectorProps {
@@ -17,9 +18,7 @@ export const SummaryPeriodSelector: React.FC<SummaryPeriodSelectorProps> = ({
   onSelect,
   testID,
 }) => {
-  const accentColor = useThemeColor('accent');
   const mutedColor = useThemeColor('muted');
-  const backgroundColor = useThemeColor('background');
 
   return (
     <View
@@ -27,7 +26,6 @@ export const SummaryPeriodSelector: React.FC<SummaryPeriodSelectorProps> = ({
       style={{ backgroundColor: `${mutedColor}20` }}
     >
       {options.map((option) => {
-        const isActive = option === selected;
         return (
           <Pressable
             key={`${testID}.${option}`}
@@ -36,13 +34,12 @@ export const SummaryPeriodSelector: React.FC<SummaryPeriodSelectorProps> = ({
             style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
             className="flex-1"
           >
-            <View
-              style={{
-                paddingVertical: 6,
-                borderRadius: 12,
-                alignItems: 'center',
-                backgroundColor: isActive ? `${mutedColor}60` : backgroundColor,
-              }}
+            <SelectableCard
+              key={`${testID}.range-select.${option}`}
+              testID={`${testID}.range-select.${option}`}
+              isSelected={selected === option}
+              onPress={() => onSelect?.(option)}
+              className="h-20 w-20 justify-center items-center"
             >
               <TypographySmall
                 testID={`${testID}.${option}.label`}
@@ -50,7 +47,7 @@ export const SummaryPeriodSelector: React.FC<SummaryPeriodSelectorProps> = ({
                 values={{ value: option }}
                 className="font-semibold"
               />
-            </View>
+            </SelectableCard>
           </Pressable>
         );
       })}

@@ -6,9 +6,11 @@ import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { useGetListActiveModule } from '@/domain/module/hook/get-list-active-module.hook';
 import type { TRequestGetActiveModuleList } from '@/domain/module/use-case-schema/get-active-module-list.use-case-schema';
+import { SUMMARY_PIN_TYPE_ENUM } from '@/domain/summary/enum/summary-pin-type.enum';
 import { useGetSummaryHome } from '@/domain/summary/hook/get-summary-home.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { PinnedSection } from '@/ui/components/molecules/pinned-section.molecule';
 import { SummaryCard } from '@/ui/components/molecules/summary-card.molecule';
 import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
@@ -53,8 +55,13 @@ export default function SummaryHomeScreen() {
   }, [activeModuleHook.items.length]);
 
   const { modules, pins } = summaryHomeHook.items;
+  const pinnedModuleIds = pins
+    .filter((pin) => pin.type === SUMMARY_PIN_TYPE_ENUM.MODULE)
+    .map((pin) => Number(pin.targetId));
   const pinnedModules =
-    pins.length > 0 ? modules.slice(0, pins.length) : modules.slice(0, 1);
+    pinnedModuleIds.length > 0
+      ? modules.filter((module) => pinnedModuleIds.includes(module.moduleId))
+      : modules.slice(0, 1);
 
   const getTimeLabel = (dateValue: string | null) => {
     if (!dateValue) return '';
@@ -91,13 +98,12 @@ export default function SummaryHomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View className="gap-6">
-          <View className="gap-3">
-            <SummarySectionHeader
-              titleKey="page.summary.section.pinned"
-              actionKey={pins.length > 0 ? 'common.edit' : undefined}
-              onActionPress={() => {}}
-              testID="page.summary.pinned"
-            />
+          <PinnedSection
+            titleKey="page.summary.section.pinned"
+            actionKey={pins.length > 0 ? 'common.edit' : undefined}
+            onActionPress={() => {}}
+            testID="page.summary.pinned"
+          >
             {pinnedModules.length === 0 ? (
               <SummaryRow
                 iconName="add-circle"
@@ -107,23 +113,27 @@ export default function SummaryHomeScreen() {
               />
             ) : (
               pinnedModules.map((module) => (
-                <SummaryCard
+                <View
                   key={`summary-pinned-${module.moduleId}`}
-                  title={String(module.moduleKey)}
-                  metricValue={module.todayCount}
-                  metricLabel={t('page.summary.metric-label.today')}
-                  timeLabel={getTimeLabel(module.lastRecordedAt)}
-                  iconName={getModuleIcon(String(module.moduleKey))}
-                  chartValues={module.last7Days.map((item) => item.value)}
-                  chartAverage={module.previousPeriodAverage ?? null}
-                  onPress={() =>
-                    goToSummaryModuleDetail(String(module.moduleId))
-                  }
-                  testID={`page.summary.pinned.${module.moduleId}`}
-                />
+                  className="w-80"
+                >
+                  <SummaryCard
+                    title={String(module.moduleKey)}
+                    metricValue={module.todayCount}
+                    metricLabel={t('page.summary.metric-label.today')}
+                    timeLabel={getTimeLabel(module.lastRecordedAt)}
+                    iconName={getModuleIcon(String(module.moduleKey))}
+                    chartValues={module.last7Days.map((item) => item.value)}
+                    chartAverage={module.previousPeriodAverage ?? null}
+                    onPress={() =>
+                      goToSummaryModuleDetail(String(module.moduleId))
+                    }
+                    testID={`page.summary.pinned.${module.moduleId}`}
+                  />
+                </View>
               ))
             )}
-          </View>
+          </PinnedSection>
 
           <View className="gap-2">
             <SummaryRow

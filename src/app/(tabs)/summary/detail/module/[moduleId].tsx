@@ -8,7 +8,11 @@ import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import { SUMMARY_DETAIL_TYPE_ENUM } from '@/domain/summary/enum/summary-detail-type.enum';
 import { SUMMARY_PERIOD_ENUM } from '@/domain/summary/enum/summary-period.enum';
+import { SUMMARY_PIN_TYPE_ENUM } from '@/domain/summary/enum/summary-pin-type.enum';
 import { useGetSummaryDetail } from '@/domain/summary/hook/get-summary-detail.hook';
+import { useGetSummaryPins } from '@/domain/summary/hook/get-summary-pins.hook';
+import { usePinSummaryItem } from '@/domain/summary/hook/pin-summary-item.hook';
+import { useUnpinSummaryItem } from '@/domain/summary/hook/unpin-summary-item.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
@@ -21,6 +25,7 @@ import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { SummaryCard } from '@/ui/components/molecules/summary-card.molecule';
 import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
 import { SummaryPeriodSelector } from '@/ui/components/molecules/summary-period-selector.molecule';
+import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 
 export default function SummaryModuleDetailScreen() {
@@ -33,6 +38,7 @@ export default function SummaryModuleDetailScreen() {
     notifyAdapter,
     moduleFieldAdapter,
     navigationAdapter,
+    summaryPinsAdapter,
   } = useAdapters();
 
   const { goToSummaryFieldDetail } = useNavigation({ navigationAdapter });
@@ -40,6 +46,24 @@ export default function SummaryModuleDetailScreen() {
   const detailHook = useGetSummaryDetail({
     loggerAdapter: BASE_LOGGER,
     summaryDetailAdapter,
+    notifyAdapter,
+  });
+
+  const pinsListHook = useGetSummaryPins({
+    loggerAdapter: BASE_LOGGER,
+    summaryPinsAdapter,
+    notifyAdapter,
+  });
+
+  const pinHook = usePinSummaryItem({
+    loggerAdapter: BASE_LOGGER,
+    summaryPinsAdapter,
+    notifyAdapter,
+  });
+
+  const unpinHook = useUnpinSummaryItem({
+    loggerAdapter: BASE_LOGGER,
+    summaryPinsAdapter,
     notifyAdapter,
   });
 
@@ -57,12 +81,34 @@ export default function SummaryModuleDetailScreen() {
       period: SUMMARY_PERIOD_ENUM.WEEK,
     });
     void fieldsHook.execute({ moduleID: moduleId });
+    void pinsListHook.execute();
   }, [moduleId]);
 
   const chartValues = detailHook.items.series.map((item) => ({
     value: '',
     count: item.value,
   }));
+
+  const isPinned = pinsListHook.items.some(
+    (pin) =>
+      pin.type === SUMMARY_PIN_TYPE_ENUM.MODULE &&
+      pin.targetId === String(moduleId)
+  );
+
+  const handlePinToggle = async () => {
+    if (isPinned) {
+      await unpinHook.execute({
+        type: SUMMARY_PIN_TYPE_ENUM.MODULE,
+        targetId: String(moduleId),
+      });
+      return;
+    }
+
+    await pinHook.execute({
+      type: SUMMARY_PIN_TYPE_ENUM.MODULE,
+      targetId: String(moduleId),
+    });
+  };
   const hasSeries = detailHook.items.series.length > 0;
 
   return (
@@ -142,6 +188,27 @@ export default function SummaryModuleDetailScreen() {
             chartAverage={detailHook.items.average}
             testID="page.summary-detail.insight"
           />
+
+          <CardAtom className="p-0 rounded-2xl">
+            <View className="p-4">
+              <SummarySectionHeader
+                titleKey="page.summary-detail.actions"
+                testID="page.summary-detail.actions"
+              />
+            </View>
+            <View className="px-4 pb-4 gap-2">
+              <SummaryRow
+                iconName={isPinned ? 'bookmark' : 'bookmark-outline'}
+                titleKey={
+                  isPinned
+                    ? 'page.summary-detail.unpin'
+                    : 'page.summary-detail.pin'
+                }
+                onPress={handlePinToggle}
+                testID="page.summary-detail.pin-toggle"
+              />
+            </View>
+          </CardAtom>
 
           <View className="gap-3">
             <SummarySectionHeader

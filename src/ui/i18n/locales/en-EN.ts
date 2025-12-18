@@ -181,6 +181,11 @@ export const enEN = Object.freeze({
   'page.summary-detail.fields': 'Fields',
   'page.summary-detail.fields-empty': 'No fields available',
   'page.summary-detail.empty': 'No data for this period',
+  'page.summary-detail.actions': 'Actions',
+  'page.summary-detail.pin': 'Pin to Summary',
+  'page.summary-detail.unpin': 'Remove from Summary',
+  'page.summary-detail.back-to-module': 'Back to module',
+  'page.summary-detail.back-to-summary': 'Back to Summary',
 
   // Summary Trends (fake data)
   'summary.trend.cic.up.title': 'CIC increasing in recent weeks',
