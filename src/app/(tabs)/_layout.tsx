@@ -30,6 +30,17 @@ export default function TabLayout() {
         <Label>{t('tab.report')}</Label>
       </NativeTabs.Trigger>
 
+      {/* Summary Tab */}
+      <NativeTabs.Trigger name="summary">
+        <Icon
+          sf={{
+            default: 'heart.text.square',
+            selected: 'heart.text.square.fill',
+          }}
+        />
+        <Label>{t('tab.summary')}</Label>
+      </NativeTabs.Trigger>
+
       {/* Register Tab - Default landing page (first tab) */}
       <NativeTabs.Trigger name="register">
         <Icon sf={{ default: 'plus.circle', selected: 'plus.circle.fill' }} />
