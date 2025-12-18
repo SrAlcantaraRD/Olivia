@@ -11,7 +11,7 @@ Este plan detalla las tareas y subtareas para implementar la pestaña "Resumen" 
    - Subtarea 1.1: Actualizar `summary-resumen-plan.md` con decisiones finales (e.g., rutas, adapters).
    - Subtarea 1.2: Completar wireframes detallados para cada pantalla (Home, hubs, detalle).
    - Subtarea 1.3: Definir contratos de datos (e.g., `SummaryModule`) en domain.
-   - Criterios: Documento aprobado, wireframes en Figma o similar.
+   - Criterios: Documento aprobado, wireframes en formato txt .
    - Dependencias: Ninguna.
 
 2. **Crear estructura de carpetas y archivos base**
