@@ -1,33 +1,43 @@
 import { describe, expect, it } from '@jest/globals';
-import { fireEvent, render } from '@testing-library/react-native';
 
 import type { TModule } from '@/domain/module/entity/module.entity';
+import { MODULE_FIELD_TYPE_ENUM } from '@/domain/module/enum/module-field-type.enum';
+import { mockLoggerPort, mockNotifyPort } from '@/tests/mocks/core.port.mock';
+import { mockModuleFieldEntity } from '@/tests/mocks/module-field.entity.mock';
+import { mockModuleFieldPort } from '@/tests/mocks/module-field.port.mock';
+import { mockModuleEntity } from '@/tests/mocks/module.entity.mock';
 import { ModuleWizard } from '@/ui/components/organisms/module-wizard/module-wizard.organism';
-import {
-  mockLoggerPort,
-  mockNotifyPort,
-} from '../../domain/core/mocks/mock.port';
-import {
-  mockModuleEntity,
-  mockModuleFieldEntity,
-} from '../../domain/module/mocks/mock.entities';
-import { mockModuleFieldPort } from '../../domain/module/mocks/mock.port';
+import { act, render, userEvent, waitFor } from '../test-utils';
 
-const mockField = mockModuleFieldEntity({ required: true });
+describe('[UI] ModuleWizard behavior', () => {
+  const prepareSuiteCase = () => {
+    // Arrange
+    const loggerAdapter = mockLoggerPort();
+    const notifyAdapter = mockNotifyPort();
+    const moduleFieldAdapter = mockModuleFieldPort({
+      getAllByModuleId: jest.fn().mockResolvedValue([
+        mockModuleFieldEntity({
+          id: 1,
+          moduleId: 1,
+          type: MODULE_FIELD_TYPE_ENUM.SELECT,
+          values: JSON.stringify(['page.cic_register.volume.normal']),
+        }),
+      ]),
+    });
 
-jest.mock('@/adapter', () => ({
-  useAdapters: jest.fn(() => ({
-    loggerAdapter: mockLoggerPort(),
-    moduleFieldAdapter: mockModuleFieldPort({
-      getAllByModuleId: jest.fn().mockResolvedValue([mockField]),
-    }),
-    notifyAdapter: mockNotifyPort(),
-  })),
-}));
+    return { loggerAdapter, notifyAdapter, moduleFieldAdapter };
+  };
 
-describe('[Organism] ModuleWizard behavior', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('calls onComplete when selecting last option of a single-select module', async () => {
+    jest.useFakeTimers();
+
     const module: TModule = mockModuleEntity();
+    const { loggerAdapter, notifyAdapter, moduleFieldAdapter } =
+      prepareSuiteCase();
 
     const onComplete = jest.fn();
 
@@ -36,19 +46,28 @@ describe('[Organism] ModuleWizard behavior', () => {
         moduleID={module.id}
         testID="test.module-wizard"
         onComplete={onComplete}
+        adapters={{ loggerAdapter, notifyAdapter, moduleFieldAdapter }}
       />
     );
 
     const optionTestId =
-      'test.module-wizard.field.1.option.page.cic_register.volume.normal.selectable-card';
+      'test.module-wizard.field.1.option.page.cic_register.volume.normal.selectable-card.pressable';
 
     const option = await findByTestId(optionTestId);
-    fireEvent.press(option);
 
-    // Wait for the hook to set value and call goToNext
-    await new Promise((res) => setTimeout(res, 600));
+    const user = userEvent.setup({
+      advanceTimers: jest.advanceTimersByTime,
+    });
+    await user.press(option);
 
-    expect(onComplete).toHaveBeenCalled();
+    // useModuleWizard waits 500ms before calling onComplete
+    act(() => {
+      jest.advanceTimersByTime(500);
+    });
+
+    await waitFor(() => {
+      expect(onComplete).toHaveBeenCalled();
+    });
     expect(onComplete).toHaveBeenCalledWith({
       moduleID: 1,
       carerID: 0,
@@ -56,5 +75,7 @@ describe('[Organism] ModuleWizard behavior', () => {
       synced: false,
       fieldList: [{ fieldID: 1, value: 'page.cic_register.volume.normal' }],
     });
+
+    jest.useRealTimers();
   });
 });

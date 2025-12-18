@@ -1,73 +1,48 @@
 import { describe, expect, it } from '@jest/globals';
-import { act, renderHook } from '@testing-library/react-native';
+import { act, renderHook, waitFor } from '@testing-library/react-native';
 
+import { mockLoggerPort, mockNotifyPort } from '@/tests/mocks/core.port.mock';
+import { mockModuleFieldEntity } from '@/tests/mocks/module-field.entity.mock';
+import { mockModuleFieldPort } from '@/tests/mocks/module-field.port.mock';
+import { mockModuleEntity } from '@/tests/mocks/module.entity.mock';
 import { useModuleWizard } from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';
-import {
-  mockModuleEntity,
-  mockModuleFieldEntity,
-} from '../../domain/module/mocks/mock.entities';
-
-const mockField = mockModuleFieldEntity({ required: true });
-
-jest.mock('@/domain/module/use-case/get-module-field-list.use-case', () => ({
-  GetModuleFieldListUseCase: jest.fn().mockImplementation(() => ({
-    execute: jest.fn().mockResolvedValue({
-      success: true,
-      details: { items: [mockField] },
-    }),
-  })),
-}));
-
-jest.mock('@/domain/module/hook/get-list-module-field.hook', () => ({
-  useGetListModuleField: jest.fn(() => ({
-    execute: jest.fn(),
-    items: [mockField],
-  })),
-}));
-
-jest.mock('expo-sqlite', () => ({
-  openDatabaseSync: jest.fn(() => ({})),
-}));
-
-jest.mock('drizzle-orm/expo-sqlite', () => ({
-  drizzle: jest.fn(() => ({
-    select: jest.fn(() => ({
-      from: jest.fn(() => ({
-        where: jest.fn(() => ({
-          all: jest.fn(() => []),
-        })),
-      })),
-    })),
-  })),
-}));
-
-jest.mock('@/database/config/database.config', () => ({
-  DB_CLIENT: {
-    select: jest.fn(() => ({
-      from: jest.fn(() => ({
-        where: jest.fn(() => ({
-          all: jest.fn(() => []),
-        })),
-      })),
-    })),
-  },
-  SQLITE_DB: {},
-  buildAdapterClient: jest.fn(),
-}));
 
 describe('[Hook] useModuleWizard', () => {
-  it('creates steps from module field and handles select option navigation', () => {
-    const mockField = mockModuleFieldEntity();
+  const prepareSuiteCase = () => {
+    // Arrange
+    const loggerAdapter = mockLoggerPort();
+    const notifyAdapter = mockNotifyPort();
+    const moduleFieldAdapter = mockModuleFieldPort();
+
+    return { loggerAdapter, notifyAdapter, moduleFieldAdapter };
+  };
+
+  it('creates steps from module field and handles select option navigation', async () => {
+    const { loggerAdapter, notifyAdapter, moduleFieldAdapter } =
+      prepareSuiteCase();
+    const mockField = mockModuleFieldEntity({ required: true });
 
     const mockModule = mockModuleEntity({
       fieldList: [mockField],
     });
 
+    moduleFieldAdapter.getAllByModuleId.mockResolvedValue([mockField]);
+
     const { result } = renderHook(() =>
-      useModuleWizard({ moduleID: mockModule.id, initialValues: {} })
+      useModuleWizard({
+        moduleID: mockModule.id,
+        initialValues: {},
+        adapters: {
+          loggerAdapter,
+          notifyAdapter,
+          moduleFieldAdapter,
+        },
+      })
     );
 
-    expect(result.current.fieldList.length).toBe(1);
+    await waitFor(() => {
+      expect(result.current.fieldList.length).toBe(1);
+    });
     expect(result.current.currentStep).toBe(0);
     expect(result.current.steps[0].isValid).toBe(false);
 
