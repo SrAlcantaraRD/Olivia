@@ -1,29 +1,30 @@
-import { fireEvent, render } from '@testing-library/react-native';
-
-jest.mock('@/domain/core/hook/use-app-settings.hook', () => ({
-  useAppSettings: () => ({
-    setTheme: jest.fn(),
-    setLocale: jest.fn(),
-  }),
-}));
+import { render, userEvent } from '@testing-library/react-native';
 
 import AppSettingsScreen from '@/app/(tabs)/settings/app-settings';
 
-describe('AppSettingsScreen', () => {
-  it('calls setLocale when language buttons pressed', () => {
-    const { getByText } = render(<AppSettingsScreen />);
+describe('[UI] AppSettingsScreen', () => {
+  it('calls setLocale when language buttons pressed', async () => {
+    const user = userEvent.setup();
 
-    const enBtn = getByText('English');
-    fireEvent.press(enBtn);
+    const { getByLabelText } = render(<AppSettingsScreen />);
 
-    const esBtn = getByText('Español');
-    fireEvent.press(esBtn);
+    const enButton = getByLabelText(
+      'page.app-settings.button.change-language-english'
+    );
+    await user.press(enButton);
 
-    const caBtn = getByText('Català');
-    fireEvent.press(caBtn);
+    const esButton = getByLabelText(
+      'page.app-settings.button.change-language-spanish'
+    );
+    await user.press(esButton);
 
-    expect(enBtn).toBeDefined();
-    expect(esBtn).toBeDefined();
-    expect(caBtn).toBeDefined();
+    const caButton = getByLabelText(
+      'page.app-settings.button.change-language-catalan'
+    );
+    await user.press(caButton);
+
+    expect(enButton).toBeDefined();
+    expect(esButton).toBeDefined();
+    expect(caButton).toBeDefined();
   });
 });
