@@ -6,21 +6,21 @@ import { useSetupParent } from '@/domain/carer/hook/setup-parent.hook';
 import type { TResponseSetupParent } from '@/domain/carer/use-case-schema/setup-parent.use-case-schema';
 import type { IHookResponse } from '@/domain/core/interface/hook.interface';
 import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
-import { mockCachePort } from '@/tests/unit-test/core/mocks/mock.cache.port';
-import { mockNotifyPort } from '@/tests/unit-test/core/mocks/mock.notify.port';
-import { mockLoggerPort } from '@/tests/unit-test/core/mocks/mock.port';
 import {
   mockCarerCreate,
   mockCarerEntity,
-} from '@/tests/unit-test/domain/carer/mocks/mock.entities';
-import { mockCarerPort } from '@/tests/unit-test/domain/carer/mocks/mock.port';
-import { mockModuleEntity } from '@/tests/unit-test/module/mocks/mock.entities';
-import { mockModulePort } from '@/tests/unit-test/module/mocks/mock.port';
+} from '@/tests/mocks/carer.entity.mock';
+import { mockCarerPort } from '@/tests/mocks/carer.port.mock';
 import {
-  mockPatientCreate,
-  mockPatientEntity,
-} from '@/tests/unit-test/patient/mocks/mock.entities';
-import { mockPatientPort } from '@/tests/unit-test/patient/mocks/mock.port';
+  mockCachePort,
+  mockLoggerPort,
+  mockNotifyPort,
+} from '@/tests/mocks/core.port.mock';
+import { mockModuleEntity } from '@/tests/mocks/module.entity.mock';
+import { mockModulePort } from '@/tests/mocks/module.port.mock';
+import { mockPatientCreate } from '@/tests/mocks/patient.dto.mock';
+import { mockPatientEntity } from '@/tests/mocks/patient.entity.mock';
+import { mockPatientPort } from '@/tests/mocks/patient.port.mock';
 
 describe('[Hook] - SetupParent', () => {
   const prepareSuiteCase = () => {

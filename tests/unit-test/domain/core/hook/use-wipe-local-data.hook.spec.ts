@@ -1,4 +1,4 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import { act, renderHook } from '@testing-library/react-native';
 
 import { useWipeLocalData } from '@/domain/core/hook/use-wipe-local-data.hook';
@@ -6,34 +6,40 @@ import {
   mockCachePort,
   mockLoggerPort,
   mockSecureStorePort,
-} from '/Users/gabriel/Documents/personal/UOC/2025_2026_01/TFG/tests/unit-test/domain/core/mocks/mock.port';
+} from '@/tests/mocks/core.port.mock';
 
-// mock dropDatabase to avoid touching real DB
-jest.mock('@/database/config/drop-database.config', () => ({
-  dropDatabase: (jest.fn() as any).mockResolvedValue(undefined),
-}));
+describe('[Hook] - UseWipeLocalData', () => {
+  const prepareSuiteCase = () => {
+    // Arrange
+    const loggerAdapter = mockLoggerPort();
+    const cacheAdapter = mockCachePort();
+    const secureStoreAdapter = mockSecureStorePort();
+    return { loggerAdapter, cacheAdapter, secureStoreAdapter };
+  };
 
-describe('useWipeLocalData', () => {
-  it('executes wipe and returns success', async () => {
-    const mockCache = mockCachePort();
-    const mockSecure = mockSecureStorePort();
-    const mockLogger = mockLoggerPort();
+  beforeEach(() => jest.clearAllMocks());
 
+  it('executes wipe successfully when called', async () => {
+    const { loggerAdapter, cacheAdapter, secureStoreAdapter } =
+      prepareSuiteCase();
+
+    // Act
     const { result } = renderHook(() =>
       useWipeLocalData({
-        loggerAdapter: mockLogger,
-        cacheAdapter: mockCache,
-        secureStoreAdapter: mockSecure,
+        loggerAdapter,
+        cacheAdapter,
+        secureStoreAdapter,
       })
     );
 
-    let resp: unknown;
+    let response;
     await act(async () => {
-      resp = await result.current.execute();
+      response = await result.current.execute();
     });
 
-    expect((resp as { success: boolean }).success).toBe(true);
-    expect(mockCache.clearAll).toHaveBeenCalled();
-    expect(mockSecure.clearAll).toHaveBeenCalled();
+    // Assert
+    expect(response.success).toBe(true);
+    expect(cacheAdapter.clearAll).toHaveBeenCalled();
+    expect(secureStoreAdapter.clearAll).toHaveBeenCalled();
   });
 });

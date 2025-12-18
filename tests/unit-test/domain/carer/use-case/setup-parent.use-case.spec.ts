@@ -6,17 +6,17 @@ import { SetupParentUseCase } from '@/domain/carer/use-case/setup-parent.use-cas
 import { ErrorDatabaseDefault } from '@/domain/core/error/database-default.error';
 import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
 import type { TID } from '@/domain/core/schemas/id.schema';
-import { mockCachePort } from '../../core/mocks/mock.cache.port';
-import { mockLoggerPort } from '../../core/mocks/mock.port';
-import { mockModuleEntity } from '../../module/mocks/mock.entities';
-import { mockModulePort } from '../../module/mocks/mock.port';
 import {
-  mockPatientCreate,
-  mockPatientEntity,
-} from '../../patient/mocks/mock.entities';
-import { mockPatientPort } from '../../patient/mocks/mock.port';
-import { mockCarerCreate, mockCarerEntity } from '../mocks/mock.entities';
-import { mockCarerPort } from '../mocks/mock.port';
+  mockCarerCreate,
+  mockCarerEntity,
+} from '@/tests/mocks/carer.entity.mock';
+import { mockCarerPort } from '@/tests/mocks/carer.port.mock';
+import { mockCachePort, mockLoggerPort } from '@/tests/mocks/core.port.mock';
+import { mockModuleEntity } from '@/tests/mocks/module.entity.mock';
+import { mockModulePort } from '@/tests/mocks/module.port.mock';
+import { mockPatientCreate } from '@/tests/mocks/patient.dto.mock';
+import { mockPatientEntity } from '@/tests/mocks/patient.entity.mock';
+import { mockPatientPort } from '@/tests/mocks/patient.port.mock';
 
 describe('[UseCase] - Setup Parent', () => {
   const prepareSuiteCase = () => {

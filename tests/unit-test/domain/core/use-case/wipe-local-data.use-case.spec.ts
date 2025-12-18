@@ -5,27 +5,33 @@ import {
   mockCachePort,
   mockLoggerPort,
   mockSecureStorePort,
-} from '../mocks/mock.port';
+} from '@/tests/mocks/core.port.mock';
 
-// mock dropDatabase to avoid touching real DB
-jest.mock('@/database/config/drop-database.config', () => ({
-  dropDatabase: jest.fn().mockResolvedValue(undefined),
-}));
+describe('[UseCase] - WipeLocalData', () => {
+  const prepareSuiteCase = () => {
+    // Arrange
+    const loggerAdapter = mockLoggerPort();
+    const cacheAdapter = mockCachePort();
+    const secureStoreAdapter = mockSecureStorePort();
+    const unit = new WipeLocalDataUseCase(
+      loggerAdapter,
+      cacheAdapter,
+      secureStoreAdapter
+    );
+    return { unit, loggerAdapter, cacheAdapter, secureStoreAdapter };
+  };
 
-describe('[UseCase] WipeLocalDataUseCase', () => {
+  beforeEach(() => jest.clearAllMocks());
+
   it('clears cache, secure keys and drops the database', async () => {
-    const mockCache = mockCachePort();
-    const mockSecure = mockSecureStorePort();
-    const mockLogger = mockLoggerPort();
+    const { unit, cacheAdapter, secureStoreAdapter } = prepareSuiteCase();
 
-    const usecase = new WipeLocalDataUseCase(mockLogger, mockCache, mockSecure);
+    // Act
+    const resp = await unit.execute();
 
-    const resp = await usecase.execute();
-
+    // Assert
     expect(resp.success).toBe(true);
-
-    // ensure clearAll called on both adapters
-    expect(mockCache.clearAll).toHaveBeenCalled();
-    expect(mockSecure.clearAll).toHaveBeenCalled();
+    expect(cacheAdapter.clearAll).toHaveBeenCalled();
+    expect(secureStoreAdapter.clearAll).toHaveBeenCalled();
   });
 });

@@ -6,49 +6,58 @@ import type {
   TRecordCreate,
 } from '@/domain/module/entity/record.entity';
 import { CreateRecordUseCase } from '@/domain/module/use-case/create-record.use-case';
-import { mockLoggerPort } from '../../core/mocks/mock.port';
-import { mockRecordCreate, mockRecordEntity } from '../mocks/mock.entities';
-import { mockRecordFieldPort, mockRecordPort } from '../mocks/mock.port';
+import { mockLoggerPort } from '@/tests/mocks/core.port.mock';
+import {
+  mockRecordCreate,
+  mockRecordEntity,
+} from '@/tests/mocks/module-field.entity.mock';
+import {
+  mockRecordFieldPort,
+  mockRecordPort,
+} from '@/tests/mocks/module-field.port.mock';
 
-describe('[UseCase] CreateRecordUseCase', () => {
+describe('[UseCase] - CreateRecord', () => {
   const prepareSuiteCase = () => {
     // Arrange
     const loggerAdapter = mockLoggerPort();
     const recordAdapter = mockRecordPort();
     const recordFieldAdapter = mockRecordFieldPort();
 
-    const useCase = new CreateRecordUseCase({
+    const unit = new CreateRecordUseCase({
       loggerAdapter,
       recordAdapter,
       recordFieldAdapter,
     });
 
-    return { useCase, loggerAdapter, recordAdapter, recordFieldAdapter };
+    return { unit, loggerAdapter, recordAdapter, recordFieldAdapter };
   };
 
   beforeEach(() => jest.clearAllMocks());
 
-  it('calls adapter.create and returns success', async () => {
-    const { recordAdapter, recordFieldAdapter, useCase } = prepareSuiteCase();
+  describe('Happy Path', () => {
+    it('creates record successfully when adapters succeed', async () => {
+      const { recordAdapter, recordFieldAdapter, unit } = prepareSuiteCase();
 
-    const mockRecord: TRecord = mockRecordEntity({
-      status: STATUS_ENUM.ACTIVE,
-    });
+      const mockRecord: TRecord = mockRecordEntity({
+        status: STATUS_ENUM.ACTIVE,
+      });
 
-    const payload: TRecordCreate = mockRecordCreate({
-      moduleID: 1,
-      data: mockRecord.data,
-      synced: false,
-    });
+      const payload: TRecordCreate = mockRecordCreate({
+        moduleID: 1,
+        data: mockRecord.data,
+        synced: false,
+      });
 
-    recordAdapter.create.mockResolvedValue(mockRecord);
-    recordFieldAdapter.batchCreate.mockResolvedValue([]);
+      recordAdapter.create.mockResolvedValue(mockRecord);
+      recordFieldAdapter.batchCreate.mockResolvedValue([]);
 
-    const resp = await useCase.execute(payload);
-    expect(resp.success).toBe(true);
-    if (resp.success) {
+      // Act
+      const resp = await unit.execute(payload);
+
+      // Assert
+      expect(resp.success).toBe(true);
       expect(resp.details).toEqual(mockRecord);
-    }
-    expect(recordAdapter.create).toHaveBeenCalledWith(payload);
+      expect(recordAdapter.create).toHaveBeenCalledWith(payload);
+    });
   });
 });
