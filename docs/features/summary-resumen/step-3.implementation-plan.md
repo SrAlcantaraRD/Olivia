@@ -61,7 +61,10 @@ Fuentes
 - Aceptacion: enums usados por use-cases y hooks.
 
 1.3 Ports (interfaces)
-- `SummaryDataPort`: read aggregates (today, last7, averages, trends, highlights).
+- `SummaryModulePort`: read module summaries (today, last7, averages).
+- `SummaryDetailPort`: read detail data (module/field/trend).
+- `SummaryTrendPort`: list trends.
+- `SummaryHighlightPort`: list highlights.
 - `SummaryPinsPort`: CRUD + ordering.
 - `SummaryAnalysisPort`: generateAnalysis placeholder.
 - Aceptacion: ports cubren necesidades del PSD.
@@ -73,13 +76,14 @@ Fuentes
 - `GetSummaryHighlightsUseCase` (highlights list).
 - `GetSummaryDetailUseCase` (detail template data by type).
 - `PinSummaryItemUseCase`, `UnpinSummaryItemUseCase`, `ReorderSummaryPinsUseCase`.
+- `RefreshSummarySnapshotsUseCase` (recalcula y guarda snapshots).
 - Aceptacion: use-cases retornan domain-only models, sin dependencias UI.
 
 
 ## Fase 2 - Adapters (1 - 2 dias)
 
 2.1 Data adapter (query/aggregation)
-- Implementar `SummaryDataAdapter` usando Drizzle y/o `use-report-manager`.
+- Implementar adapters por entidad usando Drizzle y/o `use-report-manager`.
 - Agregados minimos: todayCount, last7Days, previousPeriodAverage.
 - Aceptacion: adapter retorna datos reales o fallback seguro.
 
@@ -91,6 +95,11 @@ Fuentes
 2.3 Analysis adapter (placeholder)
 - Implementar `aiAnalysis.stub.ts` y port.
 - Aceptacion: retorna texto placeholder estable.
+
+2.4 Summary snapshot adapter (PRO, sin TTL)
+- Implementar almacenamiento de snapshots (cache) con `cache.port.ts`.
+- El snapshot se actualiza solo via use-case (sin TTL automatico).
+- Aceptacion: snapshots guardados y leidos de cache sin expiracion.
 
 
 ## Fase 3 - Hooks (1 - 2 dias)
@@ -113,6 +122,10 @@ Fuentes
 3.4 Hook de pins
 - `use-summary-pins.hook.ts`: pin/unpin/reorder.
 - Aceptacion: cambios reflejados en home.
+
+3.5 Hook de refresh
+- `use-summary-refresh.hook.ts`: ejecuta refresh manual (pull-to-refresh, entry).
+- Aceptacion: dispara el recalculo de snapshots sin TTL.
 
 
 ## Fase 4 - UI base y navegacion (2 - 3 dias)

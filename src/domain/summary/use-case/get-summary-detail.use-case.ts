@@ -2,7 +2,7 @@ import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import { SUMMARY_DETAIL_TYPE_ENUM } from '@/domain/summary/enum/summary-detail-type.enum';
-import type { ISummaryDataPort } from '@/domain/summary/port/summary-data.port';
+import type { ISummaryDetailPort } from '@/domain/summary/port/summary-detail.port';
 import type {
   TRequestGetSummaryDetail,
   TResponseGetSummaryDetail,
@@ -15,7 +15,7 @@ export class GetSummaryDetailUseCase extends BaseUseCase<
   constructor(
     private readonly adapters: {
       loggerAdapter: TLoggerPort;
-      summaryDataAdapter: ISummaryDataPort;
+      summaryDetailAdapter: ISummaryDetailPort;
     }
   ) {
     super('get-summary-detail', adapters.loggerAdapter);
@@ -26,7 +26,7 @@ export class GetSummaryDetailUseCase extends BaseUseCase<
   ): Promise<IBaseResponse<TResponseGetSummaryDetail>> {
     if (data.type === SUMMARY_DETAIL_TYPE_ENUM.MODULE && data.moduleId) {
       const detail =
-        await this.adapters.summaryDataAdapter.getSummaryDetailByModule({
+        await this.adapters.summaryDetailAdapter.getSummaryDetailByModule({
           moduleId: data.moduleId,
           period: data.period,
         });
@@ -44,7 +44,7 @@ export class GetSummaryDetailUseCase extends BaseUseCase<
       data.fieldId
     ) {
       const detail =
-        await this.adapters.summaryDataAdapter.getSummaryDetailByField({
+        await this.adapters.summaryDetailAdapter.getSummaryDetailByField({
           moduleId: data.moduleId,
           fieldId: data.fieldId,
           period: data.period,
@@ -59,7 +59,7 @@ export class GetSummaryDetailUseCase extends BaseUseCase<
 
     if (data.type === SUMMARY_DETAIL_TYPE_ENUM.TREND && data.trendId) {
       const detail =
-        await this.adapters.summaryDataAdapter.getSummaryDetailByTrend({
+        await this.adapters.summaryDetailAdapter.getSummaryDetailByTrend({
           trendId: data.trendId,
           period: data.period,
         });

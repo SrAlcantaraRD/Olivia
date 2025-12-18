@@ -1,7 +1,7 @@
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
-import type { ISummaryDataPort } from '@/domain/summary/port/summary-data.port';
+import type { ISummaryHighlightPort } from '@/domain/summary/port/summary-highlight.port';
 import type {
   TRequestGetSummaryHighlights,
   TResponseGetSummaryHighlights,
@@ -14,7 +14,7 @@ export class GetSummaryHighlightsUseCase extends BaseUseCase<
   constructor(
     private readonly adapters: {
       loggerAdapter: TLoggerPort;
-      summaryDataAdapter: ISummaryDataPort;
+      summaryHighlightAdapter: ISummaryHighlightPort;
     }
   ) {
     super('get-summary-highlights', adapters.loggerAdapter);
@@ -23,7 +23,8 @@ export class GetSummaryHighlightsUseCase extends BaseUseCase<
   public async execute(): Promise<
     IBaseResponse<TResponseGetSummaryHighlights>
   > {
-    const items = await this.adapters.summaryDataAdapter.getSummaryHighlights();
+    const items =
+      await this.adapters.summaryHighlightAdapter.listSummaryHighlights();
 
     return {
       success: true,

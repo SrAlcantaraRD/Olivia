@@ -1,7 +1,7 @@
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
-import type { ISummaryDataPort } from '@/domain/summary/port/summary-data.port';
+import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
 import type {
   TRequestGetSummaryModules,
   TResponseGetSummaryModules,
@@ -14,7 +14,7 @@ export class GetSummaryModulesUseCase extends BaseUseCase<
   constructor(
     private readonly adapters: {
       loggerAdapter: TLoggerPort;
-      summaryDataAdapter: ISummaryDataPort;
+      summaryModuleAdapter: ISummaryModulePort;
     }
   ) {
     super('get-summary-modules', adapters.loggerAdapter);
@@ -23,7 +23,7 @@ export class GetSummaryModulesUseCase extends BaseUseCase<
   public async execute(
     data: TRequestGetSummaryModules
   ): Promise<IBaseResponse<TResponseGetSummaryModules>> {
-    const items = await this.adapters.summaryDataAdapter.getModuleSummaries(
+    const items = await this.adapters.summaryModuleAdapter.getModuleSummaries(
       data.moduleIds
     );
 
