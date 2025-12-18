@@ -100,6 +100,7 @@ Fuentes
 - Implementar almacenamiento de snapshots (cache) con `cache.port.ts`.
 - El snapshot se actualiza solo via use-case (sin TTL automatico).
 - Aceptacion: snapshots guardados y leidos de cache sin expiracion.
+ - Nota: se define la logica y contratos ahora; la implementacion queda para el final.
 
 
 ## Fase 3 - Hooks (1 - 2 dias)
@@ -126,6 +127,14 @@ Fuentes
 3.5 Hook de refresh
 - `use-summary-refresh.hook.ts`: ejecuta refresh manual (pull-to-refresh, entry).
 - Aceptacion: dispara el recalculo de snapshots sin TTL.
+ - Nota: hook y use-case quedaran como skeletons con mocks hasta la fase final.
+
+3.6 Puntos de invocacion del refresh (documentado, sin implementar)
+- App open (cold start).
+- Al entrar a tab Summary.
+- Pull-to-refresh manual en Home.
+- Al crear/editar un record (si aplica).
+- Aceptacion: puntos de invocacion definidos en este documento.
 
 
 ## Fase 4 - UI base y navegacion (2 - 3 dias)
