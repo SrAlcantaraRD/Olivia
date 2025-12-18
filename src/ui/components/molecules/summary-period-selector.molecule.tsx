@@ -41,7 +41,7 @@ export const SummaryPeriodSelector: React.FC<SummaryPeriodSelectorProps> = ({
                 paddingVertical: 6,
                 borderRadius: 12,
                 alignItems: 'center',
-                backgroundColor: isActive ? mutedColor : backgroundColor,
+                backgroundColor: isActive ? `${mutedColor}60` : backgroundColor,
               }}
             >
               <TypographySmall

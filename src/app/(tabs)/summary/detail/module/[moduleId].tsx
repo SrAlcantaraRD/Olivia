@@ -1,12 +1,15 @@
-import React from 'react';
-import { ScrollView, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
+import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import { SUMMARY_DETAIL_TYPE_ENUM } from '@/domain/summary/enum/summary-detail-type.enum';
 import { SUMMARY_PERIOD_ENUM } from '@/domain/summary/enum/summary-period.enum';
 import { useGetSummaryDetail } from '@/domain/summary/hook/get-summary-detail.hook';
+import { useNavigation } from '@/hooks/use-navigation.hook';
 import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import {
@@ -15,18 +18,34 @@ import {
   TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { SummaryCard } from '@/ui/components/molecules/summary-card.molecule';
 import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
 import { SummaryPeriodSelector } from '@/ui/components/molecules/summary-period-selector.molecule';
+import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 
 export default function SummaryModuleDetailScreen() {
+  const { t } = useTranslation();
   const params = useLocalSearchParams<{ moduleId?: string }>();
   const moduleId = Number(params.moduleId ?? 0);
 
-  const { summaryDetailAdapter, notifyAdapter } = useAdapters();
+  const {
+    summaryDetailAdapter,
+    notifyAdapter,
+    moduleFieldAdapter,
+    navigationAdapter,
+  } = useAdapters();
+
+  const { goToSummaryFieldDetail } = useNavigation({ navigationAdapter });
 
   const detailHook = useGetSummaryDetail({
     loggerAdapter: BASE_LOGGER,
     summaryDetailAdapter,
+    notifyAdapter,
+  });
+
+  const fieldsHook = useGetListModuleField({
+    loggerAdapter: BASE_LOGGER,
+    moduleFieldAdapter,
     notifyAdapter,
   });
 
@@ -37,12 +56,14 @@ export default function SummaryModuleDetailScreen() {
       moduleId,
       period: SUMMARY_PERIOD_ENUM.WEEK,
     });
+    void fieldsHook.execute({ moduleID: moduleId });
   }, [moduleId]);
 
   const chartValues = detailHook.items.series.map((item) => ({
     value: '',
     count: item.value,
   }));
+  const hasSeries = detailHook.items.series.length > 0;
 
   return (
     <ScreenLayout
@@ -78,13 +99,23 @@ export default function SummaryModuleDetailScreen() {
               i18nKey="page.summary-detail.range-placeholder"
               variant="light"
             />
-            <View className="mt-4">
-              <BarChartAtom
-                values={chartValues}
-                showAxisLabels={false}
-                testID="page.summary-detail.chart"
+            {hasSeries ? (
+              <View className="mt-4">
+                <BarChartAtom
+                  values={chartValues}
+                  height={180}
+                  showAxisLabels={false}
+                  testID="page.summary-detail.chart"
+                />
+              </View>
+            ) : (
+              <TypographySmall
+                testID="page.summary-detail.empty"
+                i18nKey="page.summary-detail.empty"
+                variant="light"
+                className="mt-4"
               />
-            </View>
+            )}
           </CardAtom>
 
           <CardAtom className="p-4 rounded-3xl">
@@ -111,6 +142,41 @@ export default function SummaryModuleDetailScreen() {
             chartAverage={detailHook.items.average}
             testID="page.summary-detail.insight"
           />
+
+          <View className="gap-3">
+            <SummarySectionHeader
+              titleKey="page.summary-detail.fields"
+              testID="page.summary-detail.fields"
+            />
+            {fieldsHook.items.length === 0 ? (
+              <CardAtom>
+                <TypographySmall
+                  testID="page.summary-detail.fields-empty"
+                  i18nKey="page.summary-detail.fields-empty"
+                  variant="light"
+                />
+              </CardAtom>
+            ) : (
+              fieldsHook.items.map((field) => (
+                <SummaryCard
+                  key={`summary-field-${field.id}`}
+                  title={field.title}
+                  metricValue={detailHook.items.todayValue ?? 0}
+                  metricLabel={t('page.summary.metric-label.today')}
+                  timeLabel=""
+                  iconName="flame"
+                  chartValues={detailHook.items.series.map(
+                    (item) => item.value
+                  )}
+                  chartAverage={detailHook.items.average}
+                  onPress={() =>
+                    goToSummaryFieldDetail(String(moduleId), String(field.id))
+                  }
+                  testID={`page.summary-detail.field.${field.id}`}
+                />
+              ))
+            )}
+          </View>
         </View>
       </ScrollView>
     </ScreenLayout>

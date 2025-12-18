@@ -184,14 +184,17 @@ Fuentes
 5.1 Plantilla de detalle
 - Implementar layout con period selector, charts placeholders, description, analysis.
 - Aceptacion: usable para module/field/trend.
+ - Estado: ✅
 
 5.2 Componentes reutilizables
 - `SummaryCard`, `BarChartMini`, `PinnedSection`, `ListRow`.
 - Aceptacion: componentes independientes, accesibles.
+ - Estado: ✅ (pendiente: PinnedSection)
 
 5.3 Pinned interactions
 - Integrar pin/unpin y reorder en detalle + home.
 - Aceptacion: persistencia local y actualizacion UI.
+ - Estado: ⏳
 
 
 ## Fase 6 - Estados especiales y i18n (1 - 2 dias)
@@ -199,14 +202,17 @@ Fuentes
 6.1 i18n keys
 - Agregar keys ES/EN para summary.*.
 - Aceptacion: no hay claves faltantes.
+ - Estado: ✅
 
 6.2 Empty states
 - Sin datos, sin historico, sin tendencias.
 - Aceptacion: mensajes claros y consistentes.
+ - Estado: ✅
 
 6.3 Validaciones
 - Evitar NaN, valores negativos, fechas invalidas.
 - Aceptacion: UI nunca muestra valores rotos.
+ - Estado: ✅ (basico)
 
 
 ## Fase 7 - Tests y QA (2 - 3 dias)

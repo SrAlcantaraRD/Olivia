@@ -1,6 +1,7 @@
 import { useThemeColor } from 'heroui-native';
 import { View } from 'react-native';
 
+import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
 
 interface SummaryMiniBarChartProps {
@@ -34,18 +35,25 @@ export function SummaryMiniBarChart({
       ? labels
       : ['D', 'L', 'M', 'X', 'J', 'V', 'S'].slice(0, values.length);
 
+  const barValues = values.map((value) => ({ value: '', count: value }));
+
   return (
     <View testID={testID} className="w-full">
-      <View
-        className="w-full justify-end"
-        style={{ height, backgroundColor, borderRadius: 12 }}
-      >
+      <View style={{ height }} className="w-full">
+        <BarChartAtom
+          values={barValues}
+          height={height}
+          color={mutedColor}
+          secondaryColor={mutedColor}
+          showAxisLabels={false}
+          testID={`${testID}.bars`}
+        />
         {avgRatio !== null && (
           <View
             style={{
               position: 'absolute',
-              left: 0,
-              right: 0,
+              left: 8,
+              right: 8,
               height: 3,
               backgroundColor: accentColor,
               top: height - height * avgRatio - 1,
@@ -53,25 +61,6 @@ export function SummaryMiniBarChart({
             }}
           />
         )}
-        <View className="flex-row items-end px-2 gap-2 h-full">
-          {values.map((value, index) => {
-            const ratio = Math.max(0, value) / max;
-            const barHeight = Math.max(6, Math.round(height * ratio));
-
-            return (
-              <View
-                key={`${testID}.bar.${index}`}
-                className="flex-1"
-                style={{
-                  height: barHeight,
-                  borderRadius: 6,
-                  backgroundColor: mutedColor,
-                  opacity: 0.7,
-                }}
-              />
-            );
-          })}
-        </View>
       </View>
 
       {showLabels && (

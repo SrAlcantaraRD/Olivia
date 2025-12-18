@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { SummaryDetailTypeSchema } from '@/domain/summary/enum/summary-detail-type.enum';
 import { SummarySeriesPointSchema } from '@/domain/summary/entity/summary-series-point.entity';
+import { SummaryDetailTypeSchema } from '@/domain/summary/enum/summary-detail-type.enum';
 
 export const SummaryDetailSchema = z.object({
   type: SummaryDetailTypeSchema,

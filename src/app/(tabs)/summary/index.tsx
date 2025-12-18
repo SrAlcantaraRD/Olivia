@@ -151,20 +151,31 @@ export default function SummaryHomeScreen() {
               titleKey="page.summary.section.modules"
               testID="page.summary.modules"
             />
-            {modules.map((module) => (
-              <SummaryCard
-                key={`summary-module-${module.moduleId}`}
-                title={String(module.moduleKey)}
-                metricValue={module.todayCount}
-                metricLabel={t('page.summary.metric-label.today')}
-                timeLabel={getTimeLabel(module.lastRecordedAt)}
-                iconName={getModuleIcon(String(module.moduleKey))}
-                chartValues={module.last7Days.map((item) => item.value)}
-                chartAverage={module.previousPeriodAverage ?? null}
-                onPress={() => goToSummaryModuleDetail(String(module.moduleId))}
-                testID={`page.summary.module.${module.moduleId}`}
+            {modules.length === 0 ? (
+              <SummaryRow
+                iconName="alert"
+                titleKey="page.summary.modules-empty"
+                onPress={goToSummaryAllData}
+                testID="page.summary.modules-empty"
               />
-            ))}
+            ) : (
+              modules.map((module) => (
+                <SummaryCard
+                  key={`summary-module-${module.moduleId}`}
+                  title={String(module.moduleKey)}
+                  metricValue={module.todayCount}
+                  metricLabel={t('page.summary.metric-label.today')}
+                  timeLabel={getTimeLabel(module.lastRecordedAt)}
+                  iconName={getModuleIcon(String(module.moduleKey))}
+                  chartValues={module.last7Days.map((item) => item.value)}
+                  chartAverage={module.previousPeriodAverage ?? null}
+                  onPress={() =>
+                    goToSummaryModuleDetail(String(module.moduleId))
+                  }
+                  testID={`page.summary.module.${module.moduleId}`}
+                />
+              ))
+            )}
           </View>
         </View>
       </ScrollView>

@@ -3,18 +3,18 @@ import { useRouter } from 'expo-router';
 import { ExpoRouterNavigationAdapter } from '@/adapter/expo-router-navigation.adapter';
 import { SecureStoreCacheAdapter } from '@/adapter/expo-secure-store.cache-port.adapter';
 import { ToastUINotifyPortAdapter } from '@/adapter/toast.notify-port.adapter';
-import { SQLiteCarerAdapter } from '@/database/adapter/sqlite.carer.adapter';
-import { SQLiteModuleFieldAdapter } from '@/database/adapter/sqlite.module-field.adapter';
-import { SQLiteModuleAdapter } from '@/database/adapter/sqlite.module.adapter';
-import { SQLitePatientAdapter } from '@/database/adapter/sqlite.patient.adapter';
-import { SQLiteRecordFieldAdapter } from '@/database/adapter/sqlite.record-field.adapter';
-import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
 import { FakeDataSummaryDetailAdapter } from '@/database/adapter/fake-data.summary-detail.adapter';
 import { FakeDataSummaryHighlightAdapter } from '@/database/adapter/fake-data.summary-highlight.adapter';
 import { FakeDataSummaryModuleAdapter } from '@/database/adapter/fake-data.summary-module.adapter';
 import { FakeDataSummaryPinsAdapter } from '@/database/adapter/fake-data.summary-pins.adapter';
 import { FakeDataSummarySnapshotAdapter } from '@/database/adapter/fake-data.summary-snapshot.adapter';
 import { FakeDataSummaryTrendAdapter } from '@/database/adapter/fake-data.summary-trend.adapter';
+import { SQLiteCarerAdapter } from '@/database/adapter/sqlite.carer.adapter';
+import { SQLiteModuleAdapter } from '@/database/adapter/sqlite.module.adapter';
+import { SQLiteModuleFieldAdapter } from '@/database/adapter/sqlite.module-field.adapter';
+import { SQLitePatientAdapter } from '@/database/adapter/sqlite.patient.adapter';
+import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
+import { SQLiteRecordFieldAdapter } from '@/database/adapter/sqlite.record-field.adapter';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import {
   BASE_LOGGER,
@@ -23,10 +23,10 @@ import {
 import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INavigationPort } from '@/domain/core/port/navigation.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
-import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
-import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
+import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IRecordPort } from '@/domain/module/port/record.port';
+import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import type { IPatientPort } from '@/domain/patient/port/patient.port';
 import type { ISummaryDetailPort } from '@/domain/summary/port/summary-detail.port';
 import type { ISummaryHighlightPort } from '@/domain/summary/port/summary-highlight.port';

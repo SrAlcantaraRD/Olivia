@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
+import { useAddDemoData } from '@/hooks/add-demo-data.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
@@ -11,7 +12,8 @@ import { SettingsRow } from '@/ui/components/molecules/settings-row.molecule';
 export default function SettingsScreen() {
   const { t } = useTranslation();
 
-  const { navigationAdapter } = useAdapters();
+  const adapters = useAdapters();
+  const { navigationAdapter } = adapters;
   const {
     goToAppSettings,
     goToLogOut,
@@ -19,6 +21,20 @@ export default function SettingsScreen() {
     goToCarerManagement,
     goToAbout,
   } = useNavigation({ navigationAdapter });
+
+  const { execute: addDemoData } = useAddDemoData({
+    loggerAdapter: adapters.loggerAdapter,
+    notifyAdapter: adapters.notifyAdapter,
+    carerAdapter: adapters.carerAdapter,
+    moduleAdapter: adapters.moduleAdapter,
+    moduleFieldAdapter: adapters.moduleFieldAdapter,
+    recordAdapter: adapters.recordAdapter,
+    recordFieldAdapter: adapters.recordFieldAdapter,
+  });
+
+  const handleAddDemoData = async () => {
+    await addDemoData({});
+  };
 
   return (
     <ScreenLayout
@@ -73,6 +89,15 @@ export default function SettingsScreen() {
               captionKey="page.settings.app-settings-desc"
               onPress={goToAppSettings}
               testID="screen.settings.app-settings"
+              hasDivider
+            />
+
+            <SettingsRow
+              iconName="add-circle"
+              titleKey="page.settings.add-demo-data"
+              captionKey="page.settings.add-demo-data-desc"
+              onPress={handleAddDemoData}
+              testID="screen.settings.add-demo-data"
               hasDivider
             />
 

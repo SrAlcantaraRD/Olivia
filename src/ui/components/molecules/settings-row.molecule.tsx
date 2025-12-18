@@ -40,6 +40,7 @@ export const SettingsRow: React.FC<SettingsRowProps> = ({
 
   return (
     <CardAtom className="p-0 my-2">
+      {/* Add loading  */}
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={testID}

@@ -191,6 +191,7 @@ export const caCA = Object.freeze({
   'page.summary-detail.highlights': 'Dades importants',
   'page.summary-detail.fields': 'Camps',
   'page.summary-detail.fields-empty': 'No hi ha camps disponibles',
+  'page.summary-detail.empty': 'No hi ha dades per a aquest període',
 
   // Summary Trends (fake data)
   'summary.trend.cic.up.title': "CIC a l'alça les darreres setmanes",

@@ -1,6 +1,6 @@
+import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
@@ -48,6 +48,7 @@ export default function SummaryFieldDetailScreen() {
     value: '',
     count: item.value,
   }));
+  const hasSeries = detailHook.items.series.length > 0;
 
   return (
     <ScreenLayout
@@ -83,13 +84,23 @@ export default function SummaryFieldDetailScreen() {
               i18nKey="page.summary-detail.range-placeholder"
               variant="light"
             />
-            <View className="mt-4">
-              <BarChartAtom
-                values={chartValues}
-                showAxisLabels={false}
-                testID="page.summary-detail.chart"
+            {hasSeries ? (
+              <View className="mt-4">
+                <BarChartAtom
+                  values={chartValues}
+                  height={180}
+                  showAxisLabels={false}
+                  testID="page.summary-detail.chart"
+                />
+              </View>
+            ) : (
+              <TypographySmall
+                testID="page.summary-detail.empty"
+                i18nKey="page.summary-detail.empty"
+                variant="light"
+                className="mt-4"
               />
-            </View>
+            )}
           </CardAtom>
 
           <CardAtom className="p-4 rounded-3xl">

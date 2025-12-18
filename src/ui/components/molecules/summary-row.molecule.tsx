@@ -34,7 +34,7 @@ export const SummaryRow: React.FC<SummaryRowProps> = ({
         accessibilityLabel={testID}
         onPress={onPress}
         style={({ pressed }) => ({
-          minHeight: 56,
+          minHeight: 60,
           padding: 14,
           flexDirection: 'row',
           alignItems: 'center',

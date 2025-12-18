@@ -71,7 +71,6 @@ export const SummaryInsightCard: React.FC<SummaryInsightCardProps> = ({
             <TypographyParagraph
               testID={`${testID}.title`}
               i18nKey={titleKey}
-              className="font-semibold"
             />
           </View>
           <StyledIonicons
@@ -96,7 +95,6 @@ export const SummaryInsightCard: React.FC<SummaryInsightCardProps> = ({
                 testID={`${testID}.metric`}
                 i18nKey="common.raw-value"
                 values={{ value: metricValue }}
-                className="text-2xl font-semibold"
               />
               {metricLabel && (
                 <TypographySmall

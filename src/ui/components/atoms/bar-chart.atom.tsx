@@ -15,6 +15,7 @@ interface BarChartProps {
 
 export function BarChartAtom({
   values,
+  height,
   color = '#4f46e5',
   secondaryColor,
   showLine = false,
@@ -22,7 +23,8 @@ export function BarChartAtom({
   testID,
 }: BarChartProps) {
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
-  const resolvedHeight = Math.floor(windowHeight * 0.2);
+  const resolvedHeight =
+    typeof height === 'number' ? height : Math.floor(windowHeight * 0.2);
 
   if (!values || values.length === 0)
     return <View style={{ height: resolvedHeight }} />;

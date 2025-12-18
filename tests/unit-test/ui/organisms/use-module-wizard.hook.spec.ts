@@ -2,9 +2,9 @@ import { describe, expect, it } from '@jest/globals';
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 
 import { mockLoggerPort, mockNotifyPort } from '@/tests/mocks/core.port.mock';
+import { mockModuleEntity } from '@/tests/mocks/module.entity.mock';
 import { mockModuleFieldEntity } from '@/tests/mocks/module-field.entity.mock';
 import { mockModuleFieldPort } from '@/tests/mocks/module-field.port.mock';
-import { mockModuleEntity } from '@/tests/mocks/module.entity.mock';
 import { useModuleWizard } from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';
 
 describe('[Hook] useModuleWizard', () => {
