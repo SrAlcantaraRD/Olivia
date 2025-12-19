@@ -1,18 +1,20 @@
 {
   "expo": {
     "name": "TFG",
-    "slug": "TFG",
+    "slug": "tfg-oliva",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/icon.png",
     "scheme": "tfg",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "owner": "gabriel-inaldo-alcantara-moreno",
+    "owner": "galcantara_uoc",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.gabriel-alcantara.TFG",
-      "deploymentTarget": "15.1"
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -43,7 +45,12 @@
           }
         }
       ],
-      "@config-plugins/detox",
+      [
+        "@config-plugins/detox",
+        {
+          "subdomains": "*"
+        }
+      ],
       "expo-localization",
       "expo-sqlite",
       "expo-font",
@@ -53,6 +60,18 @@
       "typedRoutes": true,
       "reactCompiler": true,
       "tsconfigPaths": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f118b924-8af1-4360-ae55-001a1e2114ce"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/f118b924-8af1-4360-ae55-001a1e2114ce"
     }
   }
 }

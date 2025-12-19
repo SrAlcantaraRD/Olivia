@@ -3,18 +3,19 @@ import { useRouter } from 'expo-router';
 import { ExpoRouterNavigationAdapter } from '@/adapter/expo-router-navigation.adapter';
 import { SecureStoreCacheAdapter } from '@/adapter/expo-secure-store.cache-port.adapter';
 import { ToastUINotifyPortAdapter } from '@/adapter/toast.notify-port.adapter';
-import { FakeDataSummaryDetailAdapter } from '@/database/adapter/fake-data.summary-detail.adapter';
-import { FakeDataSummaryHighlightAdapter } from '@/database/adapter/fake-data.summary-highlight.adapter';
-import { FakeDataSummaryModuleAdapter } from '@/database/adapter/fake-data.summary-module.adapter';
-import { FakeDataSummaryPinsAdapter } from '@/database/adapter/fake-data.summary-pins.adapter';
-import { FakeDataSummarySnapshotAdapter } from '@/database/adapter/fake-data.summary-snapshot.adapter';
-import { FakeDataSummaryTrendAdapter } from '@/database/adapter/fake-data.summary-trend.adapter';
+import { SecureStoreSummaryPinsAdapter } from '@/database/adapter/secure-store.summary-pins.adapter';
+import { SecureStoreSummarySnapshotAdapter } from '@/database/adapter/secure-store.summary-snapshot.adapter';
 import { SQLiteCarerAdapter } from '@/database/adapter/sqlite.carer.adapter';
 import { SQLiteModuleAdapter } from '@/database/adapter/sqlite.module.adapter';
 import { SQLiteModuleFieldAdapter } from '@/database/adapter/sqlite.module-field.adapter';
 import { SQLitePatientAdapter } from '@/database/adapter/sqlite.patient.adapter';
 import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
 import { SQLiteRecordFieldAdapter } from '@/database/adapter/sqlite.record-field.adapter';
+import { SQLiteSummaryDetailAdapter } from '@/database/adapter/sqlite.summary-detail.adapter';
+import { SQLiteSummaryHighlightAdapter } from '@/database/adapter/sqlite.summary-highlight.adapter';
+import { SQLiteSummaryModuleAdapter } from '@/database/adapter/sqlite.summary-module.adapter';
+import { SQLiteSummaryTrendAdapter } from '@/database/adapter/sqlite.summary-trend.adapter';
+import { StubSummaryAnalysisAdapter } from '@/database/adapter/stub.summary-analysis.adapter';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import {
   BASE_LOGGER,
@@ -68,15 +69,19 @@ export const useAdapters = (): Readonly<IAdapters> => {
   const recordAdapter = new SQLiteRecordAdapter();
   const recordFieldAdapter = new SQLiteRecordFieldAdapter();
 
-  const summaryModuleAdapter = new FakeDataSummaryModuleAdapter();
-  const summaryDetailAdapter = new FakeDataSummaryDetailAdapter();
-  const summaryTrendAdapter = new FakeDataSummaryTrendAdapter();
-  const summaryHighlightAdapter = new FakeDataSummaryHighlightAdapter();
-  const summaryPinsAdapter = new FakeDataSummaryPinsAdapter();
-  const summarySnapshotAdapter = new FakeDataSummarySnapshotAdapter();
-
   const secureStoreAdapter = new SecureStoreCacheAdapter();
   // const cacheAdapter = new SecureStoreCacheAdapter();
+
+  const summaryModuleAdapter = new SQLiteSummaryModuleAdapter();
+  const summaryDetailAdapter = new SQLiteSummaryDetailAdapter();
+  const summaryTrendAdapter = new SQLiteSummaryTrendAdapter();
+  const summaryHighlightAdapter = new SQLiteSummaryHighlightAdapter();
+  const summaryPinsAdapter = new SecureStoreSummaryPinsAdapter(
+    secureStoreAdapter
+  );
+  const summarySnapshotAdapter = new SecureStoreSummarySnapshotAdapter(
+    secureStoreAdapter
+  );
 
   return Object.freeze({
     loggerAdapter: BASE_LOGGER,
