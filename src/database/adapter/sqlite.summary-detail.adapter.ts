@@ -1,4 +1,5 @@
-import { and, count, eq, sql } from 'drizzle-orm';
+import { subDays, subMonths, subWeeks, subYears } from 'date-fns';
+import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
 
 import {
   buildAdapterClient,
@@ -123,8 +124,8 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
       .where(
         and(
           eq(DB_SCHEMA.RECORD.moduleID, moduleId),
-          sql`${DB_SCHEMA.RECORD.createdAt} >= ${dateRange.start}`,
-          sql`${DB_SCHEMA.RECORD.createdAt} <= ${dateRange.end}`
+          gte(DB_SCHEMA.RECORD.createdAt, dateRange.start),
+          lte(DB_SCHEMA.RECORD.createdAt, dateRange.end)
         )
       )
       .groupBy(
@@ -156,8 +157,8 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
       .where(
         and(
           eq(DB_SCHEMA.RECORD_FIELD.fieldID, fieldId),
-          sql`${DB_SCHEMA.RECORD.createdAt} >= ${dateRange.start}`,
-          sql`${DB_SCHEMA.RECORD.createdAt} <= ${dateRange.end}`
+          gte(DB_SCHEMA.RECORD.createdAt, dateRange.start),
+          lte(DB_SCHEMA.RECORD.createdAt, dateRange.end)
         )
       )
       .groupBy(
@@ -220,35 +221,35 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
   }
 
   private getDateRangeForPeriod(period: SUMMARY_PERIOD_ENUM): {
-    start: number;
-    end: number;
+    start: Date;
+    end: Date;
   } {
     const now = new Date();
     let start: Date;
 
     switch (period) {
       case SUMMARY_PERIOD_ENUM.DAY:
-        start = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        start = subDays(now, 1);
         break;
       case SUMMARY_PERIOD_ENUM.WEEK:
-        start = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        start = subWeeks(now, 1);
         break;
       case SUMMARY_PERIOD_ENUM.MONTH:
-        start = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        start = subMonths(now, 1);
         break;
       case SUMMARY_PERIOD_ENUM.HALF_YEAR:
-        start = new Date(now.getTime() - 180 * 24 * 60 * 60 * 1000);
+        start = subMonths(now, 6);
         break;
       case SUMMARY_PERIOD_ENUM.YEAR:
-        start = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+        start = subYears(now, 1);
         break;
       default:
-        start = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        start = subWeeks(now, 7);
     }
 
     return {
-      start: Math.floor(start.getTime() / 1000),
-      end: Math.floor(now.getTime() / 1000),
+      start,
+      end: now,
     };
   }
 

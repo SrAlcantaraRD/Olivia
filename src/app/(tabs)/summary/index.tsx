@@ -127,6 +127,8 @@ export default function SummaryHomeScreen() {
     }
   };
 
+  console.log(pinnedModules);
+
   return (
     <ScreenLayout
       testID="page.summary"

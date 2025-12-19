@@ -1,3 +1,4 @@
+import { subDays } from 'date-fns';
 import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
 
 import {
@@ -80,6 +81,7 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
       );
 
       // Last 7 days series
+      const last7DaysStart = subDays(new Date(), 7);
       const last7DaysResult = await this.database
         .select({
           date: sql<string>`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`,
@@ -89,10 +91,7 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
         .where(
           and(
             eq(DB_SCHEMA.RECORD.moduleID, moduleId),
-            gte(
-              DB_SCHEMA.RECORD.createdAt,
-              sql`strftime('%s', datetime('now', '-7 days'))`
-            )
+            gte(DB_SCHEMA.RECORD.createdAt, last7DaysStart)
           )
         )
         .groupBy(
@@ -108,20 +107,16 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
       );
 
       // Previous period average (previous 7 days before last 7 days)
+      const previousStart = subDays(new Date(), 14);
+      const previousEnd = subDays(new Date(), 7);
       const previousPeriodResult = await this.database
         .select({ count: count() })
         .from(DB_SCHEMA.RECORD)
         .where(
           and(
             eq(DB_SCHEMA.RECORD.moduleID, moduleId),
-            gte(
-              DB_SCHEMA.RECORD.createdAt,
-              sql`strftime('%s', datetime('now', '-14 days'))`
-            ),
-            lte(
-              DB_SCHEMA.RECORD.createdAt,
-              sql`strftime('%s', datetime('now', '-7 days'))`
-            )
+            gte(DB_SCHEMA.RECORD.createdAt, previousStart),
+            lte(DB_SCHEMA.RECORD.createdAt, previousEnd)
           )
         );
 
