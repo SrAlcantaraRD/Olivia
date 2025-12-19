@@ -205,4 +205,30 @@ export class SQLiteRecordAdapter implements IRecordPort {
 
     return rows;
   }
+
+  public async getLatestRecordDateByModule(
+    moduleID: TID
+  ): Promise<Date | null> {
+    const rows = await this.database
+      .select({
+        createdAt: DB_SCHEMA.RECORD.createdAt,
+      })
+      .from(DB_SCHEMA.RECORD)
+      .where(
+        and(
+          eq(DB_SCHEMA.RECORD.moduleID, moduleID),
+          eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE)
+        )
+      )
+      .orderBy(desc(DB_SCHEMA.RECORD.createdAt))
+      .limit(1);
+
+    if (!rows.length) return null;
+
+    // createdAt stored in unix epoch seconds
+    const timestamp = Number(rows[0].createdAt);
+    if (!Number.isFinite(timestamp)) return null;
+
+    return new Date(timestamp * 1000);
+  }
 }

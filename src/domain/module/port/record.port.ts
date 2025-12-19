@@ -24,4 +24,5 @@ export interface IRecordPort {
     startDate?: Date;
     endDate?: Date;
   }): Promise<{ value: string; count: number }[]>;
+  getLatestRecordDateByModule(moduleID: TID): Promise<Date | null>;
 }
