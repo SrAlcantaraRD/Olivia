@@ -29,7 +29,7 @@ export const PinnedSection: React.FC<PinnedSectionProps> = ({
       />
       <ScrollView
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 12 }}
+        contentContainerStyle={{ gap: 4 }}
       >
         {children}
       </ScrollView>
