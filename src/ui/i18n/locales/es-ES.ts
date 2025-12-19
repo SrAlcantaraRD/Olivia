@@ -389,6 +389,13 @@ export const esES = Object.freeze({
   'page.history-detail.range.30d': 'Últimos 30 días',
   'page.history-detail.range.90d': 'Últimos 90 días',
 
+  // Summary
+  'page.summary-detail.period.day': 'D',
+  'page.summary-detail.period.week': 'S',
+  'page.summary-detail.period.month': 'M',
+  'page.summary-detail.period.half-year': '6M',
+  'page.summary-detail.period.year': 'A',
+
   'hook.setup-parent.title': 'Configurando progenitor',
   'hook.setup-parent.description':
     'Por favor espera mientras configuramos tu cuenta.',

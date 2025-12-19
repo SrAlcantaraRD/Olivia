@@ -1,6 +1,7 @@
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
+import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import { SUMMARY_DETAIL_TYPE_ENUM } from '@/domain/summary/enum/summary-detail-type.enum';
 import type { ISummaryDetailPort } from '@/domain/summary/port/summary-detail.port';
 import type {
@@ -73,7 +74,7 @@ export class GetSummaryDetailUseCase extends BaseUseCase<
 
     return {
       success: false,
-      message: 'summary.detail.invalid-params',
+      message: 'summary.detail.invalid-params' as Ti18nKeys,
     };
   }
 }

@@ -4,13 +4,19 @@ import { ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
+import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import { SUMMARY_DETAIL_TYPE_ENUM } from '@/domain/summary/enum/summary-detail-type.enum';
-import { SUMMARY_PERIOD_ENUM } from '@/domain/summary/enum/summary-period.enum';
+import {
+  SUMMARY_PERIOD_ENUM,
+  SUMMARY_PERIOD_I18N_MAP,
+  SUMMARY_PERIOD_VALUES,
+} from '@/domain/summary/enum/summary-period.enum';
 import { SUMMARY_PIN_TYPE_ENUM } from '@/domain/summary/enum/summary-pin-type.enum';
+import { useGetSummaryDetail } from '@/domain/summary/hook/get-summary-detail.hook';
 import { useGetSummaryPins } from '@/domain/summary/hook/get-summary-pins.hook';
 import { usePinSummaryItem } from '@/domain/summary/hook/pin-summary-item.hook';
 import { useUnpinSummaryItem } from '@/domain/summary/hook/unpin-summary-item.hook';
-import { useGetSummaryDetail } from '@/domain/summary/hook/get-summary-detail.hook';
+import { useNavigation } from '@/hooks/use-navigation.hook';
 import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import {
@@ -23,7 +29,6 @@ import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-ca
 import { SummaryPeriodSelector } from '@/ui/components/molecules/summary-period-selector.molecule';
 import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
-import { useNavigation } from '@/hooks/use-navigation.hook';
 
 export default function SummaryFieldDetailScreen() {
   const params = useLocalSearchParams<{
@@ -54,6 +59,10 @@ export default function SummaryFieldDetailScreen() {
     notifyAdapter,
   });
 
+  const [selectedPeriod, setSelectedPeriod] = React.useState(
+    SUMMARY_PERIOD_ENUM.WEEK
+  );
+
   const pinHook = usePinSummaryItem({
     loggerAdapter: BASE_LOGGER,
     summaryPinsAdapter,
@@ -72,10 +81,10 @@ export default function SummaryFieldDetailScreen() {
       type: SUMMARY_DETAIL_TYPE_ENUM.FIELD,
       moduleId,
       fieldId,
-      period: SUMMARY_PERIOD_ENUM.WEEK,
+      period: selectedPeriod,
     });
     void pinsListHook.execute();
-  }, [moduleId, fieldId]);
+  }, [moduleId, fieldId, selectedPeriod]);
 
   const chartValues = detailHook.items.series.map((item) => ({
     value: '',
@@ -104,6 +113,11 @@ export default function SummaryFieldDetailScreen() {
     });
   };
 
+  const periodOptions = SUMMARY_PERIOD_VALUES.map((period) => ({
+    value: period,
+    labelKey: SUMMARY_PERIOD_I18N_MAP[period],
+  }));
+
   return (
     <ScreenLayout
       testID="page.summary-detail-field"
@@ -117,8 +131,11 @@ export default function SummaryFieldDetailScreen() {
       >
         <View className="gap-6">
           <SummaryPeriodSelector
-            options={['D', 'S', 'M', '6M', 'A']}
-            selected="S"
+            options={periodOptions}
+            selected={selectedPeriod}
+            onSelect={(value) =>
+              setSelectedPeriod(value as SUMMARY_PERIOD_ENUM)
+            }
             testID="page.summary-detail.period"
           />
 
@@ -173,7 +190,7 @@ export default function SummaryFieldDetailScreen() {
 
           <SummaryInsightCard
             titleKey="page.summary-detail.highlights"
-            descriptionKey={detailHook.items.descriptionKey}
+            descriptionKey={detailHook.items.descriptionKey as Ti18nKeys}
             iconName="flame"
             metricValue={detailHook.items.average ?? 0}
             metricLabel=""

@@ -4,6 +4,7 @@ import { ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
+import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import { useGetSummaryHighlights } from '@/domain/summary/hook/get-summary-highlights.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
@@ -68,8 +69,8 @@ export default function SummaryHighlightsScreen() {
             highlightsHook.items.map((highlight) => (
               <SummaryInsightCard
                 key={`summary-highlight-${highlight.id}`}
-                titleKey={highlight.titleKey}
-                descriptionKey={highlight.descriptionKey}
+                titleKey={highlight.titleKey as Ti18nKeys}
+                descriptionKey={highlight.descriptionKey as Ti18nKeys}
                 iconName="flame"
                 metricValue={3502}
                 metricLabel={t('page.summary.metric-label.steps')}

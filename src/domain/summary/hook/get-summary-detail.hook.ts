@@ -7,6 +7,7 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
+import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import type { TSummaryDetail } from '@/domain/summary/entity/summary-detail.entity';
 import { SUMMARY_DETAIL_TYPE_ENUM } from '@/domain/summary/enum/summary-detail-type.enum';
 import type { ISummaryDetailPort } from '@/domain/summary/port/summary-detail.port';
@@ -39,7 +40,7 @@ export function useGetSummaryDetail(adapters: {
 
         if (!response.success || !response.details) {
           notifyAdapter.error({
-            title: 'hook.get-summary-detail.error',
+            title: 'hook.get-summary-detail.error' as Ti18nKeys,
             description: response.message,
           });
           return { success: false };

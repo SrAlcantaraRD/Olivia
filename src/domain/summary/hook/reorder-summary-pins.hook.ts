@@ -7,6 +7,7 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
+import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import type { TSummaryPin } from '@/domain/summary/entity/summary-pin.entity';
 import type { ISummaryPinsPort } from '@/domain/summary/port/summary-pins.port';
 import { ReorderSummaryPinsUseCase } from '@/domain/summary/use-case/reorder-summary-pins.use-case';
@@ -38,7 +39,7 @@ export function useReorderSummaryPins(adapters: {
 
         if (!response.success || !response.details) {
           notifyAdapter.error({
-            title: 'hook.reorder-summary-pins.error',
+            title: 'hook.reorder-summary-pins.error' as Ti18nKeys,
             description: response.message,
           });
           return { success: false };

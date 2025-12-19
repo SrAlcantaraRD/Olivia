@@ -383,6 +383,13 @@ export const enEN = Object.freeze({
   'modal.switch-account.title': 'Switch Account Modal',
   'modal.symptom-alert.title': 'Symptom Alert Modal',
 
+  // Summary
+  'page.summary-detail.period.day': 'Day',
+  'page.summary-detail.period.week': 'Week',
+  'page.summary-detail.period.month': 'Month',
+  'page.summary-detail.period.half-year': '6 Months',
+  'page.summary-detail.period.year': 'Year',
+
   'hook.setup-parent.title': 'Setting up parent',
   'hook.setup-parent.description': 'Please wait while we set up your account.',
   'hook.setup-parent.error-title': 'Setup Failed',

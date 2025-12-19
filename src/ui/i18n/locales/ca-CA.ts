@@ -389,6 +389,13 @@ export const caCA = Object.freeze({
   'modal.switch-account.title': 'Canviar de Compte',
   'modal.symptom-alert.title': 'Alerta de Símptomes',
 
+  // Summary
+  'page.summary-detail.period.day': 'Dia',
+  'page.summary-detail.period.week': 'Setmana',
+  'page.summary-detail.period.month': 'Mes',
+  'page.summary-detail.period.half-year': '6 Mesos',
+  'page.summary-detail.period.year': 'Any',
+
   'hook.setup-parent.title': 'Configurant progenitor',
   'hook.setup-parent.description':
     'Si us plau espera mentre configurem el teu compte.',

@@ -1,5 +1,6 @@
 import { addDays, endOfDay, startOfDay, subDays } from 'date-fns';
 
+import type { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import type { IRecordPort } from '@/domain/module/port/record.port';
 import type { TSummaryModule } from '@/domain/summary/entity/summary-module.entity';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
@@ -64,7 +65,7 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
 
         return {
           moduleId,
-          moduleKey: String(moduleId),
+          moduleKey: String(moduleId) as MODULE_KEY_ENUM,
           todayCount,
           lastRecordedAt: lastRecordedAt?.toISOString() ?? null,
           last7Days: last7Series,

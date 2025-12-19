@@ -7,6 +7,7 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
+import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import type { TSummaryModule } from '@/domain/summary/entity/summary-module.entity';
 import type { TSummaryPin } from '@/domain/summary/entity/summary-pin.entity';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
@@ -52,7 +53,7 @@ export function useGetSummaryHome(adapters: {
 
         if (!response.success || !response.details) {
           notifyAdapter.error({
-            title: 'hook.get-summary-home.error',
+            title: 'hook.get-summary-home.error' as Ti18nKeys,
             description: response.message,
           });
           return { success: false };

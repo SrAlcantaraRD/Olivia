@@ -1,3 +1,5 @@
+// FIXME: DEPRECATED. Use SUMMARY_PERIOD_ENUM instead.
+
 /**
  * Time range options for analytics and reports.
  * Used to define date ranges for filtering historical data.

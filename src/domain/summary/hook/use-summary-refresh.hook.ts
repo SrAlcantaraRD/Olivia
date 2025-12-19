@@ -7,6 +7,7 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
+import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import type { TSummarySnapshot } from '@/domain/summary/entity/summary-snapshot.entity';
 import type { ISummaryHighlightPort } from '@/domain/summary/port/summary-highlight.port';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
@@ -54,7 +55,7 @@ export function useSummaryRefresh(adapters: {
 
         if (!response.success || !response.details) {
           notifyAdapter.error({
-            title: 'hook.use-summary-refresh.error',
+            title: 'hook.use-summary-refresh.error' as Ti18nKeys,
             description: response.message,
           });
           return { success: false };
