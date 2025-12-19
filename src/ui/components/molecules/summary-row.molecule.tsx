@@ -28,7 +28,7 @@ export const SummaryRow: React.FC<SummaryRowProps> = ({
   const mutedColor = useThemeColor('muted');
 
   return (
-    <CardAtom className="p-0 rounded-2xl">
+    <CardAtom className="p-0">
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={testID}

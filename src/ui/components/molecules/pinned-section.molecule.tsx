@@ -20,7 +20,7 @@ export const PinnedSection: React.FC<PinnedSectionProps> = ({
   children,
 }) => {
   return (
-    <View className="gap-3 flex-1">
+    <View className="gap-4">
       <SummarySectionHeader
         titleKey={titleKey}
         actionKey={actionKey}
@@ -28,7 +28,6 @@ export const PinnedSection: React.FC<PinnedSectionProps> = ({
         testID={testID}
       />
       <ScrollView
-        horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 12 }}
       >

@@ -12,6 +12,7 @@ import { useGetSummaryHome } from '@/domain/summary/hook/get-summary-home.hook';
 import { useSummaryRefresh } from '@/domain/summary/hook/use-summary-refresh.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { PinnedSection } from '@/ui/components/molecules/pinned-section.molecule';
 import { SummaryCard } from '@/ui/components/molecules/summary-card.molecule';
 import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
@@ -127,8 +128,6 @@ export default function SummaryHomeScreen() {
     }
   };
 
-  console.log(pinnedModules);
-
   return (
     <ScreenLayout
       testID="page.summary"
@@ -143,31 +142,40 @@ export default function SummaryHomeScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <View className="gap-6">
-          {pinnedModules.length === 0 ? (
-            <SummaryRow
-              iconName="add-circle"
-              titleKey="page.summary.pins-empty"
-              onPress={goToSummaryAllData}
-              testID="page.summary.pins-empty"
-            />
-          ) : (
-            pinnedModules.map((module) => (
-              <SummaryCard
-                highlightLastBar
-                key={`summary-pinned-module-${module.moduleId}`}
-                title={String(module.moduleKey)}
-                metricValue={module.todayCount}
-                metricLabel={t('page.summary.metric-label.today')}
-                timeLabel={getTimeLabel(module.lastRecordedAt)}
-                iconName={getModuleIcon(String(module.moduleKey))}
-                chartValues={module.last7Days.map((item) => item.value)}
-                chartAverage={module.previousPeriodAverage ?? null}
-                onPress={() => goToSummaryModuleDetail(String(module.moduleId))}
-                testID={`page.summary.pinned.${module.moduleId}`}
+        <View className="gap-4">
+          <PinnedSection
+            titleKey="page.summary.section.pinned"
+            actionKey={pinnedModules.length > 0 ? 'common.edit' : undefined}
+            onActionPress={() => {}}
+            testID="page.summary.pinned"
+          >
+            {pinnedModules.length === 0 ? (
+              <SummaryRow
+                iconName="add-circle"
+                titleKey="page.summary.pins-empty"
+                onPress={goToSummaryAllData}
+                testID="page.summary.pins-empty"
               />
-            ))
-          )}
+            ) : (
+              pinnedModules.map((module) => (
+                <SummaryCard
+                  highlightLastBar
+                  key={`summary-pinned-module-${module.moduleId}`}
+                  title={String(module.moduleKey)}
+                  metricValue={module.todayCount}
+                  metricLabel={t('page.summary.metric-label.today')}
+                  timeLabel={getTimeLabel(module.lastRecordedAt)}
+                  iconName={getModuleIcon(String(module.moduleKey))}
+                  chartValues={module.last7Days.map((item) => item.value)}
+                  chartAverage={module.previousPeriodAverage ?? null}
+                  onPress={() =>
+                    goToSummaryModuleDetail(String(module.moduleId))
+                  }
+                  testID={`page.summary.pinned.${module.moduleId}`}
+                />
+              ))
+            )}
+          </PinnedSection>
 
           <View className="gap-2">
             <SummaryRow
