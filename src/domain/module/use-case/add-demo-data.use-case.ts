@@ -68,39 +68,38 @@ export class AddDemoDataUseCase extends BaseUseCase<
       module.id
     );
 
-    // Days in each month (for 2025, non-leap year)
-    const daysInMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const now = new Date();
 
-    // Create records for each month, each day, 5-9 records per day
-    for (let month = 1; month <= 12; month++) {
-      const daysInMonth = daysInMonths[month - 1];
-      for (let day = 1; day <= daysInMonth; day++) {
-        const numRecords = Math.floor(Math.random() * 5) + 5; // 5 to 9
-        for (let i = 0; i < numRecords; i++) {
-          const recordData = `Demo record for ${module.name} - ${month}/${day} - ${i + 1}`;
-          const synced = false;
+    // Create records for the last 365 days, 5-9 records per day
+    for (let dayOffset = 0; dayOffset < 365; dayOffset++) {
+      const recordDate = new Date(now);
+      recordDate.setDate(now.getDate() - dayOffset);
 
-          const fieldList = fields.map((field) => ({
-            fieldID: field.id,
-            value: this.generateDemoValue(field),
-          }));
+      const numRecords = Math.floor(Math.random() * 5) + 5; // 5 to 9
+      for (let i = 0; i < numRecords; i++) {
+        const recordData = `Demo record for ${module.name} - ${recordDate.toDateString()} - ${i + 1}`;
+        const synced = false;
 
-          // Generate random hour and minute for the day
-          const hour = Math.floor(Math.random() * 24);
-          const minute = Math.floor(Math.random() * 60);
-          const createdAt = new Date(2025, month - 1, day, hour, minute);
+        const fieldList = fields.map((field) => ({
+          fieldID: field.id,
+          value: this.generateDemoValue(field),
+        }));
 
-          const recordCreate: TRecordCreate = {
-            moduleID: module.id,
-            carerID,
-            data: recordData,
-            synced,
-            fieldList,
-            createdAt,
-          };
+        // Generate random hour and minute for the day
+        const hour = Math.floor(Math.random() * 24);
+        const minute = Math.floor(Math.random() * 60);
+        recordDate.setHours(hour, minute, 0, 0);
 
-          await this.adapters.recordAdapter.create(recordCreate);
-        }
+        const recordCreate: TRecordCreate = {
+          moduleID: module.id,
+          carerID,
+          data: recordData,
+          synced,
+          fieldList,
+          createdAt: recordDate,
+        };
+
+        await this.adapters.recordAdapter.create(recordCreate);
       }
     }
   }

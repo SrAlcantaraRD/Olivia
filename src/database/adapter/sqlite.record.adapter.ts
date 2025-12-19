@@ -113,9 +113,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
       .orderBy(desc(DB_SCHEMA.RECORD.createdAt))
       .limit(limit);
 
-    return (rows as TRecordAdapterEntity[]).map(
-      SQLiteRecordAdapter.toDomainEntity
-    );
+    return rows.map(SQLiteRecordAdapter.toDomainEntity);
   }
 
   public async getCountsByModule(criteria?: {

@@ -43,6 +43,10 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
   }
 
   public async getModuleSummaries(moduleIds: TID[]): Promise<TSummaryModule[]> {
+    console.log(
+      `[SummaryModuleAdapter] getModuleSummaries called with moduleIds:`,
+      moduleIds
+    );
     const results: TSummaryModule[] = [];
 
     for (const moduleId of moduleIds) {
@@ -53,11 +57,14 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
         .where(
           and(
             eq(DB_SCHEMA.RECORD.moduleID, moduleId),
-            sql`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt}) = strftime('%Y-%m-%d', 'now')`
+            sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch')) = strftime('%Y-%m-%d', 'now')`
           )
         );
 
       const todayCount = todayResult[0]?.count ?? 0;
+      console.log(
+        `[SummaryModuleAdapter] Module ${moduleId}: todayCount = ${todayCount}`
+      );
 
       // Last recorded at
       const lastRecord = await this.database
@@ -68,22 +75,37 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
         .limit(1);
 
       const lastRecordedAt = lastRecord[0]?.createdAt ?? null;
+      console.log(
+        `[SummaryModuleAdapter] Module ${moduleId}: lastRecordedAt = ${lastRecordedAt}`
+      );
 
       // Last 7 days series
       const last7DaysResult = await this.database
         .select({
-          date: sql<string>`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt})`,
+          date: sql<string>`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`,
           value: count(),
         })
         .from(DB_SCHEMA.RECORD)
         .where(
           and(
             eq(DB_SCHEMA.RECORD.moduleID, moduleId),
-            gte(DB_SCHEMA.RECORD.createdAt, sql`datetime('now', '-7 days')`)
+            gte(
+              DB_SCHEMA.RECORD.createdAt,
+              sql`strftime('%s', datetime('now', '-7 days'))`
+            )
           )
         )
-        .groupBy(sql`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt})`)
-        .orderBy(sql`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt})`);
+        .groupBy(
+          sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
+        )
+        .orderBy(
+          sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
+        );
+
+      console.log(
+        `[SummaryModuleAdapter] Module ${moduleId}: last7Days =`,
+        last7DaysResult
+      );
 
       // Previous period average (previous 7 days before last 7 days)
       const previousPeriodResult = await this.database
@@ -92,8 +114,14 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
         .where(
           and(
             eq(DB_SCHEMA.RECORD.moduleID, moduleId),
-            gte(DB_SCHEMA.RECORD.createdAt, sql`datetime('now', '-14 days')`),
-            lte(DB_SCHEMA.RECORD.createdAt, sql`datetime('now', '-7 days')`)
+            gte(
+              DB_SCHEMA.RECORD.createdAt,
+              sql`strftime('%s', datetime('now', '-14 days'))`
+            ),
+            lte(
+              DB_SCHEMA.RECORD.createdAt,
+              sql`strftime('%s', datetime('now', '-7 days'))`
+            )
           )
         );
 

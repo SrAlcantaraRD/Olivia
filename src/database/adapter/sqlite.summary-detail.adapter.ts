@@ -116,7 +116,7 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
 
     const result = await this.database
       .select({
-        date: sql<string>`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt})`,
+        date: sql<string>`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`,
         value: count(),
       })
       .from(DB_SCHEMA.RECORD)
@@ -127,8 +127,12 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
           sql`${DB_SCHEMA.RECORD.createdAt} <= ${dateRange.end}`
         )
       )
-      .groupBy(sql`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt})`)
-      .orderBy(sql`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt})`);
+      .groupBy(
+        sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
+      )
+      .orderBy(
+        sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
+      );
 
     return result;
   }
@@ -141,7 +145,7 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
 
     const result = await this.database
       .select({
-        date: sql<string>`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt})`,
+        date: sql<string>`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`,
         value: count(),
       })
       .from(DB_SCHEMA.RECORD_FIELD)
@@ -156,8 +160,12 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
           sql`${DB_SCHEMA.RECORD.createdAt} <= ${dateRange.end}`
         )
       )
-      .groupBy(sql`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt})`)
-      .orderBy(sql`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt})`);
+      .groupBy(
+        sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
+      )
+      .orderBy(
+        sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
+      );
 
     return result;
   }
@@ -186,7 +194,7 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
       .where(
         and(
           eq(DB_SCHEMA.RECORD.moduleID, moduleId),
-          sql`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt}) = strftime('%Y-%m-%d', 'now')`
+          sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch')) = strftime('%Y-%m-%d', 'now')`
         )
       );
 
@@ -204,7 +212,7 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
       .where(
         and(
           eq(DB_SCHEMA.RECORD_FIELD.fieldID, fieldId),
-          sql`strftime('%Y-%m-%d', ${DB_SCHEMA.RECORD.createdAt}) = strftime('%Y-%m-%d', 'now')`
+          sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch')) = strftime('%Y-%m-%d', 'now')`
         )
       );
 
@@ -212,8 +220,8 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
   }
 
   private getDateRangeForPeriod(period: SUMMARY_PERIOD_ENUM): {
-    start: string;
-    end: string;
+    start: number;
+    end: number;
   } {
     const now = new Date();
     let start: Date;
@@ -239,8 +247,8 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
     }
 
     return {
-      start: start.toISOString(),
-      end: now.toISOString(),
+      start: Math.floor(start.getTime() / 1000),
+      end: Math.floor(now.getTime() / 1000),
     };
   }
 

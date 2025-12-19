@@ -145,16 +145,16 @@ Fuentes
 3.5 Hook de refresh
 - `use-summary-refresh.hook.ts`: ejecuta refresh manual (pull-to-refresh, entry).
 - Aceptacion: dispara el recalculo de snapshots sin TTL.
- - Nota: hook y use-case quedaran como skeletons con mocks hasta la fase final.
- - Estado: ⏳
- - TODO: renombrar `refresh-summary-snapshots.hook.ts` a `use-summary-refresh.hook.ts`.
+ - Nota: hook y use-case implementados con adapters reales.
+ - Estado: ✅
+ - TODO: renombrar `refresh-summary-snapshots.hook.ts` a `use-summary-refresh.hook.ts`. ✅
 
-3.6 Puntos de invocacion del refresh (documentado, sin implementar)
-- App open (cold start).
-- Al entrar a tab Summary.
-- Pull-to-refresh manual en Home.
-- Al crear/editar un record (si aplica).
-- Aceptacion: puntos de invocacion definidos en este documento.
+3.6 Puntos de invocacion del refresh (implementado)
+- App open (cold start): pendiente.
+- Al entrar a tab Summary: ✅ (useFocusEffect en index.tsx).
+- Pull-to-refresh manual en Home: ✅ (RefreshControl en ScrollView).
+- Al crear/editar un record (si aplica): pendiente.
+- Aceptacion: puntos de invocacion definidos y algunos implementados.
  - Estado: ✅
 
 

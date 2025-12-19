@@ -1,6 +1,7 @@
+import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
@@ -8,6 +9,7 @@ import { useGetListActiveModule } from '@/domain/module/hook/get-list-active-mod
 import type { TRequestGetActiveModuleList } from '@/domain/module/use-case-schema/get-active-module-list.use-case-schema';
 import { SUMMARY_PIN_TYPE_ENUM } from '@/domain/summary/enum/summary-pin-type.enum';
 import { useGetSummaryHome } from '@/domain/summary/hook/get-summary-home.hook';
+import { useSummaryRefresh } from '@/domain/summary/hook/use-summary-refresh.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { SummaryCard } from '@/ui/components/molecules/summary-card.molecule';
@@ -20,6 +22,9 @@ export default function SummaryHomeScreen() {
     moduleAdapter,
     summaryModuleAdapter,
     summaryPinsAdapter,
+    summaryTrendAdapter,
+    summaryHighlightAdapter,
+    summarySnapshotAdapter,
     notifyAdapter,
     navigationAdapter,
   } = useAdapters();
@@ -44,14 +49,51 @@ export default function SummaryHomeScreen() {
     notifyAdapter,
   });
 
-  React.useEffect(() => {
-    void activeModuleHook.execute(undefined as TRequestGetActiveModuleList);
-  }, []);
+  const summaryRefreshHook = useSummaryRefresh({
+    loggerAdapter: BASE_LOGGER,
+    summaryModuleAdapter,
+    summaryTrendAdapter,
+    summaryHighlightAdapter,
+    summarySnapshotAdapter,
+    notifyAdapter,
+  });
+
+  const [refreshing, setRefreshing] = React.useState(false);
+  const hasRefreshedOnFocus = React.useRef(false);
+
+  const handleRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const activeModules = activeModuleHook.items?.map((m) => m.id) ?? [];
+      console.log(`[SummaryIndex] Pull refresh with modules:`, activeModules);
+      await summaryRefreshHook.execute({ moduleIds: activeModules });
+      // Re-fetch home data
+      await summaryHomeHook.execute({ moduleIds: activeModules });
+    } catch (error) {
+      console.error('Refresh failed:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [activeModuleHook.items, summaryRefreshHook, summaryHomeHook]);
 
   React.useEffect(() => {
     const moduleIds = activeModuleHook.items.map((module) => module.id);
     void summaryHomeHook.execute({ moduleIds });
   }, [activeModuleHook.items.length]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Refresh snapshots when entering the tab, but only once per session
+      if (!hasRefreshedOnFocus.current) {
+        hasRefreshedOnFocus.current = true;
+        const activeModules = activeModuleHook.items?.map((m) => m.id) ?? [];
+        console.log(`[SummaryIndex] Active modules:`, activeModules);
+        if (activeModules.length > 0) {
+          void summaryRefreshHook.execute({ moduleIds: activeModules });
+        }
+      }
+    }, [activeModuleHook.items, summaryRefreshHook])
+  );
 
   const { modules, pins } = summaryHomeHook.items;
   const pinnedModuleIds = pins
@@ -95,6 +137,9 @@ export default function SummaryHomeScreen() {
         className="flex-1"
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
       >
         <View className="gap-6">
           {pinnedModules.length === 0 ? (

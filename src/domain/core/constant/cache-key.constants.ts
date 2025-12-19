@@ -5,9 +5,9 @@ export const CACHE_KEY_ENUM = Object.freeze({
   MODULES: 'cache-modules',
   APP_THEME: 'cache-app-theme',
   APP_LOCALE: 'cache-app-locale',
-  REPORT_DISTRIBUTION: 'report:distribution',
-  SUMMARY_PINS: 'summary:pins',
-  SUMMARY_SNAPSHOT: 'summary:snapshot',
+  REPORT_DISTRIBUTION: 'report_distribution',
+  SUMMARY_PINS: 'summary_pins',
+  SUMMARY_SNAPSHOT: 'summary_snapshot',
 } as const);
 
 export type TCacheKey = (typeof CACHE_KEY_ENUM)[keyof typeof CACHE_KEY_ENUM];

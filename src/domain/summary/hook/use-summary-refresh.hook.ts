@@ -15,7 +15,7 @@ import type { ISummaryTrendPort } from '@/domain/summary/port/summary-trend.port
 import { RefreshSummarySnapshotsUseCase } from '@/domain/summary/use-case/refresh-summary-snapshots.use-case';
 import type { TRequestRefreshSummarySnapshots } from '@/domain/summary/use-case-schema/refresh-summary-snapshots.use-case-schema';
 
-export function useRefreshSummarySnapshots(adapters: {
+export function useSummaryRefresh(adapters: {
   loggerAdapter: TLoggerPort;
   summaryModuleAdapter: ISummaryModulePort;
   summaryTrendAdapter: ISummaryTrendPort;
@@ -54,7 +54,7 @@ export function useRefreshSummarySnapshots(adapters: {
 
         if (!response.success || !response.details) {
           notifyAdapter.error({
-            title: 'hook.refresh-summary-snapshots.error',
+            title: 'hook.use-summary-refresh.error',
             description: response.message,
           });
           return { success: false };
