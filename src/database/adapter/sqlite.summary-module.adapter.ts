@@ -16,7 +16,7 @@ export type TSummaryModuleAdapterEntity = {
   moduleKey: string;
   todayCount: number;
   lastRecordedAt: string | null;
-  last7Days: Array<{ date: string; value: number }>;
+  last7Days: { date: string; value: number }[];
   previousPeriodAverage: number | null;
 };
 

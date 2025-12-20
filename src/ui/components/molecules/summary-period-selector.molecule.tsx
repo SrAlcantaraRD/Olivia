@@ -7,7 +7,7 @@ import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
 
 interface SummaryPeriodSelectorProps {
-  options: Array<{ value: string; labelKey: Ti18nKeys }>;
+  options: { value: string; labelKey: Ti18nKeys }[];
   selected: string;
   onSelect?: (value: string) => void;
   testID: string;

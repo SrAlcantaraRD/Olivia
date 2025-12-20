@@ -17,7 +17,7 @@ interface ModuleStatisticsData {
 }
 
 interface ReportData {
-  stats?: Array<{ moduleID: number; count: number }>;
+  stats?: { moduleID: number; count: number }[];
   trendByModule: Record<number, number[]>;
   timeRange: { startDate: Date; endDate: Date };
 }

@@ -7,6 +7,8 @@ import { TextFieldAtom } from '@/ui/components/atoms/text-field.atom';
 import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
 import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
 
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
+
 function parseFieldValues(valuesStr: string | undefined): string[] {
   if (!valuesStr) return [];
 
@@ -17,8 +19,6 @@ function parseFieldValues(valuesStr: string | undefined): string[] {
   if (!result.success) return [];
   return result.data;
 }
-
-import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface FieldStep {
   id: string;

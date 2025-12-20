@@ -14,7 +14,10 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import Toast, { type ToastConfig } from 'react-native-toast-message';
 
 import i18n from '@/ui/i18n/i18n';
-import 'react-native-reanimated';
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from 'react-native-reanimated';
 import '../global.css';
 
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
@@ -22,10 +25,6 @@ import { Stack } from 'expo-router';
 import { SQLiteProvider } from 'expo-sqlite';
 import { HeroUINativeProvider } from 'heroui-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import {
-  configureReanimatedLogger,
-  ReanimatedLogLevel,
-} from 'react-native-reanimated';
 
 import { SQLITE_DB } from '@/database/config/database.config';
 import { useInitDb } from '@/database/execute-migrations';

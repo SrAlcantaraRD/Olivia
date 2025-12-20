@@ -4,7 +4,7 @@ import type { TSummaryModule } from '@/domain/summary/entity/summary-module.enti
 import type { TSummarySeriesPoint } from '@/domain/summary/entity/summary-series-point.entity';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
 
-const MODULE_SEED: Array<{ id: TID; key: MODULE_KEY_ENUM; base: number }> = [
+const MODULE_SEED: { id: TID; key: MODULE_KEY_ENUM; base: number }[] = [
   { id: 1, key: MODULE_KEY_ENUM.CIC, base: 4 },
   { id: 2, key: MODULE_KEY_ENUM.URINE, base: 6 },
   { id: 3, key: MODULE_KEY_ENUM.STOOL, base: 2 },

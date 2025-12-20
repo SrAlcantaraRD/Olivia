@@ -63,7 +63,7 @@ export function useGetRecordFieldDistribution(adapters: {
             }
           } catch (err) {
             // ignore cache errors and continue
-            // eslint-disable-next-line no-console
+
             console.warn('cache.get failed', err);
           }
         }
@@ -86,7 +86,6 @@ export function useGetRecordFieldDistribution(adapters: {
           try {
             await cacheAdapter.set(cacheKey, response.details.values);
           } catch (err) {
-            // eslint-disable-next-line no-console
             console.warn('cache.set failed', err);
           }
         }
