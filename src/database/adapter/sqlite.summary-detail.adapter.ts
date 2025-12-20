@@ -112,12 +112,13 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
   private async getSeriesForModule(
     moduleId: TID,
     period: SUMMARY_PERIOD_ENUM
-  ): Promise<Array<{ date: string; value: number }>> {
+  ): Promise<{ date: string; value: number }[]> {
     const dateRange = this.getDateRangeForPeriod(period);
+    const dateFormat = this.getDateFormatForPeriod(period);
 
     const result = await this.database
       .select({
-        date: sql<string>`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`,
+        date: sql<string>`strftime('${sql.raw(dateFormat)}', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`,
         value: count(),
       })
       .from(DB_SCHEMA.RECORD)
@@ -129,10 +130,10 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
         )
       )
       .groupBy(
-        sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
+        sql`strftime('${sql.raw(dateFormat)}', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
       )
       .orderBy(
-        sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
+        sql`strftime('${sql.raw(dateFormat)}', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
       );
 
     return result;
@@ -141,12 +142,13 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
   private async getSeriesForField(
     fieldId: TID,
     period: SUMMARY_PERIOD_ENUM
-  ): Promise<Array<{ date: string; value: number }>> {
+  ): Promise<{ date: string; value: number }[]> {
     const dateRange = this.getDateRangeForPeriod(period);
+    const dateFormat = this.getDateFormatForPeriod(period);
 
     const result = await this.database
       .select({
-        date: sql<string>`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`,
+        date: sql<string>`strftime('${sql.raw(dateFormat)}', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`,
         value: count(),
       })
       .from(DB_SCHEMA.RECORD_FIELD)
@@ -162,10 +164,10 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
         )
       )
       .groupBy(
-        sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
+        sql`strftime('${sql.raw(dateFormat)}', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
       )
       .orderBy(
-        sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
+        sql`strftime('${sql.raw(dateFormat)}', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
       );
 
     return result;
@@ -173,19 +175,73 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
 
   private getPlaceholderSeries(
     period: SUMMARY_PERIOD_ENUM
-  ): Array<{ date: string; value: number }> {
-    // Placeholder for trends
-    const days = this.getDaysForPeriod(period);
+  ): { date: string; value: number }[] {
+    // Placeholder for trends - generate correct number of bars per period
+    const count = this.getBarCountForPeriod(period);
     const now = new Date();
-    return Array.from({ length: days }, (_, i) => {
-      const date = new Date(
-        now.getTime() - (days - i - 1) * 24 * 60 * 60 * 1000
-      );
+
+    return Array.from({ length: count }, (_, i) => {
+      let date: Date;
+      let dateStr: string;
+
+      switch (period) {
+        case SUMMARY_PERIOD_ENUM.DAY:
+          // 24 hours
+          date = new Date(now.getTime() - (23 - i) * 60 * 60 * 1000);
+          dateStr = date.toISOString().slice(0, 13); // YYYY-MM-DDTHH
+          break;
+        case SUMMARY_PERIOD_ENUM.WEEK:
+          // 7 days
+          date = new Date(now.getTime() - (6 - i) * 24 * 60 * 60 * 1000);
+          dateStr = date.toISOString().split('T')[0]; // YYYY-MM-DD
+          break;
+        case SUMMARY_PERIOD_ENUM.MONTH: {
+          // Days in current month
+          const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+          date = new Date(monthStart.getTime() + i * 24 * 60 * 60 * 1000);
+          dateStr = date.toISOString().split('T')[0];
+          break;
+        }
+        case SUMMARY_PERIOD_ENUM.HALF_YEAR:
+          // 6 months
+          date = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1);
+          dateStr = date.toISOString().slice(0, 7); // YYYY-MM
+          break;
+        case SUMMARY_PERIOD_ENUM.YEAR:
+          // 12 months
+          date = new Date(now.getFullYear(), i, 1);
+          dateStr = date.toISOString().slice(0, 7); // YYYY-MM
+          break;
+        default:
+          date = new Date(now.getTime() - (6 - i) * 24 * 60 * 60 * 1000);
+          dateStr = date.toISOString().split('T')[0];
+      }
+
       return {
-        date: date.toISOString().split('T')[0], // YYYY-MM-DD
+        date: dateStr,
         value: Math.floor(Math.random() * 10), // Random placeholder
       };
     });
+  }
+
+  private getBarCountForPeriod(period: SUMMARY_PERIOD_ENUM): number {
+    switch (period) {
+      case SUMMARY_PERIOD_ENUM.DAY:
+        return 24; // Hours
+      case SUMMARY_PERIOD_ENUM.WEEK:
+        return 7; // Days
+      case SUMMARY_PERIOD_ENUM.MONTH: {
+        // Days in current month
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+      }
+      case SUMMARY_PERIOD_ENUM.HALF_YEAR:
+        return 6; // Months
+      case SUMMARY_PERIOD_ENUM.YEAR:
+        return 12; // Months
+      default:
+        return 7;
+    }
   }
 
   private async getTodayValueForModule(moduleId: TID): Promise<number | null> {
@@ -270,8 +326,25 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
     }
   }
 
+  private getDateFormatForPeriod(period: SUMMARY_PERIOD_ENUM): string {
+    switch (period) {
+      case SUMMARY_PERIOD_ENUM.DAY:
+        return '%Y-%m-%d %H'; // Hour
+      case SUMMARY_PERIOD_ENUM.WEEK:
+        return '%Y-%m-%d'; // Day
+      case SUMMARY_PERIOD_ENUM.MONTH:
+        return '%Y-%m-%d'; // Day
+      case SUMMARY_PERIOD_ENUM.HALF_YEAR:
+        return '%Y-%m'; // Month
+      case SUMMARY_PERIOD_ENUM.YEAR:
+        return '%Y-%m'; // Month
+      default:
+        return '%Y-%m-%d';
+    }
+  }
+
   private calculateAverage(
-    series: Array<{ date: string; value: number }>
+    series: { date: string; value: number }[]
   ): number | null {
     if (series.length === 0) return null;
     const total = series.reduce((sum, point) => sum + point.value, 0);

@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -93,8 +94,39 @@ export default function SummaryModuleDetailScreen() {
     void pinsListHook.execute();
   }, [moduleId, selectedPeriod]);
 
+  const formatChartLabel = (
+    dateStr: string,
+    period: SUMMARY_PERIOD_ENUM
+  ): string => {
+    try {
+      switch (period) {
+        case SUMMARY_PERIOD_ENUM.DAY: {
+          // dateStr is like "2025-12-19 14"
+          const hour = dateStr.split(' ')[1];
+          return `${hour}h`;
+        }
+        case SUMMARY_PERIOD_ENUM.WEEK:
+          // dateStr is like "2025-12-19"
+          return format(new Date(dateStr), 'EEE'); // Mon, Tue, etc.
+        case SUMMARY_PERIOD_ENUM.MONTH:
+          // dateStr is like "2025-12-19"
+          return format(new Date(dateStr), 'dd'); // 01, 02, etc.
+        case SUMMARY_PERIOD_ENUM.HALF_YEAR:
+        case SUMMARY_PERIOD_ENUM.YEAR: {
+          // dateStr is like "2025-12"
+          const [year, month] = dateStr.split('-');
+          return format(new Date(parseInt(year), parseInt(month) - 1), 'MMM'); // Jan, Feb, etc.
+        }
+        default:
+          return dateStr;
+      }
+    } catch {
+      return dateStr;
+    }
+  };
+
   const chartValues = detailHook.items.series.map((item) => ({
-    value: '',
+    value: formatChartLabel(item.date, selectedPeriod),
     count: item.value,
   }));
 
@@ -167,7 +199,7 @@ export default function SummaryModuleDetailScreen() {
                 <BarChartAtom
                   values={chartValues}
                   height={180}
-                  showAxisLabels={false}
+                  showAxisLabels={true}
                   testID="page.summary-detail.chart"
                 />
               </View>

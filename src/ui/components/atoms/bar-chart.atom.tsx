@@ -39,10 +39,17 @@ export function BarChartAtom({
 
   // For distribution charts we cap to top 20 (readability).
   // For compact trend charts we prefer the MOST RECENT values that fit on screen.
+  // When showing axis labels, allow more bars but ensure labels fit
   const isCompact = showAxisLabels === false;
   const availableForBars = Math.max(1, chartWidth - 20);
-  const maxBarsByWidth = Math.max(1, Math.floor(availableForBars / 5));
-  const maxItems = isCompact ? Math.min(values.length, maxBarsByWidth) : 20;
+  const minWidthPerLabel = showAxisLabels ? 35 : 5; // More space needed for labels
+  const maxBarsByWidth = Math.max(
+    1,
+    Math.floor(availableForBars / minWidthPerLabel)
+  );
+  const maxItems = isCompact
+    ? Math.min(values.length, maxBarsByWidth)
+    : Math.min(values.length, maxBarsByWidth);
   const sliced = isCompact
     ? values.slice(-maxItems)
     : values.slice(0, maxItems);
@@ -109,10 +116,12 @@ export function BarChartAtom({
         rulesColor={showAxisLabels ? color : 'transparent'}
         rulesThickness={showAxisLabels ? 1 : 0}
         yAxisLabelTexts={yAxisLabelTexts}
+        xAxisLabelTexts={showAxisLabels ? data.map((d) => d.label) : undefined}
         labelWidth={showAxisLabels ? 40 : 0}
         xAxisLabelTextStyle={{
           color: showAxisLabels ? color : 'transparent',
           textAlign: 'center',
+          fontSize: 10,
         }}
         showLine={showLine}
         lineConfig={{
