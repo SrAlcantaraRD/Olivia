@@ -6,3 +6,15 @@ export class ErrorWhenSetupParent extends BaseError {
     super(ERROR_CODE_ENUM.WHEN_SETUP_PARENT, code, description);
   }
 }
+
+export class ErrorWhenCreateInvite extends BaseError {
+  constructor(code: string, description: string) {
+    super(ERROR_CODE_ENUM.WHEN_CREATE_INVITE, code, description);
+  }
+}
+
+export class ErrorWhenImportInvite extends BaseError {
+  constructor(code: string, description: string) {
+    super(ERROR_CODE_ENUM.WHEN_IMPORT_INVITE, code, description);
+  }
+}
