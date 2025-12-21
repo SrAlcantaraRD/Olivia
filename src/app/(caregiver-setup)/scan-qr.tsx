@@ -1,17 +1,16 @@
+import {
+  type BarcodeScanningResult,
+  CameraView,
+  useCameraPermissions,
+} from 'expo-camera';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import {
-  BarCodeScanner,
-  BarCodeScannedResult,
-  Camera,
-  CameraType,
-} from 'expo-camera';
 
 import { useAdapters } from '@/adapter';
-import { useNavigation } from '@/hooks/use-navigation.hook';
-import { useImportInvite } from '@/domain/carer/hook/import-invite.hook';
 import type { TInviteChunk } from '@/domain/carer/entity/invite-bundle.entity';
+import { useImportInvite } from '@/domain/carer/hook/import-invite.hook';
+import { useNavigation } from '@/hooks/use-navigation.hook';
 import { ButtonAtom } from '@/ui/components/atoms/button.atom';
 import { SpinnerAtom } from '@/ui/components/atoms/spinner.atom';
 import { TextFieldAtom } from '@/ui/components/atoms/text-field.atom';
@@ -44,7 +43,7 @@ export default function ScanQRScreen() {
     secureStoreAdapter,
   });
 
-  const [hasPermission, requestPermission] = Camera.useCameraPermissions();
+  const [hasPermission, requestPermission] = useCameraPermissions();
   const [chunkText, setChunkText] = useState('');
   const [chunks, setChunks] = useState<TInviteChunk[]>([]);
   const [bundleId, setBundleId] = useState<string | null>(null);
@@ -108,7 +107,7 @@ export default function ScanQRScreen() {
   }, [chunkText, tryAddChunk, notifyAdapter, loggerAdapter]);
 
   const handleBarCodeScanned = useCallback(
-    async ({ data }: BarCodeScannedResult) => {
+    async ({ data }: BarcodeScanningResult) => {
       if (scanningRef.current) {
         return;
       }
@@ -198,11 +197,10 @@ export default function ScanQRScreen() {
         <View className="overflow-hidden rounded-3xl bg-black">
           {hasPermission?.granted ? (
             <View className="relative aspect-video">
-              <Camera
-                type={CameraType.back}
-                onBarCodeScanned={handleBarCodeScanned}
-                barCodeScannerSettings={{
-                  barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+              <CameraView
+                onBarcodeScanned={handleBarCodeScanned}
+                barcodeScannerSettings={{
+                  barcodeTypes: ['qr'],
                 }}
                 style={{ flex: 1 }}
               />
@@ -277,6 +275,7 @@ export default function ScanQRScreen() {
             <TypographyParagraph
               key={`${chunk.bundleId}-${chunk.chunkIndex}`}
               className="text-xs text-muted"
+              testID="page.caregiver-setup.scan-qr.chunk-item"
               i18nKey="page.caregiver-setup.scan-qr.chunk-item"
               values={{
                 index: chunk.chunkIndex + 1,
