@@ -28,9 +28,28 @@ export const useNavigation = (adapters: {
     navigateTo('/(onboarding)/parent-setup');
   }, []);
 
-  const goToConfirmLink = useCallback(() => {
-    navigateTo('/(caregiver-setup)/confirm-link');
-  }, []);
+  const buildQueryString = (params: Record<string, string>) => {
+    return Object.entries(params)
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+      )
+      .join('&');
+  };
+
+  const goToConfirmLink = useCallback(
+    (params?: Record<string, string>) => {
+      const route = '/(caregiver-setup)/confirm-link';
+      if (!params || !Object.keys(params).length) {
+        navigateTo(route);
+        return;
+      }
+
+      const query = buildQueryString(params);
+      navigateTo(`${route}?${query}`);
+    },
+    [navigateTo]
+  );
 
   const goToScanQr = useCallback(() => {
     navigateTo('/(caregiver-setup)/scan-qr');

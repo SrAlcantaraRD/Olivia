@@ -72,6 +72,21 @@ describe('[Hook] useNavigation', () => {
     );
   });
 
+  it('should append query params when goToConfirmLink receives data', () => {
+    const { result } = renderHook(() =>
+      useNavigation({ navigationAdapter: mockNavigationAdapter })
+    );
+
+    result.current.goToConfirmLink({
+      carerName: 'Ana',
+      bundleId: 'abc-123',
+    });
+
+    expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
+      '/(caregiver-setup)/confirm-link?carerName=Ana&bundleId=abc-123' satisfies Href
+    );
+  });
+
   it('should call navigateTo with scan qr route on goToScanQr', () => {
     const { result } = renderHook(() =>
       useNavigation({ navigationAdapter: mockNavigationAdapter })

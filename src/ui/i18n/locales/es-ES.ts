@@ -154,6 +154,24 @@ export const esES = Object.freeze({
   'page.child-profile.placeholder': 'Formulario de perfil próximamente',
   'page.carer-management.title': 'Gestión de Cuidadores',
   'page.carer-management.placeholder': 'Lista de cuidadores próximamente',
+  'page.carer-management.description':
+    'Invita a cuidadores secundarios para compartir registros de forma segura.',
+  'page.carer-management.list-empty':
+    'Aún no hay cuidadores. Configura primero el cuidador principal.',
+  'page.carer-management.sync-button': 'Sincronizar',
+  'page.carer-management.card.status-active': 'Activo',
+  'page.carer-management.card.status-inactive': 'Inactivo',
+  'page.carer-management.card.primary': 'Cuidador principal',
+  'page.carer-management.card.secondary': 'Cuidador secundario',
+  'page.carer-management.invitation-modal.title': 'Bundle de invitación',
+  'page.carer-management.invitation-modal.instructions':
+    'Escanea cada chunk del QR o pega el payload en el dispositivo secundario.',
+  'page.carer-management.invitation-modal.copy': 'Copiar chunk',
+  'page.carer-management.invitation-modal.close': 'Cerrar',
+  'page.carer-management.invitation-modal.chunks-title':
+    'Chunk {{index}} de {{total}}',
+  'page.carer-management.invitation-modal.progress':
+    '{{count}} / {{total}} chunks listos',
   'page.app-settings.title': 'Configuración de la App',
   'page.app-settings.subtitle': 'Personaliza tu experiencia en la app',
   'page.app-settings.section-theme': 'Tema',
@@ -284,7 +302,22 @@ export const esES = Object.freeze({
   'modal.go-home': 'Ir a la pantalla principal',
   // Caregiver Setup
   'caregiver-setup.scan-qr.title': 'Escanear código QR',
+  'page.caregiver-setup.scan-qr.instructions':
+    'Escanea el QR de invitación o pega cada chunk aquí.',
+  'page.caregiver-setup.scan-qr.input.placeholder': 'Pega el JSON del chunk',
+  'page.caregiver-setup.scan-qr.add-chunk': 'Agregar chunk',
+  'page.caregiver-setup.scan-qr.reset': 'Reiniciar escáner',
+  'page.caregiver-setup.scan-qr.status':
+    '{{count}} de {{total}} chunks escaneados',
+  'page.caregiver-setup.scan-qr.chunk-item': 'Chunk {{index}} de {{total}}',
+  'page.caregiver-setup.scan-qr.error.invalid-chunk':
+    'Chunk inválido. Intenta nuevamente.',
   'caregiver-setup.confirm-link.title': 'Confirmar enlace',
+  'page.caregiver-setup.confirm-link.subtitle':
+    'El cuidador secundario se vinculó con éxito.',
+  'page.caregiver-setup.confirm-link.details':
+    'El cuidador <bold>{{name}}</bold> ya puede ver los registros compartidos.',
+  'page.caregiver-setup.confirm-link.go-home': 'Ir al panel',
   // Modals
   'modal.add-carer.title': 'Añadir Cuidador (Generar QR)',
   'modal.filter-history.title': 'Filtrar Historial',
@@ -401,6 +434,24 @@ export const esES = Object.freeze({
     'Por favor espera mientras configuramos tu cuenta.',
   'hook.setup-parent.error-title': 'Configuración Fallida',
   'hook.setup-parent.success-title': 'Configuración Exitosa',
+  'hook.create-invite.title': 'Preparando invitación',
+  'hook.create-invite.description':
+    'Generando un bundle firmado para otro cuidador.',
+  'hook.create-invite.success-title': 'Invitación lista',
+  'hook.create-invite.success-description':
+    'Comparte el QR para iniciar la sincronización.',
+  'hook.create-invite.error-title': 'Error al crear invitación',
+  'hook.create-invite.error-description':
+    'No se pudo generar la invitación en este momento.',
+  'hook.import-invite.title': 'Importando invitación',
+  'hook.import-invite.description':
+    'Validando el bundle antes de agregar al cuidador secundario.',
+  'hook.import-invite.success-title': 'Invitación importada',
+  'hook.import-invite.success-description':
+    'Cuidado secundario agregado con éxito.',
+  'hook.import-invite.error-title': 'Error al importar',
+  'hook.import-invite.error-description':
+    'No se pudo importar la invitación. Inténtalo de nuevo.',
   'hook.get-list-active-module.title': 'Cargando Módulos',
   'hook.get-list-active-module.description':
     'Por favor espera mientras cargamos módulos.',

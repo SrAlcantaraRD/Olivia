@@ -240,6 +240,24 @@ export const enEN = Object.freeze({
   'page.child-profile.placeholder': 'Profile form coming soon',
   'page.carer-management.title': 'Carer Management',
   'page.carer-management.placeholder': 'Carer list coming soon',
+  'page.carer-management.description':
+    'Invite trusted caregivers to safely sync shared records.',
+  'page.carer-management.list-empty':
+    'No carers yet. Set up a primary caregiver to get started.',
+  'page.carer-management.sync-button': 'Sync',
+  'page.carer-management.card.status-active': 'Active',
+  'page.carer-management.card.status-inactive': 'Inactive',
+  'page.carer-management.card.primary': 'Primary carer',
+  'page.carer-management.card.secondary': 'Secondary carer',
+  'page.carer-management.invitation-modal.title': 'Invitation bundle',
+  'page.carer-management.invitation-modal.instructions':
+    'Scan every QR chunk or paste its payload into the secondary device.',
+  'page.carer-management.invitation-modal.copy': 'Copy chunk',
+  'page.carer-management.invitation-modal.close': 'Close',
+  'page.carer-management.invitation-modal.chunks-title':
+    'Chunk {{index}} of {{total}}',
+  'page.carer-management.invitation-modal.progress':
+    '{{count}} / {{total}} chunks ready',
   'page.app-settings.title': 'App Settings',
   'page.app-settings.subtitle': 'Customize your app experience',
   'page.app-settings.section-theme': 'Theme',
@@ -374,7 +392,21 @@ export const enEN = Object.freeze({
   'modal.go-home': 'Go to home screen',
   // Caregiver Setup
   'caregiver-setup.scan-qr.title': 'Scan QR Code',
+  'page.caregiver-setup.scan-qr.instructions':
+    'Scan the invitation QR or paste each chunk below.',
+  'page.caregiver-setup.scan-qr.input.placeholder': 'Paste chunk JSON payload',
+  'page.caregiver-setup.scan-qr.add-chunk': 'Add chunk',
+  'page.caregiver-setup.scan-qr.reset': 'Reset scanner',
+  'page.caregiver-setup.scan-qr.status': 'Scanned {{count}} / {{total}} chunks',
+  'page.caregiver-setup.scan-qr.chunk-item': 'Chunk {{index}} of {{total}}',
+  'page.caregiver-setup.scan-qr.error.invalid-chunk':
+    'Invalid chunk. Please retry.',
   'caregiver-setup.confirm-link.title': 'Confirm Link',
+  'page.caregiver-setup.confirm-link.subtitle':
+    'Secondary carer linked successfully.',
+  'page.caregiver-setup.confirm-link.details':
+    'Carer <bold>{{name}}</bold> can now access shared records.',
+  'page.caregiver-setup.confirm-link.go-home': 'Go to dashboard',
   // Modals
   'modal.add-carer.title': 'Add Carer Modal (QR Generation)',
   'modal.filter-history.title': 'Filter History Modal',
@@ -394,6 +426,24 @@ export const enEN = Object.freeze({
   'hook.setup-parent.description': 'Please wait while we set up your account.',
   'hook.setup-parent.error-title': 'Setup Failed',
   'hook.setup-parent.success-title': 'Setup Successful',
+  'hook.create-invite.title': 'Preparing invite',
+  'hook.create-invite.description':
+    'Generating a signed QR bundle for the secondary caregiver.',
+  'hook.create-invite.success-title': 'Invite ready',
+  'hook.create-invite.success-description':
+    'Share the QR with another carer to start the sync.',
+  'hook.create-invite.error-title': 'Invite failed',
+  'hook.create-invite.error-description':
+    'Unable to create the invitation right now.',
+  'hook.import-invite.title': 'Importing invite',
+  'hook.import-invite.description':
+    'Validating the bundle before adding the secondary carer.',
+  'hook.import-invite.success-title': 'Invite imported',
+  'hook.import-invite.success-description':
+    'Secondary carer added successfully.',
+  'hook.import-invite.error-title': 'Import failed',
+  'hook.import-invite.error-description':
+    'Could not import the invitation. Try again.',
   'hook.get-list-active-module.title': 'Loading Modules',
   'hook.get-list-active-module.description':
     'Please wait while we load modules.',

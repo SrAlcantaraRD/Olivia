@@ -252,6 +252,24 @@ export const caCA = Object.freeze({
   'page.child-profile.placeholder': 'Formulari de perfil pròximament',
   'page.carer-management.title': 'Gestió de Cuidadors',
   'page.carer-management.placeholder': 'Llista de cuidadors pròximament',
+  'page.carer-management.description':
+    'Convida cuidadors secundaris per compartir registres de forma segura.',
+  'page.carer-management.list-empty':
+    'Encara no hi ha cuidadors. Configura primer el principal.',
+  'page.carer-management.sync-button': 'Sincronitzar',
+  'page.carer-management.card.status-active': 'Actiu',
+  'page.carer-management.card.status-inactive': 'Inactiu',
+  'page.carer-management.card.primary': 'Cuidador principal',
+  'page.carer-management.card.secondary': 'Cuidador secundari',
+  'page.carer-management.invitation-modal.title': "Pack d'invitació",
+  'page.carer-management.invitation-modal.instructions':
+    'Escaneja cada fragment del QR o enganxa la dada al dispositiu secundari.',
+  'page.carer-management.invitation-modal.copy': 'Copia fragment',
+  'page.carer-management.invitation-modal.close': 'Tancar',
+  'page.carer-management.invitation-modal.chunks-title':
+    'Fragment {{index}} de {{total}}',
+  'page.carer-management.invitation-modal.progress':
+    '{{count}} / {{total}} fragments llestos',
   'page.app-settings.title': "Configuració de l'App",
   'page.app-settings.subtitle': "Personalitza la teva experiència a l'app",
 
@@ -380,7 +398,23 @@ export const caCA = Object.freeze({
   'modal.go-home': 'Ves a la pantalla principal',
   // Caregiver Setup
   'caregiver-setup.scan-qr.title': 'Escanejar Codi QR',
+  'page.caregiver-setup.scan-qr.instructions':
+    'Escaneja el QR de la invitació o enganxa cada fragment aquí.',
+  'page.caregiver-setup.scan-qr.input.placeholder':
+    'Enganxa el JSON del fragment',
+  'page.caregiver-setup.scan-qr.add-chunk': 'Afegeix fragment',
+  'page.caregiver-setup.scan-qr.reset': "Reinicia l'escàner",
+  'page.caregiver-setup.scan-qr.status':
+    '{{count}} de {{total}} fragments escanejats',
+  'page.caregiver-setup.scan-qr.chunk-item': 'Fragment {{index}} de {{total}}',
+  'page.caregiver-setup.scan-qr.error.invalid-chunk':
+    'Fragment invàlid. Torna-ho a provar.',
   'caregiver-setup.confirm-link.title': 'Confirmar Enllaç',
+  'page.caregiver-setup.confirm-link.subtitle':
+    'El cuidador secundari s’ha vinculat amb èxit.',
+  'page.caregiver-setup.confirm-link.details':
+    'El cuidador <bold>{{name}}</bold> ja pot veure els registres compartits.',
+  'page.caregiver-setup.confirm-link.go-home': 'Anar al tauler',
   // Modals
   'modal.add-carer.title': 'Afegir Cuidador (Generar QR)',
   'modal.filter-history.title': 'Filtrar Història',
@@ -401,6 +435,24 @@ export const caCA = Object.freeze({
     'Si us plau espera mentre configurem el teu compte.',
   'hook.setup-parent.error-title': 'Configuració Fallida',
   'hook.setup-parent.success-title': 'Configuració Exitosa',
+  'hook.create-invite.title': 'Preparant invitació',
+  'hook.create-invite.description':
+    "Generant un paquet signat per a l'altre cuidador.",
+  'hook.create-invite.success-title': 'Invitació preparada',
+  'hook.create-invite.success-description':
+    'Comparteix el QR per començar la sincronització.',
+  'hook.create-invite.error-title': 'Error creant invitació',
+  'hook.create-invite.error-description':
+    'No s’ha pogut generar la invitació ara mateix.',
+  'hook.import-invite.title': 'Important la invitació',
+  'hook.import-invite.description':
+    "Validant el paquet abans d'afegir el cuidador secundari.",
+  'hook.import-invite.success-title': 'Invitació importada',
+  'hook.import-invite.success-description':
+    'Cuidat secundari afegit correctament.',
+  'hook.import-invite.error-title': 'Error important',
+  'hook.import-invite.error-description':
+    'No es va poder importar la invitació. Torna-ho a provar.',
   'hook.get-list-active-module.title': 'Carregant Mòduls',
   'hook.get-list-active-module.description':
     'Si us plau espera mentre carreguem mòduls.',
