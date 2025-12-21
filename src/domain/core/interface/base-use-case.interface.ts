@@ -10,7 +10,7 @@ export abstract class BaseUseCase<BaseRequest, BaseResponse> {
   ) {}
 
   protected logDebug(message: string, details?: unknown): void {
-    this.loggerAdapter.debug(message, details);
+    this.loggerAdapter.debug(this.useCaseName, message, details);
   }
 
   protected logError(message: string, details?: unknown): void {
