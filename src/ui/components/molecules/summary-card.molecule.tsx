@@ -10,6 +10,7 @@ import {
   TypographyHeading,
   TypographyParagraph,
   TypographySmall,
+  TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
 import { SummaryMiniBarChart } from '@/ui/components/molecules/summary-mini-bar-chart.molecule';
 
@@ -72,12 +73,12 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
                 />
               </View>
             )}
-            <TypographyParagraph
+            <TypographyTitle
               testID={`${testID}.title`}
               i18nKey="common.raw-value"
               values={{ value: title }}
               className="font-semibold text-lg"
-              variant="primary"
+              variant="default"
             />
           </View>
 

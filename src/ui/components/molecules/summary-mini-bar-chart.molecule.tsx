@@ -26,7 +26,6 @@ export function SummaryMiniBarChart({
 }: SummaryMiniBarChartProps) {
   const accentColor = useThemeColor('accent');
   const mutedColor = useThemeColor('muted');
-  const backgroundColor = useThemeColor('background');
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
   const safeValues = values.length > 0 ? values : [0];
@@ -85,8 +84,8 @@ export function SummaryMiniBarChart({
 
       {showLabels && (
         <View className="flex-row justify-between px-2 mt-2">
-          {barLabels.map((label, index) => (
-            <View key={`${testID}.label.${index}`} className="flex-1">
+          {barLabels.map((label) => (
+            <View key={`${testID}.label.${label}`} className="flex-1">
               <TypographySmall
                 testID={`${testID}.label.${label}`}
                 i18nKey="common.raw-value"

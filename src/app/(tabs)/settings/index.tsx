@@ -33,7 +33,7 @@ export default function SettingsScreen() {
   });
 
   const handleAddDemoData = async () => {
-    await addDemoData({});
+    await addDemoData();
   };
 
   return (
@@ -43,14 +43,14 @@ export default function SettingsScreen() {
       subtitle="page.settings.subtitle"
     >
       <ScrollView
-        className="flex-1"
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
+        className="gap-4"
       >
-        {/* TODO: Añadir avatar del carer logueada y nombre */}
         <View className="gap-4">
-          {/* Child Profile Section */}
-          <CardAtom>
+          {/* TODO: Añadir avatar del carer logueada y nombre */}
+          <View className="gap-2">
+            {/* Child Profile Section */}
             <TypographyParagraph
               testID="screen.settings.section_carers"
               i18nKey="page.settings.section-configuration"
@@ -72,10 +72,9 @@ export default function SettingsScreen() {
               onPress={goToCarerManagement}
               testID="screen.settings.manage-carers"
             />
-          </CardAtom>
-
-          {/* App Settings Section */}
-          <CardAtom>
+          </View>
+          <View className="gap-2">
+            {/* App Settings Section */}
             <TypographyParagraph
               testID="screen.settings.section-app"
               i18nKey="page.settings.section-app"
@@ -108,7 +107,7 @@ export default function SettingsScreen() {
               onPress={goToAbout}
               testID="screen.settings.about"
             />
-          </CardAtom>
+          </View>
 
           {/* Danger Zone */}
           <CardAtom className="bg-danger/80">
