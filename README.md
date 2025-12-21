@@ -83,6 +83,8 @@ No vamos a desarrollar una aplicación exclusiva de acceso a los datos, sino que
 
 ### Front-end
 
+A nivel de design-system, utilizamos HeroUI Native como base para los componentes visuales (https://github.com/heroui-inc/heroui-native/blob/beta/README.md), adaptándolos a las necesidades de la aplicación. Como es una librería en beta, no los utilizaremos directamente, sino que crearemos componentes propios (*.atom.tsx) que utilicen HeroUI Native internamente.
+
 A este nivel, necesitaremos implementar los siguientes artefactos:
 
 - **Hook**: Encapsula la lógica de presentación e invoca un use-case inyectándole los adapter que necesite.
