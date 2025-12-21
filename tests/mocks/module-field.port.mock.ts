@@ -36,6 +36,7 @@ export function mockRecordPort(
     getCountsByModule: jest.fn(),
     getCountsByDay: jest.fn(),
     getFieldDistribution: jest.fn(),
+    getLatestRecordDateByModule: jest.fn(),
     ...overrides,
   } satisfies jest.Mocked<IRecordPort>;
 }

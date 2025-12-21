@@ -9,15 +9,15 @@ import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import * as SplashScreen from 'expo-splash-screen';
 import { Suspense, useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { ActivityIndicator, Image, Platform, StyleSheet } from 'react-native';
+import { ActivityIndicator, Image, Platform } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-import Toast, { type ToastConfig } from 'react-native-toast-message';
-
-import i18n from '@/ui/i18n/i18n';
 import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
+import Toast, { type ToastConfig } from 'react-native-toast-message';
+
+import i18n from '@/ui/i18n/i18n';
 import '../global.css';
 
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
@@ -58,7 +58,7 @@ function RootNavigator() {
     return (
       <Image
         source={isDark ? LogoLight : LogoDark}
-        style={styles.logo}
+        className="w-20 h-6"
         resizeMode="contain"
       />
     );
@@ -129,12 +129,20 @@ export default function RootLayout() {
         options={{ enableChangeListener: true }}
         useSuspense
       >
-        <GestureHandlerRootView style={styles.root}>
+        <GestureHandlerRootView className="flex-1">
           <KeyboardProvider>
             <AppThemeProvider>
               <SettingsProvider>
                 <HeroUINativeProvider
                   config={{
+                    toast: {
+                      insets: {
+                        top: 20,
+                        bottom: 20,
+                        left: 20,
+                        right: 20,
+                      },
+                    },
                     textProps: {
                       allowFontScaling: false,
                     },
@@ -153,13 +161,3 @@ export default function RootLayout() {
     </Suspense>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
-  logo: {
-    width: 80,
-    height: 24,
-  },
-});

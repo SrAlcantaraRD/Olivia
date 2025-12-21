@@ -55,7 +55,7 @@ export class AddDemoDataUseCase extends BaseUseCase<
     return {
       success: true,
       message: 'common.success',
-      details: {},
+      details: undefined,
     };
   }
 

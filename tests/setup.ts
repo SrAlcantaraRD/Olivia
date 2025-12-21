@@ -31,8 +31,8 @@ jest.mock('react-native-safe-area-context', () => ({
 jest.mock('heroui-native', () => ({
   ...jest.requireActual('heroui-native'),
   useThemeColor: jest.fn(() => '#000000'),
-  HeroUINativeProvider: ({ children }: { children: React.ReactNode }) =>
-    children,
+  // HeroUINativeProvider: ({ children }: { children: React.ReactNode }) =>
+  //   children,
 }));
 
 // Mock de react-native-reanimated

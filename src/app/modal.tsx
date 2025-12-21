@@ -21,6 +21,7 @@ export default function ModalScreen() {
   );
 }
 
+// TODO: Remove all StyleSheet and use className only
 const styles = StyleSheet.create({
   container: {
     flex: 1,

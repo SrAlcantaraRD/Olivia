@@ -7,13 +7,15 @@ export default function TabLayout() {
 
   const accentColor = useThemeColor('accent');
   const mutedColor = useThemeColor('muted');
-  const backgroundColor = useThemeColor('background');
+  const backgroundColor = useThemeColor('surface');
 
   return (
     <NativeTabs
       minimizeBehavior="onScrollDown"
       tintColor={accentColor}
       backgroundColor={backgroundColor}
+      disableTransparentOnScrollEdge={true}
+      blurEffect="none"
       labelStyle={{
         fontSize: 11,
         fontWeight: '600',
