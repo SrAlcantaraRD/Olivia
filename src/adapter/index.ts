@@ -17,6 +17,7 @@ import { SQLiteSummaryModuleAdapter } from '@/database/adapter/sqlite.summary-mo
 import { SQLiteSummaryTrendAdapter } from '@/database/adapter/sqlite.summary-trend.adapter';
 import { StubSummaryAnalysisAdapter } from '@/database/adapter/stub.summary-analysis.adapter';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
+import type { IInvitePort } from '@/domain/carer/port/invite.port';
 import {
   BASE_LOGGER,
   type TLoggerPort,
@@ -35,6 +36,7 @@ import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.po
 import type { ISummaryPinsPort } from '@/domain/summary/port/summary-pins.port';
 import type { ISummarySnapshotPort } from '@/domain/summary/port/summary-snapshot.port';
 import type { ISummaryTrendPort } from '@/domain/summary/port/summary-trend.port';
+import { InvitePortAdapter } from '@/adapter/invite.adapter';
 
 interface IAdapters {
   cacheAdapter: ICachePort;
@@ -54,6 +56,7 @@ interface IAdapters {
   summaryPinsAdapter: ISummaryPinsPort;
   summarySnapshotAdapter: ISummarySnapshotPort;
   summaryTrendAdapter: ISummaryTrendPort;
+  inviteAdapter: IInvitePort;
 }
 
 export const useAdapters = (): Readonly<IAdapters> => {
@@ -82,6 +85,7 @@ export const useAdapters = (): Readonly<IAdapters> => {
   const summarySnapshotAdapter = new SecureStoreSummarySnapshotAdapter(
     secureStoreAdapter
   );
+  const inviteAdapter = new InvitePortAdapter(BASE_LOGGER);
 
   return Object.freeze({
     loggerAdapter: BASE_LOGGER,
@@ -101,5 +105,6 @@ export const useAdapters = (): Readonly<IAdapters> => {
     summaryTrendAdapter,
     cacheAdapter: secureStoreAdapter,
     secureStoreAdapter,
+    inviteAdapter,
   });
 };
