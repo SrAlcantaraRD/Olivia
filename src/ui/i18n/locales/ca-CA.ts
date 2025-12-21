@@ -398,6 +398,11 @@ export const caCA = Object.freeze({
   'modal.go-home': 'Ves a la pantalla principal',
   // Caregiver Setup
   'caregiver-setup.scan-qr.title': 'Escanejar Codi QR',
+  'page.caregiver-setup.scan-qr.camera-hint':
+    'Mantingues el QR dins del marc perquè es captin automàticament els fragments.',
+  'page.caregiver-setup.scan-qr.camera-permission':
+    "Permet l'accés a la càmera per escanejar el paquet automàticament.",
+  'page.caregiver-setup.scan-qr.camera-request': "Accepta l'accés a la càmera",
   'page.caregiver-setup.scan-qr.instructions':
     'Escaneja el QR de la invitació o enganxa cada fragment aquí.',
   'page.caregiver-setup.scan-qr.input.placeholder':

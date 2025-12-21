@@ -1,6 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import {
+  BarCodeScanner,
+  BarCodeScannedResult,
+  Camera,
+  CameraType,
+} from 'expo-camera';
 
 import { useAdapters } from '@/adapter';
 import { useNavigation } from '@/hooks/use-navigation.hook';
@@ -13,6 +19,8 @@ import {
   TypographyParagraph,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
+
+const INVALID_CHUNK_KEY = 'page.caregiver-setup.scan-qr.error.invalid-chunk';
 
 export default function ScanQRScreen() {
   const {
@@ -36,6 +44,7 @@ export default function ScanQRScreen() {
     secureStoreAdapter,
   });
 
+  const [hasPermission, requestPermission] = Camera.useCameraPermissions();
   const [chunkText, setChunkText] = useState('');
   const [chunks, setChunks] = useState<TInviteChunk[]>([]);
   const [bundleId, setBundleId] = useState<string | null>(null);
@@ -43,44 +52,89 @@ export default function ScanQRScreen() {
   const [decodedBundleId, setDecodedBundleId] = useState<string | null>(null);
   const [errorKey, setErrorKey] = useState<string | null>(null);
   const [isDecoding, setDecoding] = useState(false);
+  const [isProcessingScan, setProcessingScan] = useState(false);
+  const scanningRef = useRef(false);
+
+  useEffect(() => {
+    void requestPermission();
+  }, [requestPermission]);
+
+  const tryAddChunk = useCallback(
+    (chunk: TInviteChunk): boolean => {
+      if (chunkTotal && chunk.chunkTotal !== chunkTotal) {
+        setErrorKey(INVALID_CHUNK_KEY);
+        return false;
+      }
+
+      if (bundleId && chunk.bundleId !== bundleId) {
+        setErrorKey(INVALID_CHUNK_KEY);
+        return false;
+      }
+
+      if (chunks.some((existing) => existing.chunkIndex === chunk.chunkIndex)) {
+        setErrorKey(INVALID_CHUNK_KEY);
+        return false;
+      }
+
+      setBundleId((prev) => prev ?? chunk.bundleId);
+      setChunkTotal((prev) => prev ?? chunk.chunkTotal);
+      setChunks((prev) => [...prev, chunk]);
+      setErrorKey(null);
+
+      return true;
+    },
+    [chunkTotal, bundleId, chunks]
+  );
 
   const handleAddChunk = useCallback(() => {
-    if (!chunkText.trim()) {
-      return;
-    }
+    if (!chunkText.trim()) return;
 
     try {
       const parsed = JSON.parse(chunkText.trim()) as TInviteChunk;
 
-      if (chunkTotal && parsed.chunkTotal !== chunkTotal) {
-        setErrorKey('page.caregiver-setup.scan-qr.error.invalid-chunk');
-        return;
-      }
+      const added = tryAddChunk(parsed);
 
-      if (bundleId && parsed.bundleId !== bundleId) {
-        setErrorKey('page.caregiver-setup.scan-qr.error.invalid-chunk');
-        return;
+      if (added) {
+        setChunkText('');
       }
-
-      if (chunks.some((chunk) => chunk.chunkIndex === parsed.chunkIndex)) {
-        setErrorKey('page.caregiver-setup.scan-qr.error.invalid-chunk');
-        return;
-      }
-
-      setBundleId(parsed.bundleId);
-      setChunkTotal(parsed.chunkTotal);
-      setChunks((prev) => [...prev, parsed]);
-      setChunkText('');
-      setErrorKey(null);
     } catch (error) {
       notifyAdapter.error({
         title: 'hook.import-invite.error-title',
         description: 'hook.import-invite.error-description',
       });
       loggerAdapter.error('scan-qr', error);
-      setErrorKey('page.caregiver-setup.scan-qr.error.invalid-chunk');
+      setErrorKey(INVALID_CHUNK_KEY);
     }
-  }, [chunkText, chunkTotal, bundleId, chunks, notifyAdapter, loggerAdapter]);
+  }, [chunkText, tryAddChunk, notifyAdapter, loggerAdapter]);
+
+  const handleBarCodeScanned = useCallback(
+    async ({ data }: BarCodeScannedResult) => {
+      if (scanningRef.current) {
+        return;
+      }
+
+      scanningRef.current = true;
+      setProcessingScan(true);
+
+      try {
+        const parsed = JSON.parse(data) as TInviteChunk;
+        tryAddChunk(parsed);
+      } catch (error) {
+        notifyAdapter.error({
+          title: 'hook.import-invite.error-title',
+          description: 'hook.import-invite.error-description',
+        });
+        loggerAdapter.error('scan-qr', error);
+        setErrorKey(INVALID_CHUNK_KEY);
+      } finally {
+        setTimeout(() => {
+          scanningRef.current = false;
+          setProcessingScan(false);
+        }, 750);
+      }
+    },
+    [tryAddChunk, notifyAdapter, loggerAdapter]
+  );
 
   const handleReset = useCallback(() => {
     setChunkText('');
@@ -92,17 +146,9 @@ export default function ScanQRScreen() {
   }, []);
 
   useEffect(() => {
-    if (!chunkTotal || chunkTotal <= 0) {
-      return;
-    }
-
-    if (chunks.length !== chunkTotal) {
-      return;
-    }
-
-    if (!bundleId || decodedBundleId === bundleId) {
-      return;
-    }
+    if (!chunkTotal || chunkTotal <= 0) return;
+    if (chunks.length !== chunkTotal) return;
+    if (!bundleId || decodedBundleId === bundleId) return;
 
     setDecoding(true);
 
@@ -118,11 +164,11 @@ export default function ScanQRScreen() {
             carerName: bundle.payload.carer.name,
           });
         } else {
-          setErrorKey('page.caregiver-setup.scan-qr.error.invalid-chunk');
+          setErrorKey(INVALID_CHUNK_KEY);
         }
       } catch (error) {
         loggerAdapter.error('scan-qr', error);
-        setErrorKey('page.caregiver-setup.scan-qr.error.invalid-chunk');
+        setErrorKey(INVALID_CHUNK_KEY);
       } finally {
         setDecoding(false);
       }
@@ -141,17 +187,58 @@ export default function ScanQRScreen() {
   return (
     <KeyboardAwareScrollView
       className="flex-1"
-      contentContainerClassName="px-4 pt-8"
+      contentContainerClassName="px-4 pt-8 pb-8"
     >
       <View className="gap-6">
         <TypographyTitle
           testID="screen.caregiver-setup.scan-qr.title"
           i18nKey="caregiver-setup.scan-qr.title"
         />
+
+        <View className="overflow-hidden rounded-3xl bg-black">
+          {hasPermission?.granted ? (
+            <View className="relative aspect-video">
+              <Camera
+                type={CameraType.back}
+                onBarCodeScanned={handleBarCodeScanned}
+                barCodeScannerSettings={{
+                  barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+                }}
+                style={{ flex: 1 }}
+              />
+              <View className="absolute inset-0 items-center justify-center">
+                <TypographyParagraph
+                  testID="screen.caregiver-setup.scan-qr.camera-hint"
+                  i18nKey="page.caregiver-setup.scan-qr.camera-hint"
+                  className="bg-black/60 px-4 py-1 text-white"
+                />
+              </View>
+              {isProcessingScan && (
+                <View className="absolute inset-0 items-center justify-center">
+                  <SpinnerAtom testID="screen.caregiver-setup.scan-qr.camera-spinner" />
+                </View>
+              )}
+            </View>
+          ) : (
+            <View className="p-4">
+              <TypographyParagraph
+                testID="screen.caregiver-setup.scan-qr.camera-permission"
+                i18nKey="page.caregiver-setup.scan-qr.camera-permission"
+              />
+              <ButtonAtom
+                title="page.caregiver-setup.scan-qr.camera-request"
+                onPress={() => void requestPermission()}
+                testID="screen.caregiver-setup.scan-qr.camera-request"
+              />
+            </View>
+          )}
+        </View>
+
         <TypographyParagraph
           testID="screen.caregiver-setup.scan-qr.instructions"
           i18nKey="page.caregiver-setup.scan-qr.instructions"
         />
+
         <TextFieldAtom
           value={chunkText}
           onChangeText={setChunkText}
@@ -160,6 +247,7 @@ export default function ScanQRScreen() {
           numberOfLines={4}
           testID="screen.caregiver-setup.scan-qr.input"
         />
+
         <View className="flex-row gap-3">
           <ButtonAtom
             title="page.caregiver-setup.scan-qr.add-chunk"
@@ -174,6 +262,7 @@ export default function ScanQRScreen() {
             isDisabled={isDecoding || isImporting}
           />
         </View>
+
         <TypographyParagraph
           testID="screen.caregiver-setup.scan-qr.progress"
           className="text-sm"
@@ -196,6 +285,7 @@ export default function ScanQRScreen() {
             />
           ))}
         </View>
+
         {errorKey && (
           <TypographyParagraph
             testID="screen.caregiver-setup.scan-qr.error"
@@ -203,6 +293,7 @@ export default function ScanQRScreen() {
             className="text-error"
           />
         )}
+
         {(isDecoding || isImporting) && (
           <View className="items-center">
             <SpinnerAtom />

@@ -302,6 +302,11 @@ export const esES = Object.freeze({
   'modal.go-home': 'Ir a la pantalla principal',
   // Caregiver Setup
   'caregiver-setup.scan-qr.title': 'Escanear código QR',
+  'page.caregiver-setup.scan-qr.camera-hint':
+    'Mantén el QR dentro del marco para capturar cada chunk automáticamente.',
+  'page.caregiver-setup.scan-qr.camera-permission':
+    'Permite el acceso a la cámara para escanear el bundle de forma automática.',
+  'page.caregiver-setup.scan-qr.camera-request': 'Conceder acceso a la cámara',
   'page.caregiver-setup.scan-qr.instructions':
     'Escanea el QR de invitación o pega cada chunk aquí.',
   'page.caregiver-setup.scan-qr.input.placeholder': 'Pega el JSON del chunk',

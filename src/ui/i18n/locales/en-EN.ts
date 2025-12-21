@@ -392,6 +392,11 @@ export const enEN = Object.freeze({
   'modal.go-home': 'Go to home screen',
   // Caregiver Setup
   'caregiver-setup.scan-qr.title': 'Scan QR Code',
+  'page.caregiver-setup.scan-qr.camera-hint':
+    'Hold the QR inside the frame for automatic chunk collection.',
+  'page.caregiver-setup.scan-qr.camera-permission':
+    'Allow camera access to scan QR bundles automatically.',
+  'page.caregiver-setup.scan-qr.camera-request': 'Grant camera access',
   'page.caregiver-setup.scan-qr.instructions':
     'Scan the invitation QR or paste each chunk below.',
   'page.caregiver-setup.scan-qr.input.placeholder': 'Paste chunk JSON payload',
