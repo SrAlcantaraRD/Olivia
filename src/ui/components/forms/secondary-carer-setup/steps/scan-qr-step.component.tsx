@@ -60,7 +60,7 @@ export function ScanQRStep({ testID, onReadQR }: ScanQRStepProps) {
     );
   }
   return (
-    <View className="flex-1 justify-center bg-red-600">
+    <View className="flex-1 justify-center bg-accent">
       <CameraView
         className="flex-1"
         style={{ flex: 1 }}

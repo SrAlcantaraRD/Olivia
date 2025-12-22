@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import {
   TIME_RANGE_ENUM,
   TIME_RANGE_I18N_MAP,
@@ -30,8 +29,13 @@ export default function HistoryDetailScreen() {
     moduleId?: string;
     moduleID?: string;
   }>();
-  const { moduleFieldAdapter, recordAdapter, notifyAdapter, cacheAdapter } =
-    useAdapters();
+  const {
+    loggerAdapter,
+    moduleFieldAdapter,
+    recordAdapter,
+    notifyAdapter,
+    cacheAdapter,
+  } = useAdapters();
 
   const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');
@@ -41,7 +45,7 @@ export default function HistoryDetailScreen() {
     items: fields,
     isExecuting: isLoadingFields,
   } = useGetListModuleField({
-    loggerAdapter: BASE_LOGGER,
+    loggerAdapter,
     moduleFieldAdapter,
     notifyAdapter,
   });
@@ -51,7 +55,7 @@ export default function HistoryDetailScreen() {
     items: distributionItems,
     isExecuting: isLoadingDistribution,
   } = useGetRecordFieldDistribution({
-    loggerAdapter: BASE_LOGGER,
+    loggerAdapter,
     recordAdapter,
     notifyAdapter,
     cacheAdapter,

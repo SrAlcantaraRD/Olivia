@@ -18,6 +18,7 @@ import type { IBaseResponse } from '@/domain/core/interface/base-response.interf
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import { CACHE_KEY_ENUM, type ICachePort } from '@/domain/core/port/cache.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
+import type { IModulePort } from '@/domain/module/port/module.port';
 
 export class SecondaryCarerConsumeInvitationQRUseCase extends BaseUseCase<
   TRequestSecondaryCarerConsumeInvitation,
@@ -29,6 +30,7 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends BaseUseCase<
       carerAdapter: ICarerPort;
       qrAdapter: IQRPort;
       cacheAdapter: ICachePort;
+      moduleAdapter: IModulePort;
     }
   ) {
     super('secondary-carer-consume-invitation-qr', adapters.loggerAdapter);
@@ -81,11 +83,13 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends BaseUseCase<
     }
 
     const {
-      payload: { expiresAt, id: originalCarerID, name },
+      payload: { expiresAt, id: originalCarerID, name, activeModuleIDList },
     } = parsedData.data;
 
     const carerExists =
       await this.adapters.carerAdapter.getByID(originalCarerID);
+
+    await this.adapters.moduleAdapter.batchActivate(activeModuleIDList);
 
     if (carerExists) {
       this.adapters.cacheAdapter.set(

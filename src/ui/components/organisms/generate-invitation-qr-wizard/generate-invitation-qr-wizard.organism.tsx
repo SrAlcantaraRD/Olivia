@@ -122,7 +122,6 @@ export function GenerateInvitationQRWizard({
       accentColor,
       setSelectedTTL,
       reset,
-      onComplete,
     ]
   );
 

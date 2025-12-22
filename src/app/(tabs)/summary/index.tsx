@@ -6,7 +6,6 @@ import { RefreshControl, ScrollView, View } from 'react-native';
 import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { useGetListActiveModule } from '@/domain/module/hook/get-list-active-module.hook';
-import type { TRequestGetActiveModuleList } from '@/domain/module/use-case-schema/get-active-module-list.use-case-schema';
 import { SUMMARY_PIN_TYPE_ENUM } from '@/domain/summary/enum/summary-pin-type.enum';
 import { useGetSummaryHome } from '@/domain/summary/hook/get-summary-home.hook';
 import { useSummaryRefresh } from '@/domain/summary/hook/use-summary-refresh.hook';
@@ -142,7 +141,7 @@ export default function SummaryHomeScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <View className="gap-4">
+        <View className="gap-2">
           <PinnedSection
             titleKey="page.summary.section.pinned"
             actionKey={pinnedModules.length > 0 ? 'common.edit' : undefined}
@@ -177,26 +176,24 @@ export default function SummaryHomeScreen() {
             )}
           </PinnedSection>
 
-          <View className="gap-2">
-            <SummaryRow
-              iconName="heart"
-              titleKey="page.summary.all-data"
-              onPress={goToSummaryAllData}
-              testID="page.summary.all-data"
-            />
-            <SummaryRow
-              iconName="trending-up"
-              titleKey="page.summary.trends"
-              onPress={goToSummaryTrends}
-              testID="page.summary.trends"
-            />
-            <SummaryRow
-              iconName="sparkles"
-              titleKey="page.summary.highlights"
-              onPress={goToSummaryHighlights}
-              testID="page.summary.highlights"
-            />
-          </View>
+          <SummaryRow
+            iconName="heart"
+            titleKey="page.summary.all-data"
+            onPress={goToSummaryAllData}
+            testID="page.summary.all-data"
+          />
+          <SummaryRow
+            iconName="trending-up"
+            titleKey="page.summary.trends"
+            onPress={goToSummaryTrends}
+            testID="page.summary.trends"
+          />
+          <SummaryRow
+            iconName="sparkles"
+            titleKey="page.summary.highlights"
+            onPress={goToSummaryHighlights}
+            testID="page.summary.highlights"
+          />
 
           <View className="gap-3">
             <SummarySectionHeader

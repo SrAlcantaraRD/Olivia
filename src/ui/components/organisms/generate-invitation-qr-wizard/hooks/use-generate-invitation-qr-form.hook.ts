@@ -24,6 +24,7 @@ export const DEFAULT_DATA = {
         expiresAt: addMonths(new Date(), 1),
         id: -1,
         name: '',
+        activeModuleIDList: [],
       },
     },
     qrBundle: '',
@@ -38,6 +39,7 @@ export function useGenerateInvitationQRForm(carerID: number) {
     loggerAdapter,
     qrAdapter,
     cacheAdapter,
+    moduleAdapter,
   } = useAdapters();
 
   const { execute: generateInvitation, isExecuting: isGenerating } =
@@ -47,6 +49,7 @@ export function useGenerateInvitationQRForm(carerID: number) {
       notifyAdapter,
       qrAdapter,
       cacheAdapter,
+      moduleAdapter,
     });
 
   const [currentStep, setCurrentStep] = useState(0);

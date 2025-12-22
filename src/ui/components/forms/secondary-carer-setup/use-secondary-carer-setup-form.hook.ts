@@ -8,7 +8,9 @@ import {
 } from '@/domain/carer/dto/invite-secondary-carer.qr.dto';
 import { useSecondaryCarerConsumeInvitationQR } from '@/domain/carer/hook/secondary-carer.consume-invitation-qr.hook';
 import type { TQRBundle } from '@/domain/core/dto/qr.dto';
+import type { TID } from '@/domain/core/schemas/id.schema';
 import { useSecondaryCarerSetupStore } from '@/domain/core/stores/secondary-carer-setup.store';
+import { useGetModuleListByIDList } from '@/domain/module/hook/get-module-list-by-id-list.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
 
 export function useSecondaryCarerSetupForm() {
@@ -18,6 +20,7 @@ export function useSecondaryCarerSetupForm() {
     qrAdapter,
     cacheAdapter,
     loggerAdapter,
+    moduleAdapter,
     navigationAdapter,
   } = useAdapters();
 
@@ -25,10 +28,12 @@ export function useSecondaryCarerSetupForm() {
     formData,
     currentStep,
     isLoading,
+    activeModules,
     setFormData,
     setCurrentStep,
     setIsLoading,
     reset,
+    setActiveModules,
   } = useSecondaryCarerSetupStore();
 
   const { goToRegisterHome } = useNavigation({ navigationAdapter });
@@ -40,7 +45,22 @@ export function useSecondaryCarerSetupForm() {
       carerAdapter,
       cacheAdapter,
       qrAdapter,
+      moduleAdapter,
     });
+
+  const { execute } = useGetModuleListByIDList({
+    loggerAdapter,
+    moduleAdapter,
+    notifyAdapter,
+  });
+
+  const handlerGetList = async (idList: TID[]) => {
+    const response = await execute({ idList });
+
+    if (response.success) {
+      setActiveModules(response.data.items);
+    }
+  };
 
   // Sync isLoading with the hook's isExecuting
   React.useEffect(() => {
@@ -80,7 +100,9 @@ export function useSecondaryCarerSetupForm() {
       return;
     }
 
-    loggerAdapter.error(parse.data);
+    loggerAdapter.error({ activeModuleIDList: parse.data.payload });
+
+    handlerGetList(parse.data.payload.activeModuleIDList);
 
     setFormData({
       qrBundle,
@@ -128,6 +150,7 @@ export function useSecondaryCarerSetupForm() {
   return {
     currentStep,
     formData,
+    activeModules,
 
     // Step 1: QR Scanning
     handlerReadQR,

@@ -14,6 +14,7 @@ import type {
 import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
+import type { IModulePort } from '@/domain/module/port/module.port';
 
 export function useSecondaryCarerGenerateInvitationQR(adapters: {
   loggerAdapter: TLoggerPort;
@@ -21,6 +22,7 @@ export function useSecondaryCarerGenerateInvitationQR(adapters: {
   carerAdapter: ICarerPort;
   qrAdapter: IQRPort;
   cacheAdapter: ICachePort;
+  moduleAdapter: IModulePort;
 }): IUseHook<
   TRequestSecondaryCarerGenerateInvitationQR,
   TResponseSecondaryCarerGenerateInvitationQR
@@ -46,6 +48,7 @@ export function useSecondaryCarerGenerateInvitationQR(adapters: {
           carerAdapter: adapters.carerAdapter,
           qrAdapter: adapters.qrAdapter,
           cacheAdapter: adapters.cacheAdapter,
+          moduleAdapter: adapters.moduleAdapter,
         });
 
         const response = await useCase.execute(data);

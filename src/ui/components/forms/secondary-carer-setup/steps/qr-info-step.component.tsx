@@ -1,18 +1,19 @@
 import { format } from 'date-fns';
 import { View } from 'react-native';
 
-import { useSecondaryCarerSetupStore } from '@/domain/core/stores/secondary-carer-setup.store';
 import {
   TypographyParagraph,
   TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
+import { ModuleCard } from '@/ui/components/cards/module.card';
+import { useSecondaryCarerSetupForm } from '@/ui/components/forms/secondary-carer-setup/use-secondary-carer-setup-form.hook';
 
 interface QRInfoStepProps {
   testID: string;
 }
 
 export function QRInfoStep({ testID }: QRInfoStepProps) {
-  const { formData } = useSecondaryCarerSetupStore();
+  const { formData, activeModules } = useSecondaryCarerSetupForm();
   const qrData = formData.qrData;
 
   if (!qrData || !qrData.payload) {
@@ -38,6 +39,26 @@ export function QRInfoStep({ testID }: QRInfoStepProps) {
         i18nKey="secondary-carer-setup.qr-info.expires-at"
         values={{ expiresAt: format(qrData.payload.expiresAt, 'yyyy-MM-dd') }}
       />
+
+      <TypographyParagraph
+        testID={`${testID}.active-actions-title`}
+        i18nKey="secondary-carer-setup.modules.title"
+        variant="primary"
+        weight="semibold"
+        size="lg"
+      />
+
+      {/* Active Actions */}
+      <View className="gap-4">
+        {activeModules.map((module) => (
+          <ModuleCard
+            testID={`page.register.module-card.${module.code}`}
+            key={module.id}
+            module={module}
+            onPress={() => {}}
+          />
+        ))}
+      </View>
 
       <TypographySmall
         variant="light"

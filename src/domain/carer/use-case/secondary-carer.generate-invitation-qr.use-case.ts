@@ -15,6 +15,8 @@ import type { IBaseResponse } from '@/domain/core/interface/base-response.interf
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
+import type { TID } from '@/domain/core/schemas/id.schema';
+import type { IModulePort } from '@/domain/module/port/module.port';
 
 export class SecondaryCarerGenerateInvitationQRUseCase extends BaseUseCase<
   TRequestSecondaryCarerGenerateInvitationQR,
@@ -26,6 +28,7 @@ export class SecondaryCarerGenerateInvitationQRUseCase extends BaseUseCase<
       carerAdapter: ICarerPort;
       qrAdapter: IQRPort;
       cacheAdapter: ICachePort;
+      moduleAdapter: IModulePort;
     }
   ) {
     super('generate-invitation-qr-for-secondary-carer', adapters.loggerAdapter);
@@ -59,6 +62,8 @@ export class SecondaryCarerGenerateInvitationQRUseCase extends BaseUseCase<
       throw new ErrorEntityNotFoundBy('Carer', 'id', carerID);
     }
 
+    const activeModuleIDList = await this.getActiveModuleIDList();
+
     try {
       const expiresAt = this.getExpireAt(timeToLive);
 
@@ -66,6 +71,7 @@ export class SecondaryCarerGenerateInvitationQRUseCase extends BaseUseCase<
         id: carer.id,
         name: carer.name,
         expiresAt,
+        activeModuleIDList,
       } satisfies TInviteSecondaryCarerQRPayload;
 
       const qrData =
@@ -126,5 +132,11 @@ export class SecondaryCarerGenerateInvitationQRUseCase extends BaseUseCase<
     expiresAt = endOfDay(expiresAt);
 
     return expiresAt;
+  }
+
+  private async getActiveModuleIDList(): Promise<TID[]> {
+    const moduleList = await this.adapters.moduleAdapter.getAll();
+
+    return moduleList.map((module) => module.id);
   }
 }
