@@ -1,4 +1,6 @@
+import * as Haptics from 'expo-haptics';
 import { useCallback, useState } from 'react';
+import { Platform } from 'react-native';
 import { Uniwind } from 'uniwind';
 
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
@@ -11,6 +13,7 @@ import { SetAppThemeUseCase } from '@/domain/core/use-case/set-app-theme.use-cas
 import i18n from '@/ui/i18n/i18n';
 import { useAppTheme } from '@/ui/themes/app-theme-context';
 
+// FIXME: Should not depend on Uniwind directly. Move to src/ui/themes/app-theme-context.tsx
 export function useAppSettings(adapters: {
   loggerAdapter: TLoggerPort;
   cacheAdapter: ICachePort;
@@ -47,6 +50,19 @@ export function useAppSettings(adapters: {
     [loggerAdapter, cacheAdapter]
   );
 
+  const toggleTheme = useCallback(() => {
+    const newTheme =
+      currentTheme === EThemeMode.LIGHT ? EThemeMode.DARK : EThemeMode.LIGHT;
+
+    if (Platform.OS === 'ios') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+
+    Uniwind.setTheme(newTheme);
+
+    setTheme(newTheme);
+  }, [currentTheme]);
+
   const getLocale = useCallback(async () => {
     const usecase = new GetAppLocaleUseCase(loggerAdapter, cacheAdapter);
 
@@ -56,7 +72,7 @@ export function useAppSettings(adapters: {
       return response.details;
     }
 
-    return ELocaleCode.ES;
+    return ELocaleCode.es_ES;
   }, [loggerAdapter, cacheAdapter]);
 
   const setLocale = useCallback(
@@ -97,6 +113,9 @@ export function useAppSettings(adapters: {
   return {
     getTheme,
     setTheme,
+    toggleTheme,
+    isLight: currentTheme === EThemeMode.LIGHT,
+    isDark: currentTheme === EThemeMode.DARK,
     getLocale,
     setLocale,
     initSettings,

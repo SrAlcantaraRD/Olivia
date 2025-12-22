@@ -1,37 +1,46 @@
 import { describe, expect, it } from '@jest/globals';
 
-import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
-import type { IRecordPort } from '@/domain/module/port/record.port';
 import { GetRecordStatisticsUseCase } from '@/domain/module/use-case/get-record-statistics.use-case';
+import { mockLoggerPort } from '@/tests/mocks/core.port.mock';
+import { mockRecordPort } from '@/tests/mocks/module-field.port.mock';
 
-describe('[UseCase] GetRecordStatisticsUseCase', () => {
-  it('calls adapter.getCountsByModule and returns data', async () => {
-    const mockCounts = [
-      { moduleID: 1, count: 3 },
-      { moduleID: 2, count: 2 },
-    ];
-    const mockAdapter: IRecordPort = {
-      create: jest.fn(),
-      getById: jest.fn(),
-      getAll: jest.fn(),
-      getCountsByModule: jest.fn().mockResolvedValue(mockCounts),
-      getCountsByDay: jest.fn(),
-      getFieldDistribution: jest.fn(),
-    } as unknown as IRecordPort;
-
-    const useCase = new GetRecordStatisticsUseCase({
-      loggerAdapter: { info: () => {} } as unknown as TLoggerPort,
-      recordAdapter: mockAdapter,
+describe('[UseCase] - GetRecordStatistics', () => {
+  const prepareSuiteCase = () => {
+    // Arrange
+    const loggerAdapter = mockLoggerPort();
+    const recordAdapter = mockRecordPort();
+    const unit = new GetRecordStatisticsUseCase({
+      loggerAdapter,
+      recordAdapter,
     });
+    return { unit, loggerAdapter, recordAdapter };
+  };
 
-    const resp = await useCase.execute({
-      startDate: new Date(0),
-      endDate: new Date(Math.floor(Date.now() / 1000) * 1000),
-    });
-    expect(resp.success).toBe(true);
-    if (resp.success) {
+  beforeEach(() => jest.clearAllMocks());
+
+  describe('Happy Path', () => {
+    it('returns record statistics successfully when adapter succeeds', async () => {
+      const { recordAdapter, unit } = prepareSuiteCase();
+      const mockCounts = [
+        { moduleID: 1, count: 3 },
+        { moduleID: 2, count: 2 },
+      ];
+      recordAdapter.getCountsByModule.mockResolvedValue(mockCounts);
+
+      // Act
+      const resp = await unit.execute({
+        startDate: new Date(0),
+        endDate: new Date(Math.floor(Date.now() / 1000) * 1000),
+      });
+
+      // Assert
+      expect(resp.success).toBe(true);
+
+      if (!resp.success) {
+        throw new Error('Expected success response');
+      }
       expect(resp.details.countsByModule).toEqual(mockCounts);
-    }
-    expect(mockAdapter.getCountsByModule).toHaveBeenCalled();
+      expect(recordAdapter.getCountsByModule).toHaveBeenCalled();
+    });
   });
 });

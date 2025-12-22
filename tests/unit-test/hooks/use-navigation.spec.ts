@@ -1,9 +1,10 @@
 import { renderHook } from '@testing-library/react-native';
+import type { Href } from 'expo-router';
 
-import type { INavigationPort } from '@/domain/ports/navigation.port';
-import { useNavigation } from '@/hooks/use-navigation.hook';
+import type { INavigationPort } from '@/domain/core/port/navigation.port';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
-describe('useNavigation', () => {
+describe('[Hook] useNavigation', () => {
   let mockNavigationAdapter: jest.Mocked<INavigationPort>;
 
   beforeEach(() => {
@@ -21,7 +22,7 @@ describe('useNavigation', () => {
     result.current.navigateTo('/(onboarding)/role-selection');
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(onboarding)/role-selection'
+      '/(onboarding)/role-selection' satisfies Href
     );
   });
 
@@ -43,7 +44,7 @@ describe('useNavigation', () => {
     result.current.goToRoleSelection();
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(onboarding)/role-selection'
+      '/(onboarding)/role-selection' satisfies Href
     );
   });
 
@@ -55,31 +56,7 @@ describe('useNavigation', () => {
     result.current.goToParentSetup();
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(onboarding)/parent-setup'
-    );
-  });
-
-  it('should call navigateTo with confirm link route on goToConfirmLink', () => {
-    const { result } = renderHook(() =>
-      useNavigation({ navigationAdapter: mockNavigationAdapter })
-    );
-
-    result.current.goToConfirmLink();
-
-    expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(caregiver-setup)/confirm-link'
-    );
-  });
-
-  it('should call navigateTo with scan qr route on goToScanQr', () => {
-    const { result } = renderHook(() =>
-      useNavigation({ navigationAdapter: mockNavigationAdapter })
-    );
-
-    result.current.goToScanQr();
-
-    expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(caregiver-setup)/scan-qr'
+      '/(onboarding)/parent-setup' satisfies Href
     );
   });
 
@@ -91,19 +68,7 @@ describe('useNavigation', () => {
     result.current.goToRegister(1);
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(tabs)/register/execute-register'
-    );
-  });
-
-  it('should call navigateTo with filter history route on goToFilterHistory', () => {
-    const { result } = renderHook(() =>
-      useNavigation({ navigationAdapter: mockNavigationAdapter })
-    );
-
-    result.current.goToFilterHistory();
-
-    expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(modals)/modal-filter-history'
+      '/(tabs)/register/execute-register?moduleID=1' satisfies Href
     );
   });
 
@@ -115,7 +80,7 @@ describe('useNavigation', () => {
     result.current.goToOnboarding();
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(onboarding)'
+      '/(onboarding)' satisfies Href
     );
   });
 });

@@ -10,7 +10,6 @@ import {
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { getStatusFromValue } from '@/domain/core/enum/status.enum';
 import type { TID } from '@/domain/core/schemas/id.schema';
 import type {

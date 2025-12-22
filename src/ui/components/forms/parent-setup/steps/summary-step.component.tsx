@@ -1,5 +1,5 @@
 import { useThemeColor } from 'heroui-native';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import type { TID } from '@/domain/core/schemas/id.schema';
@@ -66,6 +66,7 @@ function SummarySection({ title, children }: SummarySectionProps) {
 }
 
 export function SummaryStep({ formData }: SummaryStepProps) {
+  const { t } = useTranslation();
   const cardBgColor = useThemeColor('background-secondary');
   const accentColor = useThemeColor('accent');
   const foregroundColor = useThemeColor('foreground');

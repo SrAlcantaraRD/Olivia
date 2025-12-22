@@ -1,312 +1,94 @@
-import { jest } from '@jest/globals';
-
-import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
-
-describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
-  it('getFieldDistribution uses database.execute when available (no moduleID)', async () => {
-    const adapter = new SQLiteRecordAdapter();
-
-    const mockExecute = jest
-      .fn<() => Promise<{ value: string; count: number }[]>>()
-      .mockResolvedValue([{ value: 'A', count: 2 }]);
-    // inject fake database object with execute
-    (adapter as unknown as { database: { execute: unknown } }).database = {
-      // using non-strict cast for test convenience
-      execute: mockExecute as unknown,
-    };
-
-    const result = await adapter.getFieldDistribution({
-      fieldID: 1,
-      startDate: new Date(0),
-      endDate: new Date(1000),
-    });
-
-    expect(mockExecute).toHaveBeenCalled();
-    expect(result).toEqual([{ value: 'A', count: 2 }]);
-  });
-
-  it('getFieldDistribution uses database.execute when available (with moduleID)', async () => {
-    const adapter = new SQLiteRecordAdapter();
-
-    const mockExecute = jest
-      .fn<() => Promise<{ value: string; count: number }[]>>()
-      .mockResolvedValue([{ value: 'B', count: 1 }]);
-    (adapter as unknown as { database: unknown }).database = {
-      execute: mockExecute,
-    } as unknown;
-
-    const result = await adapter.getFieldDistribution({
-      fieldID: 2,
-      moduleID: 5,
-      startDate: new Date(0),
-      endDate: new Date(1000),
-    });
-
-    expect(mockExecute).toHaveBeenCalled();
-    expect(result).toEqual([{ value: 'B', count: 1 }]);
-  });
-
-  it('getCountsByModule falls back to in-memory when execute is not available', async () => {
-    const adapter = new SQLiteRecordAdapter();
-
-    const nowEpoch = Math.floor(Date.now() / 1000);
-    // Provide a stubbed query.RECORD.findMany
-    const fakeDb = {
-      query: {
-        RECORD: {
-          findMany: jest
-            .fn<
-              () => Promise<
-                {
-                  id: number;
-                  moduleID: number;
-                  status: number;
-                  data: string;
-                  synced: number;
-                  createdAt: number;
-                }[]
-              >
-            >()
-            .mockResolvedValue([
-              {
-                id: 1,
-                moduleID: 1,
-                status: 1,
-                data: '{}',
-                synced: 0,
-                createdAt: nowEpoch,
-              },
-              {
-                id: 2,
-                moduleID: 1,
-                status: 1,
-                data: '{}',
-                synced: 0,
-                createdAt: nowEpoch,
-              },
-              {
-                id: 3,
-                moduleID: 2,
-                status: 1,
-                data: '{}',
-                synced: 0,
-                createdAt: nowEpoch,
-              },
-            ]),
-        },
-      },
-    } as unknown as Record<string, unknown>;
-
-    (adapter as unknown as { database: unknown }).database = fakeDb as unknown;
-
-    const result = await adapter.getCountsByModule({
-      startDate: new Date((nowEpoch - 100) * 1000),
-      endDate: new Date(nowEpoch * 1000),
-    });
-
-    expect(Array.isArray(result)).toBe(true);
-    expect(result).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ moduleID: 1, count: 2 }),
-        expect.objectContaining({ moduleID: 2, count: 1 }),
-      ])
-    );
-  });
-});
+/// <reference types="jest" />
 
 import { describe, expect, it } from '@jest/globals';
 
-describe('SQLiteRecordAdapter aggregations', () => {
-  it('getFieldDistribution uses database.execute when available (no moduleID)', async () => {
-    const adapter = new SQLiteRecordAdapter();
+import {
+  SQLiteRecordAdapter,
+  type TRecordAdapterEntity,
+} from '@/database/adapter/sqlite.record.adapter';
+import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 
-    const mockExecute = jest
-      .fn<() => Promise<{ value: string; count: number }[]>>()
-      .mockResolvedValue([{ value: 'A', count: 2 }]);
-    // inject fake database object with execute
-    (adapter as unknown as { database: { execute: unknown } }).database = {
-      execute: mockExecute as unknown,
-    };
+const buildEntity = (
+  overrides: Partial<TRecordAdapterEntity> = {}
+): TRecordAdapterEntity => {
+  const base: TRecordAdapterEntity = {
+    id: 1,
+    status: STATUS_ENUM.ACTIVE,
+    createdAt: new Date('2025-12-18T00:00:00.000Z'), // seconds
+    moduleID: 10,
+    carerID: 20,
+    data: '{"field1":"value1"}',
+    synced: 0,
+  };
 
-    const result = await adapter.getFieldDistribution({
-      fieldID: 1,
-      startDate: new Date(0),
-      endDate: new Date(1000),
+  return { ...base, ...overrides };
+};
+
+describe('[Adapter] - SQLiteRecordAdapter.toDomainEntity', () => {
+  it('maps scalar fields and converts status + synced', () => {
+    // Arrange
+    const entity = buildEntity({
+      id: 99,
+      status: STATUS_ENUM.INACTIVE,
+      synced: 1,
     });
 
-    expect(mockExecute).toHaveBeenCalled();
-    expect(result).toEqual([{ value: 'A', count: 2 }]);
+    // Act
+    const result = SQLiteRecordAdapter.toDomainEntity(entity);
+
+    // Assert
+    expect(result.id).toBe(99);
+    expect(result.status).toBe(STATUS_ENUM.INACTIVE);
+    expect(result.moduleID).toBe(10);
+    expect(result.carerID).toBe(20);
+    expect(result.data).toBe('{"field1":"value1"}');
+    expect(result.synced).toBe(true);
   });
 
-  it('getCountsByModule falls back to in-memory when execute is not available', async () => {
-    const adapter = new SQLiteRecordAdapter();
+  it('converts createdAt from unix seconds to Date', () => {
+    // Arrange
+    const seconds = 1_700_000_000;
+    const entity = buildEntity({ createdAt: new Date(seconds * 1000) });
 
-    const nowEpoch = Math.floor(Date.now() / 1000);
-    // Provide a stubbed query.RECORD.findMany
-    const fakeDb = {
-      query: {
-        RECORD: {
-          findMany: jest
-            .fn<
-              () => Promise<
-                {
-                  id: number;
-                  moduleID: number;
-                  status: number;
-                  data: string;
-                  synced: number;
-                  createdAt: number;
-                }[]
-              >
-            >()
-            .mockResolvedValue([
-              {
-                id: 1,
-                moduleID: 1,
-                status: 1,
-                data: '{}',
-                synced: 0,
-                createdAt: nowEpoch,
-              },
-              {
-                id: 2,
-                moduleID: 1,
-                status: 1,
-                data: '{}',
-                synced: 0,
-                createdAt: nowEpoch,
-              },
-              {
-                id: 3,
-                moduleID: 2,
-                status: 1,
-                data: '{}',
-                synced: 0,
-                createdAt: nowEpoch,
-              },
-            ]),
-        },
-      },
-    } as unknown as Record<string, unknown>;
+    // Act
+    const result = SQLiteRecordAdapter.toDomainEntity(entity);
 
-    (adapter as unknown as { database: unknown }).database = fakeDb as unknown;
-
-    const result = await adapter.getCountsByModule({
-      startDate: new Date((nowEpoch - 100) * 1000),
-      endDate: new Date(nowEpoch * 1000),
-    });
-
-    expect(Array.isArray(result)).toBe(true);
-    expect(result).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ moduleID: 1, count: 2 }),
-        expect.objectContaining({ moduleID: 2, count: 1 }),
-      ])
-    );
-  });
-});
-
-describe('SQLiteRecordAdapter aggregations', () => {
-  it('calls database.execute with correct SQL when execute is available (no moduleID)', async () => {
-    const adapter = new SQLiteRecordAdapter();
-
-    const mockExecute = jest
-      .fn<() => Promise<{ value: string; count: number }[]>>()
-      .mockResolvedValue([{ value: 'A', count: 2 }]);
-    // inject fake database object with execute
-    (adapter as unknown as { database: unknown }).database = {
-      execute: mockExecute,
-    } as unknown;
-
-    const result = await adapter.getFieldDistribution({
-      fieldID: 1,
-      startDate: new Date(0),
-      endDate: new Date(1000),
-    });
-
-    expect(mockExecute).toHaveBeenCalled();
-    expect(result).toEqual([{ value: 'A', count: 2 }]);
+    // Assert
+    expect(result.createdAt).toBeInstanceOf(Date);
+    expect(result.createdAt.getTime()).toBe(seconds * 1000);
   });
 
-  it('calls database.execute with correct SQL when execute is available (with moduleID)', async () => {
-    const adapter = new SQLiteRecordAdapter();
+  it('converts createdAt from unix milliseconds to Date', () => {
+    // Arrange
+    const ms = 1_700_000_000_000;
+    const entity = buildEntity({ createdAt: new Date(ms) });
 
-    const mockExecute = jest
-      .fn<() => Promise<{ value: string; count: number }[]>>()
-      .mockResolvedValue([{ value: 'B', count: 1 }]);
-    (adapter as unknown as { database: unknown }).database = {
-      execute: mockExecute,
-    } as unknown;
+    // Act
+    const result = SQLiteRecordAdapter.toDomainEntity(entity);
 
-    const result = await adapter.getFieldDistribution({
-      fieldID: 2,
-      moduleID: 5,
-      startDate: new Date(0),
-      endDate: new Date(1000),
-    });
-
-    expect(mockExecute).toHaveBeenCalled();
-    expect(result).toEqual([{ value: 'B', count: 1 }]);
+    // Assert
+    expect(result.createdAt).toBeInstanceOf(Date);
+    expect(result.createdAt.getTime()).toBe(ms);
   });
-});
 
-// Using global jest from @jest/globals; no direct import required
+  it('keeps createdAt as Date when already a Date', () => {
+    // Arrange
+    const date = new Date('2025-12-18T00:00:00.000Z');
+    const entity = buildEntity({ createdAt: date });
 
-describe('[Adapter] SQLiteRecordAdapter - Aggregations', () => {
-  it('getCountsByModule aggregates counts correctly', async () => {
-    const adapter = new SQLiteRecordAdapter();
+    // Act
+    const result = SQLiteRecordAdapter.toDomainEntity(entity);
 
-    const nowEpoch = Math.floor(Date.now() / 1000);
-    // Spy on the database query method to return a curated list
-    const mockRecords = [
-      {
-        id: 1,
-        moduleID: 1,
-        status: 1,
-        data: '{}',
-        synced: 0,
-        createdAt: nowEpoch - 10,
-      },
-      {
-        id: 2,
-        moduleID: 1,
-        status: 1,
-        data: '{}',
-        synced: 0,
-        createdAt: nowEpoch - 9,
-      },
-      {
-        id: 3,
-        moduleID: 2,
-        status: 1,
-        data: '{}',
-        synced: 0,
-        createdAt: nowEpoch - 8,
-      },
-    ];
+    // Assert
+    expect(result.createdAt).toBeInstanceOf(Date);
+    expect(result.createdAt.getTime()).toBe(date.getTime());
+  });
 
-    // Override the internal database query method
-    interface IDbQueryStub {
-      query: {
-        RECORD: {
-          findMany: (params?: unknown) => Promise<unknown[]>;
-        };
-      };
-    }
-    const db = (adapter as unknown as { database: IDbQueryStub }).database;
-    (db.query.RECORD.findMany as unknown as jest.Mock).mockResolvedValue(
-      mockRecords as never
-    );
+  it('throws when status is not a valid STATUS_ENUM', () => {
+    // Arrange
+    const entity = buildEntity({ status: 999 });
 
-    const result = await adapter.getCountsByModule({
-      startDate: new Date((nowEpoch - 100) * 1000),
-      endDate: new Date(nowEpoch * 1000),
-    });
-    expect(result).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ moduleID: 1, count: 2 }),
-        expect.objectContaining({ moduleID: 2, count: 1 }),
-      ])
-    );
+    // Act + Assert
+    expect(() => SQLiteRecordAdapter.toDomainEntity(entity)).toThrow();
   });
 });

@@ -15,7 +15,8 @@
       "!dist",
       "!.vscode",
       "!coverage",
-      "!uniwind.d.ts"
+      "!uniwind.d.ts",
+      "!src/global.css"
     ]
   },
   "formatter": {
@@ -24,20 +25,16 @@
     "indentWidth": 2,
     "lineWidth": 80
   },
-  "css": {
-    "parser": {
-      "tailwindDirectives": true
-    }
-  },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "correctness": {
+        "noUnusedImports": "error",
         "useExhaustiveDependencies": "off",
         "noUnusedFunctionParameters": "off",
-        "noUnusedVariables": "info",
-        "noUnknownTypeSelector": "off"
+        "noUnknownTypeSelector": "off",
+        "noUnusedVariables": "error"
       }
     }
   },
@@ -55,7 +52,6 @@
           "level": "on",
           "options": {
             "groups": [
-              ":BLANK_LINE:",
               ":URL:",
               ":PACKAGE:",
               ":PACKAGE_WITH_PROTOCOL:",
@@ -67,8 +63,7 @@
               ":BLANK_LINE:",
               "./",
               ":BLANK_LINE:",
-              "../",
-              ":BLANK_LINE:"
+              "../"
             ]
           }
         }

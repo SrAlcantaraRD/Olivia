@@ -51,6 +51,24 @@ Así pues, los diferentes artefactos con el cual se construye la aplicación son
 - **Use-case**: Implementan las reglas de negocio, orquestando la lógica de cada operación (ej. registrar una rutina, sincronización QR, etc.).
 - **Error**: Errores específicos del dominio, con códigos identificativos y sin depender de detalles técnicos.
 
+#### 📅 Manejo de Fechas (Date/Time)
+
+**Estrategia:** El dominio utiliza objetos `Date` nativos de JavaScript; internamente, los hooks y adapters usan `date-fns` para cálculos (ej. `startOfDay`, `subDays`, `format`, `differenceInDays`).
+
+**Zonas Horarias:** Todas las operaciones se hacen en **tiempo local** del dispositivo. Los timestamps en SQLite se guardan en Unix seconds (unixepoch) via `sqlite(...)` en la definición de schema.
+
+**Conversión:**
+- Domain recibe/devuelve `Date` objects (local).
+- Adapters convierten internamente:
+  - `fromUnixTime()` para convertir Unix seconds → `Date`.
+  - `getUnixTime()` para convertir `Date` → Unix seconds (para cache keys, etc.).
+  - `format(date, 'yyyy-MM-dd')` para keys de agrupación diaria.
+
+**Hook Principal:** [`useModuleStatistics`](src/hooks/use-report-manager.hook.ts) centraliza la lógica de rangos de tiempo:
+- `computeTimeRange(range: 'today' | '7d' | '30d' | '90d')` → `{ startDate: Date; endDate: Date }`
+
+Reutilizada por reportes, históricos y distribuciones de datos.
+
 ### Back-end
 
 Para una descripción más detallada del dominio, las entidades y los casos de uso, consulta los siguientes documentos:
@@ -64,6 +82,8 @@ Para una descripción más detallada del dominio, las entidades y los casos de u
 No vamos a desarrollar una aplicación exclusiva de acceso a los datos, sino que vamos a trabajar directamente con la BBDD utilizando un ORM que facilite la iteración y evolución de la BBDD.
 
 ### Front-end
+
+A nivel de design-system, utilizamos HeroUI Native como base para los componentes visuales (https://github.com/heroui-inc/heroui-native/blob/beta/README.md), adaptándolos a las necesidades de la aplicación. Como es una librería en beta, no los utilizaremos directamente, sino que crearemos componentes propios (*.atom.tsx) que utilicen HeroUI Native internamente.
 
 A este nivel, necesitaremos implementar los siguientes artefactos:
 

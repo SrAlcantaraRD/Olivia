@@ -1,8 +1,14 @@
 import { Card } from 'heroui-native';
 import type React from 'react';
 
+import { cn } from '@/ui/lib/utils';
+
 type CardAtomProps = React.ComponentProps<typeof Card>;
 
-export const CardAtom = ({ children, ...props }: CardAtomProps) => {
-  return <Card {...props}>{children}</Card>;
+export const CardAtom = ({ children, className, ...props }: CardAtomProps) => {
+  return (
+    <Card {...props} className={cn('rounded-lg', `bg-accent-soft`, className)}>
+      {children}
+    </Card>
+  );
 };

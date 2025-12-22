@@ -9,10 +9,10 @@ describe('[Organism] - ModuleWizard parseFieldValues', () => {
     expect(result).toEqual(['option.one', 'option.two']);
   });
 
-  it('parses comma-separated string into array', () => {
+  it('returns empty array for invalid JSON values', () => {
     const values = 'option.one, option.two,option.three';
     const result = parseFieldValues(values);
-    expect(result).toEqual(['option.one', 'option.two', 'option.three']);
+    expect(result).toEqual([]);
   });
 
   it('returns empty array for empty values', () => {

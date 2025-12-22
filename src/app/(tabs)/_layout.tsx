@@ -1,28 +1,25 @@
 import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
 import { useThemeColor } from 'heroui-native';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
-
-import { useAppTheme } from '@/ui/themes/app-theme-context';
 
 export default function TabLayout() {
-  const { isDark } = useAppTheme();
   const { t } = useTranslation();
 
   const accentColor = useThemeColor('accent');
   const mutedColor = useThemeColor('muted');
-  const backgroundColor = useThemeColor('background');
+  const backgroundColor = useThemeColor('surface');
 
   return (
     <NativeTabs
+      minimizeBehavior="onScrollDown"
       tintColor={accentColor}
       backgroundColor={backgroundColor}
-      blurEffect={
-        isDark ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'
-      }
+      disableTransparentOnScrollEdge={true}
+      blurEffect="none"
       labelStyle={{
         fontSize: 11,
         fontWeight: '600',
+        color: useThemeColor('foreground'),
       }}
       iconColor={{
         default: mutedColor,
@@ -31,21 +28,30 @@ export default function TabLayout() {
     >
       {/* Report Tab */}
       <NativeTabs.Trigger name="report">
-        <Icon sf="chart.bar.doc.horizontal" />
+        <Icon sf={{ default: 'chart.bar', selected: 'chart.bar.fill' }} />
         <Label>{t('tab.report')}</Label>
+      </NativeTabs.Trigger>
+
+      {/* Summary Tab */}
+      <NativeTabs.Trigger name="summary">
+        <Icon
+          sf={{
+            default: 'heart.text.square',
+            selected: 'heart.text.square.fill',
+          }}
+        />
+        <Label>{t('tab.summary')}</Label>
       </NativeTabs.Trigger>
 
       {/* Register Tab - Default landing page (first tab) */}
       <NativeTabs.Trigger name="register">
-        <View testID="screen.tabs.register.icon">
-          <Icon sf="plus.circle.fill" />
-        </View>
+        <Icon sf={{ default: 'plus.circle', selected: 'plus.circle.fill' }} />
         <Label>{t('tab.register')}</Label>
       </NativeTabs.Trigger>
 
       {/* Settings Tab */}
       <NativeTabs.Trigger name="settings">
-        <Icon sf="gearshape.fill" />
+        <Icon sf={{ default: 'gearshape', selected: 'gearshape.fill' }} />
         <Label>{t('tab.settings')}</Label>
       </NativeTabs.Trigger>
     </NativeTabs>

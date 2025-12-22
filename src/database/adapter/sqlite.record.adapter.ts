@@ -1,5 +1,4 @@
-import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/expo-sqlite';
+import { and, count, desc, eq, gte, lte, sql } from 'drizzle-orm';
 
 import {
   SQLiteCarerAdapter,
@@ -13,9 +12,11 @@ import {
   SQLiteRecordFieldAdapter,
   type TRecordFieldAdapterEntity,
 } from '@/database/adapter/sqlite.record-field.adapter';
-import { SQLITE_DB } from '@/database/config/database.config';
+import {
+  buildAdapterClient,
+  type TAppDatabase,
+} from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
-import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
 import {
   getStatusFromValue,
   STATUS_ENUM,
@@ -34,16 +35,13 @@ export type TRecordAdapterEntity = typeof DB_SCHEMA.RECORD.$inferSelect & {
   recordFields?: TRecordFieldAdapterEntity[];
 };
 
-export type TRecordAdapterInsert = typeof DB_SCHEMA.RECORD.$inferInsert;
+type TRecordAdapterInsert = typeof DB_SCHEMA.RECORD.$inferInsert;
 
 export class SQLiteRecordAdapter implements IRecordPort {
-  private readonly database;
+  private readonly database: TAppDatabase;
 
-  constructor() {
-    this.database = drizzle(SQLITE_DB, {
-      schema: DB_SCHEMA,
-      logger: new DrizzleLogger('Record Adapter'),
-    });
+  constructor(database?: TAppDatabase) {
+    this.database = database ?? buildAdapterClient('Record');
   }
 
   public static toDomainEntity(entity: TRecordAdapterEntity): TRecord {
@@ -71,10 +69,6 @@ export class SQLiteRecordAdapter implements IRecordPort {
           SQLiteRecordFieldAdapter.toDomainEntity
         ),
       }),
-      // include createdAt (stored as unix epoch seconds)
-      ...(entity.createdAt !== undefined && {
-        createdAt: Number(entity.createdAt),
-      }),
     } satisfies TRecord;
   }
 
@@ -85,6 +79,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
       data: data.data,
       synced: data.synced ? STATUS_ENUM.ACTIVE : STATUS_ENUM.INACTIVE,
       status: STATUS_ENUM.ACTIVE,
+      createdAt: data.createdAt,
     } satisfies TRecordAdapterInsert;
 
     const [record] = await this.database
@@ -115,12 +110,10 @@ export class SQLiteRecordAdapter implements IRecordPort {
       .select()
       .from(DB_SCHEMA.RECORD)
       .where(eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE))
-      .orderBy(DB_SCHEMA.RECORD.createdAt, 'desc')
+      .orderBy(desc(DB_SCHEMA.RECORD.createdAt))
       .limit(limit);
 
-    return (rows as TRecordAdapterEntity[]).map(
-      SQLiteRecordAdapter.toDomainEntity
-    );
+    return rows.map(SQLiteRecordAdapter.toDomainEntity);
   }
 
   public async getCountsByModule(criteria?: {
@@ -156,12 +149,10 @@ export class SQLiteRecordAdapter implements IRecordPort {
     moduleID?: number;
   }): Promise<{ day: string; count: number }[]> {
     const { startDate, endDate, moduleID } = criteria || {};
-    // createdAt is stored as unix epoch seconds in DB
-    const dayExpr = sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`;
+    // createdAt is stored as unix epoch seconds in DB; group by LOCAL day to match user expectations
+    const dayExpr = sql<string>`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch', 'localtime'))`;
 
-    type TDayCountRow = { day: string; count: number };
-
-    const rows = (await this.database
+    const rows = await this.database
       .select({
         day: dayExpr.as('day'),
         count: count(DB_SCHEMA.RECORD.id).as('count'),
@@ -176,7 +167,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
         )
       )
       .groupBy(dayExpr)
-      .orderBy(dayExpr)) as TDayCountRow[];
+      .orderBy(dayExpr);
 
     return rows;
   }
@@ -188,9 +179,8 @@ export class SQLiteRecordAdapter implements IRecordPort {
     endDate?: Date;
   }): Promise<{ value: string; count: number }[]> {
     const { fieldID, moduleID, startDate, endDate = new Date() } = criteria;
-    type TFieldCountRow = { value: string; count: number };
 
-    const rows = (await this.database
+    const rows = await this.database
       .select({
         value: DB_SCHEMA.RECORD_FIELD.value,
         count: count(DB_SCHEMA.RECORD_FIELD.id).as('count'),
@@ -209,8 +199,34 @@ export class SQLiteRecordAdapter implements IRecordPort {
           ...(moduleID ? [eq(DB_SCHEMA.RECORD.moduleID, moduleID)] : [])
         )
       )
-      .groupBy(DB_SCHEMA.RECORD_FIELD.value)) as TFieldCountRow[];
+      .groupBy(DB_SCHEMA.RECORD_FIELD.value);
 
     return rows;
+  }
+
+  public async getLatestRecordDateByModule(
+    moduleID: TID
+  ): Promise<Date | null> {
+    const rows = await this.database
+      .select({
+        createdAt: DB_SCHEMA.RECORD.createdAt,
+      })
+      .from(DB_SCHEMA.RECORD)
+      .where(
+        and(
+          eq(DB_SCHEMA.RECORD.moduleID, moduleID),
+          eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE)
+        )
+      )
+      .orderBy(desc(DB_SCHEMA.RECORD.createdAt))
+      .limit(1);
+
+    if (!rows.length) return null;
+
+    // createdAt stored in unix epoch seconds
+    const timestamp = Number(rows[0].createdAt);
+    if (!Number.isFinite(timestamp)) return null;
+
+    return new Date(timestamp * 1000);
   }
 }

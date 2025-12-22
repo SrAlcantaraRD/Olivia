@@ -8,12 +8,16 @@ import {
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import * as SplashScreen from 'expo-splash-screen';
 import { Suspense, useEffect } from 'react';
-import { ActivityIndicator, Image, Platform, StyleSheet } from 'react-native';
+import { I18nextProvider } from 'react-i18next';
+import { ActivityIndicator, Image, Platform } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from 'react-native-reanimated';
 import Toast, { type ToastConfig } from 'react-native-toast-message';
 
-import '@/ui/i18n/i18n';
-import 'react-native-reanimated';
+import i18n from '@/ui/i18n/i18n';
 import '../global.css';
 
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
@@ -21,10 +25,6 @@ import { Stack } from 'expo-router';
 import { SQLiteProvider } from 'expo-sqlite';
 import { HeroUINativeProvider } from 'heroui-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import {
-  configureReanimatedLogger,
-  ReanimatedLogLevel,
-} from 'react-native-reanimated';
 
 import { SQLITE_DB } from '@/database/config/database.config';
 import { useInitDb } from '@/database/execute-migrations';
@@ -32,7 +32,6 @@ import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { ENVIRONMENT_VARIABLES } from '@/domain/core/constant/environment-variables.constants';
 import { ThemeToggle } from '@/ui/components/atoms/theme-toggle.atom';
 import { toastConfig } from '@/ui/components/particles/toast-design.particle';
-import { SettingsProvider } from '@/ui/context/settings.context';
 import { AppThemeProvider, useAppTheme } from '@/ui/themes/app-theme-context';
 import LogoDark from '../assets/logo-dark.png';
 import LogoLight from '../assets/logo-light.png';
@@ -58,7 +57,7 @@ function RootNavigator() {
     return (
       <Image
         source={isDark ? LogoLight : LogoDark}
-        style={styles.logo}
+        className="w-20 h-6"
         resizeMode="contain"
       />
     );
@@ -129,21 +128,29 @@ export default function RootLayout() {
         options={{ enableChangeListener: true }}
         useSuspense
       >
-        <GestureHandlerRootView style={styles.root}>
+        <GestureHandlerRootView className="flex-1">
           <KeyboardProvider>
             <AppThemeProvider>
-              <SettingsProvider>
-                <HeroUINativeProvider
-                  config={{
-                    textProps: {
-                      allowFontScaling: false,
+              <HeroUINativeProvider
+                config={{
+                  toast: {
+                    insets: {
+                      top: 20,
+                      bottom: 20,
+                      left: 20,
+                      right: 20,
                     },
-                  }}
-                >
+                  },
+                  textProps: {
+                    allowFontScaling: false,
+                  },
+                }}
+              >
+                <I18nextProvider i18n={i18n}>
                   <RootNavigator />
                   <Toast config={toastConfig as ToastConfig} />
-                </HeroUINativeProvider>
-              </SettingsProvider>
+                </I18nextProvider>
+              </HeroUINativeProvider>
             </AppThemeProvider>
           </KeyboardProvider>
         </GestureHandlerRootView>
@@ -151,13 +158,3 @@ export default function RootLayout() {
     </Suspense>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
-  logo: {
-    width: 80,
-    height: 24,
-  },
-});

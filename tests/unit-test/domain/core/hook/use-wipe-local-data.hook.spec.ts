@@ -1,4 +1,4 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import { act, renderHook } from '@testing-library/react-native';
 
 import { useWipeLocalData } from '@/domain/core/hook/use-wipe-local-data.hook';
@@ -6,34 +6,49 @@ import {
   mockCachePort,
   mockLoggerPort,
   mockSecureStorePort,
-} from '/Users/gabriel/Documents/personal/UOC/2025_2026_01/TFG/tests/unit-test/domain/core/mocks/mock.port';
+} from '@/tests/mocks/core.port.mock';
 
-// mock dropDatabase to avoid touching real DB
-jest.mock('@/database/config/drop-database.config', () => ({
-  dropDatabase: (jest.fn() as any).mockResolvedValue(undefined),
-}));
+describe('[Hook] - UseWipeLocalData', () => {
+  const prepareSuiteCase = () => {
+    // Arrange
+    const loggerAdapter = mockLoggerPort();
+    const cacheAdapter = mockCachePort();
+    const secureStoreAdapter = mockSecureStorePort();
 
-describe('useWipeLocalData', () => {
-  it('executes wipe and returns success', async () => {
-    const mockCache = mockCachePort();
-    const mockSecure = mockSecureStorePort();
-    const mockLogger = mockLoggerPort();
+    const adapters = { loggerAdapter, cacheAdapter, secureStoreAdapter };
 
-    const { result } = renderHook(() =>
-      useWipeLocalData({
-        loggerAdapter: mockLogger,
-        cacheAdapter: mockCache,
-        secureStoreAdapter: mockSecure,
-      })
-    );
+    const { result } = renderHook(() => useWipeLocalData(adapters));
 
-    let resp: unknown;
-    await act(async () => {
-      resp = await result.current.execute();
-    });
+    const execute = async () => {
+      let response:
+        | Awaited<ReturnType<(typeof result.current)['execute']>>
+        | undefined;
 
-    expect((resp as { success: boolean }).success).toBe(true);
-    expect(mockCache.delete).toHaveBeenCalled();
-    expect(mockSecure.delete).toHaveBeenCalled();
+      await act(async () => {
+        response = await result.current.execute();
+      });
+
+      if (!response) {
+        throw new Error('Expected hook response');
+      }
+
+      return response;
+    };
+
+    return { result, execute, ...adapters };
+  };
+
+  beforeEach(() => jest.clearAllMocks());
+
+  it('executes wipe successfully when called', async () => {
+    const { execute, cacheAdapter, secureStoreAdapter } = prepareSuiteCase();
+
+    // Act
+    const response = await execute();
+
+    // Assert
+    expect(response.success).toBe(true);
+    expect(cacheAdapter.clearAll).toHaveBeenCalled();
+    expect(secureStoreAdapter.clearAll).toHaveBeenCalled();
   });
 });

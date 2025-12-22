@@ -15,5 +15,5 @@ export type IUseHook<TRequest, TResponse> = {
     reload?: boolean
   ) => Promise<IHookResponse<TResponse>>;
   isExecuting: boolean;
-  items: TResponse;
+  items: TResponse; //FIXME: rename to result
 };

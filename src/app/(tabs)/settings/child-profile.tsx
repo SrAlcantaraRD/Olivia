@@ -15,15 +15,15 @@ export default function ChildProfileScreen() {
       >
         <View className="gap-6">
           <TypographyTitle
-            testID="screen.settings.child_profile.title"
-            i18nKey="page.child_profile.title"
+            testID="screen.settings.child-profile.title"
+            i18nKey="page.child-profile.title"
             accessibilityRole="header"
           />
 
           <View className="p-4 bg-default-100 rounded-lg">
             <TypographyParagraph
-              testID="screen.settings.child_profile.placeholder"
-              i18nKey="page.child_profile.placeholder"
+              testID="screen.settings.child-profile.placeholder"
+              i18nKey="page.child-profile.placeholder"
               variant="light"
               size="sm"
               className="text-center"

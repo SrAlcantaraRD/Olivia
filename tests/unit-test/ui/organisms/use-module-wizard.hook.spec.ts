@@ -1,43 +1,48 @@
 import { describe, expect, it } from '@jest/globals';
-import { act, renderHook } from '@testing-library/react-native';
+import { act, renderHook, waitFor } from '@testing-library/react-native';
 
-import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
-import type { TModule } from '@/domain/module/entity/module.entity';
-import type { TModuleField } from '@/domain/module/entity/module-field.entity';
-import { MODULE_FIELD_TYPE_ENUM } from '@/domain/module/enum/module-field-type.enum';
-import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
+import { mockLoggerPort, mockNotifyPort } from '@/tests/mocks/core.port.mock';
+import { mockModuleEntity } from '@/tests/mocks/module.entity.mock';
+import { mockModuleFieldEntity } from '@/tests/mocks/module-field.entity.mock';
+import { mockModuleFieldPort } from '@/tests/mocks/module-field.port.mock';
 import { useModuleWizard } from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';
 
 describe('[Hook] useModuleWizard', () => {
-  it('creates steps from module field and handles select option navigation', () => {
-    const mockField = {
-      id: 1,
-      moduleId: 1,
-      title: 'page.cic_register.volume.title',
-      description: 'page.cic_register.volume.description',
-      type: MODULE_FIELD_TYPE_ENUM.SELECT,
-      values:
-        '["page.cic_register.volume.low","page.cic_register.volume.normal","page.cic_register.volume.high"]',
-      required: true,
-      order: 1,
-      status: STATUS_ENUM.ACTIVE,
-    } satisfies TModuleField;
+  const prepareSuiteCase = () => {
+    // Arrange
+    const loggerAdapter = mockLoggerPort();
+    const notifyAdapter = mockNotifyPort();
+    const moduleFieldAdapter = mockModuleFieldPort();
 
-    const mockModule = {
-      id: 1,
-      code: MODULE_KEY_ENUM.CIC,
-      name: 'CIC',
-      description: 'Catheterization',
-      isActive: true,
+    return { loggerAdapter, notifyAdapter, moduleFieldAdapter };
+  };
+
+  it('creates steps from module field and handles select option navigation', async () => {
+    const { loggerAdapter, notifyAdapter, moduleFieldAdapter } =
+      prepareSuiteCase();
+    const mockField = mockModuleFieldEntity({ required: true });
+
+    const mockModule = mockModuleEntity({
       fieldList: [mockField],
-      status: STATUS_ENUM.ACTIVE,
-    } satisfies TModule;
+    });
+
+    moduleFieldAdapter.getAllByModuleId.mockResolvedValue([mockField]);
 
     const { result } = renderHook(() =>
-      useModuleWizard({ moduleID: mockModule.id, initialValues: {} })
+      useModuleWizard({
+        moduleID: mockModule.id,
+        initialValues: {},
+        adapters: {
+          loggerAdapter,
+          notifyAdapter,
+          moduleFieldAdapter,
+        },
+      })
     );
 
-    expect(result.current.fieldList.length).toBe(1);
+    await waitFor(() => {
+      expect(result.current.fieldList.length).toBe(1);
+    });
     expect(result.current.currentStep).toBe(0);
     expect(result.current.steps[0].isValid).toBe(false);
 

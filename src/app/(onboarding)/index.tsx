@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import { useAdapters } from '@/adapter';
-import { useNavigation } from '@/hooks/use-navigation.hook';
 import type { IconName } from '@/ui/components/atoms/icon.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { WelcomeSlideContent } from '@/ui/components/molecules/welcome-slide-content.molecule';
@@ -9,6 +8,7 @@ import {
   Wizard,
   type WizardStep,
 } from '@/ui/components/molecules/wizard.molecule';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface WelcomeSlide {

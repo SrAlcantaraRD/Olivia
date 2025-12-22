@@ -1,5 +1,5 @@
 import type React from 'react';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Text } from 'react-native';
 
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
@@ -30,9 +30,13 @@ export function TextTranslation({
   values,
   components,
 }: ITextTranslationProps): React.ReactElement {
+  const { t } = useTranslation();
+
   return (
     <Trans<Ti18nKeys>
+      t={t}
       i18nKey={i18nKey}
+      parent={Text}
       values={values}
       components={{
         // Default components available in all translations (React Native)

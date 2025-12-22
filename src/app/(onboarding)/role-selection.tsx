@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
-import { useNavigation } from '@/hooks/use-navigation.hook';
 import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
 import {
   TypographyParagraph,
@@ -12,6 +11,7 @@ import {
 } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 enum ROLE_ENUM {
   PARENT = 'parent',
@@ -20,7 +20,7 @@ enum ROLE_ENUM {
 
 export default function RoleSelectionScreen() {
   const { navigationAdapter } = useAdapters();
-  const { goToParentSetup, goToScanQr, goBack } = useNavigation({
+  const { goToParentSetup, goToSecondaryCarerSetup, goBack } = useNavigation({
     navigationAdapter,
   });
   const [selectedRole, setSelectedRole] = useState<ROLE_ENUM | null>(null);
@@ -30,10 +30,10 @@ export default function RoleSelectionScreen() {
   const accentColor = useThemeColor('accent');
 
   const handleContinue = () => {
-    if (selectedRole === 'parent') {
+    if (selectedRole === ROLE_ENUM.PARENT) {
       goToParentSetup();
-    } else if (selectedRole === 'caregiver') {
-      goToScanQr();
+    } else if (selectedRole === ROLE_ENUM.CAREGIVER) {
+      goToSecondaryCarerSetup();
     }
   };
 

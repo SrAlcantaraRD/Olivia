@@ -1,12 +1,14 @@
 import { CheckCarerExistenceUseCase } from '@/domain/carer/use-case/check-carer-existence.use-case';
-import { mockLoggerPort } from '../../core/mocks/mock.port';
-import { mockCarerPort } from '../mocks/mock.port';
+import { mockCarerPort } from '@/tests/mocks/carer.port.mock';
+import { mockLoggerPort } from '@/tests/mocks/core.port.mock';
 
 describe('[UseCase] - CheckCarerExistence', () => {
   const prepareSuiteCase = () => {
     const carerPort = mockCarerPort();
     const loggerPort = mockLoggerPort();
+
     const useCase = new CheckCarerExistenceUseCase(loggerPort, carerPort);
+
     return { useCase, carerPort, loggerPort };
   };
 

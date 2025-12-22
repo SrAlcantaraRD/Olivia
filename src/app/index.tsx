@@ -4,10 +4,8 @@ import { useEffect, useRef } from 'react';
 import { Animated, Pressable, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
-import { dropDatabase } from '@/database/config/drop-database.config';
+import { useSplashCarerValidation } from '@/domain/carer/hook/use-splash-carer-validation.hook';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
-import { useNavigation } from '@/hooks/use-navigation.hook';
-import { useSplashCarerValidation } from '@/hooks/use-splash-carer-validation.hook';
 import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
 import {
   TypographyHeading,
@@ -15,6 +13,7 @@ import {
   TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 import { cn } from '@/ui/lib/utils';
 
 export default function SplashScreen() {
@@ -66,14 +65,14 @@ export default function SplashScreen() {
     goToOnboarding();
   };
 
-  const handleResetDb = async () => {
-    await dropDatabase();
-  };
+  // const handleResetDb = async () => {
+  //   await dropDatabase();
+  // };
 
   useEffect(() => {
     notifyAdapter.success({
       title: 'welcome',
-      description: 'common.view_all',
+      description: 'common.view-all',
     });
   }, []);
 
@@ -138,7 +137,7 @@ export default function SplashScreen() {
         />
       </Pressable>
 
-      {__DEV__ && (
+      {/* {__DEV__ && (
         <Pressable testID="reset-db-button" onPress={handleResetDb}>
           <TypographySmall
             testID="screen.splash.reset-db"
@@ -146,7 +145,7 @@ export default function SplashScreen() {
             i18nKey="test.reset-db"
           />
         </Pressable>
-      )}
+      )} */}
 
       {/* Privacy Notice */}
       <View className="absolute bottom-12 items-center flex-row gap-2 px-6">

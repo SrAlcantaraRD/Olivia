@@ -39,7 +39,8 @@ export const SettingsRow: React.FC<SettingsRowProps> = ({
   const chipBg = `${accentColor}20`;
 
   return (
-    <CardAtom className="p-0 my-2">
+    <CardAtom className="p-0">
+      {/* Add loading  */}
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={testID}

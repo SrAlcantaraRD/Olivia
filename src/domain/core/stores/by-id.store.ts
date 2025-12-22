@@ -41,19 +41,14 @@ const ownStore = create<Store>((set, get) => ({
     getItem: <T extends TBaseEntity>(storeName: string, id: TID): T | null => {
       const state = get().items;
 
-      console.log({ state });
-
       if (!state[storeName]) {
         return null;
       }
-
-      console.log({ store: state[storeName] });
 
       if (!state[storeName][id]) {
         return null;
       }
 
-      console.log({ item: state[storeName][id] });
       return state[storeName][id] as T;
     },
     removeItem: (storeName: string, id: TID) => {

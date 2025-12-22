@@ -1,30 +1,41 @@
 import { useMemo } from 'react';
-import { View } from 'react-native';
 
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
-import { FormPage } from '@/ui/components/molecules/form-page.molecule';
+import { ModuleFieldSelectValuesFromJsonStringSchema } from '@/domain/module/schemas/module-field-values.schema';
+import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { Wizard } from '@/ui/components/molecules/wizard.molecule';
 import { ModuleFieldWrapper } from '@/ui/components/organisms/module-wizard/module-field-wrapper.component';
-import { useModuleWizard } from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';
+import {
+  type IModuleWizardAdapters,
+  useModuleWizard,
+} from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 // FIXME: Simplificate processing field values parsing
 export function parseFieldValues(values: string | undefined): string[] {
   if (!values) return [];
-  return JSON.parse(values);
+
+  const trimmed = values.trim();
+  if (!trimmed) return [];
+
+  const result = ModuleFieldSelectValuesFromJsonStringSchema.safeParse(trimmed);
+  if (!result.success) return [];
+  return result.data;
 }
 
 interface ModuleWizardProps {
   moduleID: number;
   onComplete: (data: TRecordCreate) => void;
   testID: string;
+  adapters: IModuleWizardAdapters;
 }
 
 export function ModuleWizard({
   moduleID,
   onComplete,
   testID,
+  adapters,
 }: ModuleWizardProps) {
   const {
     currentStep,
@@ -34,7 +45,12 @@ export function ModuleWizard({
     goToPreviousStep,
     setFieldValue,
     selectOptionAndNext,
-  } = useModuleWizard({ moduleID, initialValues: {} });
+  } = useModuleWizard({
+    moduleID,
+    initialValues: {},
+    onComplete,
+    adapters,
+  });
 
   type StepItem = {
     id: string;
@@ -49,27 +65,19 @@ export function ModuleWizard({
       steps.map((step) => ({
         id: step.id,
         content: (
-          <FormPage
-            key={`page-${step.id}`}
-            testID={`${testID}.form-page.step.${step.id}`}
-            step={{
-              id: step.id,
-              titleKey: step.titleKey,
-              descriptionKey: step.descriptionKey,
-              content: (
-                <View className="mt-4">
-                  <ModuleFieldWrapper
-                    step={step as StepItem}
-                    values={values}
-                    setFieldValue={setFieldValue}
-                    selectOptionAndNext={selectOptionAndNext}
-                    testID={testID}
-                  />
-                </View>
-              ),
-              isValid: step.isValid,
-            }}
-          />
+          <ScreenLayout
+            testID={`${testID}.screen.step.${step.id}`}
+            title={step.titleKey}
+            subtitle={step.descriptionKey}
+          >
+            <ModuleFieldWrapper
+              step={step as StepItem}
+              values={values}
+              setFieldValue={setFieldValue}
+              selectOptionAndNext={selectOptionAndNext}
+              testID={testID}
+            />
+          </ScreenLayout>
         ),
         isValid: step.isValid,
       })),
@@ -85,6 +93,7 @@ export function ModuleWizard({
         carerID: 0, // load from cache
         data: JSON.stringify(values),
         synced: false,
+        createdAt: new Date(),
         fieldList: Object.entries(values).map(([fieldId, value]) => ({
           fieldID: Number(fieldId),
           value,
@@ -99,12 +108,12 @@ export function ModuleWizard({
 
   return (
     <Wizard
+      testID={testID}
       steps={wizardSteps}
       currentStepIndex={currentStep}
       onNext={handleNext}
       onBack={goToPreviousStep}
       showBackButton={true}
-      testID={testID}
     />
   );
 }

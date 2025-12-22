@@ -1,31 +1,31 @@
-import { File, Paths } from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
+import { Platform } from 'react-native';
 import {
   consoleTransport,
   fileAsyncTransport,
   logger,
 } from 'react-native-logs';
 
-// Create a file system adapter for react-native-logs
-const fileSystemAdapter = {
-  writeFile: async (path: string, data: string) => {
-    const file = new File(Paths.document, path);
-    await file.write(data);
-  },
-  readFile: async (path: string) => {
-    const file = new File(Paths.document, path);
-    return await file.text();
-  },
-  mkdir: async (path: string) => {
-    // expo-file-system auto-creates directories
-  },
-  unlink: async (path: string) => {
-    const file = new File(Paths.document, path);
-    await file.delete();
-  },
+const isFileSystemSupported =
+  Platform.OS !== 'web' && Boolean(FileSystem.documentDirectory);
+
+const transport =
+  __DEV__ || !isFileSystemSupported ? consoleTransport : fileAsyncTransport;
+
+const colors = {
+  info: 'blueBright',
+  warn: 'yellowBright',
+  error: 'redBright',
+} as const;
+
+const transportOptions = {
+  FS: FileSystem,
+  fileName: 'logs.txt',
+  colors,
 };
 
 const BASE_LOGGER = logger.createLogger({
-  transport: __DEV__ ? consoleTransport : fileAsyncTransport,
+  transport,
   severity: __DEV__ ? 'debug' : 'error',
   levels: {
     custom: 0,
@@ -35,15 +35,7 @@ const BASE_LOGGER = logger.createLogger({
     error: 4,
     devNotice: 5,
   },
-  transportOptions: {
-    FS: fileSystemAdapter,
-    fileName: 'logs.txt',
-    colors: {
-      info: 'blueBright',
-      warn: 'yellowBright',
-      error: 'redBright',
-    },
-  },
+  transportOptions,
   async: true,
   dateFormat: 'time',
   printLevel: true,

@@ -1,18 +1,16 @@
 import { create } from 'zustand';
 
-import type { TBaseEntity } from '@/domain/core/entity/base-entity.entity';
-
 type StoreProps = {
   [entity: string]: {
-    items: TBaseEntity[];
+    items: unknown[];
     listLoaded: boolean;
     isLoading: boolean;
   };
 };
 
 interface StoreActions {
-  saveItems: <T extends TBaseEntity>(entity: string, items: T[]) => void;
-  getItems: <T extends TBaseEntity>(entity: string) => T[];
+  saveItems: <T>(entity: string, items: T[]) => void;
+  getItems: <T>(entity: string) => T[];
   startLoading: (entity: string) => void;
   stopLoading: (entity: string) => void;
   isLoading: (entity: string) => boolean;
@@ -60,15 +58,14 @@ const ownStore = create<Store>((set, get) => ({
         },
       }));
     },
-    saveItems: <T extends TBaseEntity>(entity: string, items: T[]) =>
+    saveItems: <T>(entity: string, items: T[]) =>
       set((state) => ({
         state: {
           ...state.state,
           [entity]: { items, listLoaded: true, isLoading: false },
         },
       })),
-    getItems: <T extends TBaseEntity>(entity: string) =>
-      (get().state[entity]?.items || []) as T[],
+    getItems: <T>(entity: string) => (get().state[entity]?.items || []) as T[],
     clearStore: (entity: string) =>
       set((state) => {
         const { [entity]: _, ...rest } = state.state;
@@ -78,7 +75,7 @@ const ownStore = create<Store>((set, get) => ({
   },
 }));
 
-export const useListStore = <T extends TBaseEntity>(entity: string) => {
+export const useListStore = <T>(entity: string) => {
   const store = ownStore();
 
   return {

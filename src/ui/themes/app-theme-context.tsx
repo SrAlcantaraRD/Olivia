@@ -4,7 +4,7 @@ import { Uniwind, useUniwind } from 'uniwind';
 
 type ThemeName = 'light' | 'dark';
 
-interface AppThemeContextType {
+export interface AppThemeContextType {
   currentTheme: string;
   isLight: boolean;
   isDark: boolean;

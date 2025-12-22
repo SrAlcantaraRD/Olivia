@@ -16,6 +16,7 @@ export const RecordFieldCreateSchema = RecordFieldSchema.omit({
   id: true,
   recordID: true,
   status: true,
+  createdAt: true,
 });
 
 export type TRecordField = z.infer<typeof RecordFieldSchema> & {

@@ -47,10 +47,10 @@ const WEIGHT_CLASS: Record<TypographyWeight, string> = {
 
 // Base typography styles
 const BASE_STYLES = {
-  title: 'tracking-tight mb-4',
-  subtitle: 'tracking-tight mb-3',
-  heading: 'tracking-tight mb-2',
-  paragraph: 'leading-relaxed',
+  title: 'tracking-wide font-serif antialiased',
+  subtitle: 'tracking-wide font-serif antialiased',
+  heading: 'tracking-wide font-serif antialiased',
+  paragraph: 'tracking-wide leading-relaxed font-serif antialiased',
 };
 
 function typographyVariants({
@@ -92,7 +92,7 @@ const TypographyTitle = React.forwardRef<Text, TypographyProps>(
     const foregroundColor = useThemeColor('foreground');
     const mutedColor = useThemeColor('muted');
 
-    const colorMap = {
+    const colorMap: Record<TypographyVariant, string> = {
       default: foregroundColor,
       primary: accentColor,
       light: mutedColor,
@@ -139,7 +139,7 @@ const TypographySubtitle = React.forwardRef<Text, TypographyProps>(
     const foregroundColor = useThemeColor('foreground');
     const mutedColor = useThemeColor('muted');
 
-    const colorMap = {
+    const colorMap: Record<TypographyVariant, string> = {
       default: foregroundColor,
       primary: accentColor,
       light: mutedColor,
@@ -186,7 +186,7 @@ const TypographyHeading = React.forwardRef<Text, TypographyProps>(
     const foregroundColor = useThemeColor('foreground');
     const mutedColor = useThemeColor('muted');
 
-    const colorMap = {
+    const colorMap: Record<TypographyVariant, string> = {
       default: foregroundColor,
       primary: accentColor,
       light: mutedColor,
@@ -233,7 +233,7 @@ const TypographyParagraph = React.forwardRef<Text, TypographyProps>(
     const foregroundColor = useThemeColor('foreground');
     const mutedColor = useThemeColor('muted');
 
-    const colorMap = {
+    const colorMap: Record<TypographyVariant, string> = {
       default: foregroundColor,
       primary: accentColor,
       light: mutedColor,
@@ -281,7 +281,7 @@ const TypographySmall = React.forwardRef<Text, TypographyProps>(
     const foregroundColor = useThemeColor('foreground');
     const mutedColor = useThemeColor('muted');
 
-    const colorMap = {
+    const colorMap: Record<TypographyVariant, string> = {
       default: foregroundColor,
       primary: accentColor,
       light: mutedColor,

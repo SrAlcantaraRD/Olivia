@@ -12,13 +12,13 @@ export const caCA = Object.freeze({
   'start-onboarding': 'Començar',
   'add-register': 'Afegir registre',
 
-  'page.app_settings.section_theme': 'Tema',
-  'page.app_settings.section_language': 'Idioma',
-  'page.app_settings.language.english': 'Anglès',
-  'page.app_settings.language.spanish': 'Espanyol',
-  'page.app_settings.language.catalan': 'Català',
-  'page.app_settings.action.switch_to_dark': 'Canviar a Mode Fosc',
-  'page.app_settings.action.switch_to_light': 'Canviar a Mode Clar',
+  'page.app-settings.section-theme': 'Tema',
+  'page.app-settings.section-language': 'Idioma',
+  'page.app-settings.language.english': 'Anglès',
+  'page.app-settings.language.spanish': 'Espanyol',
+  'page.app-settings.language.catalan': 'Català',
+  'page.app-settings.action.switch-to-dark': 'Canviar a Mode Fosc',
+  'page.app-settings.action.switch-to-light': 'Canviar a Mode Clar',
 
   // Splash Screen
   'splash-screen.app-name': 'Oliva',
@@ -119,24 +119,26 @@ export const caCA = Object.freeze({
   'common.loading': 'Carregant...',
   'common.error': 'Error',
   'common.success': 'Èxit',
+  'error.no-carer-found': "No s'ha trobat cuidador",
   'hook.get-record-statistics.error':
     'Error carregant estadístiques de registres',
   'common.optional': 'Opcional',
   'common.required': 'Obligatori',
-  'common.view_all': 'Veure tot',
+  'common.view-all': 'Veure tot',
   'common.number': '{{value}}',
 
   // Tab navigation
   'tab.register': 'Registre',
   'tab.report': 'Informe',
+  'tab.summary': 'Resum',
   'tab.settings': 'Configuració',
 
   // Page: Register Tab
   'page.register.title': 'Registre',
   'page.register.subtitle': 'Registra cateterismes, deposicions i medicació',
-  'page.register.quick_actions': 'Accions ràpides',
-  'page.register.recent_activity': 'Activitat recent',
-  'page.register.no_recent_activity': 'No hi ha activitat recent',
+  'page.register.quick-actions': 'Accions ràpides',
+  'page.register.recent-activity': 'Activitat recent',
+  'page.register.no-recent-activity': 'No hi ha activitat recent',
 
   // Page: Report Tab
   'page.report.title': 'Informe',
@@ -144,169 +146,278 @@ export const caCA = Object.freeze({
   'page.report.filters': 'Filtres',
   'page.report.statistics': 'Estadístiques',
   'page.report.history': 'Història',
-  'page.report.no_history': 'No hi ha registres a la història',
+  'page.report.no-history': 'No hi ha registres a la història',
+
+  // Page: Summary Tab
+  'page.summary.title': 'Resum',
+  'page.summary.subtitle': 'Vista ràpida de dades de salut',
+  'page.summary.section.pinned': 'Dades fixades',
+  'page.summary.section.modules': 'Mòduls',
+  'page.summary.pins-empty': 'Fixa elements per veure-los aquí',
+  'page.summary.modules-empty': 'No hi ha mòduls per mostrar',
+  'page.summary.today-count': 'Avui: {{value}}',
+  'page.summary.metric-label.today': 'Avui',
+  'page.summary.metric-label.steps': 'passos',
+  'page.summary.all-data': 'Mostrar totes les dades de salut',
+  'page.summary.trends': 'Tendències',
+  'page.summary.highlights': 'Dades importants',
+
+  // Page: Summary All Data
+  'page.summary-all-data.title': 'Totes les dades de salut',
+  'page.summary-all-data.subtitle': 'Explora mòduls i detalls',
+  'page.summary-all-data.heading': 'Mòduls actius',
+  'page.summary-all-data.empty': 'Encara no hi ha mòduls actius',
+
+  // Page: Summary Trends
+  'page.summary-trends.title': 'Tendències',
+  'page.summary-trends.subtitle': 'Patrons i canvis detectats',
+  'page.summary-trends.heading': 'Tendències recents',
+  'page.summary-trends.empty': 'No hi ha tendències disponibles',
+
+  // Page: Summary Highlights
+  'page.summary-highlights.title': 'Dades importants',
+  'page.summary-highlights.subtitle': 'Insights rellevants',
+  'page.summary-highlights.heading': 'Dades importants',
+  'page.summary-highlights.empty': 'No hi ha dades importants encara',
+
+  // Page: Summary Detail
+  'page.summary-detail.title': 'Detall del resum',
+  'page.summary-detail.subtitle': 'Vista detallada',
+  'page.summary-detail.heading': 'Informació detallada',
+  'page.summary-detail.average-label': 'Mitjana',
+  'page.summary-detail.range-placeholder': '7-13 des 2025',
+  'page.summary-detail.trend': 'Tendència',
+  'page.summary-detail.trend-empty': 'No disponible',
+  'page.summary-detail.highlights': 'Dades importants',
+  'page.summary-detail.fields': 'Camps',
+  'page.summary-detail.fields-empty': 'No hi ha camps disponibles',
+  'page.summary-detail.empty': 'No hi ha dades per a aquest període',
+  'page.summary-detail.actions': 'Accions',
+  'page.summary-detail.pin': 'Fixar al Resum',
+  'page.summary-detail.unpin': 'Treure del Resum',
+  'page.summary-detail.back-to-module': 'Tornar al mòdul',
+  'page.summary-detail.back-to-summary': 'Tornar al Resum',
+
+  // Summary Trends (fake data)
+  'summary.trend.cic.up.title': "CIC a l'alça les darreres setmanes",
+  'summary.trend.cic.up.description': 'El teu recompte de CIC ha pujat.',
+  'summary.trend.stool.stable.title': 'Patró de deposicions estable',
+  'summary.trend.stool.stable.description':
+    'La freqüència de deposicions es manté estable.',
+
+  // Summary Highlights (fake data)
+  'summary.highlight.cic.high.title': 'CIC per sobre de l’habitual',
+  'summary.highlight.cic.high.description':
+    'La mitjana de CIC està per sobre del rang habitual.',
+  'summary.highlight.urine.up.title': "Volum d'orina en augment",
+  'summary.highlight.urine.up.description':
+    "El volum diari d'orina mostra una pujada.",
+
+  // Summary Detail placeholders
+  'summary.detail.comparison.default': 'Comparat amb la teva mitjana',
+  'summary.detail.projection.default': 'Projecció no disponible encara',
 
   // Page: History Detail
-  'page.history_detail.title': 'Detall de la Història',
-  'page.history_detail.placeholder':
+  'page.history-detail.title': 'Detall de la Història',
+  'page.history-detail.subtitle': 'Vista detallada dels teus registres',
+  'page.history-detail.placeholder':
     'Contingut detallat de la història pròximament',
-  'page.history_detail.select_field': 'Selecciona un camp',
-  'page.history_detail.no_fields':
+  'page.history-detail.select-field': 'Selecciona un camp',
+  'page.history-detail.no-fields':
     'No hi ha camps disponibles per a aquest mòdul',
-  'page.history_detail.no_data':
+  'page.history-detail.no-data':
     'No hi ha dades per a aquest camp en el rang seleccionat',
 
   // Page: Settings Tab
   'page.settings.title': 'Configuració',
   'page.settings.subtitle': "Gestiona perfil, cuidadors i ajustos de l'app",
-  'page.settings.section_child': 'Nen/a',
-  'page.settings.section_carers': 'Cuidadors',
-  'page.settings.section_app': 'Aplicació',
-  'page.settings.section_danger': 'Zona de perill',
-  'page.settings.child_profile': 'Perfil del nen/a',
-  'page.settings.child_profile_desc': 'Dades personals i diagnòstic',
-  'page.settings.manage_carers': 'Gestiona cuidadors',
-  'page.settings.manage_carers_desc': 'Afegeix o elimina cuidadors',
-  'page.settings.app_settings': "Ajustos de l'app",
-  'page.settings.app_settings_desc': 'Tema, idioma i privacitat',
+  'page.settings.section-child': 'Nen/a',
+  'page.settings.section-carers': 'Cuidadors',
+  'page.settings.section-app': 'Aplicació',
+  'page.settings.section-danger': 'Zona de perill',
+  'page.settings.child-profile': 'Perfil del nen/a',
+  'page.settings.child-profile-desc': 'Dades personals i diagnòstic',
+  'page.settings.manage-carers': 'Gestiona cuidadors',
+  'page.settings.manage-carers-desc': 'Afegeix o elimina cuidadors',
+  'page.settings.app-settings': "Ajustos de l'app",
+  'page.settings.app-settings-desc': 'Tema, idioma i privacitat',
   'page.settings.about': 'Sobre',
-  'page.settings.about_desc': 'Versió i informació legal',
+  'page.settings.about-desc': 'Versió i informació legal',
+  'page.settings.add-demo-data': 'Afegeix Dades de Demo',
+  'page.settings.add-demo-data-desc': 'Afegeix registres de mostra per proves',
   'page.settings.logout': 'Tanca sessió',
 
   // Page: Settings Detail Screens
-  'page.child_profile.title': 'Perfil del Nen/a',
-  'page.child_profile.placeholder': 'Formulari de perfil pròximament',
-  'page.carer_management.title': 'Gestió de Cuidadors',
-  'page.carer_management.placeholder': 'Llista de cuidadors pròximament',
-  'page.app_settings.title': "Configuració de l'App",
-  'page.app_settings.subtitle': "Personalitza la teva experiència a l'app",
+  'page.child-profile.title': 'Perfil del Nen/a',
+  'page.child-profile.placeholder': 'Formulari de perfil pròximament',
+  'page.carer-management.title': 'Gestió de Cuidadors',
+
+  'page.carer-management.description':
+    'Convida cuidadors secundaris per compartir registres de forma segura.',
+  'page.carer-management.list-empty':
+    'Encara no hi ha cuidadors. Configura primer el principal.',
+  'page.carer-management.sync-button': 'Sincronitzar',
+  'page.carer-management.card.status-active': 'Actiu',
+  'page.carer-management.card.status-inactive': 'Inactiu',
+  'page.carer-management.card.primary': 'Cuidador principal',
+  'page.carer-management.card.secondary': 'Cuidador secundari',
+  'page.carer-management.card.health': 'Cuidador sanitari',
+  'page.carer-management.card.unknown': 'Cuidador desconegut',
+  'page.carer-management.invitation-modal.title': "Pack d'invitació",
+  'page.carer-management.invitation-modal.copy': 'Copia fragment',
+  'page.carer-management.invitation-modal.close': 'Tancar',
+  'page.carer-management.invitation-modal.generate': 'Generar QR',
+  'page.carer-management.invitation-modal.generating': 'Generant codi QR...',
+  'page.app-settings.title': "Configuració de l'App",
+  'page.app-settings.subtitle': "Personalitza la teva experiència a l'app",
 
   // About screen
   'page.about.title': 'Sobre',
   'page.about.placeholder': 'Versió i informació legal',
 
   // Page: Logout confirmation
-  'page.settings.logout_confirm.title': 'Aquesta acció és irreversible',
-  'page.settings.logout_confirm.warning':
+  'page.settings.logout-confirm.title': 'Aquesta acció és irreversible',
+  'page.settings.logout-confirm.warning':
     'Aquesta acció eliminarà totes les dades emmagatzemades en aquest dispositiu per a aquest perfil. No es pot desfer.',
-  'page.settings.logout_confirm.summary_title': 'Resum de la teva informació',
-  'page.settings.logout_confirm.time_registered': 'Temps registrat',
-  'page.settings.logout_confirm.total_records': 'Registres totals',
-  'page.settings.logout_confirm.cic': 'CIC',
-  'page.settings.logout_confirm.stools': 'Deposicions',
-  'page.settings.logout_confirm.enemas': 'Enemes',
-  'page.settings.logout_confirm.medication': 'Medicació',
-  'page.settings.logout_confirm.confirm_question':
+  'page.settings.logout-confirm.summary-title': 'Resum de la teva informació',
+  'page.settings.logout-confirm.time-registered': 'Temps registrat',
+  'page.settings.logout-confirm.total-records': 'Registres totals',
+  'page.settings.logout-confirm.cic': 'CIC',
+  'page.settings.logout-confirm.stools': 'Deposicions',
+  'page.settings.logout-confirm.enemas': 'Enemes',
+  'page.settings.logout-confirm.medication': 'Medicació',
+  'page.settings.logout-confirm.confirm-question':
     'Estàs segur que vols eliminar tot? Això no es pot desfer.',
-  'page.settings.logout_confirm.delete_warning':
+  'page.settings.logout-confirm.delete-warning':
     "Acció d'eliminació sol·licitada",
-  'page.settings.logout_confirm.time_registered_value': '{{count}} dies',
-  'page.settings.logout_confirm.total_records_value': '{{count}}',
+  'page.settings.logout-confirm.time-registered-value': '{{count}} dies',
+  'page.settings.logout-confirm.total-records-value': '{{count}}',
 
   // Page: CIC Registration Wizard - Volume
-  'page.cic_register.volume.title': "Volum d'orina",
-  'page.cic_register.volume.description': 'Selecciona el volum observat',
-  'page.cic_register.volume.low': 'Baix',
-  'page.cic_register.volume.normal': 'Normal',
-  'page.cic_register.volume.high': 'Alt',
+  'page.cic-register.volume.title': "Volum d'orina",
+  'page.cic-register.volume.description': 'Selecciona el volum observat',
+  'page.cic-register.volume.low': 'Baix',
+  'page.cic-register.volume.normal': 'Normal',
+  'page.cic-register.volume.high': 'Alt',
 
   // Page: CIC Registration Wizard - Color
-  'page.cic_register.color.title': "Color de l'orina",
-  'page.cic_register.color.description': 'Selecciona el color observat',
-  'page.cic_register.color.transparent': 'Transparent',
-  'page.cic_register.color.light_yellow': 'Groc clar',
-  'page.cic_register.color.dark_yellow': 'Groc fosc',
-  'page.cic_register.color.abnormal': 'Anòmal',
+  'page.cic-register.color.title': "Color de l'orina",
+  'page.cic-register.color.description': 'Selecciona el color observat',
+  'page.cic-register.color.transparent': 'Transparent',
+  'page.cic-register.color.light-yellow': 'Groc clar',
+  'page.cic-register.color.dark-yellow': 'Groc fosc',
+  'page.cic-register.color.abnormal': 'Anòmal',
 
   // Page: CIC Registration Wizard - Turbidity
-  'page.cic_register.turbidity.title': 'Turbidesa',
-  'page.cic_register.turbidity.description':
+  'page.cic-register.turbidity.title': 'Turbidesa',
+  'page.cic-register.turbidity.description':
     'Selecciona la turbidesa observada',
-  'page.cic_register.turbidity.clear': 'Clara',
-  'page.cic_register.turbidity.slight': 'Lleu',
-  'page.cic_register.turbidity.high': 'Alta',
+  'page.cic-register.turbidity.clear': 'Clara',
+  'page.cic-register.turbidity.slight': 'Lleu',
+  'page.cic-register.turbidity.high': 'Alta',
 
   // Page: CIC Registration Wizard - Discomfort
-  'page.cic_register.discomfort.title': 'Hi ha hagut molèsties?',
-  'page.cic_register.discomfort.description':
+  'page.cic-register.discomfort.title': 'Hi ha hagut molèsties?',
+  'page.cic-register.discomfort.description':
     'Indica si el nen/na ha presentat molèsties',
-  'page.cic_register.discomfort.none': 'No',
-  'page.cic_register.discomfort.slight': 'Lleu',
-  'page.cic_register.discomfort.pain': 'Dolor',
-  'page.cic_register.discomfort.note_label': 'Descriu el dolor (opcional)',
-  'page.cic_register.discomfort.note_placeholder':
+  'page.cic-register.discomfort.none': 'No',
+  'page.cic-register.discomfort.slight': 'Lleu',
+  'page.cic-register.discomfort.pain': 'Dolor',
+  'page.cic-register.discomfort.note-label': 'Descriu el dolor (opcional)',
+  'page.cic-register.discomfort.note-placeholder':
     "P. ex.: Dolor a l'inici del cateterisme",
 
   // Page: CIC Registration Wizard - Summary
-  'page.cic_register.summary.title': 'Resum del registre',
-  'page.cic_register.summary.description':
+  'page.cic-register.summary.title': 'Resum del registre',
+  'page.cic-register.summary.description':
     'Confirma que tot és correcte abans de desar',
-  'page.cic_register.summary.volume_label': 'Volum',
-  'page.cic_register.summary.color_label': 'Color',
-  'page.cic_register.summary.turbidity_label': 'Turbidesa',
-  'page.cic_register.summary.discomfort_label': 'Molèsties',
-  'page.cic_register.summary.notes_label': 'Notes addicionals (opcional)',
-  'page.cic_register.summary.notes_placeholder':
+  'page.cic-register.summary.volume-label': 'Volum',
+  'page.cic-register.summary.color-label': 'Color',
+  'page.cic-register.summary.turbidity-label': 'Turbidesa',
+  'page.cic-register.summary.discomfort-label': 'Molèsties',
+  'page.cic-register.summary.notes-label': 'Notes addicionals (opcional)',
+  'page.cic-register.summary.notes-placeholder':
     'Afegeix notes addicionals si ho desitges',
-  'page.cic_register.summary.save_button': 'Desa registre',
-  'page.cic_register.summary.success': 'Registre desat correctament',
-  'page.cic_register.summary.error': 'Error desant el registre',
+  'page.cic-register.summary.save-button': 'Desa registre',
+  'page.cic-register.summary.success': 'Registre desat correctament',
+  'page.cic-register.summary.error': 'Error desant el registre',
 
   // Components
-  'component.register_cic_button.label': 'Registrar Cateterisme (CIC)',
-  'component.register_cic_button.subtitle': 'Cateterisme Intermitent Net',
-  'component.register_cic_button.description':
+  'component.register-cic-button.label': 'Registrar Cateterisme (CIC)',
+  'component.register-cic-button.subtitle': 'Cateterisme Intermitent Net',
+  'component.register-cic-button.description':
     'Registra volum, color i incomoditat',
-  'component.register_stool_button.label': 'Registrar Deposició',
-  'component.register_stool_button.subtitle': 'Moviment Intestinal',
-  'component.register_stool_button.description':
+  'component.register-stool-button.label': 'Registrar Deposició',
+  'component.register-stool-button.subtitle': 'Moviment Intestinal',
+  'component.register-stool-button.description':
     'Seguiment de consistència i freqüència',
-  'component.register_medication_button.label': 'Registrar Medicació',
-  'component.register_medication_button.subtitle': 'Administració de Medicines',
-  'component.register_medication_button.description':
+  'component.register-medication-button.label': 'Registrar Medicació',
+  'component.register-medication-button.subtitle': 'Administració de Medicines',
+  'component.register-medication-button.description':
     'Registra medicació i dosi',
-  'component.filter_button.label': 'Filtres',
-  'component.filter_button.all_types': 'Tots els tipus',
-  'component.stat_card.cic_label': 'Cateterismes',
-  'component.stat_card.stool_label': 'Deposicions',
-  'component.stat_card.medication_label': 'Medicació',
-  'component.stat_card.today': 'Avui',
-  'page.report.debug_stats': 'Depurar: estadístiques',
-  'page.report.debug_trendItems': 'Depurar: elements de tendència',
+  'component.filter-button.label': 'Filtres',
+  'component.filter-button.all-types': 'Tots els tipus',
+  'component.stat-card.cic-label': 'Cateterismes',
+  'component.stat-card.stool-label': 'Deposicions',
+  'component.stat-card.medication-label': 'Medicació',
+  'component.stat-card.today': 'Avui',
+  'page.report.debug-stats': 'Depurar: estadístiques',
+  'page.report.debug-trendItems': 'Depurar: elements de tendència',
 
   // History detail ranges
-  'page.history_detail.range.today': 'Avui',
-  'page.history_detail.range.7d': 'Últims 7 dies',
-  'page.history_detail.range.30d': 'Últims 30 dies',
-  'page.history_detail.range.90d': 'Últims 90 dies',
+  'page.history-detail.range.today': 'Avui',
+  'page.history-detail.range.7d': 'Últims 7 dies',
+  'page.history-detail.range.30d': 'Últims 30 dies',
+  'page.history-detail.range.90d': 'Últims 90 dies',
 
   // Accessibility
-  'a11y.button.register_cic': 'Botó per registrar cateterisme',
-  'a11y.button.register_stool': 'Botó per registrar deposició',
-  'a11y.button.register_medication': 'Botó per registrar medicació',
-  'a11y.button.open_filters': 'Obrir filtres',
-  'a11y.button.view_all_history': 'Veure tota la història',
-  'a11y.button.child_profile': 'Veure perfil del nen',
-  'a11y.button.manage_carers': 'Gestionar cuidadors',
-  'a11y.button.app_settings': "Ajustos de l'aplicació",
+  'a11y.button.register-cic': 'Botó per registrar cateterisme',
+  'a11y.button.register-stool': 'Botó per registrar deposició',
+  'a11y.button.register-medication': 'Botó per registrar medicació',
+  'a11y.button.open-filters': 'Obrir filtres',
+  'a11y.button.view-all-history': 'Veure tota la història',
+  'a11y.button.child-profile': 'Veure perfil del nen',
+  'a11y.button.manage-carers': 'Gestionar cuidadors',
+  'a11y.button.app-settings': "Ajustos de l'aplicació",
   'a11y.button.about': 'Sobre',
   'a11y.button.logout': 'Tanca sessió',
-  'a11y.hint.opens_cic_form': 'Obre el formulari de registre de cateterisme',
-  'a11y.hint.opens_stool_form': 'Obre el formulari de registre de deposició',
-  'a11y.hint.opens_medication_form':
+  'a11y.hint.opens-cic-form': 'Obre el formulari de registre de cateterisme',
+  'a11y.hint.opens-stool-form': 'Obre el formulari de registre de deposició',
+  'a11y.hint.opens-medication-form':
     'Obre el formulari de registre de medicació',
-  'a11y.hint.opens_filter_modal': 'Obre la modal de filtres',
-  'a11y.hint.opens_child_profile': 'Obre la pantalla de perfil del nen',
-  'a11y.hint.opens_carer_management': 'Obre la pantalla de gestió de cuidadors',
-  'a11y.hint.opens_app_settings': "Obre la pantalla d'ajustos de l'aplicació",
-  'a11y.hint.opens_about': 'Obre la pantalla sobre',
-  'a11y.hint.logout_action': 'Tanca la teva sessió actual',
+  'a11y.hint.opens-filter-modal': 'Obre la modal de filtres',
+  'a11y.hint.opens-child-profile': 'Obre la pantalla de perfil del nen',
+  'a11y.hint.opens-carer-management': 'Obre la pantalla de gestió de cuidadors',
+  'a11y.hint.opens-app-settings': "Obre la pantalla d'ajustos de l'aplicació",
+  'a11y.hint.opens-about': 'Obre la pantalla sobre',
+  'a11y.hint.logout-action': 'Tanca la teva sessió actual',
   // Modal Screen
   'modal.title': 'Això és un modal',
   'modal.go-home': 'Ves a la pantalla principal',
   // Caregiver Setup
   'caregiver-setup.scan-qr.title': 'Escanejar Codi QR',
+  'page.caregiver-setup.scan-qr.camera-hint':
+    'Mantingues el QR dins del marc perquè es captin automàticament els fragments.',
+  'page.caregiver-setup.scan-qr.camera-permission':
+    "Permet l'accés a la càmera per escanejar el paquet automàticament.",
+  'page.caregiver-setup.scan-qr.camera-request': "Accepta l'accés a la càmera",
+  'page.caregiver-setup.scan-qr.instructions':
+    'Escaneja el QR de la invitació o enganxa cada fragment aquí.',
+  'page.caregiver-setup.scan-qr.input.placeholder':
+    'Enganxa el JSON del fragment',
+  'page.caregiver-setup.scan-qr.add-chunk': 'Afegeix fragment',
+  'page.caregiver-setup.scan-qr.reset': "Reinicia l'escàner",
+  'page.caregiver-setup.scan-qr.status':
+    '{{count}} de {{total}} fragments escanejats',
+  'page.caregiver-setup.scan-qr.chunk-item': 'Fragment {{index}} de {{total}}',
+  'page.caregiver-setup.scan-qr.error.invalid-chunk':
+    'Fragment invàlid. Torna-ho a provar.',
   'caregiver-setup.confirm-link.title': 'Confirmar Enllaç',
+  'page.caregiver-setup.confirm-link.subtitle':
+    'El cuidador secundari s’ha vinculat amb èxit.',
+  'page.caregiver-setup.confirm-link.details':
+    'El cuidador <bold>{{name}}</bold> ja pot veure els registres compartits.',
+  'page.caregiver-setup.confirm-link.go-home': 'Anar al tauler',
   // Modals
   'modal.add-carer.title': 'Afegir Cuidador (Generar QR)',
   'modal.filter-history.title': 'Filtrar Història',
@@ -315,11 +426,27 @@ export const caCA = Object.freeze({
   'modal.switch-account.title': 'Canviar de Compte',
   'modal.symptom-alert.title': 'Alerta de Símptomes',
 
+  // Summary
+  'page.summary-detail.period.day': 'Dia',
+  'page.summary-detail.period.week': 'Setmana',
+  'page.summary-detail.period.month': 'Mes',
+  'page.summary-detail.period.half-year': '6 Mesos',
+  'page.summary-detail.period.year': 'Any',
+
   'hook.setup-parent.title': 'Configurant progenitor',
   'hook.setup-parent.description':
     'Si us plau espera mentre configurem el teu compte.',
   'hook.setup-parent.error-title': 'Configuració Fallida',
   'hook.setup-parent.success-title': 'Configuració Exitosa',
+  'hook.import-invite.title': 'Important la invitació',
+  'hook.import-invite.description':
+    "Validant el paquet abans d'afegir el cuidador secundari.",
+  'hook.import-invite.success-title': 'Invitació importada',
+  'hook.import-invite.success-description':
+    'Cuidat secundari afegit correctament.',
+  'hook.import-invite.error-title': 'Error important',
+  'hook.import-invite.error-description':
+    'No es va poder importar la invitació. Torna-ho a provar.',
   'hook.get-list-active-module.title': 'Carregant Mòduls',
   'hook.get-list-active-module.description':
     'Si us plau espera mentre carreguem mòduls.',
@@ -333,6 +460,179 @@ export const caCA = Object.freeze({
   'test.reset-db': 'Restablir Base de Dades per a Proves',
   'hook.create-record.error-title': 'Error en Crear Registre',
   'hook.create-record.success-title': 'Registre Creat Exitosament',
+  'hook.add-demo-data.error-title': 'Error en Afegir Dades de Demo',
+  'hook.add-demo-data.success-title': 'Dades de Demo Afegides Exitosament',
+  'hook.add-demo-data.success-description':
+    "Les dades de demo s'han afegit exitosament",
+  'hook.add-demo-data.error-description':
+    'Va ocórrer un error en afegir les dades de demo',
   'hook.get-record-field-distribution.error':
     'Error obtenint distribució del camp',
+  'page.settings.section-configuration': 'Configuració',
+  'time-to-live.one-day': '1 dia',
+  'time-to-live.one-week': '1 setmana',
+  'time-to-live.one-month': '1 mes',
+  'hook.create-secondary-carer.title': 'Creant cuidador',
+  'hook.create-secondary-carer.description':
+    'Desant el nou cuidador secundari.',
+  'hook.create-secondary-carer.error-title': 'No es va poder crear el cuidador',
+  'hook.create-secondary-carer.error-description':
+    'Torna-ho a provar més tard per afegir el cuidador secundari.',
+  'hook.create-secondary-carer.success-title': 'Cuidador creat',
+  'hook.create-secondary-carer.success-description':
+    'El cuidador secundari està llest per a invitacions.',
+  'hook.delete-carer.title': 'Eliminant cuidador',
+  'hook.delete-carer.description':
+    'Estem eliminant aquest cuidador de forma segura.',
+  'hook.delete-carer.error-title': 'Eliminació fallida',
+  'hook.delete-carer.error-description':
+    'No vam poder eliminar el cuidador en aquest moment.',
+  'hook.delete-carer.success-title': 'Cuidador eliminat',
+  'hook.delete-carer.success-description':
+    'El cuidador està ara inactiu i ocult per a sincronització.',
+  'hook.create-carer.title': 'Creant cuidador',
+  'hook.create-carer.description':
+    'Estem creant aquest cuidador de forma segura.',
+  'hook.create-carer.error-title': 'Creació fallida',
+  'hook.create-carer.error-description':
+    'No vam poder crear el cuidador en aquest moment.',
+  'hook.create-carer.success-title': 'Cuidador creat',
+  'hook.create-carer.success-description': 'El cuidador està ara actiu.',
+  'hook.sync-with-carer.title': 'Sincronitzant dades',
+  'hook.sync-with-carer.description': 'Important registres des de QR.',
+  'hook.sync-with-carer.error-title': 'Sincronització fallida',
+  'hook.sync-with-carer.error-description':
+    'No vam poder sincronitzar els registres. Torna-ho a provar.',
+  'hook.sync-with-carer.success-title': 'Sincronització registrada',
+  'hook.sync-with-carer.success-description':
+    "L'esdeveniment de sincronització s'ha registrat correctament.",
+  'page.carer-detail.heading': 'Detalls del cuidador',
+  'page.carer-detail.name-value': 'Nom: <bold>{{name}}</bold>',
+  'page.carer-detail.ttl':
+    'TTL: <bold>{{ttl}}</bold> · Expira en {{expiresAt}}',
+  'page.carer-detail.analysis-button': 'Veure dades importades (pròximament)',
+  'page.carer-detail.sync-history.title': 'Historial de sincronització',
+  'page.carer-detail.sync-history.empty':
+    'Encara no hi ha sincronitzacions registrades.',
+  'page.carer-detail.history.record':
+    '{{timestamp}} · {{status}} · {{records}} registres · {{details}}',
+  'page.carer-detail.history.status.success': 'Èxit',
+  'page.carer-detail.history.status.failure': 'Fallada',
+  'page.carer-management.invite-button': 'Convidar via QR',
+  'page.carer-management.detail-button': 'Veure detalls',
+  'page.carer-management.delete-button': 'Eliminar',
+  'page.carer-management.invitation-modal.subtitle':
+    'Estableix un TTL, genera el bundle QR, i comparteix-lo de forma segura amb el dispositiu secundari.',
+  'page.carer-management.ttl.heading': 'Seleccionar TTL de invitació',
+  'page.carer-management.invitation-modal.ttl':
+    'TTL <bold>{{ttl}}</bold> · Expira en {{expiresAt}}',
+  'page.carer-management.invitation-modal.bundle': 'Bundle: {{value}}',
+  'page.carer-management.create-modal.title': 'Crear un cuidador secundari',
+  'page.carer-management.create-modal.name-label': 'Nom del cuidador',
+  'page.carer-management.create-modal.name-placeholder': 'Introdueix el nom',
+  'page.carer-management.create-modal.create': 'Crear cuidador',
+  'page.carer-management.delete-modal.title': 'Eliminar cuidador secundari',
+  'page.carer-management.delete-modal.subtitle':
+    'Aquesta acció elimina suaument el cuidador i prevé noves sincronitzacions.',
+  'page.carer-management.delete-modal.confirm': 'Confirmar eliminació',
+  'use-case.generate-invitation-qr-for-secondary-carer.invalid-request':
+    'Sol·licitud invàlida per generar QR de invitació',
+  'use-case.generate-invitation-qr-for-secondary-carer.generation-failed':
+    'Fallada en generar QR de invitació',
+  'use-case.create-carer.invalid-request':
+    'Sol·licitud invàlida per crear cuidador',
+  'use-case.delete-carer.invalid-request':
+    'Sol·licitud invàlida per eliminar cuidador',
+  'use-case.create-secondary-carer.invalid-request':
+    'Sol·licitud invàlida per crear cuidador secundari',
+  'use-case.secondary-carer-consume-invitation-qr.invalid-qr-data':
+    'Dades QR invàlides proporcionades',
+  'use-case.secondary-carer-consume-invitation-qr.carer-exists':
+    'El cuidador ja existeix',
+  'use-case.sync-with-carer.invalid-request':
+    'Sol·licitud invàlida per sincronitzar amb cuidador',
+  'page.carer-management.create-secondary': 'Crear cuidador secundari',
+  'page.carer-management.section.primary': 'Cuidador Principal',
+  'page.carer-management.section.secondary': 'Cuidadors Secundaris',
+  'page.carer-management.ttl-expired.title': 'Invitació Expirada',
+  'page.carer-management.ttl-expired.description':
+    'La invitació ha expirat. Genera una nova.',
+  'page.carer-management.ttl-expired.sync': 'Sincronitzar amb nova invitació',
+  'hook.generate-invitation-qr-for-secondary-carer.title': 'Generant codi QR',
+  'hook.generate-invitation-qr-for-secondary-carer.description':
+    'Per favor espera mentre es genera el codi QR per al cuidador secundari.',
+  'hook.generate-invitation-qr-for-secondary-carer.success-title':
+    'Codi QR generat',
+  'hook.generate-invitation-qr-for-secondary-carer.success-description':
+    'Comparteix el codi QR amb el dispositiu secundari.',
+  'hook.generate-invitation-qr-for-secondary-carer.error-title':
+    'Error generant codi QR',
+  'hook.generate-invitation-qr-for-secondary-carer.error-description':
+    "No s'ha pogut generar el codi QR. Torna-ho a provar.",
+  'page.carer-detail.subtitle': 'Detalls i gestió del cuidador secundari',
+  'page.carer-detail.title': 'Detalls del Cuidador',
+
+  // Secondary Carer Setup
+  'secondary-carer-setup.carer-info.title': 'Sobre tu',
+  'secondary-carer-setup.carer-info.description':
+    'Informació bàsica sobre el cuidador secundari.',
+  'secondary-carer-setup.carer-info.name-label': 'Nom:',
+  'secondary-carer-setup.carer-info.name-placeholder': 'El teu nom',
+  'secondary-carer-setup.carer-info.relationship-label': 'Relació amb el nen:',
+  'secondary-carer-setup.carer-info.relationship-placeholder':
+    'Seleccionar relació',
+  'secondary-carer-setup.carer-info.relationship.family': 'Familiar',
+  'secondary-carer-setup.carer-info.relationship.professional':
+    'Professional sanitari',
+  'secondary-carer-setup.carer-info.relationship.other': 'Altres',
+  'secondary-carer-setup.carer-info.notes-label':
+    'Notes addicionals (opcional):',
+  'secondary-carer-setup.carer-info.notes-placeholder':
+    'Qualsevol informació addicional...',
+
+  // Scan QR Step
+  'secondary-carer-setup.scan-qr.title': "Escanejar QR d'Invitació",
+  'secondary-carer-setup.scan-qr.description':
+    'Escaneja el codi QR de la teva invitació per continuar amb la configuració.',
+  'secondary-carer-setup.scan-qr.progress': 'Progrés: {{progress}}',
+  'secondary-carer-setup.scan-qr.manual.title':
+    'O introdueix les dades del QR manualment:',
+  'secondary-carer-setup.scan-qr.manual.placeholder':
+    'Enganxa les dades del fragment QR aquí...',
+  'secondary-carer-setup.scan-qr.manual.submit': 'Processar Fragment',
+
+  // QR Info Step
+  'secondary-carer-setup.qr-info.title': 'Detalls de la Invitació',
+  'secondary-carer-setup.qr-info.description':
+    'Revisa i confirma els detalls de la invitació.',
+  'secondary-carer-setup.qr-info.invitation-details': 'Detalls de la Invitació',
+  'secondary-carer-setup.qr-info.name': 'Nom Convidat',
+  'secondary-carer-setup.qr-info.ttl': 'Temps de Vida',
+  'secondary-carer-setup.qr-info.expires-at':
+    'Expira el <bold>{{expiresAt}}</bold>',
+  'secondary-carer-setup.qr-info.user-name':
+    'Nom del Cuidador: <bold>{{userName}}</bold>',
+  'secondary-carer-setup.qr-info.form-title': 'La Teva Informació',
+
+  'secondary-carer-setup.modules.title': 'Mòduls Actius',
+  'secondary-carer-setup.modules.description':
+    'Revisa els mòduls als quals tindràs accés.',
+  'secondary-carer-setup.modules.empty': "No s'han trobat mòduls actius.",
+  'secondary-carer-setup.modules.note':
+    'Podràs veure i contribuir a aquests mòduls de salut.',
+  'secondary-carer-setup.summary.title': 'Revisa la teva informació',
+  'secondary-carer-setup.summary.description':
+    'Confirma que tot és correcte abans de continuar',
+  'secondary-carer-setup.summary.carer-name': 'Nom',
+  'secondary-carer-setup.summary.relationship': 'Relació',
+  'secondary-carer-setup.summary.notes': 'Notes',
+  'secondary-carer-setup.summary.modules-count': 'Mòduls actius',
+  'secondary-carer-setup.summary.terms': 'Accepto els termes i condicions',
+  'secondary-carer-setup.summary.confirmation-note':
+    'En continuar, acceptes compartir dades de salut de forma segura.',
+  'page.caregiver-setup.scan-qr.permission.description':
+    "L'aplicació necessita accés a la càmera per escanejar el codi QR de la invitació. Aquesta acció és essencial per completar la configuració del cuidador secundari.",
+  'page.caregiver-setup.scan-qr.permission.request':
+    'Concedeix accés a la càmera',
+  'page.caregiver-setup.scan-qr.permission.title': 'Permís de Càmera Necessari',
 } satisfies Record<Ti18nKeys, string>);

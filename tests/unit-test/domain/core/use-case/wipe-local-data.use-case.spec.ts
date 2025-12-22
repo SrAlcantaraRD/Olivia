@@ -1,28 +1,37 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
 import { WipeLocalDataUseCase } from '@/domain/core/use-case/wipe-local-data.use-case';
 import {
   mockCachePort,
   mockLoggerPort,
   mockSecureStorePort,
-} from '../mocks/mock.port';
+} from '@/tests/mocks/core.port.mock';
 
-describe('[UseCase] WipeLocalDataUseCase', () => {
-  it('deletes cache keys, secure keys and drops the database', async () => {
-    const mockCache = mockCachePort();
-    const mockSecure = mockSecureStorePort();
-    const mockLogger = mockLoggerPort();
+describe('[UseCase] - WipeLocalData', () => {
+  const prepareSuiteCase = () => {
+    // Arrange
+    const loggerAdapter = mockLoggerPort();
+    const cacheAdapter = mockCachePort();
+    const secureStoreAdapter = mockSecureStorePort();
+    const unit = new WipeLocalDataUseCase(
+      loggerAdapter,
+      cacheAdapter,
+      secureStoreAdapter
+    );
+    return { unit, loggerAdapter, cacheAdapter, secureStoreAdapter };
+  };
 
-    const usecase = new WipeLocalDataUseCase(mockLogger, mockCache, mockSecure);
+  beforeEach(() => jest.clearAllMocks());
 
-    const resp = await usecase.execute();
+  it('clears cache, secure keys and drops the database', async () => {
+    const { unit, cacheAdapter, secureStoreAdapter } = prepareSuiteCase();
 
+    // Act
+    const resp = await unit.execute();
+
+    // Assert
     expect(resp.success).toBe(true);
-
-    const keys = Object.values(CACHE_KEY_ENUM);
-    // ensure delete called for each key on both adapters
-    expect(mockCache.delete).toHaveBeenCalledTimes(keys.length);
-    expect(mockSecure.delete).toHaveBeenCalledTimes(keys.length);
+    expect(cacheAdapter.clearAll).toHaveBeenCalled();
+    expect(secureStoreAdapter.clearAll).toHaveBeenCalled();
   });
 });

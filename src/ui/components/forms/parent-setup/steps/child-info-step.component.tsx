@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { View } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { TextFieldAtom } from '@/ui/components/atoms/text-field.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
@@ -20,6 +22,34 @@ export function ChildInfoStep({
   onBirthDateChange,
   onDiagnosisChange,
 }: ChildInfoStepProps) {
+  const [openDatePicker, setOpenDatePicker] = useState(false);
+
+  const parseDate = (dateString: string): Date => {
+    if (!dateString) return new Date();
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  const formatDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleDateConfirm = (date: Date) => {
+    setOpenDatePicker(false);
+    onBirthDateChange(formatDate(date));
+  };
+
+  const handleDateCancel = () => {
+    setOpenDatePicker(false);
+  };
+
+  const showDatePickerModal = () => {
+    setOpenDatePicker(true);
+  };
+
   return (
     <>
       {/* Name Input */}
@@ -30,6 +60,7 @@ export function ChildInfoStep({
           value={name}
           onChangeText={onNameChange}
           isRequired
+          testID="child-name-input"
         />
       </View>
 
@@ -39,9 +70,20 @@ export function ChildInfoStep({
           label="parent-setup.child-info.birth-date-label"
           placeholder="parent-setup.child-info.birth-date-placeholder"
           value={birthDate}
-          onChangeText={onBirthDateChange}
+          onChangeText={() => {}} // No-op since it's read-only
           keyboardType="numbers-and-punctuation"
           isRequired
+          testID="child-birthdate-input"
+          onPress={showDatePickerModal}
+          editable={false}
+        />
+        <DateTimePickerModal
+          isVisible={openDatePicker}
+          mode="date"
+          date={parseDate(birthDate)}
+          maximumDate={new Date()}
+          onConfirm={handleDateConfirm}
+          onCancel={handleDateCancel}
         />
       </View>
 
@@ -52,6 +94,7 @@ export function ChildInfoStep({
           placeholder="parent-setup.child-info.diagnosis-placeholder"
           value={diagnosis}
           onChangeText={onDiagnosisChange}
+          testID="child-diagnosis-input"
         />
         <TypographySmall
           className="text-muted ml-1 mt-1"

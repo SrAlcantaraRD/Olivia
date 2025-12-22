@@ -1,6 +1,6 @@
 import { useAdapters } from '@/adapter';
 import { ENTITY_NAME } from '@/domain/core/enum/entity-names.enum';
-import { useGetEntityList } from '@/domain/core/hooks/get-entity-list.hook';
+import { useGetEntityList } from '@/domain/core/hook/get-entity-list.hook';
 import { ParentSetupForm } from '@/ui/components/forms/parent-setup';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 

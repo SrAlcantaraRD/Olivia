@@ -21,6 +21,7 @@ interface FormPageProps {
   testID: string;
 }
 
+// TODO: Remove it, use WizardStep.
 export function FormPage({ step, testID }: FormPageProps) {
   const foregroundColor = useThemeColor('foreground');
   const mutedColor = useThemeColor('muted');

@@ -31,6 +31,7 @@ export function ParentInfoStep({
           isRequired
           value={name}
           onChangeText={onNameChange}
+          testID="parent-name-input"
         />
       </View>
 

@@ -1,7 +1,7 @@
 import { View } from 'react-native';
+import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { CardAtom } from '@/ui/components/atoms/card.atom';
 import {
   TypographySubtitle,
   TypographyTitle,
@@ -14,6 +14,7 @@ interface ScreenLayoutProps {
   testID: string;
   isLoading?: boolean;
   styles?: {
+    container?: string;
     content?: string;
   };
   title?: Ti18nKeys;
@@ -33,32 +34,41 @@ export function ScreenLayout({
   return (
     <View
       testID={testID}
-      className="flex-1 px-6 pt-4 h-full w-full bg-background"
+      className={cn(
+        'flex-1 p-4 h-full w-full bg-background',
+        styles?.container
+      )}
       style={{ paddingTop: insets.top }}
     >
       <ScreenContentLayout
         className={cn(isLoading ? 'opacity-50' : '', styles?.content)}
       >
         {(title || subtitle) && (
-          <CardAtom variant="transparent" className="gap-4 px-0">
-            {title && (
-              <TypographyTitle
-                testID="screen.settings.title"
-                i18nKey={title}
-                accessibilityRole="header"
-                className="mb-0"
-              />
-            )}
-            {subtitle && (
-              <TypographySubtitle
-                size="lg"
-                testID="screen.settings.subtitle"
-                accessibilityRole="header"
-                i18nKey={subtitle}
-                variant="light"
-              />
-            )}
-          </CardAtom>
+          <Animated.View
+            key={`header-${title}-${subtitle}`}
+            entering={FadeInRight.duration(250)}
+            exiting={FadeOutLeft.duration(200)}
+          >
+            <View className="gap-4 pb-4">
+              {title && (
+                <TypographyTitle
+                  testID="screen.settings.title"
+                  i18nKey={title}
+                  accessibilityRole="header"
+                  className="mb-0"
+                />
+              )}
+              {subtitle && (
+                <TypographySubtitle
+                  size="lg"
+                  testID="screen.settings.subtitle"
+                  accessibilityRole="header"
+                  i18nKey={subtitle}
+                  variant="light"
+                />
+              )}
+            </View>
+          </Animated.View>
         )}
 
         {children}

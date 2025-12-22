@@ -5,9 +5,9 @@ import { ELocaleCode } from '@/domain/core/enum/settings.enum';
 export const RequestGetAppLocaleSchema = z.void();
 
 export const ResponseGetAppLocaleSchema = z.union([
-  z.literal(ELocaleCode.ES),
-  z.literal(ELocaleCode.EN),
-  z.literal(ELocaleCode.CA),
+  z.literal(ELocaleCode.es_ES),
+  z.literal(ELocaleCode.en_EN),
+  z.literal(ELocaleCode.ca_CA),
 ]);
 
 export type TRequestGetAppLocale = z.infer<typeof RequestGetAppLocaleSchema>;

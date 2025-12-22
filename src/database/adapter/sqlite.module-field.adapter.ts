@@ -1,5 +1,3 @@
-import { drizzle } from 'drizzle-orm/expo-sqlite';
-
 import {
   SQLiteModuleAdapter,
   type TModuleAdapterEntity,
@@ -8,9 +6,11 @@ import {
   SQLiteRecordFieldAdapter,
   type TRecordFieldAdapterEntity,
 } from '@/database/adapter/sqlite.record-field.adapter';
-import { SQLITE_DB } from '@/database/config/database.config';
+import {
+  buildAdapterClient,
+  type TAppDatabase,
+} from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
-import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
 import { getStatusFromValue } from '@/domain/core/enum/status.enum';
 import type {
   TModuleField,
@@ -31,11 +31,8 @@ export type TModuleFieldAdapterEntity =
 export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
   private readonly database;
 
-  constructor() {
-    this.database = drizzle(SQLITE_DB, {
-      schema: DB_SCHEMA,
-      logger: new DrizzleLogger('Module Field Adapter'),
-    });
+  constructor(database?: TAppDatabase) {
+    this.database = database ?? buildAdapterClient('Module Field');
   }
 
   public static toDomainEntity(

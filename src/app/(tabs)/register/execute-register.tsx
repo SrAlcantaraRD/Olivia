@@ -62,6 +62,7 @@ export default function ExecuteRegister() {
         key={`module-wizard.module.${moduleID}`}
         testID={`module-wizard.module.${moduleID}`}
         moduleID={Number(moduleID)}
+        adapters={{ loggerAdapter, moduleFieldAdapter, notifyAdapter }}
         onComplete={handleOnComplete}
       />
     </ScreenLayout>
