@@ -4,7 +4,7 @@ import { act, renderHook } from '@testing-library/react-native';
 
 import type { TBaseEntity } from '@/domain/core/entity/base-entity.entity';
 import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
-import { useGetEntityList } from '@/domain/core/hooks/get-entity-list.hook';
+import { useGetEntityList } from '@/domain/core/hook/get-entity-list.hook';
 import type { IHookResponse } from '@/domain/core/interface/hook.interface';
 import { mockNotifyPort } from '@/tests/mocks/core.port.mock';
 

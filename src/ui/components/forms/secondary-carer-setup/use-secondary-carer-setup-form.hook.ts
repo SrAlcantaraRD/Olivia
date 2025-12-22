@@ -11,7 +11,7 @@ import type { TQRBundle } from '@/domain/core/dto/qr.dto';
 import type { TID } from '@/domain/core/schemas/id.schema';
 import { useSecondaryCarerSetupStore } from '@/domain/core/stores/secondary-carer-setup.store';
 import { useGetModuleListByIDList } from '@/domain/module/hook/get-module-list-by-id-list.hook';
-import { useNavigation } from '@/hooks/use-navigation.hook';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 export function useSecondaryCarerSetupForm() {
   const {

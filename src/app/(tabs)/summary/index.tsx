@@ -9,12 +9,12 @@ import { useGetListActiveModule } from '@/domain/module/hook/get-list-active-mod
 import { SUMMARY_PIN_TYPE_ENUM } from '@/domain/summary/enum/summary-pin-type.enum';
 import { useGetSummaryHome } from '@/domain/summary/hook/get-summary-home.hook';
 import { useSummaryRefresh } from '@/domain/summary/hook/use-summary-refresh.hook';
-import { useNavigation } from '@/hooks/use-navigation.hook';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { PinnedSection } from '@/ui/components/molecules/pinned-section.molecule';
 import { SummaryCard } from '@/ui/components/molecules/summary-card.molecule';
 import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 export default function SummaryHomeScreen() {
   const { t } = useTranslation();

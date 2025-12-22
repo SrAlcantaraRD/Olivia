@@ -5,10 +5,10 @@ import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import { useGetSummaryTrends } from '@/domain/summary/hook/get-summary-trends.hook';
-import { useNavigation } from '@/hooks/use-navigation.hook';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 const DEFAULT_TREND_SERIES = [2, 4, 3, 5, 3, 2, 4, 3, 5, 4, 3, 2];
 

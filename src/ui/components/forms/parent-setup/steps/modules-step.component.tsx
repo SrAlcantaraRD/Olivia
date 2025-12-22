@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { ENTITY_NAME } from '@/domain/core/enum/entity-names.enum';
-import { useGetEntityList } from '@/domain/core/hooks/get-entity-list.hook';
+import { useGetEntityList } from '@/domain/core/hook/get-entity-list.hook';
 import type { TID } from '@/domain/core/schemas/id.schema';
 import { ModuleCard } from '@/ui/components/cards/module.card';
 

@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react-native';
 import type { Href } from 'expo-router';
 
 import type { INavigationPort } from '@/domain/core/port/navigation.port';
-import { useNavigation } from '@/hooks/use-navigation.hook';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 describe('[Hook] useNavigation', () => {
   let mockNavigationAdapter: jest.Mocked<INavigationPort>;
@@ -60,45 +60,6 @@ describe('[Hook] useNavigation', () => {
     );
   });
 
-  it('should call navigateTo with confirm link route on goToConfirmLink', () => {
-    const { result } = renderHook(() =>
-      useNavigation({ navigationAdapter: mockNavigationAdapter })
-    );
-
-    result.current.goToConfirmLink();
-
-    expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(caregiver-setup)/confirm-link' satisfies Href satisfies Href
-    );
-  });
-
-  it('should append query params when goToConfirmLink receives data', () => {
-    const { result } = renderHook(() =>
-      useNavigation({ navigationAdapter: mockNavigationAdapter })
-    );
-
-    result.current.goToConfirmLink({
-      carerName: 'Ana',
-      bundleId: 'abc-123',
-    });
-
-    expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(caregiver-setup)/confirm-link?carerName=Ana&bundleId=abc-123' satisfies Href
-    );
-  });
-
-  it('should call navigateTo with scan qr route on goToScanQr', () => {
-    const { result } = renderHook(() =>
-      useNavigation({ navigationAdapter: mockNavigationAdapter })
-    );
-
-    result.current.goToScanQr();
-
-    expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(caregiver-setup)/scan-qr' satisfies Href
-    );
-  });
-
   it('should call navigateTo with register cic route on goToRegister', () => {
     const { result } = renderHook(() =>
       useNavigation({ navigationAdapter: mockNavigationAdapter })
@@ -108,18 +69,6 @@ describe('[Hook] useNavigation', () => {
 
     expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
       '/(tabs)/register/execute-register?moduleID=1' satisfies Href
-    );
-  });
-
-  it('should call navigateTo with filter history route on goToFilterHistory', () => {
-    const { result } = renderHook(() =>
-      useNavigation({ navigationAdapter: mockNavigationAdapter })
-    );
-
-    result.current.goToFilterHistory();
-
-    expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(modals)/modal-filter-history' satisfies Href
     );
   });
 

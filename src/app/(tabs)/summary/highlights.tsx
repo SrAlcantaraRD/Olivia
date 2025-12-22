@@ -6,11 +6,11 @@ import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import { useGetSummaryHighlights } from '@/domain/summary/hook/get-summary-highlights.hook';
-import { useNavigation } from '@/hooks/use-navigation.hook';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
 import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 const DEFAULT_HIGHLIGHT_SERIES = [1, 3, 2, 4, 2, 3, 4];
 

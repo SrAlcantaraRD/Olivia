@@ -2,12 +2,12 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
-import { useAddDemoData } from '@/hooks/add-demo-data.hook';
-import { useNavigation } from '@/hooks/use-navigation.hook';
+import { useAddDemoData } from '@/domain/core/hook/add-demo-data.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { SettingsRow } from '@/ui/components/molecules/settings-row.molecule';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 export default function SettingsScreen() {
   const { t } = useTranslation();

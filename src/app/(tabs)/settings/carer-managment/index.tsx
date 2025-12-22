@@ -8,13 +8,13 @@ import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
 import { useCreateCarer } from '@/domain/carer/hook/create-carer.hook';
 import { useDeleteCarer } from '@/domain/carer/hook/delete-carer.hook';
 import { ENTITY_NAME } from '@/domain/core/enum/entity-names.enum';
-import { useGetEntityList } from '@/domain/core/hooks/get-entity-list.hook';
-import { useNavigation } from '@/hooks/use-navigation.hook';
+import { useGetEntityList } from '@/domain/core/hook/get-entity-list.hook';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { CreateSecondaryCarerModal } from '@/ui/components/molecules/create-secondary-carer.modal';
 import { DeleteCarerModal } from '@/ui/components/molecules/delete-carer.modal';
 import { SettingsRow } from '@/ui/components/molecules/settings-row.molecule';
 import { CarerCardOrganism } from '@/ui/components/organisms/carer-card.organism';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 export default function CarerManagementScreen() {
   const { carerAdapter, notifyAdapter, loggerAdapter, navigationAdapter } =

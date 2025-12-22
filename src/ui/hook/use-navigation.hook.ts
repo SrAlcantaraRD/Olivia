@@ -52,10 +52,6 @@ export const useNavigation = (adapters: {
     navigateTo('/(tabs)/register');
   }, []);
 
-  const goToFilterHistory = useCallback(() => {
-    navigateTo('/(modals)/modal-filter-history');
-  }, []);
-
   const goToOnboarding = useCallback(() => {
     navigateTo('/(onboarding)');
   }, []);
@@ -82,14 +78,6 @@ export const useNavigation = (adapters: {
 
   const goToAbout = useCallback(() => {
     navigateTo('/(tabs)/settings/about');
-  }, []);
-
-  const goToReportHistoryByModule = useCallback((moduleId: string) => {
-    navigateTo(`/(tabs)/report/history-detail?moduleId=${moduleId}`);
-  }, []);
-
-  const goToReportHistoryByRecord = useCallback((recordId: string) => {
-    navigateTo(`/(tabs)/report/history-detail?recordId=${recordId}`);
   }, []);
 
   const goToSummaryHome = useCallback(() => {
@@ -134,7 +122,6 @@ export const useNavigation = (adapters: {
     goToSyncronization,
     goToRegister: goToRegister,
     goToRegisterHome,
-    goToFilterHistory,
     goToOnboarding,
     goToAppSettings,
     goToChildProfile,
@@ -143,8 +130,6 @@ export const useNavigation = (adapters: {
     goToGenerateInvitationQR,
     goToLogOut,
     goToAbout,
-    goToReportHistoryByModule,
-    goToReportHistoryByRecord,
     goToSummaryHome,
     goToSummaryAllData,
     goToSummaryTrends,

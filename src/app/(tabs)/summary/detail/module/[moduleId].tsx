@@ -18,7 +18,6 @@ import { useGetSummaryDetail } from '@/domain/summary/hook/get-summary-detail.ho
 import { useGetSummaryPins } from '@/domain/summary/hook/get-summary-pins.hook';
 import { usePinSummaryItem } from '@/domain/summary/hook/pin-summary-item.hook';
 import { useUnpinSummaryItem } from '@/domain/summary/hook/unpin-summary-item.hook';
-import { useNavigation } from '@/hooks/use-navigation.hook';
 import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import {
@@ -32,6 +31,7 @@ import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-ca
 import { SummaryPeriodSelector } from '@/ui/components/molecules/summary-period-selector.molecule';
 import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
+import { useNavigation } from '@/ui/hook/use-navigation.hook';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 export default function SummaryModuleDetailScreen() {
