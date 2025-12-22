@@ -163,6 +163,8 @@ export const esES = Object.freeze({
   'page.carer-management.card.status-inactive': 'Inactivo',
   'page.carer-management.card.primary': 'Cuidador principal',
   'page.carer-management.card.secondary': 'Cuidador secundario',
+  'page.carer-management.card.health': 'Cuidador sanitario',
+  'page.carer-management.card.unknown': 'Cuidador desconocido',
   'page.carer-management.invitation-modal.title': 'Bundle de invitación',
   'page.carer-management.invitation-modal.copy': 'Copiar chunk',
   'page.carer-management.invitation-modal.close': 'Cerrar',

@@ -1,30 +1,20 @@
+import { Divider } from 'heroui-native';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import type { TCarer } from '@/domain/carer/entity/carer.entity';
-import { useCreateSecondaryCarer } from '@/domain/carer/hook/create-secondary-carer.hook';
+import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
+import { useCreateCarer } from '@/domain/carer/hook/create-carer.hook';
 import { useDeleteCarer } from '@/domain/carer/hook/delete-carer.hook';
 import { ENTITY_NAME } from '@/domain/core/enum/entity-names.enum';
-import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 import { useGetEntityList } from '@/domain/core/hooks/get-entity-list.hook';
 import { useNavigation } from '@/hooks/use-navigation.hook';
-import { ButtonAtom } from '@/ui/components/atoms/button.atom';
-import { CardAtom } from '@/ui/components/atoms/card.atom';
-import { SpinnerAtom } from '@/ui/components/atoms/spinner.atom';
-import {
-  TypographyParagraph,
-  TypographyTitle,
-} from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
-import { CarerCard } from '@/ui/components/molecules/CarerCard';
-import { CreateSecondaryCarerModal } from '@/ui/components/molecules/CreateSecondaryCarerModal';
-import { DeleteCarerModal } from '@/ui/components/molecules/DeleteCarerModal';
-
-const STATUS_LABEL_MAP: Record<STATUS_ENUM, string> = {
-  [STATUS_ENUM.ACTIVE]: 'page.carer-management.card.status-active',
-  [STATUS_ENUM.INACTIVE]: 'page.carer-management.card.status-inactive',
-};
+import { CreateSecondaryCarerModal } from '@/ui/components/molecules/create-secondary-carer.modal';
+import { DeleteCarerModal } from '@/ui/components/molecules/delete-carer.modal';
+import { SettingsRow } from '@/ui/components/molecules/settings-row.molecule';
+import { CarerCardOrganism } from '@/ui/components/organisms/carer-card.organism';
 
 export default function CarerManagementScreen() {
   const { carerAdapter, notifyAdapter, loggerAdapter, navigationAdapter } =
@@ -35,11 +25,11 @@ export default function CarerManagementScreen() {
       navigationAdapter,
     });
 
-  const {
-    execute: fetchCarers,
-    isExecuting: isFetchingCarers,
-    items: carerList = [],
-  } = useGetEntityList(ENTITY_NAME.CARER, notifyAdapter, carerAdapter);
+  const { execute: fetchCarers, items: carerList = [] } = useGetEntityList(
+    ENTITY_NAME.CARER,
+    notifyAdapter,
+    carerAdapter
+  );
 
   const { execute: deleteCarer, isExecuting: isDeletingCarer } = useDeleteCarer(
     {
@@ -50,7 +40,7 @@ export default function CarerManagementScreen() {
   );
 
   const { execute: createSecondaryCarer, isExecuting: isCreatingCarer } =
-    useCreateSecondaryCarer({
+    useCreateCarer({
       carerAdapter,
       loggerAdapter,
       notifyAdapter,
@@ -63,8 +53,8 @@ export default function CarerManagementScreen() {
   const [carerToDelete, setCarerToDelete] = useState<TCarer | null>(null);
 
   useEffect(() => {
-    void fetchCarers();
-  }, [fetchCarers]);
+    fetchCarers();
+  }, []);
 
   const sortedCarers = useMemo(() => {
     return [...carerList].sort((a, b) => {
@@ -75,27 +65,21 @@ export default function CarerManagementScreen() {
     });
   }, [carerList]);
 
-  const primaryCarers = useMemo(
-    () => sortedCarers.filter((carer) => carer.isPrimary),
-    [sortedCarers]
-  );
-
-  const secondaryCarers = useMemo(
-    () => sortedCarers.filter((carer) => !carer.isPrimary),
-    [sortedCarers]
-  );
-
   const handleCreateCarer = useCallback(async () => {
     if (!newCarerName.trim()) return;
+
     const response = await createSecondaryCarer({
       name: newCarerName.trim(),
+      isPrimary: false,
+      pinHash: '', // Pin will be set on first sync
+      type: CARER_TYPE_ENUM.SECONDARY,
     });
     if (response.success) {
       setNewCarerName('');
       setCreateModalVisible(false);
       void fetchCarers();
     }
-  }, [createSecondaryCarer, fetchCarers, newCarerName]);
+  }, [newCarerName]);
 
   const handleRequestDelete = useCallback((carer: TCarer) => {
     setCarerToDelete(carer);
@@ -122,72 +106,28 @@ export default function CarerManagementScreen() {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
-        <ButtonAtom
-          title="page.carer-management.create-secondary"
-          onPress={() => setCreateModalVisible(true)}
-          testID="carer-management.create-secondary"
-        />
+        <View className="gap-4">
+          <SettingsRow
+            iconName="add"
+            onPress={() => setCreateModalVisible(true)}
+            testID="carer-management.create-secondary"
+            titleKey="page.carer-management.create-secondary"
+          />
 
-        {isFetchingCarers && (
-          <View className="items-center py-16">
-            <SpinnerAtom testID="screen.carer-management.spinner" />
-          </View>
-        )}
+          <Divider className="my-2" />
 
-        {!isFetchingCarers && !sortedCarers.length && (
-          <CardAtom className="p-4">
-            <TypographyParagraph
-              testID="screen.carer-management.empty"
-              i18nKey="page.carer-management.list-empty"
-              variant="light"
+          {sortedCarers.map((carer) => (
+            <CarerCardOrganism
+              key={`carer-card.${carer.id}`}
+              carer={carer}
+              onInviteQR={() => goToGenerateInvitationQR(carer.id)}
+              onSync={() => goToSyncronization(carer.id)}
+              onDelete={() => handleRequestDelete(carer)}
+              onViewDetails={() => goToCarerDetail(carer.id)}
+              testID={`carer-card-organism-${carer.id}`}
             />
-          </CardAtom>
-        )}
-
-        {!!primaryCarers.length && (
-          <View className="space-y-2">
-            <TypographyTitle
-              testID="carer-management.primary-heading"
-              i18nKey="page.carer-management.section.primary"
-            />
-            {primaryCarers.map((carer) => (
-              <CarerCard
-                key={carer.id}
-                carer={carer}
-                statusLabelKey={STATUS_LABEL_MAP[carer.status]}
-                roleLabelKey="page.carer-management.card.primary"
-                onDetail={() => goToCarerDetail(carer.id)}
-              />
-            ))}
-          </View>
-        )}
-
-        {!!secondaryCarers.length && (
-          <View className="space-y-2">
-            <TypographyTitle
-              testID="carer-management.secondary-heading"
-              i18nKey="page.carer-management.section.secondary"
-            />
-            {secondaryCarers.map((carer) => (
-              <CarerCard
-                key={carer.id}
-                carer={carer}
-                statusLabelKey={STATUS_LABEL_MAP[carer.status]}
-                roleLabelKey="page.carer-management.card.secondary"
-                onDetail={() => goToCarerDetail(carer.id)}
-                onInvite={
-                  carer.status === STATUS_ENUM.ACTIVE
-                    ? () => goToGenerateInvitationQR(carer.id)
-                    : undefined
-                }
-                onSync={() => goToSyncronization(carer.id)}
-                onDelete={handleRequestDelete}
-                inviteDisabled={carer.status !== STATUS_ENUM.ACTIVE}
-                deleting={isDeletingCarer}
-              />
-            ))}
-          </View>
-        )}
+          ))}
+        </View>
       </ScrollView>
 
       <CreateSecondaryCarerModal

@@ -261,6 +261,8 @@ export const caCA = Object.freeze({
   'page.carer-management.card.status-inactive': 'Inactiu',
   'page.carer-management.card.primary': 'Cuidador principal',
   'page.carer-management.card.secondary': 'Cuidador secundari',
+  'page.carer-management.card.health': 'Cuidador sanitari',
+  'page.carer-management.card.unknown': 'Cuidador desconegut',
   'page.carer-management.invitation-modal.title': "Pack d'invitació",
   'page.carer-management.invitation-modal.copy': 'Copia fragment',
   'page.carer-management.invitation-modal.close': 'Tancar',

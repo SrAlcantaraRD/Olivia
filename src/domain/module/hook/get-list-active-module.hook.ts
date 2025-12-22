@@ -9,8 +9,8 @@ import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
 import type { TModule } from '@/domain/module/entity/module.entity';
 import type { IModulePort } from '@/domain/module/port/module.port';
-import type { TRequestGetActiveModuleList } from '@/domain/module/use-case-schema/get-active-module-list.use-case-schema';
 import { GetActiveModuleListUseCase } from '@/domain/module/use-case/get-active-module-list.use-case';
+import type { TRequestGetActiveModuleList } from '@/domain/module/use-case-schema/get-active-module-list.use-case-schema';
 
 export function useGetListActiveModule(adapters: {
   loggerAdapter: TLoggerPort;

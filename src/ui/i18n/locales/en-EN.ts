@@ -248,6 +248,8 @@ export const enEN = Object.freeze({
   'page.carer-management.section.secondary': 'Secondary carers',
   'page.carer-management.card.primary': 'Primary carer',
   'page.carer-management.card.secondary': 'Secondary carer',
+  'page.carer-management.card.health': 'Health carer',
+  'page.carer-management.card.unknown': 'Unknown carer',
   'page.carer-management.card.status-active': 'Active',
   'page.carer-management.card.status-inactive': 'Inactive',
   'page.carer-management.invite-button': 'Invite via QR',

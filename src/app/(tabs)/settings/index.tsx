@@ -22,15 +22,7 @@ export default function SettingsScreen() {
     goToAbout,
   } = useNavigation({ navigationAdapter });
 
-  const { execute: addDemoData } = useAddDemoData({
-    loggerAdapter: adapters.loggerAdapter,
-    notifyAdapter: adapters.notifyAdapter,
-    carerAdapter: adapters.carerAdapter,
-    moduleAdapter: adapters.moduleAdapter,
-    moduleFieldAdapter: adapters.moduleFieldAdapter,
-    recordAdapter: adapters.recordAdapter,
-    recordFieldAdapter: adapters.recordFieldAdapter,
-  });
+  const { execute: addDemoData } = useAddDemoData(adapters);
 
   const handleAddDemoData = async () => {
     await addDemoData();
