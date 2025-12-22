@@ -1,3 +1,5 @@
+import { eq } from 'drizzle-orm';
+
 import {
   SQLiteRecordAdapter,
   type TRecordAdapterEntity,
@@ -61,19 +63,16 @@ export class SQLiteCarerAdapter implements ICarerPort {
     return SQLiteCarerAdapter.toDomainEntity(item);
   }
 
-  public async getById(id: TID): Promise<TCarer | null> {
+  public async getByID(id: TID): Promise<TCarer | null> {
     const item = await this.database.query.CARER.findFirst({
-      where: (row, { eq, and }) =>
-        and(eq(row.id, id), eq(row.status, STATUS_ENUM.ACTIVE)),
+      where: (row, { eq }) => eq(row.id, id),
     });
 
     return item ? SQLiteCarerAdapter.toDomainEntity(item) : null;
   }
 
   public async getAll(): Promise<TCarer[]> {
-    const list = await this.database.query.CARER.findMany({
-      where: (row, { eq }) => eq(row.status, STATUS_ENUM.ACTIVE),
-    });
+    const list = await this.database.query.CARER.findMany();
 
     return list.map((row) => SQLiteCarerAdapter.toDomainEntity(row));
   }
@@ -88,5 +87,17 @@ export class SQLiteCarerAdapter implements ICarerPort {
     );
 
     return !!item;
+  }
+
+  public async updateStatus(id: TID, status: STATUS_ENUM): Promise<TCarer> {
+    const [row] = await this.database
+      .update(DB_SCHEMA.CARER)
+      .set({
+        status,
+      })
+      .where(eq(DB_SCHEMA.CARER.id, id))
+      .returning();
+
+    return SQLiteCarerAdapter.toDomainEntity(row);
   }
 }

@@ -3,7 +3,6 @@ import { ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import type { TCarer } from '@/domain/carer/entity/carer.entity';
-import { useCheckSecondaryCarerTTL } from '@/domain/carer/hook/check-secondary-carer-ttl.hook';
 import { useCreateSecondaryCarer } from '@/domain/carer/hook/create-secondary-carer.hook';
 import { useDeleteCarer } from '@/domain/carer/hook/delete-carer.hook';
 import { ENTITY_NAME } from '@/domain/core/enum/entity-names.enum';
@@ -21,7 +20,6 @@ import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { CarerCard } from '@/ui/components/molecules/CarerCard';
 import { CreateSecondaryCarerModal } from '@/ui/components/molecules/CreateSecondaryCarerModal';
 import { DeleteCarerModal } from '@/ui/components/molecules/DeleteCarerModal';
-import { TTLExpiredModal } from '@/ui/components/molecules/TTLExpiredModal';
 
 const STATUS_LABEL_MAP: Record<STATUS_ENUM, string> = {
   [STATUS_ENUM.ACTIVE]: 'page.carer-management.card.status-active',
@@ -29,13 +27,8 @@ const STATUS_LABEL_MAP: Record<STATUS_ENUM, string> = {
 };
 
 export default function CarerManagementScreen() {
-  const {
-    carerAdapter,
-    notifyAdapter,
-    loggerAdapter,
-    cacheAdapter,
-    navigationAdapter,
-  } = useAdapters();
+  const { carerAdapter, notifyAdapter, loggerAdapter, navigationAdapter } =
+    useAdapters();
 
   const { goToCarerDetail, goToSyncronization, goToGenerateInvitationQR } =
     useNavigation({
@@ -62,12 +55,6 @@ export default function CarerManagementScreen() {
       loggerAdapter,
       notifyAdapter,
     });
-
-  const { isExpired } = useCheckSecondaryCarerTTL({
-    carerAdapter,
-    loggerAdapter,
-    cacheAdapter,
-  });
 
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [newCarerName, setNewCarerName] = useState('');
@@ -217,15 +204,6 @@ export default function CarerManagementScreen() {
         onConfirm={handleDeleteCarer}
         carerName={carerToDelete?.name}
         isDeleting={isDeletingCarer}
-      />
-      <TTLExpiredModal
-        visible={isExpired}
-        onClose={(): void => {
-          console.log('klk');
-        }}
-        onSync={(): void => {
-          console.log('klk');
-        }}
       />
     </ScreenLayout>
   );

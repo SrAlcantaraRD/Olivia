@@ -34,7 +34,7 @@ export function ModulesStep({
 
   return (
     <View className="mb-6">
-      {items.map((module) => (
+      {(items ?? []).map((module) => (
         <ModuleCard
           key={module.id}
           module={module}

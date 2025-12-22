@@ -1,14 +1,39 @@
+import { addMonths } from 'date-fns';
 import { useCallback, useState } from 'react';
 
 import { useAdapters } from '@/adapter';
+import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
 import { useGenerateInvitationQRForSecondaryCarer } from '@/domain/carer/hook/generate-invitation-qr-for-secondary-carer.hook';
 import type { TResponseGenerateInvitationQRForSecondaryCarer } from '@/domain/carer/use-case-schema/generate-invitation-qr-for-secondary-carer.use-case-schema';
 import { TIME_TO_LIVE } from '@/domain/core/constant/time-to-live.constants';
+import { QR_BUNDLE_VERSION } from '@/domain/core/enum/qr.enum';
 
 export interface GenerateInvitationQRFormData {
   selectedTTL: TIME_TO_LIVE;
-  invitationDetails: TResponseGenerateInvitationQRForSecondaryCarer | null;
+  invitationDetails: TResponseGenerateInvitationQRForSecondaryCarer;
 }
+
+const DEFAULT_DATA = {
+  selectedTTL: TIME_TO_LIVE.ONE_MONTH,
+  invitationDetails: {
+    qrData: {
+      metadata: {
+        nonce: '',
+        version: QR_BUNDLE_VERSION.V1,
+      },
+      payload: {
+        expiresAt: addMonths(new Date(), 1),
+        id: -1,
+        isPrimary: false,
+        type: CARER_TYPE_ENUM.SECONDARY,
+        name: '',
+        timeToLive: TIME_TO_LIVE.ONE_MONTH,
+      },
+    },
+    qrBundle: '',
+    qrChunkList: [],
+  },
+} satisfies GenerateInvitationQRFormData;
 
 export function useGenerateInvitationQRForm(carerID: number) {
   const {
@@ -29,17 +54,15 @@ export function useGenerateInvitationQRForm(carerID: number) {
     });
 
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<GenerateInvitationQRFormData>({
-    selectedTTL: TIME_TO_LIVE.ONE_MONTH,
-    invitationDetails: null,
-  });
+  const [formData, setFormData] =
+    useState<GenerateInvitationQRFormData>(DEFAULT_DATA);
 
   const setSelectedTTL = useCallback((ttl: TIME_TO_LIVE) => {
     setFormData((prev) => ({ ...prev, selectedTTL: ttl }));
   }, []);
 
   const setInvitationDetails = useCallback(
-    (details: TResponseGenerateInvitationQRForSecondaryCarer | null) => {
+    (details: TResponseGenerateInvitationQRForSecondaryCarer) => {
       setFormData((prev) => ({ ...prev, invitationDetails: details }));
     },
     []
@@ -77,10 +100,7 @@ export function useGenerateInvitationQRForm(carerID: number) {
 
   const reset = useCallback(() => {
     setCurrentStep(0);
-    setFormData({
-      selectedTTL: TIME_TO_LIVE.ONE_MONTH,
-      invitationDetails: null,
-    });
+    setFormData(DEFAULT_DATA);
   }, []);
 
   return {

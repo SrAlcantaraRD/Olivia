@@ -51,8 +51,16 @@ export const useNavigation = (adapters: {
     [navigateTo]
   );
 
-  const goToScanQr = useCallback(() => {
-    navigateTo('/(caregiver-setup)/scan-qr');
+  const goToSyncronization = useCallback((carerID: TID) => {
+    navigateTo(
+      `/(tabs)/settings/carer-managment/carer-detail/${carerID}/synchronization`
+    );
+  }, []);
+
+  const goToGenerateInvitationQR = useCallback((carerID: TID) => {
+    navigateTo(
+      `/(tabs)/settings/carer-managment/carer-detail/${carerID}/generate-invitation-qr`
+    );
   }, []);
 
   const goToRegister = useCallback((moduleID: TID) => {
@@ -80,7 +88,11 @@ export const useNavigation = (adapters: {
   }, []);
 
   const goToCarerManagement = useCallback(() => {
-    navigateTo('/(tabs)/settings/carer-management');
+    navigateTo('/(tabs)/settings/carer-managment');
+  }, []);
+
+  const goToCarerDetail = useCallback((carerID: TID) => {
+    navigateTo(`/(tabs)/settings/carer-managment/carer-detail/${carerID}`);
   }, []);
 
   const goToLogOut = useCallback(() => {
@@ -138,7 +150,7 @@ export const useNavigation = (adapters: {
     goToRoleSelection,
     goToParentSetup,
     goToConfirmLink,
-    goToScanQr,
+    goToSyncronization,
     goToRegister: goToRegister,
     goToRegisterHome,
     goToFilterHistory,
@@ -146,6 +158,8 @@ export const useNavigation = (adapters: {
     goToAppSettings,
     goToChildProfile,
     goToCarerManagement,
+    goToCarerDetail,
+    goToGenerateInvitationQR,
     goToLogOut,
     goToAbout,
     goToReportHistoryByModule,

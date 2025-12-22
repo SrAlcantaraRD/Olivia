@@ -1,12 +1,10 @@
-import * as Clipboard from 'expo-clipboard';
+import { format } from 'date-fns';
 import { useThemeColor } from 'heroui-native';
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
-import { useAdapters } from '@/adapter';
 import { getTimeToLiveOptions } from '@/domain/core/constant/time-to-live.constants';
-import { ButtonAtom } from '@/ui/components/atoms/button.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
@@ -28,7 +26,6 @@ export function GenerateInvitationQRWizard({
   onComplete,
   testID,
 }: GenerateInvitationQRWizardProps) {
-  const { notifyAdapter } = useAdapters();
   const accentColor = useThemeColor('accent');
 
   const {
@@ -74,7 +71,7 @@ export function GenerateInvitationQRWizard({
       },
       {
         id: 'qr-preview',
-        isValid: false, // Never valid so the wizard button is disabled - buttons are in content
+        isValid: true,
         content: (
           <ScreenLayout
             testID="generate-invitation-qr.qr-preview"
@@ -95,22 +92,19 @@ export function GenerateInvitationQRWizard({
                   i18nKey="page.carer-management.invitation-modal.ttl"
                   values={{
                     ttl: formData.selectedTTL,
-                    expiresAt:
+                    expiresAt: format(
                       formData.invitationDetails?.qrData.payload.expiresAt,
+                      'yyyy-MM-dd'
+                    ),
                   }}
                   testID="modal.invite.ttl"
                 />
                 <TypographySmall
                   i18nKey="page.carer-management.invitation-modal.bundle"
-                  values={{ value: formData.invitationDetails?.qrBundle }}
+                  values={{
+                    value: JSON.stringify(formData.invitationDetails?.qrData),
+                  }}
                   testID="modal.invite.bundle"
-                />
-                <ButtonAtom
-                  title="page.carer-management.invitation-modal.copy"
-                  onPress={() =>
-                    handleCopyBundle(formData.invitationDetails?.qrBundle)
-                  }
-                  testID="modal.invite.copy"
                 />
               </View>
             </View>
@@ -143,15 +137,6 @@ export function GenerateInvitationQRWizard({
     if (currentStep > 0) {
       goToPreviousStep();
     }
-  };
-
-  const handleCopyBundle = async (bundle?: string) => {
-    if (!bundle) return;
-    await Clipboard.setStringAsync(bundle);
-    notifyAdapter.success({
-      title: 'common.success',
-      description: 'page.carer-management.invitation-modal.copy',
-    });
   };
 
   return (
