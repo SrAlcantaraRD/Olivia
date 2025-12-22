@@ -20,7 +20,7 @@ enum ROLE_ENUM {
 
 export default function RoleSelectionScreen() {
   const { navigationAdapter } = useAdapters();
-  const { goToParentSetup, goToScanQr, goBack } = useNavigation({
+  const { goToParentSetup, goToSecondaryCarerSetup, goBack } = useNavigation({
     navigationAdapter,
   });
   const [selectedRole, setSelectedRole] = useState<ROLE_ENUM | null>(null);
@@ -30,10 +30,10 @@ export default function RoleSelectionScreen() {
   const accentColor = useThemeColor('accent');
 
   const handleContinue = () => {
-    if (selectedRole === 'parent') {
+    if (selectedRole === ROLE_ENUM.PARENT) {
       goToParentSetup();
-    } else if (selectedRole === 'caregiver') {
-      goToScanQr();
+    } else if (selectedRole === ROLE_ENUM.CAREGIVER) {
+      goToSecondaryCarerSetup();
     }
   };
 

@@ -7,11 +7,7 @@ type CardAtomProps = React.ComponentProps<typeof Card>;
 
 export const CardAtom = ({ children, className, ...props }: CardAtomProps) => {
   return (
-    <Card
-      variant="quaternary"
-      {...props}
-      className={cn('rounded-lg', className)}
-    >
+    <Card {...props} className={cn('rounded-lg', `bg-accent-soft`, className)}>
       {children}
     </Card>
   );

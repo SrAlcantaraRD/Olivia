@@ -239,25 +239,82 @@ export const enEN = Object.freeze({
   'page.child-profile.title': 'Child Profile',
   'page.child-profile.placeholder': 'Profile form coming soon',
   'page.carer-management.title': 'Carer Management',
-  'page.carer-management.placeholder': 'Carer list coming soon',
   'page.carer-management.description':
-    'Invite trusted caregivers to safely sync shared records.',
+    'Monitor primary and secondary carers, share QR invitations, and synchronize records securely.',
   'page.carer-management.list-empty':
-    'No carers yet. Set up a primary caregiver to get started.',
-  'page.carer-management.sync-button': 'Sync',
-  'page.carer-management.card.status-active': 'Active',
-  'page.carer-management.card.status-inactive': 'Inactive',
+    'No carers configured yet. Create one to start inviting or syncing.',
+  'page.carer-management.create-secondary': 'Create secondary carer',
+  'page.carer-management.section.primary': 'Primary carers',
+  'page.carer-management.section.secondary': 'Secondary carers',
   'page.carer-management.card.primary': 'Primary carer',
   'page.carer-management.card.secondary': 'Secondary carer',
+  'page.carer-management.card.status-active': 'Active',
+  'page.carer-management.card.status-inactive': 'Inactive',
+  'page.carer-management.invite-button': 'Invite via QR',
+  'page.carer-management.sync-button': 'Sync with carer',
+  'page.carer-management.detail-button': 'View details',
+  'page.carer-management.delete-button': 'Delete',
   'page.carer-management.invitation-modal.title': 'Invitation bundle',
-  'page.carer-management.invitation-modal.instructions':
-    'Scan every QR chunk or paste its payload into the secondary device.',
-  'page.carer-management.invitation-modal.copy': 'Copy chunk',
+  'page.carer-management.invitation-modal.subtitle':
+    'Set a TTL, generate the QR bundle, and safely share it with the secondary device.',
+  'page.carer-management.ttl.heading': 'Select invitation TTL',
+  'page.carer-management.invitation-modal.generate': 'Generate QR',
+  'page.carer-management.invitation-modal.generating': 'Generating QR code...',
+  'page.carer-management.invitation-modal.ttl':
+    'TTL <bold>{{ttl}}</bold> · Expires at {{expiresAt}}',
+  'page.carer-management.invitation-modal.bundle': 'Bundle: {{value}}',
+  'page.carer-management.invitation-modal.copy': 'Copy bundle',
   'page.carer-management.invitation-modal.close': 'Close',
-  'page.carer-management.invitation-modal.chunks-title':
-    'Chunk {{index}} of {{total}}',
-  'page.carer-management.invitation-modal.progress':
-    '{{count}} / {{total}} chunks ready',
+  'page.carer-management.ttl-expired.title': 'Invitation expired',
+  'page.carer-management.ttl-expired.description':
+    'This invitation has expired and can no longer be used.',
+  'page.carer-management.ttl-expired.sync': 'Sync with carer',
+  'page.carer-management.create-modal.title': 'Create a secondary carer',
+  'page.carer-management.create-modal.name-label': 'Carer name',
+  'page.carer-management.create-modal.name-placeholder': 'Enter name',
+  'page.carer-management.create-modal.create': 'Create carer',
+  'page.carer-management.delete-modal.title': 'Remove secondary carer',
+  'page.carer-management.delete-modal.subtitle':
+    'This action soft-deletes the carer and prevents new syncs.',
+  'page.carer-management.delete-modal.confirm': 'Confirm removal',
+  'time-to-live.one-day': '1 day',
+  'time-to-live.one-week': '1 week',
+  'time-to-live.one-month': '1 month',
+  'hook.delete-carer.title': 'Removing carer',
+  'hook.delete-carer.description': 'We are removing this carer safely.',
+  'hook.delete-carer.error-title': 'Removal failed',
+  'hook.delete-carer.error-description':
+    'We could not remove the carer right now.',
+  'hook.delete-carer.success-title': 'Carer removed',
+  'hook.delete-carer.success-description':
+    'The carer is now inactive and hidden from syncing.',
+  'hook.create-secondary-carer.title': 'Creating carer',
+  'hook.create-secondary-carer.description': 'Saving the new secondary carer.',
+  'hook.create-secondary-carer.error-title': 'Unable to create carer',
+  'hook.create-secondary-carer.error-description':
+    'Try again later to add the secondary carer.',
+  'hook.create-secondary-carer.success-title': 'Carer created',
+  'hook.create-secondary-carer.success-description':
+    'The secondary carer is ready for invitations.',
+  'hook.sync-with-carer.title': 'Syncing data',
+  'hook.sync-with-carer.description': 'Importing records from QR.',
+  'hook.sync-with-carer.error-title': 'Sync failed',
+  'hook.sync-with-carer.error-description':
+    'We could not sync the records. Try again.',
+  'hook.sync-with-carer.success-title': 'Sync recorded',
+  'hook.sync-with-carer.success-description':
+    'The sync event has been logged successfully.',
+  'page.carer-detail.heading': 'Carer details',
+  'page.carer-detail.name-value': 'Name: <bold>{{name}}</bold>',
+  'page.carer-detail.ttl':
+    'TTL: <bold>{{ttl}}</bold> · Expires at {{expiresAt}}',
+  'page.carer-detail.analysis-button': 'View imported data (soon)',
+  'page.carer-detail.sync-history.title': 'Sync history',
+  'page.carer-detail.sync-history.empty': 'No syncs recorded yet.',
+  'page.carer-detail.history.record':
+    '{{timestamp}} · {{status}} · {{records}} records · {{details}}',
+  'page.carer-detail.history.status.success': 'Success',
+  'page.carer-detail.history.status.failure': 'Failure',
   'page.app-settings.title': 'App Settings',
   'page.app-settings.subtitle': 'Customize your app experience',
   'page.app-settings.section-theme': 'Theme',
@@ -431,14 +488,16 @@ export const enEN = Object.freeze({
   'hook.setup-parent.description': 'Please wait while we set up your account.',
   'hook.setup-parent.error-title': 'Setup Failed',
   'hook.setup-parent.success-title': 'Setup Successful',
-  'hook.create-invite.title': 'Preparing invite',
-  'hook.create-invite.description':
+  'hook.generate-invitation-qr-for-secondary-carer.title': 'Preparing invite',
+  'hook.generate-invitation-qr-for-secondary-carer.description':
     'Generating a signed QR bundle for the secondary caregiver.',
-  'hook.create-invite.success-title': 'Invite ready',
-  'hook.create-invite.success-description':
+  'hook.generate-invitation-qr-for-secondary-carer.success-title':
+    'Invite ready',
+  'hook.generate-invitation-qr-for-secondary-carer.success-description':
     'Share the QR with another carer to start the sync.',
-  'hook.create-invite.error-title': 'Invite failed',
-  'hook.create-invite.error-description':
+  'hook.generate-invitation-qr-for-secondary-carer.error-title':
+    'Invite failed',
+  'hook.generate-invitation-qr-for-secondary-carer.error-description':
     'Unable to create the invitation right now.',
   'hook.import-invite.title': 'Importing invite',
   'hook.import-invite.description':
@@ -470,6 +529,76 @@ export const enEN = Object.freeze({
     'An error occurred while adding demo data',
   'hook.get-record-field-distribution.error':
     'Error getting field distribution',
+
+  'use-case.generate-invitation-qr-for-secondary-carer.invalid-request':
+    'Invalid request for generating invitation QR',
+  'use-case.generate-invitation-qr-for-secondary-carer.generation-failed':
+    'Failed to generate invitation QR',
+  'page.carer-detail.title': 'Carer Detail',
+  'page.carer-detail.subtitle': 'View carer information and sync history',
+
+  // Secondary Carer Setup
+  'secondary-carer-setup.carer-info.title': 'About you',
+  'secondary-carer-setup.carer-info.description':
+    'Basic information about the secondary carer.',
+  'secondary-carer-setup.carer-info.name-label': 'Name:',
+  'secondary-carer-setup.carer-info.name-placeholder': 'Your name',
+  'secondary-carer-setup.carer-info.relationship-label':
+    'Relationship to the child:',
+  'secondary-carer-setup.carer-info.relationship-placeholder':
+    'Select relationship',
+  'secondary-carer-setup.carer-info.relationship.family': 'Family member',
+  'secondary-carer-setup.carer-info.relationship.professional':
+    'Healthcare professional',
+  'secondary-carer-setup.carer-info.relationship.other': 'Other',
+  'secondary-carer-setup.carer-info.notes-label':
+    'Additional notes (optional):',
+  'secondary-carer-setup.carer-info.notes-placeholder':
+    'Any additional information...',
+
+  // Scan QR Step
+  'secondary-carer-setup.scan-qr.title': 'Scan Invitation QR',
+  'secondary-carer-setup.scan-qr.description':
+    'Scan the QR code from your invitation to continue setup.',
+  'secondary-carer-setup.scan-qr.progress': 'Progress: {{progress}}',
+  'secondary-carer-setup.scan-qr.manual.title': 'Or enter QR data manually:',
+  'secondary-carer-setup.scan-qr.manual.placeholder':
+    'Paste QR chunk data here...',
+  'secondary-carer-setup.scan-qr.manual.submit': 'Process Chunk',
+
+  // QR Info Step
+  'secondary-carer-setup.qr-info.title': 'Invitation Details',
+  'secondary-carer-setup.qr-info.description':
+    'Review and confirm the invitation details.',
+  'secondary-carer-setup.qr-info.invitation-details': 'Invitation Details',
+  'secondary-carer-setup.qr-info.name': 'Invited Name',
+  'secondary-carer-setup.qr-info.ttl': 'Time to Live',
+  'secondary-carer-setup.qr-info.expires-at':
+    'Expires At: <bold>{{expiresAt}}</bold>',
+  'secondary-carer-setup.qr-info.user-name':
+    'Your Name: <bold>{{userName}}</bold>',
+  'secondary-carer-setup.qr-info.form-title': 'Your Information',
+
+  'secondary-carer-setup.modules.title': 'Active Modules',
+  'secondary-carer-setup.modules.description':
+    'Review the modules you will have access to.',
+  'secondary-carer-setup.modules.empty': 'No active modules found.',
+  'secondary-carer-setup.modules.note':
+    'You will be able to view and contribute to these health modules.',
+  'secondary-carer-setup.summary.title': 'Review your information',
+  'secondary-carer-setup.summary.description':
+    'Confirm that everything is correct before continuing',
+  'secondary-carer-setup.summary.carer-name': 'Name',
+  'secondary-carer-setup.summary.relationship': 'Relationship',
+  'secondary-carer-setup.summary.notes': 'Notes',
+  'secondary-carer-setup.summary.modules-count': 'Active modules',
+  'secondary-carer-setup.summary.terms': 'I agree to the terms and conditions',
+  'secondary-carer-setup.summary.confirmation-note':
+    'By continuing, you agree to share health data securely.',
+  'page.caregiver-setup.scan-qr.permission.title': 'Camera Permission Needed',
+  'page.caregiver-setup.scan-qr.permission.description':
+    'Please allow camera access to scan the invitation QR code.',
+  'page.caregiver-setup.scan-qr.permission.request': 'Grant Camera Access',
 } as const);
 
 type RecursiveKeyOf<TObj extends object> = {

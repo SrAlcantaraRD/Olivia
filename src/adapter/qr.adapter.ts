@@ -27,28 +27,33 @@ export class QrPortAdapter implements IQRPort {
     }
   }
 
-  public async generateBundle<T extends TQR<unknown>>(
+  public async encodeToBundle<T extends TQR<unknown>>(
     payload: T
   ): Promise<string> {
-    try {
-      const jsonString = JSON.stringify(payload);
-      return jsonString;
-    } catch (error) {
-      this.loggerAdapter.error('Error generating QR bundle', error);
-      throw error;
-    }
+    return new Promise((resolve, reject) => {
+      try {
+        const jsonString = JSON.stringify(payload);
+
+        resolve(jsonString);
+      } catch (error) {
+        this.loggerAdapter.error('Error generating QR bundle', error);
+        reject(error);
+      }
+    });
   }
 
-  public async decodeBundle<T extends TQR<unknown>>(
+  public async decodeFromBundle<T extends TQR<unknown>>(
     bundle: TQRBundle
   ): Promise<T> {
-    try {
-      const qr: T = JSON.parse(bundle);
-      return qr;
-    } catch (error) {
-      this.loggerAdapter.error('Error decoding QR bundle', error);
-      throw error;
-    }
+    return new Promise((resolve, reject) => {
+      try {
+        const qr: T = JSON.parse(bundle);
+        resolve(qr);
+      } catch (error) {
+        this.loggerAdapter.error('Error decoding QR bundle', error);
+        reject(error);
+      }
+    });
   }
 
   public async encodeToChunks(

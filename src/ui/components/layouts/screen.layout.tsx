@@ -2,7 +2,6 @@ import { View } from 'react-native';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { CardAtom } from '@/ui/components/atoms/card.atom';
 import {
   TypographySubtitle,
   TypographyTitle,
@@ -50,7 +49,7 @@ export function ScreenLayout({
             entering={FadeInRight.duration(250)}
             exiting={FadeOutLeft.duration(200)}
           >
-            <CardAtom variant="transparent" className="gap-4 px-0">
+            <View className="gap-4 pb-4">
               {title && (
                 <TypographyTitle
                   testID="screen.settings.title"
@@ -68,7 +67,7 @@ export function ScreenLayout({
                   variant="light"
                 />
               )}
-            </CardAtom>
+            </View>
           </Animated.View>
         )}
 

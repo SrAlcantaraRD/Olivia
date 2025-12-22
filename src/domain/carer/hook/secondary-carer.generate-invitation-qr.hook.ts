@@ -2,10 +2,10 @@ import { useCallback, useState } from 'react';
 
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import type {
-  TRequestGenerateInvitationQRForSecondaryCarer,
-  TResponseGenerateInvitationQRForSecondaryCarer,
-} from '@/domain/carer/use-case-schema/generate-invitation-qr-for-secondary-carer.use-case-schema';
-import { GenerateInvitationQRForSecondaryCarerUseCase } from '@/domain/carer/use-case/generate-invitation-qr-for-secondary-carer.use-case';
+  TRequestSecondaryCarerGenerateInvitationQR,
+  TResponseSecondaryCarerGenerateInvitationQR,
+} from '@/domain/carer/use-case-schema/secondary-carer.generate-invitation-qr.use-case-schema';
+import { SecondaryCarerGenerateInvitationQRUseCase } from '@/domain/carer/use-case/secondary-carer.generate-invitation-qr.use-case';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
   IHookResponse,
@@ -15,26 +15,24 @@ import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
 
-export function useGenerateInvitationQRForSecondaryCarer(adapters: {
+export function useSecondaryCarerGenerateInvitationQR(adapters: {
   loggerAdapter: TLoggerPort;
   notifyAdapter: INotifyPort;
   carerAdapter: ICarerPort;
   qrAdapter: IQRPort;
   cacheAdapter: ICachePort;
 }): IUseHook<
-  TRequestGenerateInvitationQRForSecondaryCarer,
-  TResponseGenerateInvitationQRForSecondaryCarer
+  TRequestSecondaryCarerGenerateInvitationQR,
+  TResponseSecondaryCarerGenerateInvitationQR
 > {
   const [isExecuting, setExecuting] = useState(false);
   const [item, setItems] =
-    useState<TResponseGenerateInvitationQRForSecondaryCarer>();
+    useState<TResponseSecondaryCarerGenerateInvitationQR>();
 
   const execute = useCallback(
     async (
-      data: TRequestGenerateInvitationQRForSecondaryCarer
-    ): Promise<
-      IHookResponse<TResponseGenerateInvitationQRForSecondaryCarer>
-    > => {
+      data: TRequestSecondaryCarerGenerateInvitationQR
+    ): Promise<IHookResponse<TResponseSecondaryCarerGenerateInvitationQR>> => {
       setExecuting(true);
       adapters.notifyAdapter.loading({
         title: 'hook.generate-invitation-qr-for-secondary-carer.title',
@@ -43,7 +41,7 @@ export function useGenerateInvitationQRForSecondaryCarer(adapters: {
       });
 
       try {
-        const useCase = new GenerateInvitationQRForSecondaryCarerUseCase({
+        const useCase = new SecondaryCarerGenerateInvitationQRUseCase({
           loggerAdapter: adapters.loggerAdapter,
           carerAdapter: adapters.carerAdapter,
           qrAdapter: adapters.qrAdapter,

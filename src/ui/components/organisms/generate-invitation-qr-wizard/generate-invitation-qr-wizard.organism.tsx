@@ -17,13 +17,11 @@ import { useGenerateInvitationQRForm } from './hooks/use-generate-invitation-qr-
 
 interface GenerateInvitationQRWizardProps {
   carerID: number;
-  onComplete?: () => void;
   testID: string;
 }
 
 export function GenerateInvitationQRWizard({
   carerID,
-  onComplete,
   testID,
 }: GenerateInvitationQRWizardProps) {
   const accentColor = useThemeColor('accent');
@@ -99,7 +97,11 @@ export function GenerateInvitationQRWizard({
                   }}
                   testID="modal.invite.ttl"
                 />
+
                 <TypographySmall
+                  className="opacity-30"
+                  variant="light"
+                  size="xs"
                   i18nKey="page.carer-management.invitation-modal.bundle"
                   values={{
                     value: JSON.stringify(formData.invitationDetails?.qrData),

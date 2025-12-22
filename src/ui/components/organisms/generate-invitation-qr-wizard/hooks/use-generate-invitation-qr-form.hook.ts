@@ -2,18 +2,17 @@ import { addMonths } from 'date-fns';
 import { useCallback, useState } from 'react';
 
 import { useAdapters } from '@/adapter';
-import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
-import { useGenerateInvitationQRForSecondaryCarer } from '@/domain/carer/hook/generate-invitation-qr-for-secondary-carer.hook';
-import type { TResponseGenerateInvitationQRForSecondaryCarer } from '@/domain/carer/use-case-schema/generate-invitation-qr-for-secondary-carer.use-case-schema';
+import { useSecondaryCarerGenerateInvitationQR } from '@/domain/carer/hook/secondary-carer.generate-invitation-qr.hook';
+import type { TResponseSecondaryCarerGenerateInvitationQR } from '@/domain/carer/use-case-schema/secondary-carer.generate-invitation-qr.use-case-schema';
 import { TIME_TO_LIVE } from '@/domain/core/constant/time-to-live.constants';
 import { QR_BUNDLE_VERSION } from '@/domain/core/enum/qr.enum';
 
 export interface GenerateInvitationQRFormData {
   selectedTTL: TIME_TO_LIVE;
-  invitationDetails: TResponseGenerateInvitationQRForSecondaryCarer;
+  invitationDetails: TResponseSecondaryCarerGenerateInvitationQR;
 }
 
-const DEFAULT_DATA = {
+export const DEFAULT_DATA = {
   selectedTTL: TIME_TO_LIVE.ONE_MONTH,
   invitationDetails: {
     qrData: {
@@ -24,10 +23,7 @@ const DEFAULT_DATA = {
       payload: {
         expiresAt: addMonths(new Date(), 1),
         id: -1,
-        isPrimary: false,
-        type: CARER_TYPE_ENUM.SECONDARY,
         name: '',
-        timeToLive: TIME_TO_LIVE.ONE_MONTH,
       },
     },
     qrBundle: '',
@@ -45,7 +41,7 @@ export function useGenerateInvitationQRForm(carerID: number) {
   } = useAdapters();
 
   const { execute: generateInvitation, isExecuting: isGenerating } =
-    useGenerateInvitationQRForSecondaryCarer({
+    useSecondaryCarerGenerateInvitationQR({
       carerAdapter,
       loggerAdapter,
       notifyAdapter,
@@ -62,7 +58,7 @@ export function useGenerateInvitationQRForm(carerID: number) {
   }, []);
 
   const setInvitationDetails = useCallback(
-    (details: TResponseGenerateInvitationQRForSecondaryCarer) => {
+    (details: TResponseSecondaryCarerGenerateInvitationQR) => {
       setFormData((prev) => ({ ...prev, invitationDetails: details }));
     },
     []

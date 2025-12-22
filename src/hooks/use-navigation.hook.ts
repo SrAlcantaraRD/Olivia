@@ -28,28 +28,9 @@ export const useNavigation = (adapters: {
     navigateTo('/(onboarding)/parent-setup');
   }, []);
 
-  const buildQueryString = (params: Record<string, string>) => {
-    return Object.entries(params)
-      .map(
-        ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-      )
-      .join('&');
-  };
-
-  const goToConfirmLink = useCallback(
-    (params?: Record<string, string>) => {
-      const route = '/(caregiver-setup)/confirm-link';
-      if (!params || !Object.keys(params).length) {
-        navigateTo(route);
-        return;
-      }
-
-      const query = buildQueryString(params);
-      navigateTo(`${route}?${query}`);
-    },
-    [navigateTo]
-  );
+  const goToSecondaryCarerSetup = useCallback(() => {
+    navigateTo('/(onboarding)/secondary-carer-setup');
+  }, []);
 
   const goToSyncronization = useCallback((carerID: TID) => {
     navigateTo(
@@ -149,7 +130,7 @@ export const useNavigation = (adapters: {
     goBack,
     goToRoleSelection,
     goToParentSetup,
-    goToConfirmLink,
+    goToSecondaryCarerSetup,
     goToSyncronization,
     goToRegister: goToRegister,
     goToRegisterHome,

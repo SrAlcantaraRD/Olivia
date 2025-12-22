@@ -63,6 +63,25 @@ export class SQLiteCarerAdapter implements ICarerPort {
     return SQLiteCarerAdapter.toDomainEntity(item);
   }
 
+  public async addSecondaryCarer(
+    originCarerID: TID,
+    dto: TCarerCreate
+  ): Promise<TCarer> {
+    const [item] = await this.database
+      .insert(DB_SCHEMA.CARER)
+      .values({
+        id: originCarerID,
+        name: dto.name,
+        type: dto.type,
+        isPrimary: dto.isPrimary ? 1 : 0,
+        pinHash: dto.pinHash,
+        status: STATUS_ENUM.ACTIVE,
+      } satisfies TCarerAdapterInsert)
+      .returning();
+
+    return SQLiteCarerAdapter.toDomainEntity(item);
+  }
+
   public async getByID(id: TID): Promise<TCarer | null> {
     const item = await this.database.query.CARER.findFirst({
       where: (row, { eq }) => eq(row.id, id),

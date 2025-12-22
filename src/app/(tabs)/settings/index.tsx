@@ -117,13 +117,13 @@ export default function SettingsScreen() {
               accessibilityHint="a11y.hint.logout-action"
               onPress={goToLogOut}
             >
-              <CardAtom className="flex-row items-center justify-center p-0 bg-transparent h-10">
+              <View className="flex-row items-center justify-center p-0 bg-transparent h-10">
                 <TypographyParagraph
                   testID="screen.settings.logout"
                   i18nKey="page.settings.logout"
                   className="font-semibold text-white"
                 />
-              </CardAtom>
+              </View>
             </Pressable>
           </CardAtom>
         </View>

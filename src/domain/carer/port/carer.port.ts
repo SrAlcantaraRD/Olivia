@@ -4,6 +4,7 @@ import type { TID } from '@/domain/core/schemas/id.schema';
 
 export interface ICarerPort {
   create(dto: TCarerCreate): Promise<TCarer>;
+  addSecondaryCarer(originCarerID: TID, dto: TCarerCreate): Promise<TCarer>;
   getByID(id: TID): Promise<TCarer | null>;
   getAll(): Promise<TCarer[]>;
   existsAny(): Promise<boolean>;

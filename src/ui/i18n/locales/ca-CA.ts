@@ -251,7 +251,7 @@ export const caCA = Object.freeze({
   'page.child-profile.title': 'Perfil del Nen/a',
   'page.child-profile.placeholder': 'Formulari de perfil pròximament',
   'page.carer-management.title': 'Gestió de Cuidadors',
-  'page.carer-management.placeholder': 'Llista de cuidadors pròximament',
+
   'page.carer-management.description':
     'Convida cuidadors secundaris per compartir registres de forma segura.',
   'page.carer-management.list-empty':
@@ -262,14 +262,10 @@ export const caCA = Object.freeze({
   'page.carer-management.card.primary': 'Cuidador principal',
   'page.carer-management.card.secondary': 'Cuidador secundari',
   'page.carer-management.invitation-modal.title': "Pack d'invitació",
-  'page.carer-management.invitation-modal.instructions':
-    'Escaneja cada fragment del QR o enganxa la dada al dispositiu secundari.',
   'page.carer-management.invitation-modal.copy': 'Copia fragment',
   'page.carer-management.invitation-modal.close': 'Tancar',
-  'page.carer-management.invitation-modal.chunks-title':
-    'Fragment {{index}} de {{total}}',
-  'page.carer-management.invitation-modal.progress':
-    '{{count}} / {{total}} fragments llestos',
+  'page.carer-management.invitation-modal.generate': 'Generar QR',
+  'page.carer-management.invitation-modal.generating': 'Generant codi QR...',
   'page.app-settings.title': "Configuració de l'App",
   'page.app-settings.subtitle': "Personalitza la teva experiència a l'app",
 
@@ -440,15 +436,6 @@ export const caCA = Object.freeze({
     'Si us plau espera mentre configurem el teu compte.',
   'hook.setup-parent.error-title': 'Configuració Fallida',
   'hook.setup-parent.success-title': 'Configuració Exitosa',
-  'hook.create-invite.title': 'Preparant invitació',
-  'hook.create-invite.description':
-    "Generant un paquet signat per a l'altre cuidador.",
-  'hook.create-invite.success-title': 'Invitació preparada',
-  'hook.create-invite.success-description':
-    'Comparteix el QR per començar la sincronització.',
-  'hook.create-invite.error-title': 'Error creant invitació',
-  'hook.create-invite.error-description':
-    'No s’ha pogut generar la invitació ara mateix.',
   'hook.import-invite.title': 'Important la invitació',
   'hook.import-invite.description':
     "Validant el paquet abans d'afegir el cuidador secundari.",
@@ -480,4 +467,150 @@ export const caCA = Object.freeze({
   'hook.get-record-field-distribution.error':
     'Error obtenint distribució del camp',
   'page.settings.section-configuration': 'Configuració',
+  'time-to-live.one-day': '1 dia',
+  'time-to-live.one-week': '1 setmana',
+  'time-to-live.one-month': '1 mes',
+  'hook.create-secondary-carer.title': 'Creant cuidador',
+  'hook.create-secondary-carer.description':
+    'Desant el nou cuidador secundari.',
+  'hook.create-secondary-carer.error-title': 'No es va poder crear el cuidador',
+  'hook.create-secondary-carer.error-description':
+    'Torna-ho a provar més tard per afegir el cuidador secundari.',
+  'hook.create-secondary-carer.success-title': 'Cuidador creat',
+  'hook.create-secondary-carer.success-description':
+    'El cuidador secundari està llest per a invitacions.',
+  'hook.delete-carer.title': 'Eliminant cuidador',
+  'hook.delete-carer.description':
+    'Estem eliminant aquest cuidador de forma segura.',
+  'hook.delete-carer.error-title': 'Eliminació fallida',
+  'hook.delete-carer.error-description':
+    'No vam poder eliminar el cuidador en aquest moment.',
+  'hook.delete-carer.success-title': 'Cuidador eliminat',
+  'hook.delete-carer.success-description':
+    'El cuidador està ara inactiu i ocult per a sincronització.',
+  'hook.sync-with-carer.title': 'Sincronitzant dades',
+  'hook.sync-with-carer.description': 'Important registres des de QR.',
+  'hook.sync-with-carer.error-title': 'Sincronització fallida',
+  'hook.sync-with-carer.error-description':
+    'No vam poder sincronitzar els registres. Torna-ho a provar.',
+  'hook.sync-with-carer.success-title': 'Sincronització registrada',
+  'hook.sync-with-carer.success-description':
+    "L'esdeveniment de sincronització s'ha registrat correctament.",
+  'page.carer-detail.heading': 'Detalls del cuidador',
+  'page.carer-detail.name-value': 'Nom: <bold>{{name}}</bold>',
+  'page.carer-detail.ttl':
+    'TTL: <bold>{{ttl}}</bold> · Expira en {{expiresAt}}',
+  'page.carer-detail.analysis-button': 'Veure dades importades (pròximament)',
+  'page.carer-detail.sync-history.title': 'Historial de sincronització',
+  'page.carer-detail.sync-history.empty':
+    'Encara no hi ha sincronitzacions registrades.',
+  'page.carer-detail.history.record':
+    '{{timestamp}} · {{status}} · {{records}} registres · {{details}}',
+  'page.carer-detail.history.status.success': 'Èxit',
+  'page.carer-detail.history.status.failure': 'Fallada',
+  'page.carer-management.invite-button': 'Convidar via QR',
+  'page.carer-management.detail-button': 'Veure detalls',
+  'page.carer-management.delete-button': 'Eliminar',
+  'page.carer-management.invitation-modal.subtitle':
+    'Estableix un TTL, genera el bundle QR, i comparteix-lo de forma segura amb el dispositiu secundari.',
+  'page.carer-management.ttl.heading': 'Seleccionar TTL de invitació',
+  'page.carer-management.invitation-modal.ttl':
+    'TTL <bold>{{ttl}}</bold> · Expira en {{expiresAt}}',
+  'page.carer-management.invitation-modal.bundle': 'Bundle: {{value}}',
+  'page.carer-management.create-modal.title': 'Crear un cuidador secundari',
+  'page.carer-management.create-modal.name-label': 'Nom del cuidador',
+  'page.carer-management.create-modal.name-placeholder': 'Introdueix el nom',
+  'page.carer-management.create-modal.create': 'Crear cuidador',
+  'page.carer-management.delete-modal.title': 'Eliminar cuidador secundari',
+  'page.carer-management.delete-modal.subtitle':
+    'Aquesta acció elimina suaument el cuidador i prevé noves sincronitzacions.',
+  'page.carer-management.delete-modal.confirm': 'Confirmar eliminació',
+  'use-case.generate-invitation-qr-for-secondary-carer.invalid-request':
+    'Sol·licitud invàlida per generar QR de invitació',
+  'use-case.generate-invitation-qr-for-secondary-carer.generation-failed':
+    'Fallada en generar QR de invitació',
+  'page.carer-management.create-secondary': 'Crear cuidador secundari',
+  'page.carer-management.section.primary': 'Cuidador Principal',
+  'page.carer-management.section.secondary': 'Cuidadors Secundaris',
+  'page.carer-management.ttl-expired.title': 'Invitació Expirada',
+  'page.carer-management.ttl-expired.description':
+    'La invitació ha expirat. Genera una nova.',
+  'page.carer-management.ttl-expired.sync': 'Sincronitzar amb nova invitació',
+  'hook.generate-invitation-qr-for-secondary-carer.title': 'Generant codi QR',
+  'hook.generate-invitation-qr-for-secondary-carer.description':
+    'Per favor espera mentre es genera el codi QR per al cuidador secundari.',
+  'hook.generate-invitation-qr-for-secondary-carer.success-title':
+    'Codi QR generat',
+  'hook.generate-invitation-qr-for-secondary-carer.success-description':
+    'Comparteix el codi QR amb el dispositiu secundari.',
+  'hook.generate-invitation-qr-for-secondary-carer.error-title':
+    'Error generant codi QR',
+  'hook.generate-invitation-qr-for-secondary-carer.error-description':
+    "No s'ha pogut generar el codi QR. Torna-ho a provar.",
+  'page.carer-detail.subtitle': 'Detalls i gestió del cuidador secundari',
+  'page.carer-detail.title': 'Detalls del Cuidador',
+
+  // Secondary Carer Setup
+  'secondary-carer-setup.carer-info.title': 'Sobre tu',
+  'secondary-carer-setup.carer-info.description':
+    'Informació bàsica sobre el cuidador secundari.',
+  'secondary-carer-setup.carer-info.name-label': 'Nom:',
+  'secondary-carer-setup.carer-info.name-placeholder': 'El teu nom',
+  'secondary-carer-setup.carer-info.relationship-label': 'Relació amb el nen:',
+  'secondary-carer-setup.carer-info.relationship-placeholder':
+    'Seleccionar relació',
+  'secondary-carer-setup.carer-info.relationship.family': 'Familiar',
+  'secondary-carer-setup.carer-info.relationship.professional':
+    'Professional sanitari',
+  'secondary-carer-setup.carer-info.relationship.other': 'Altres',
+  'secondary-carer-setup.carer-info.notes-label':
+    'Notes addicionals (opcional):',
+  'secondary-carer-setup.carer-info.notes-placeholder':
+    'Qualsevol informació addicional...',
+
+  // Scan QR Step
+  'secondary-carer-setup.scan-qr.title': "Escanejar QR d'Invitació",
+  'secondary-carer-setup.scan-qr.description':
+    'Escaneja el codi QR de la teva invitació per continuar amb la configuració.',
+  'secondary-carer-setup.scan-qr.progress': 'Progrés: {{progress}}',
+  'secondary-carer-setup.scan-qr.manual.title':
+    'O introdueix les dades del QR manualment:',
+  'secondary-carer-setup.scan-qr.manual.placeholder':
+    'Enganxa les dades del fragment QR aquí...',
+  'secondary-carer-setup.scan-qr.manual.submit': 'Processar Fragment',
+
+  // QR Info Step
+  'secondary-carer-setup.qr-info.title': 'Detalls de la Invitació',
+  'secondary-carer-setup.qr-info.description':
+    'Revisa i confirma els detalls de la invitació.',
+  'secondary-carer-setup.qr-info.invitation-details': 'Detalls de la Invitació',
+  'secondary-carer-setup.qr-info.name': 'Nom Convidat',
+  'secondary-carer-setup.qr-info.ttl': 'Temps de Vida',
+  'secondary-carer-setup.qr-info.expires-at':
+    'Expira el <bold>{{expiresAt}}</bold>',
+  'secondary-carer-setup.qr-info.user-name':
+    'Nom del Cuidador: <bold>{{userName}}</bold>',
+  'secondary-carer-setup.qr-info.form-title': 'La Teva Informació',
+
+  'secondary-carer-setup.modules.title': 'Mòduls Actius',
+  'secondary-carer-setup.modules.description':
+    'Revisa els mòduls als quals tindràs accés.',
+  'secondary-carer-setup.modules.empty': "No s'han trobat mòduls actius.",
+  'secondary-carer-setup.modules.note':
+    'Podràs veure i contribuir a aquests mòduls de salut.',
+  'secondary-carer-setup.summary.title': 'Revisa la teva informació',
+  'secondary-carer-setup.summary.description':
+    'Confirma que tot és correcte abans de continuar',
+  'secondary-carer-setup.summary.carer-name': 'Nom',
+  'secondary-carer-setup.summary.relationship': 'Relació',
+  'secondary-carer-setup.summary.notes': 'Notes',
+  'secondary-carer-setup.summary.modules-count': 'Mòduls actius',
+  'secondary-carer-setup.summary.terms': 'Accepto els termes i condicions',
+  'secondary-carer-setup.summary.confirmation-note':
+    'En continuar, acceptes compartir dades de salut de forma segura.',
+  'page.caregiver-setup.scan-qr.permission.description':
+    "L'aplicació necessita accés a la càmera per escanejar el codi QR de la invitació. Aquesta acció és essencial per completar la configuració del cuidador secundari.",
+  'page.caregiver-setup.scan-qr.permission.request':
+    'Concedeix accés a la càmera',
+  'page.caregiver-setup.scan-qr.permission.title': 'Permís de Càmera Necessari',
 } satisfies Record<Ti18nKeys, string>);

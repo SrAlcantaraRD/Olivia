@@ -5,20 +5,21 @@ import { TimeToLiveSchema } from '@/domain/core/constant/time-to-live.constants'
 import { QRBundleSchema, QRDTOChunkListSchema } from '@/domain/core/dto/qr.dto';
 import { IDSchema } from '@/domain/core/schemas/id.schema';
 
-export const RequestGenerateInvitationQRForSecondaryCarerSchema = z.object({
+export const RequestSecondaryCarerGenerateInvitationQRSchema = z.object({
   carerID: IDSchema,
   timeToLive: TimeToLiveSchema,
 });
 
-export const ResponseGenerateInvitationQRForSecondaryCarerSchema = z.object({
+export const ResponseSecondaryCarerGenerateInvitationQRSchema = z.object({
   qrData: InviteSecondaryCarerQRSchema,
   qrBundle: QRBundleSchema,
   qrChunkList: QRDTOChunkListSchema,
 });
 
-export type TRequestGenerateInvitationQRForSecondaryCarer = z.infer<
-  typeof RequestGenerateInvitationQRForSecondaryCarerSchema
+export type TRequestSecondaryCarerGenerateInvitationQR = z.infer<
+  typeof RequestSecondaryCarerGenerateInvitationQRSchema
 >;
-export type TResponseGenerateInvitationQRForSecondaryCarer = z.infer<
-  typeof ResponseGenerateInvitationQRForSecondaryCarerSchema
+
+export type TResponseSecondaryCarerGenerateInvitationQR = z.infer<
+  typeof ResponseSecondaryCarerGenerateInvitationQRSchema
 >;

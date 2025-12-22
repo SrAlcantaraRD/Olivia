@@ -1,14 +1,13 @@
-import { addDays, addMonths, addWeeks } from 'date-fns';
+import { addDays, addMonths, addWeeks, endOfDay } from 'date-fns';
 import z from 'zod';
 
 import type { TInviteSecondaryCarerQRPayload } from '@/domain/carer/dto/invite-secondary-carer.qr.dto';
-import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import {
-  RequestGenerateInvitationQRForSecondaryCarerSchema,
-  type TRequestGenerateInvitationQRForSecondaryCarer,
-  type TResponseGenerateInvitationQRForSecondaryCarer,
-} from '@/domain/carer/use-case-schema/generate-invitation-qr-for-secondary-carer.use-case-schema';
+  RequestSecondaryCarerGenerateInvitationQRSchema,
+  type TRequestSecondaryCarerGenerateInvitationQR,
+  type TResponseSecondaryCarerGenerateInvitationQR,
+} from '@/domain/carer/use-case-schema/secondary-carer.generate-invitation-qr.use-case-schema';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import { TIME_TO_LIVE } from '@/domain/core/constant/time-to-live.constants';
 import { ErrorEntityNotFoundBy } from '@/domain/core/error/entity-not-found-by.error';
@@ -17,9 +16,9 @@ import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
 
-export class GenerateInvitationQRForSecondaryCarerUseCase extends BaseUseCase<
-  TRequestGenerateInvitationQRForSecondaryCarer,
-  TResponseGenerateInvitationQRForSecondaryCarer
+export class SecondaryCarerGenerateInvitationQRUseCase extends BaseUseCase<
+  TRequestSecondaryCarerGenerateInvitationQR,
+  TResponseSecondaryCarerGenerateInvitationQR
 > {
   constructor(
     private readonly adapters: {
@@ -33,16 +32,16 @@ export class GenerateInvitationQRForSecondaryCarerUseCase extends BaseUseCase<
   }
 
   public async execute(
-    request: TRequestGenerateInvitationQRForSecondaryCarer
-  ): Promise<IBaseResponse<TResponseGenerateInvitationQRForSecondaryCarer>> {
-    this.logDebug('GenerateInvitationQRForSecondaryCarerUseCase', request);
+    request: TRequestSecondaryCarerGenerateInvitationQR
+  ): Promise<IBaseResponse<TResponseSecondaryCarerGenerateInvitationQR>> {
+    this.logDebug(JSON.stringify(request));
 
-    const parseResult =
-      RequestGenerateInvitationQRForSecondaryCarerSchema.safeParse(request);
+    const parse =
+      RequestSecondaryCarerGenerateInvitationQRSchema.safeParse(request);
 
-    if (!parseResult.success) {
+    if (!parse.success) {
       // TODO: Generate a wrapper to encapsulate safeParse and errors return [avoid code duplication on parsing requests at abstract BaseUseCase]
-      const errorList = z.treeifyError(parseResult.error).errors;
+      const errorList = z.treeifyError(parse.error).errors;
       this.logError('Error on parsing request', errorList.join(', '));
 
       return {
@@ -52,7 +51,7 @@ export class GenerateInvitationQRForSecondaryCarerUseCase extends BaseUseCase<
       };
     }
 
-    const { carerID, timeToLive } = parseResult.data;
+    const { carerID, timeToLive } = parse.data;
 
     const carer = await this.adapters.carerAdapter.getByID(carerID);
 
@@ -66,10 +65,7 @@ export class GenerateInvitationQRForSecondaryCarerUseCase extends BaseUseCase<
       const payload = {
         id: carer.id,
         name: carer.name,
-        isPrimary: carer.isPrimary,
-        type: CARER_TYPE_ENUM.SECONDARY,
-        timeToLive,
-        expiresAt: expiresAt.toISOString(),
+        expiresAt,
       } satisfies TInviteSecondaryCarerQRPayload;
 
       const qrData =
@@ -77,7 +73,7 @@ export class GenerateInvitationQRForSecondaryCarerUseCase extends BaseUseCase<
           payload
         );
 
-      const qrBundle = await this.adapters.qrAdapter.generateBundle(qrData);
+      const qrBundle = await this.adapters.qrAdapter.encodeToBundle(qrData);
 
       const qrChunkList =
         await this.adapters.qrAdapter.encodeToChunks(qrBundle);
@@ -109,18 +105,26 @@ export class GenerateInvitationQRForSecondaryCarerUseCase extends BaseUseCase<
 
   private getExpireAt(timeToLive: TIME_TO_LIVE): Date {
     const now = new Date();
+    let expiresAt: Date;
 
     switch (timeToLive) {
       case TIME_TO_LIVE.ONE_DAY:
-        return addDays(now, 1);
+        expiresAt = addDays(now, 1);
+        break;
       case TIME_TO_LIVE.ONE_WEEK:
-        return addWeeks(now, 1);
+        expiresAt = addWeeks(now, 1);
+        break;
       case TIME_TO_LIVE.ONE_MONTH:
-        return addMonths(now, 1);
+        expiresAt = addMonths(now, 1);
+        break;
       default:
         throw new Error(
-          `Invalid timeToLive value: ${timeToLive} in GenerateInvitationQRForSecondaryCarerUseCase`
+          `Invalid timeToLive value: ${timeToLive} in SecondaryCarerGenerateInvitationQRUseCase`
         );
     }
+
+    expiresAt = endOfDay(expiresAt);
+
+    return expiresAt;
   }
 }

@@ -1,14 +1,12 @@
 import { useThemeColor } from 'heroui-native';
 import { useEffect } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-
-import { CardAtom } from '@/ui/components/atoms/card.atom';
 
 interface SelectableCardProps {
   isSelected: boolean;
@@ -57,16 +55,16 @@ export function SelectableCard({
   return (
     <Pressable
       onPress={onPress}
-      className={`rounded-3xl relative ${className} `}
+      className={`rounded-lg relative ${className} `}
       testID={`${testID}.pressable`}
       style={{ backgroundColor }}
     >
       <Animated.View
         style={animatedBorderStyle}
-        className="absolute inset-0 rounded-3xl"
+        className="absolute inset-0 rounded-lg"
       />
 
-      <CardAtom variant="transparent">{children}</CardAtom>
+      <View className="p-4 rounded-lg">{children}</View>
     </Pressable>
   );
 }

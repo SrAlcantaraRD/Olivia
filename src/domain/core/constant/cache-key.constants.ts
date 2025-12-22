@@ -8,6 +8,7 @@ export const CACHE_KEY_ENUM = Object.freeze({
   REPORT_DISTRIBUTION: 'report_distribution',
   SUMMARY_PINS: 'summary_pins',
   SUMMARY_SNAPSHOT: 'summary_snapshot',
+  SECONDARY_CARER_EXPIRES_AT: 'secondary-carer',
 } as const);
 
 export type TCacheKey = (typeof CACHE_KEY_ENUM)[keyof typeof CACHE_KEY_ENUM];
