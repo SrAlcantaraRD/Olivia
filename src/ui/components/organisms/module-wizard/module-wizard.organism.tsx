@@ -29,6 +29,7 @@ interface ModuleWizardProps {
   onComplete: (data: TRecordCreate) => void;
   testID: string;
   adapters: IModuleWizardAdapters;
+  onGoBack?: () => void;
 }
 
 export function ModuleWizard({
@@ -36,6 +37,7 @@ export function ModuleWizard({
   onComplete,
   testID,
   adapters,
+  onGoBack,
 }: ModuleWizardProps) {
   const {
     currentStep,
@@ -50,6 +52,7 @@ export function ModuleWizard({
     initialValues: {},
     onComplete,
     adapters,
+    onGoBack,
   });
 
   type StepItem = {

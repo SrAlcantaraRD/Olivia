@@ -72,6 +72,16 @@ export const useNavigation = (adapters: {
     navigateTo(`/(tabs)/settings/carer-managment/carer-detail/${carerID}`);
   }, []);
 
+  const goToCreateSecondaryCarer = useCallback(() => {
+    navigateTo('/(tabs)/settings/carer-managment/create-carer');
+  }, []);
+
+  const goToDeleteCarer = useCallback((carerID: TID) => {
+    navigateTo(
+      `/(tabs)/settings/carer-managment/carer-detail/${carerID}/delete-carer`
+    );
+  }, []);
+
   const goToLogOut = useCallback(() => {
     navigateTo('/(tabs)/settings/log-out');
   }, []);
@@ -127,6 +137,8 @@ export const useNavigation = (adapters: {
     goToChildProfile,
     goToCarerManagement,
     goToCarerDetail,
+    goToCreateSecondaryCarer,
+    goToDeleteCarer,
     goToGenerateInvitationQR,
     goToLogOut,
     goToAbout,

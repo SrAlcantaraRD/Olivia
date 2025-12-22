@@ -29,10 +29,11 @@ export interface IModuleWizardOptions {
   initialValues: Record<number, string>;
   onComplete?: (data: TRecordCreate) => void;
   adapters: IModuleWizardAdapters;
+  onGoBack?: () => void;
 }
 
 export function useModuleWizard(opts: IModuleWizardOptions) {
-  const { moduleID, initialValues, onComplete, adapters } = opts;
+  const { moduleID, initialValues, onComplete, adapters, onGoBack } = opts;
 
   const { loggerAdapter, moduleFieldAdapter, notifyAdapter } = adapters;
 
@@ -81,8 +82,12 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
   }, [totalSteps]);
 
   const goToPreviousStep = useCallback(() => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
-  }, []);
+    if (currentStep === 0) {
+      onGoBack?.();
+    } else {
+      setCurrentStep((prev) => prev - 1);
+    }
+  }, [currentStep, onGoBack]);
 
   const goToStep = useCallback(
     (idx: number) => {

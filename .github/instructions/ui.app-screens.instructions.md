@@ -14,7 +14,6 @@ Organize and implement Expo Router screens scalably, orchestrating hooks and UI 
 - `src/app/modal.tsx` - Modal stack configuration
 - `src/app/(onboarding)/**/*.tsx` - Onboarding flow screens and layouts
 - `src/app/(caregiver-setup)/**/*.tsx` - Caregiver setup screens and layouts
-- `src/app/(modals)/**/*.tsx` - Modal screens for quick actions
 - `src/app/(tabs)/**/*.tsx` - Tab-based screens and layouts
 - `test/e2e/**/*.spec.ts` - E2E tests for screen flows
 
@@ -22,7 +21,7 @@ Organize and implement Expo Router screens scalably, orchestrating hooks and UI 
 - Root Screens: `index.tsx`, `modal.tsx`
 - Layouts: `_layout.tsx` in each route group
 - Feature Screens: `<feature>.tsx` (e.g., `parent-setup.tsx`, `confirm-link.tsx`)
-- Route Groups: Use parentheses for organization `(onboarding)`, `(tabs)`, `(modals)`
+- Route Groups: Use parentheses for organization `(onboarding)`, `(tabs)``
 - Modal Screens: `modal-<feature>.tsx` (e.g., `execute-register.tsx`)
 
 ## Rules
@@ -32,7 +31,6 @@ Organize and implement Expo Router screens scalably, orchestrating hooks and UI 
 - **Route Groups**: Use parentheses for logical grouping (onboarding, tabs, modals)
 - **Layouts**: Each route group has its own `_layout.tsx` for specific navigation config
 - **Screens**: Default export functions named after the screen purpose
-- **Modal Stack**: Separate modal screens in `(modals)` group with dedicated layout
 
 ### Screen Implementation
 - Import and use `useAdapters` hook for dependency injection
@@ -69,7 +67,6 @@ Organize and implement Expo Router screens scalably, orchestrating hooks and UI 
 - Apply consistent styling with TailwindCSS classes
 
 ### Modal Screens
-- Place modal screens in `(modals)` route group
 - Use `presentation: 'modal'` in layout configuration
 - Handle modal dismissal with navigation methods
 - Implement form validation and submission in modals
