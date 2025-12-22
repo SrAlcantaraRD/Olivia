@@ -9,6 +9,7 @@ import {
 import { useSecondaryCarerConsumeInvitationQR } from '@/domain/carer/hook/secondary-carer.consume-invitation-qr.hook';
 import type { TQRBundle } from '@/domain/core/dto/qr.dto';
 import { useSecondaryCarerSetupStore } from '@/domain/core/stores/secondary-carer-setup.store';
+import { useNavigation } from '@/hooks/use-navigation.hook';
 
 export function useSecondaryCarerSetupForm() {
   const {
@@ -17,6 +18,7 @@ export function useSecondaryCarerSetupForm() {
     qrAdapter,
     cacheAdapter,
     loggerAdapter,
+    navigationAdapter,
   } = useAdapters();
 
   const {
@@ -28,6 +30,8 @@ export function useSecondaryCarerSetupForm() {
     setIsLoading,
     reset,
   } = useSecondaryCarerSetupStore();
+
+  const { goToRegisterHome } = useNavigation({ navigationAdapter });
 
   const { execute: consumeInvitationQR, isExecuting: isCreating } =
     useSecondaryCarerConsumeInvitationQR({
@@ -113,6 +117,10 @@ export function useSecondaryCarerSetupForm() {
     const result = await consumeInvitationQR({
       qrBundle: formData.qrBundle,
     });
+
+    if (result.success) {
+      goToRegisterHome();
+    }
 
     return result;
   };
