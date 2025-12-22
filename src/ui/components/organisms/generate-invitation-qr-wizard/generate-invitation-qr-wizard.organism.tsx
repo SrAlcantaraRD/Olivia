@@ -1,0 +1,167 @@
+import * as Clipboard from 'expo-clipboard';
+import { useThemeColor } from 'heroui-native';
+import { useMemo } from 'react';
+import { View } from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
+
+import { useAdapters } from '@/adapter';
+import { getTimeToLiveOptions } from '@/domain/core/constant/time-to-live.constants';
+import { ButtonAtom } from '@/ui/components/atoms/button.atom';
+import { TypographySmall } from '@/ui/components/atoms/typography.atom';
+import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
+import {
+  Wizard,
+  type WizardStep,
+} from '@/ui/components/molecules/wizard.molecule';
+import { TTL_ICONS } from '@/ui/components/particles/ttl-icons.particle';
+import { useGenerateInvitationQRForm } from './hooks/use-generate-invitation-qr-form.hook';
+
+interface GenerateInvitationQRWizardProps {
+  carerID: number;
+  onComplete?: () => void;
+  testID: string;
+}
+
+export function GenerateInvitationQRWizard({
+  carerID,
+  onComplete,
+  testID,
+}: GenerateInvitationQRWizardProps) {
+  const { notifyAdapter } = useAdapters();
+  const accentColor = useThemeColor('accent');
+
+  const {
+    formData,
+    currentStep,
+    setSelectedTTL,
+    goToNextStep,
+    goToPreviousStep,
+    isStep1Valid,
+    generateQR,
+    reset,
+    isGenerating,
+  } = useGenerateInvitationQRForm(carerID);
+
+  const steps: WizardStep[] = useMemo(
+    () => [
+      {
+        id: 'ttl-selection',
+        isValid: isStep1Valid(),
+        content: (
+          <ScreenLayout
+            testID="generate-invitation-qr.ttl-selection"
+            title="page.carer-management.ttl.heading"
+            subtitle="page.carer-management.invitation-modal.subtitle"
+            styles={{
+              container: 'p-0',
+            }}
+          >
+            <View className="gap-4">
+              {getTimeToLiveOptions().map((option) => (
+                <CardWithDetails
+                  key={option.value}
+                  title={option.label}
+                  isSelected={formData.selectedTTL === option.value}
+                  onPress={() => setSelectedTTL(option.value)}
+                  testID={`modal.invite.ttl-${option.value}`}
+                  icon={TTL_ICONS[option.value]}
+                />
+              ))}
+            </View>
+          </ScreenLayout>
+        ),
+      },
+      {
+        id: 'qr-preview',
+        isValid: false, // Never valid so the wizard button is disabled - buttons are in content
+        content: (
+          <ScreenLayout
+            testID="generate-invitation-qr.qr-preview"
+            title="page.carer-management.invitation-modal.title"
+            subtitle="page.carer-management.invitation-modal.subtitle"
+            isLoading={isGenerating}
+          >
+            <View className="gap-4">
+              <View className="items-center">
+                <QRCode
+                  value={formData.invitationDetails?.qrBundle}
+                  color={accentColor}
+                  size={250}
+                />
+              </View>
+              <View className="gap-2">
+                <TypographySmall
+                  i18nKey="page.carer-management.invitation-modal.ttl"
+                  values={{
+                    ttl: formData.selectedTTL,
+                    expiresAt:
+                      formData.invitationDetails?.qrData.payload.expiresAt,
+                  }}
+                  testID="modal.invite.ttl"
+                />
+                <TypographySmall
+                  i18nKey="page.carer-management.invitation-modal.bundle"
+                  values={{ value: formData.invitationDetails?.qrBundle }}
+                  testID="modal.invite.bundle"
+                />
+                <ButtonAtom
+                  title="page.carer-management.invitation-modal.copy"
+                  onPress={() =>
+                    handleCopyBundle(formData.invitationDetails?.qrBundle)
+                  }
+                  testID="modal.invite.copy"
+                />
+              </View>
+            </View>
+          </ScreenLayout>
+        ),
+      },
+    ],
+    [
+      formData.selectedTTL,
+      formData.invitationDetails,
+      isStep1Valid,
+      isGenerating,
+      accentColor,
+      setSelectedTTL,
+      reset,
+      onComplete,
+    ]
+  );
+
+  const handleNext = async () => {
+    if (currentStep === 0) {
+      // Generate QR before moving to next step
+      await generateQR();
+      goToNextStep();
+    }
+    // For step 1, buttons are handled in content (copy/close)
+  };
+
+  const handleBack = () => {
+    if (currentStep > 0) {
+      goToPreviousStep();
+    }
+  };
+
+  const handleCopyBundle = async (bundle?: string) => {
+    if (!bundle) return;
+    await Clipboard.setStringAsync(bundle);
+    notifyAdapter.success({
+      title: 'common.success',
+      description: 'page.carer-management.invitation-modal.copy',
+    });
+  };
+
+  return (
+    <Wizard
+      testID={`${testID}.wizard`}
+      steps={steps}
+      currentStepIndex={currentStep}
+      onNext={handleNext}
+      onBack={handleBack}
+      showBackButton={currentStep > 0}
+    />
+  );
+}

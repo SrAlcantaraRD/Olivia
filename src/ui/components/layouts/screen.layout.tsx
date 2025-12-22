@@ -15,6 +15,7 @@ interface ScreenLayoutProps {
   testID: string;
   isLoading?: boolean;
   styles?: {
+    container?: string;
     content?: string;
   };
   title?: Ti18nKeys;
@@ -34,7 +35,10 @@ export function ScreenLayout({
   return (
     <View
       testID={testID}
-      className="flex-1 p-4 h-full w-full bg-background"
+      className={cn(
+        'flex-1 p-4 h-full w-full bg-background',
+        styles?.container
+      )}
       style={{ paddingTop: insets.top }}
     >
       <ScreenContentLayout

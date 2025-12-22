@@ -107,12 +107,12 @@ export function ModuleWizard({
 
   return (
     <Wizard
+      testID={testID}
       steps={wizardSteps}
       currentStepIndex={currentStep}
       onNext={handleNext}
       onBack={goToPreviousStep}
       showBackButton={true}
-      testID={testID}
     />
   );
 }
