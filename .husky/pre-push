@@ -1,1 +1,18 @@
+echo "🧪 Running typescript check..."
+pnpm typecheck
+
+echo "🧪 Running unit test..."
 pnpm test
+
+echo "🧪 Running unit tests..."
+pnpm test:ci || exit 1
+
+echo "🏗️  Building E2E app (if needed)..."
+if [ ! -d "ios/build/Build/Products/Release-iphonesimulator/TFG.app" ]; then
+  pnpm e2e:build:ios || exit 1
+fi
+
+echo "🔬 Running E2E tests..."
+pnpm e2e:test:ios || exit 1
+
+echo "✅ All tests passed!"

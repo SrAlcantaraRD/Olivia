@@ -53,6 +53,14 @@ Así pues, los diferentes artefactos con el cual se construye la aplicación son
 
 ### Back-end
 
+Para una descripción más detallada del dominio, las entidades y los casos de uso, consulta los siguientes documentos:
+
+- **[Diseño Orientado al Dominio (DDD)](./docs/domain-driven-design.md)**: Explica el lenguaje ubicuo, las entidades principales y los contextos delimitados de la aplicación.
+- **[Casos de Uso Principales](./docs/use-cases.md)**: Detalla los flujos de negocio más importantes y cómo se orquestan.
+- **[Modelo de Datos](./docs/data-model.md)**: Describe la estructura de la base de datos, las tablas y sus relaciones.
+
+### Backend
+
 No vamos a desarrollar una aplicación exclusiva de acceso a los datos, sino que vamos a trabajar directamente con la BBDD utilizando un ORM que facilite la iteración y evolución de la BBDD.
 
 ### Front-end
@@ -67,18 +75,22 @@ A este nivel, necesitaremos implementar los siguientes artefactos:
 Con una estructura de carpeta organizada de la siguiente forma:
 
 ```sh
-├── app/                # Configuración global, layouts, tabs, Context Providers y Route Guards.
-├── bbdd/               # Contiene la definición de la BBDD, los ficheros de migración y los adaptadores.
-├── domain/             # Contiene la lógica de negocio.
-├── ui/                 # Contiene la implementación exacta de los componentes de diseño.
-│   ├── components/     # Implementación de metodología Atomic Design para componentes reutilizables.
-│   ├── features/     #
-│   └── i18n/     #
-└── test/               # estrategias de prueba unitaria, de integración y de comportamiento.
-    ├── unit-test/     #
-    ├── mocks/     #
-    ├── integration/     #
-    └── e2e/     #
+├── src/
+│   ├── app/                # Configuración global, layouts, tabs, Context Providers y Route Guards.
+│   ├── database/           # Contiene la definición de la BBDD, los ficheros de migración y los adaptadores.
+│   ├── domain/             # Contiene la lógica de negocio.
+│   ├── ui/                 # Contiene la implementación exacta de los componentes de diseño.
+│   │   ├── components/     # Implementación de metodología Atomic Design para componentes reutilizables.
+│   │   ├── features/       #
+│   │   └── i18n/           #
+│   ├── hooks/              # Custom React hooks
+│   ├── constants/          # Constantes y configuración
+│   └── assets/             # Recursos estáticos
+└── tests/                  # Estrategias de prueba unitaria, de integración y de comportamiento.
+    ├── unit-test/          #
+    ├── mocks/              #
+    ├── integration/        #
+    └── e2e/                #
 ```
 
 ## Git Hooks Configuration

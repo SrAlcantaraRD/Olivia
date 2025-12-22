@@ -1,0 +1,20 @@
+import { z } from 'zod';
+
+import { GenerateCreateEntitySchema } from '@/domain/core/entity/base-dto.entity';
+import { BaseEntitySchema } from '@/domain/core/entity/base-entity.entity';
+import { AutonomyLevelSchema } from '@/domain/patient/enum/autonomy-level.enum';
+import { SexSchema } from '@/domain/patient/enum/sex.enum';
+
+export const PatientSchema = z.object({
+  ...BaseEntitySchema.shape,
+  name: z.string().min(1),
+  birthDate: z.number().int(),
+  sex: SexSchema,
+  autonomyLevel: AutonomyLevelSchema,
+});
+
+export const PatientCreateSchema = GenerateCreateEntitySchema(PatientSchema);
+
+export type TPatient = z.infer<typeof PatientSchema>;
+
+export type TPatientCreate = z.infer<typeof PatientCreateSchema>;

@@ -1,9 +1,9 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit",
-    "source.organizeImports": "explicit",
-    "source.sortMembers": "explicit"
+    "source.fixAll.biome": "always",
+    "source.organizeImports.biome": "always",
+    "source.biome": "always",
   },
   "files.associations": {
     "*.css": "tailwindcss",
@@ -16,5 +16,5 @@
   "cSpell.words": [
     "heroui",
     "Nativewind"
-  ]
+  ],
 }

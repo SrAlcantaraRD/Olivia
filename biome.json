@@ -14,7 +14,8 @@
       "!build",
       "!dist",
       "!.vscode",
-      "!coverage"
+      "!coverage",
+      "!uniwind.d.ts"
     ]
   },
   "formatter": {
@@ -62,11 +63,7 @@
               ":BLANK_LINE:",
               "@/domain",
               ":BLANK_LINE:",
-              "@/ui",
-              ":BLANK_LINE:",
               "@/tests",
-              ":BLANK_LINE:",
-              "@/bbdd",
               ":BLANK_LINE:",
               "./",
               ":BLANK_LINE:",

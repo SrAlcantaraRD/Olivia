@@ -1,0 +1,20 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/i18n": ["./src/ui/i18n/*"]
+    }
+  },
+  "include": [
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
+}
