@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
-import { SecondaryCarerGenerateInvitationQRUseCase } from '@/domain/carer/use-case/secondary-carer.generate-invitation-qr.use-case';
 import type {
   TRequestSecondaryCarerGenerateInvitationQR,
   TResponseSecondaryCarerGenerateInvitationQR,
 } from '@/domain/carer/use-case-schema/secondary-carer.generate-invitation-qr.use-case-schema';
+import { SecondaryCarerGenerateInvitationQRUseCase } from '@/domain/carer/use-case/secondary-carer.generate-invitation-qr.use-case';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
   IHookResponse,
@@ -15,6 +15,7 @@ import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
+import { DEFAULT_DATA } from '@/ui/components/organisms/generate-invitation-qr-wizard/hooks/use-generate-invitation-qr-form.hook';
 
 export function useSecondaryCarerGenerateInvitationQR(adapters: {
   loggerAdapter: TLoggerPort;
@@ -29,7 +30,9 @@ export function useSecondaryCarerGenerateInvitationQR(adapters: {
 > {
   const [isExecuting, setExecuting] = useState(false);
   const [item, setItems] =
-    useState<TResponseSecondaryCarerGenerateInvitationQR>();
+    useState<TResponseSecondaryCarerGenerateInvitationQR>(
+      DEFAULT_DATA.invitationDetails
+    );
 
   const execute = useCallback(
     async (

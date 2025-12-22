@@ -104,6 +104,7 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends BaseUseCase<
       return {
         success: true,
         message: 'use-case.secondary-carer-consume-invitation-qr.carer-exists',
+        details: carerExists,
       };
     }
 
@@ -127,9 +128,7 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends BaseUseCase<
     return {
       success: true,
       message: 'common.success',
-      details: {
-        carer,
-      },
+      details: carer,
     };
   }
 }

@@ -65,7 +65,6 @@ export default function SummaryHomeScreen() {
     setRefreshing(true);
     try {
       const activeModules = activeModuleHook.items?.map((m) => m.id) ?? [];
-      console.log(`[SummaryIndex] Pull refresh with modules:`, activeModules);
       await summaryRefreshHook.execute({ moduleIds: activeModules });
       // Re-fetch home data
       await summaryHomeHook.execute({ moduleIds: activeModules });
@@ -87,7 +86,6 @@ export default function SummaryHomeScreen() {
       if (!hasRefreshedOnFocus.current) {
         hasRefreshedOnFocus.current = true;
         const activeModules = activeModuleHook.items?.map((m) => m.id) ?? [];
-        console.log(`[SummaryIndex] Active modules:`, activeModules);
         if (activeModules.length > 0) {
           void summaryRefreshHook.execute({ moduleIds: activeModules });
         }

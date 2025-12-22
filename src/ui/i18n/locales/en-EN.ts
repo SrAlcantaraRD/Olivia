@@ -290,6 +290,13 @@ export const enEN = Object.freeze({
   'hook.delete-carer.success-title': 'Carer removed',
   'hook.delete-carer.success-description':
     'The carer is now inactive and hidden from syncing.',
+  'hook.create-carer.title': 'Creating carer',
+  'hook.create-carer.description': 'We are creating this carer safely.',
+  'hook.create-carer.error-title': 'Creation failed',
+  'hook.create-carer.error-description':
+    'We could not create the carer right now.',
+  'hook.create-carer.success-title': 'Carer created',
+  'hook.create-carer.success-description': 'The carer is now active.',
   'hook.create-secondary-carer.title': 'Creating carer',
   'hook.create-secondary-carer.description': 'Saving the new secondary carer.',
   'hook.create-secondary-carer.error-title': 'Unable to create carer',
@@ -536,6 +543,16 @@ export const enEN = Object.freeze({
     'Invalid request for generating invitation QR',
   'use-case.generate-invitation-qr-for-secondary-carer.generation-failed':
     'Failed to generate invitation QR',
+  'use-case.create-carer.invalid-request': 'Invalid request for creating carer',
+  'use-case.delete-carer.invalid-request': 'Invalid request for deleting carer',
+  'use-case.create-secondary-carer.invalid-request':
+    'Invalid request for creating secondary carer',
+  'use-case.secondary-carer-consume-invitation-qr.invalid-qr-data':
+    'Invalid QR data provided',
+  'use-case.secondary-carer-consume-invitation-qr.carer-exists':
+    'Carer already exists',
+  'use-case.sync-with-carer.invalid-request':
+    'Invalid request for syncing with carer',
   'page.carer-detail.title': 'Carer Detail',
   'page.carer-detail.subtitle': 'View carer information and sync history',
 

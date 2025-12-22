@@ -44,10 +44,6 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
   }
 
   public async getModuleSummaries(moduleIds: TID[]): Promise<TSummaryModule[]> {
-    console.log(
-      `[SummaryModuleAdapter] getModuleSummaries called with moduleIds:`,
-      moduleIds
-    );
     const results: TSummaryModule[] = [];
 
     for (const moduleId of moduleIds) {
@@ -63,9 +59,6 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
         );
 
       const todayCount = todayResult[0]?.count ?? 0;
-      console.log(
-        `[SummaryModuleAdapter] Module ${moduleId}: todayCount = ${todayCount}`
-      );
 
       // Last recorded at
       const lastRecord = await this.database
@@ -76,9 +69,6 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
         .limit(1);
 
       const lastRecordedAt = lastRecord[0]?.createdAt ?? null;
-      console.log(
-        `[SummaryModuleAdapter] Module ${moduleId}: lastRecordedAt = ${lastRecordedAt}`
-      );
 
       // Last 7 days series
       const last7DaysStart = subDays(new Date(), 7);
@@ -100,11 +90,6 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
         .orderBy(
           sql`strftime('%Y-%m-%d', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
         );
-
-      console.log(
-        `[SummaryModuleAdapter] Module ${moduleId}: last7Days =`,
-        last7DaysResult
-      );
 
       // Previous period average (previous 7 days before last 7 days)
       const previousStart = subDays(new Date(), 14);

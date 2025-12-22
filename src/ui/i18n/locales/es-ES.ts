@@ -490,6 +490,14 @@ export const esES = Object.freeze({
   'hook.delete-carer.success-title': 'Cuidador eliminado',
   'hook.delete-carer.success-description':
     'El cuidador está ahora inactivo y oculto para sincronización.',
+  'hook.create-carer.title': 'Creando cuidador',
+  'hook.create-carer.description':
+    'Estamos creando este cuidador de forma segura.',
+  'hook.create-carer.error-title': 'Creación fallida',
+  'hook.create-carer.error-description':
+    'No pudimos crear el cuidador en este momento.',
+  'hook.create-carer.success-title': 'Cuidador creado',
+  'hook.create-carer.success-description': 'El cuidador está ahora activo.',
   'hook.sync-with-carer.title': 'Sincronizando datos',
   'hook.sync-with-carer.description': 'Importando registros desde QR.',
   'hook.sync-with-carer.error-title': 'Sincronización fallida',
@@ -531,6 +539,18 @@ export const esES = Object.freeze({
     'Solicitud inválida para generar QR de invitación',
   'use-case.generate-invitation-qr-for-secondary-carer.generation-failed':
     'Fallo al generar QR de invitación',
+  'use-case.create-carer.invalid-request':
+    'Solicitud inválida para crear cuidador',
+  'use-case.delete-carer.invalid-request':
+    'Solicitud inválida para eliminar cuidador',
+  'use-case.create-secondary-carer.invalid-request':
+    'Solicitud inválida para crear cuidador secundario',
+  'use-case.secondary-carer-consume-invitation-qr.invalid-qr-data':
+    'Datos QR inválidos proporcionados',
+  'use-case.secondary-carer-consume-invitation-qr.carer-exists':
+    'El cuidador ya existe',
+  'use-case.sync-with-carer.invalid-request':
+    'Solicitud inválida para sincronizar con cuidador',
 
   'hook.create-secondary-carer.description':
     'Estamos creando un cuidador secundario de forma segura.',

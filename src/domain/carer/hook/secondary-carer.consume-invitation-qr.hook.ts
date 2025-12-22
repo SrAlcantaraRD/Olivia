@@ -1,12 +1,15 @@
 import { useCallback, useState } from 'react';
 
+import type { TCarer } from '@/domain/carer/entity/carer.entity';
+import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
-import { SecondaryCarerConsumeInvitationQRUseCase } from '@/domain/carer/use-case/secondary-carer.consume-invitation-qr.use-case';
 import type {
   TRequestSecondaryCarerConsumeInvitation,
   TResponseSecondaryCarerConsumeInvitation,
 } from '@/domain/carer/use-case-schema/secondary-carer.consume-invitation-qr.use-case-schema';
+import { SecondaryCarerConsumeInvitationQRUseCase } from '@/domain/carer/use-case/secondary-carer.consume-invitation-qr.use-case';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
+import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 import type {
   IHookResponse,
   IUseHook,
@@ -28,6 +31,15 @@ export function useSecondaryCarerConsumeInvitationQR(adapters: {
   TResponseSecondaryCarerConsumeInvitation
 > {
   const [isExecuting, setExecuting] = useState(false);
+  const [carer, setCarer] = useState<TCarer>({
+    createdAt: new Date(),
+    id: -1,
+    isPrimary: false,
+    name: '',
+    pinHash: '',
+    status: STATUS_ENUM.INACTIVE,
+    type: CARER_TYPE_ENUM.SECONDARY,
+  });
 
   const execute = useCallback(
     async (
@@ -63,6 +75,7 @@ export function useSecondaryCarerConsumeInvitationQR(adapters: {
           description: 'hook.create-secondary-carer.success-description',
         });
 
+        setCarer(response.details);
         return {
           success: true,
           data: response.details,
@@ -81,5 +94,5 @@ export function useSecondaryCarerConsumeInvitationQR(adapters: {
     [adapters.carerAdapter, adapters.loggerAdapter, adapters.notifyAdapter]
   );
 
-  return { execute, isExecuting, items: undefined };
+  return { execute, isExecuting, items: carer };
 }

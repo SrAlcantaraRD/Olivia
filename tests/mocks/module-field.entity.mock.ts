@@ -1,16 +1,16 @@
 /// <reference types="jest" />
 
 import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
-import type { TModule } from '@/domain/module/entity/module.entity';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
-import type {
-  TRecord,
-  TRecordCreate,
-} from '@/domain/module/entity/record.entity';
+import type { TModule } from '@/domain/module/entity/module.entity';
 import type {
   TRecordField,
   TRecordFieldCreate,
 } from '@/domain/module/entity/record-field.entity';
+import type {
+  TRecord,
+  TRecordCreate,
+} from '@/domain/module/entity/record.entity';
 import { MODULE_FIELD_TYPE_ENUM } from '@/domain/module/enum/module-field-type.enum';
 import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 
@@ -77,6 +77,7 @@ export const mockRecordCreate = (
     moduleID: 1,
     synced: false,
     fieldList: [],
+    createdAt: new Date('2026-01-01T00:00:00Z'),
     ...overrides,
   }) satisfies TRecordCreate;
 

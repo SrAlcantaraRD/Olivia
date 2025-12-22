@@ -490,6 +490,14 @@ export const caCA = Object.freeze({
   'hook.delete-carer.success-title': 'Cuidador eliminat',
   'hook.delete-carer.success-description':
     'El cuidador està ara inactiu i ocult per a sincronització.',
+  'hook.create-carer.title': 'Creant cuidador',
+  'hook.create-carer.description':
+    'Estem creant aquest cuidador de forma segura.',
+  'hook.create-carer.error-title': 'Creació fallida',
+  'hook.create-carer.error-description':
+    'No vam poder crear el cuidador en aquest moment.',
+  'hook.create-carer.success-title': 'Cuidador creat',
+  'hook.create-carer.success-description': 'El cuidador està ara actiu.',
   'hook.sync-with-carer.title': 'Sincronitzant dades',
   'hook.sync-with-carer.description': 'Important registres des de QR.',
   'hook.sync-with-carer.error-title': 'Sincronització fallida',
@@ -531,6 +539,18 @@ export const caCA = Object.freeze({
     'Sol·licitud invàlida per generar QR de invitació',
   'use-case.generate-invitation-qr-for-secondary-carer.generation-failed':
     'Fallada en generar QR de invitació',
+  'use-case.create-carer.invalid-request':
+    'Sol·licitud invàlida per crear cuidador',
+  'use-case.delete-carer.invalid-request':
+    'Sol·licitud invàlida per eliminar cuidador',
+  'use-case.create-secondary-carer.invalid-request':
+    'Sol·licitud invàlida per crear cuidador secundari',
+  'use-case.secondary-carer-consume-invitation-qr.invalid-qr-data':
+    'Dades QR invàlides proporcionades',
+  'use-case.secondary-carer-consume-invitation-qr.carer-exists':
+    'El cuidador ja existeix',
+  'use-case.sync-with-carer.invalid-request':
+    'Sol·licitud invàlida per sincronitzar amb cuidador',
   'page.carer-management.create-secondary': 'Crear cuidador secundari',
   'page.carer-management.section.primary': 'Cuidador Principal',
   'page.carer-management.section.secondary': 'Cuidadors Secundaris',

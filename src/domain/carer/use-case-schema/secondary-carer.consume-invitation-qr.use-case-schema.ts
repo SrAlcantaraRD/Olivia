@@ -7,9 +7,8 @@ export const RequestSecondaryCarerConsumeInvitationQRSchema = z.object({
   qrBundle: QRBundleSchema,
 });
 
-export const ResponseSecondaryCarerConsumeInvitationQRSchema = z.object({
-  carer: CarerEntitySchema,
-});
+export const ResponseSecondaryCarerConsumeInvitationQRSchema =
+  CarerEntitySchema;
 
 export type TRequestSecondaryCarerConsumeInvitation = z.infer<
   typeof RequestSecondaryCarerConsumeInvitationQRSchema

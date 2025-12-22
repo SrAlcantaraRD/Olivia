@@ -93,6 +93,7 @@ export function ModuleWizard({
         carerID: 0, // load from cache
         data: JSON.stringify(values),
         synced: false,
+        createdAt: new Date(),
         fieldList: Object.entries(values).map(([fieldId, value]) => ({
           fieldID: Number(fieldId),
           value,

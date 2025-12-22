@@ -106,6 +106,7 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
             data: JSON.stringify({ ...values, [fieldId]: value }),
             synced: false,
             fieldList: [{ fieldID: fieldId, value }],
+            createdAt: new Date(),
           };
           onComplete?.(payload);
         } else {
