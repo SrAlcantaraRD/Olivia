@@ -4,6 +4,7 @@ import { Tabs } from 'expo-router';
 import { useThemeColor } from 'heroui-native';
 import { useTranslation } from 'react-i18next';
 import { Platform, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
   const { t } = useTranslation();
@@ -11,7 +12,7 @@ export default function TabLayout() {
   const accentColor = useThemeColor('accent');
   const mutedColor = useThemeColor('muted');
   const backgroundColor = useThemeColor('surface');
-  const foregroundColor = useThemeColor('foreground');
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -32,11 +33,11 @@ export default function TabLayout() {
           elevation: 0,
           height: Platform.select({
             ios: 88,
-            android: 64,
+            android: 64 + insets.bottom * 1.3,
           }),
           paddingBottom: Platform.select({
             ios: 32,
-            android: 12,
+            android: insets.bottom,
           }),
           paddingTop: 12,
         },

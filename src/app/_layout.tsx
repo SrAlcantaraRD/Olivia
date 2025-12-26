@@ -15,6 +15,7 @@ import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Toast, { type ToastConfig } from 'react-native-toast-message';
 
 import i18n from '@/ui/i18n/i18n';
@@ -128,32 +129,34 @@ export default function RootLayout() {
         options={{ enableChangeListener: true }}
         useSuspense
       >
-        <GestureHandlerRootView className="flex-1">
-          <KeyboardProvider>
-            <AppThemeProvider>
-              <HeroUINativeProvider
-                config={{
-                  toast: {
-                    insets: {
-                      top: 20,
-                      bottom: 20,
-                      left: 20,
-                      right: 20,
+        <SafeAreaProvider>
+          <GestureHandlerRootView className="flex-1">
+            <KeyboardProvider>
+              <AppThemeProvider>
+                <HeroUINativeProvider
+                  config={{
+                    toast: {
+                      insets: {
+                        top: 20,
+                        bottom: 20,
+                        left: 20,
+                        right: 20,
+                      },
                     },
-                  },
-                  textProps: {
-                    allowFontScaling: false,
-                  },
-                }}
-              >
-                <I18nextProvider i18n={i18n}>
-                  <RootNavigator />
-                  <Toast config={toastConfig as ToastConfig} />
-                </I18nextProvider>
-              </HeroUINativeProvider>
-            </AppThemeProvider>
-          </KeyboardProvider>
-        </GestureHandlerRootView>
+                    textProps: {
+                      allowFontScaling: false,
+                    },
+                  }}
+                >
+                  <I18nextProvider i18n={i18n}>
+                    <RootNavigator />
+                    <Toast config={toastConfig as ToastConfig} />
+                  </I18nextProvider>
+                </HeroUINativeProvider>
+              </AppThemeProvider>
+            </KeyboardProvider>
+          </GestureHandlerRootView>
+        </SafeAreaProvider>
       </SQLiteProvider>
     </Suspense>
   );
