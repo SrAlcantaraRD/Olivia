@@ -1,5 +1,6 @@
 import Toast from 'react-native-toast-message';
 
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import type {
   INotifyParams,
   INotifyPort,
@@ -38,19 +39,23 @@ export class ToastUINotifyPortAdapter implements INotifyPort {
   }
 
   public info(params: INotifyParams) {
+    BASE_LOGGER.debug({ message: params.title, details: params.description });
     this.showToast('info', params);
   }
 
   public warning(params: INotifyParams) {
     // Warning can use error type with different styling
+    BASE_LOGGER.warn({ message: params.title, details: params.description });
     this.showToast('error', params);
   }
 
   public error(params: INotifyParams) {
+    BASE_LOGGER.error({ message: params.title, details: params.description });
     this.showToast('error', params);
   }
 
   public success(params: INotifyParams) {
+    BASE_LOGGER.debug({ message: params.title, details: params.description });
     this.showToast('success', params);
   }
 }

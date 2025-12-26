@@ -81,7 +81,10 @@ export const RECORD_FIELD = sqliteTable(
     index('record_field__index__record_id').on(table.recordID),
     index('record_field__index__field_id').on(table.fieldID),
     index('record_field__index__created_at').on(table.createdAt),
-    unique('record_field__unique__created_at').on(table.createdAt),
+    unique('record_field__unique__field_id_created_at').on(
+      table.fieldID,
+      table.createdAt
+    ),
     foreignKey({
       name: 'record_field__fk__record__id',
       columns: [table.recordID],
