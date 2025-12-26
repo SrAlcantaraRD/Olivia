@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
 import { getTimeToLiveOptions } from '@/domain/core/constant/time-to-live.constants';
+import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
@@ -91,7 +92,9 @@ export function GenerateInvitationQRWizard({
                   values={{
                     ttl: formData.selectedTTL,
                     expiresAt: format(
-                      formData.invitationDetails?.qrData.payload.expiresAt,
+                      formData.invitationDetails?.qrData[QR_KEY.PAYLOAD][
+                        QR_KEY.ORIGIN_CARER_EXPIRES_AT
+                      ],
                       'yyyy-MM-dd'
                     ),
                   }}
@@ -105,6 +108,17 @@ export function GenerateInvitationQRWizard({
                   i18nKey="page.carer-management.invitation-modal.bundle"
                   values={{
                     value: JSON.stringify(formData.invitationDetails?.qrData),
+                  }}
+                  testID="modal.invite.bundle"
+                />
+
+                <TypographySmall
+                  className="opacity-30"
+                  variant="light"
+                  size="xs"
+                  i18nKey="page.carer-management.invitation-modal.bundle"
+                  values={{
+                    value: JSON.stringify(formData.invitationDetails?.qrBundle),
                   }}
                   testID="modal.invite.bundle"
                 />

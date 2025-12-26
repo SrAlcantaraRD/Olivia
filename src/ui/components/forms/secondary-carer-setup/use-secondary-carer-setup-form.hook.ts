@@ -23,6 +23,7 @@ export function useSecondaryCarerSetupForm() {
     loggerAdapter,
     moduleAdapter,
     navigationAdapter,
+    moduleFieldAdapter,
   } = useAdapters();
 
   const {
@@ -47,6 +48,7 @@ export function useSecondaryCarerSetupForm() {
       cacheAdapter,
       qrAdapter,
       moduleAdapter,
+      moduleFieldAdapter,
     });
 
   const { execute } = useGetModuleListByIDList({
@@ -104,12 +106,13 @@ export function useSecondaryCarerSetupForm() {
     }
 
     loggerAdapter.error({
-      activeModuleIDList:
-        parse.data[QR_KEY.PAYLOAD][QR_KEY.ORIGIN_CARER_ACTIVE_MODULE_ID_LIST],
+      activeModuleIDList: parse.data[QR_KEY.PAYLOAD][QR_KEY.MODULE_LIST],
     });
 
     handlerGetList(
-      parse.data[QR_KEY.PAYLOAD][QR_KEY.ORIGIN_CARER_ACTIVE_MODULE_ID_LIST]
+      parse.data[QR_KEY.PAYLOAD][QR_KEY.MODULE_LIST].map(
+        (module) => module[QR_KEY.MODULE_ID]
+      )
     );
 
     setFormData({

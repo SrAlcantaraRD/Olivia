@@ -5,7 +5,8 @@ import { useAdapters } from '@/adapter';
 import { useSecondaryCarerGenerateInvitationQR } from '@/domain/carer/hook/secondary-carer.generate-invitation-qr.hook';
 import type { TResponseSecondaryCarerGenerateInvitationQR } from '@/domain/carer/use-case-schema/secondary-carer.generate-invitation-qr.use-case-schema';
 import { TIME_TO_LIVE } from '@/domain/core/constant/time-to-live.constants';
-import { QR_BUNDLE_VERSION } from '@/domain/core/enum/qr.enum';
+import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
+import { QR_BUNDLER_VERSION } from '@/domain/core/enum/qr.enum';
 
 export interface GenerateInvitationQRFormData {
   selectedTTL: TIME_TO_LIVE;
@@ -16,19 +17,17 @@ export const DEFAULT_DATA = {
   selectedTTL: TIME_TO_LIVE.ONE_MONTH,
   invitationDetails: {
     qrData: {
-      metadata: {
-        nonce: '',
-        version: QR_BUNDLE_VERSION.V1,
+      [QR_KEY.METADATA]: {
+        [QR_KEY.VERSION]: QR_BUNDLER_VERSION.V1,
       },
-      payload: {
-        expiresAt: addMonths(new Date(), 1),
-        id: -1,
-        name: '',
-        activeModuleIDList: [],
+      [QR_KEY.PAYLOAD]: {
+        [QR_KEY.ORIGIN_CARER_ID]: -1,
+        [QR_KEY.ORIGIN_CARER_NAME]: '',
+        [QR_KEY.ORIGIN_CARER_EXPIRES_AT]: addMonths(new Date(), 1),
+        [QR_KEY.MODULE_LIST]: [],
       },
     },
     qrBundle: '',
-    qrChunkList: [],
   },
 } satisfies GenerateInvitationQRFormData;
 
