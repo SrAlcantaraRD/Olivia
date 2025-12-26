@@ -13,10 +13,14 @@ export enum QR_KEY {
   ORIGIN_CARER_ID = 'oi',
   ORIGIN_CARER_NAME = 'on',
   ORIGIN_CARER_EXPIRES_AT = 'oe',
-  ORIGIN_CARER_ACTIVE_MODULE_ID_LIST = 'om',
   BUNDLE_ID = 'b',
   RECORDS = 'rs',
   SIGNATURE = 's',
+
+  // Module access keys
+  MODULE_LIST = 'ml',
+  MODULE_ID = 'mi',
+  MODULE_FIELD_LIST = 'mf',
 
   // Chunk-specific keys
   CHUNK_INDEX = 'i',

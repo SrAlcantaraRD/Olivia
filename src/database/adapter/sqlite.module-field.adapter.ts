@@ -1,3 +1,5 @@
+import { inArray } from 'drizzle-orm';
+
 import {
   SQLiteModuleAdapter,
   type TModuleAdapterEntity,
@@ -11,11 +13,12 @@ import {
   type TAppDatabase,
 } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
-import { getStatusFromValue } from '@/domain/core/enum/status.enum';
-import type {
-  TModuleField,
-  TModuleFieldCreate,
-} from '@/domain/module/entity/module-field.entity';
+import {
+  getStatusFromValue,
+  STATUS_ENUM,
+} from '@/domain/core/enum/status.enum';
+import type { TID } from '@/domain/core/schemas/id.schema';
+import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import {
   getModuleFieldTypeFromValue,
   MODULE_FIELD_TYPE_ENUM,
@@ -83,14 +86,13 @@ export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
     } satisfies TModuleField;
   }
 
-  public async getById(id: number): Promise<TModuleField | null> {
-    const record = await this.database.query.MODULE_FIELD.findFirst({
-      where: (row, { eq }) => eq(row.id, id),
-    });
+  public async batchActivate(idList: TID[]): Promise<void> {
+    if (idList.length === 0) return;
 
-    if (!record) return null;
-
-    return SQLiteModuleFieldAdapter.toDomainEntity(record);
+    await this.database
+      .update(DB_SCHEMA.MODULE_FIELD)
+      .set({ status: STATUS_ENUM.ACTIVE })
+      .where(inArray(DB_SCHEMA.MODULE_FIELD.id, idList));
   }
 
   public async getAll(): Promise<TModuleField[]> {
@@ -99,7 +101,7 @@ export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
     return list.map(SQLiteModuleFieldAdapter.toDomainEntity);
   }
 
-  public async getAllByModuleId(moduleId: number): Promise<TModuleField[]> {
+  public async getAllByModuleId(moduleId: TID): Promise<TModuleField[]> {
     const list = await this.database.query.MODULE_FIELD.findMany({
       where: (row, { eq }) => eq(row.moduleID, moduleId),
       orderBy: (row, { asc }) => asc(row.order),
@@ -108,23 +110,9 @@ export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
     return list.map(SQLiteModuleFieldAdapter.toDomainEntity);
   }
 
-  public async create(data: TModuleFieldCreate): Promise<TModuleField> {
-    // Implement create if required. Minimal skyline for now.
-    const insert = await this.database
-      .insert(DB_SCHEMA.MODULE_FIELD)
-      .values({
-        moduleID: data.moduleId,
-        title: data.title,
-        description: data.description ?? '',
-        type: data.type,
-        values: data.values ?? null,
-        required: data.required ? 1 : 0,
-        order: data.order ?? 0,
-      })
-      .returning();
-
-    return SQLiteModuleFieldAdapter.toDomainEntity(insert[0]);
+  public async batchDesactivate(): Promise<void> {
+    await this.database
+      .update(DB_SCHEMA.MODULE_FIELD)
+      .set({ status: STATUS_ENUM.INACTIVE });
   }
 }
-
-export default SQLiteModuleFieldAdapter;

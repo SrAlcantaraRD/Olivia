@@ -1,7 +1,10 @@
 import { addDays, addMonths, addWeeks, endOfDay } from 'date-fns';
 import z from 'zod';
 
-import type { TInviteSecondaryCarerQRPayload } from '@/domain/carer/dto/invite-secondary-carer.qr.dto';
+import type {
+  TInviteSecondaryCarerQRActiveModule,
+  TInviteSecondaryCarerQRPayload,
+} from '@/domain/carer/dto/invite-secondary-carer.qr.dto';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import {
   RequestSecondaryCarerGenerateInvitationQRSchema,
@@ -11,11 +14,11 @@ import {
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import { TIME_TO_LIVE } from '@/domain/core/constant/time-to-live.constants';
 import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
+import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 import { ErrorEntityNotFoundBy } from '@/domain/core/error/entity-not-found-by.error';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
-import type { TID } from '@/domain/core/schemas/id.schema';
 import { WorkWithQRBaseUseCase } from '@/domain/module/abstract/work-with-qr.use-case-abstract';
 import type { IModulePort } from '@/domain/module/port/module.port';
 
@@ -76,7 +79,7 @@ export class SecondaryCarerGenerateInvitationQRUseCase extends WorkWithQRBaseUse
         [QR_KEY.ORIGIN_CARER_ID]: carer.id,
         [QR_KEY.ORIGIN_CARER_NAME]: carer.name,
         [QR_KEY.ORIGIN_CARER_EXPIRES_AT]: expiresAt,
-        [QR_KEY.ORIGIN_CARER_ACTIVE_MODULE_ID_LIST]: activeModuleIDList,
+        [QR_KEY.MODULE_LIST]: activeModuleIDList,
       } satisfies TInviteSecondaryCarerQRPayload;
 
       const qrData = this.generateQRCode(payload);
@@ -124,9 +127,18 @@ export class SecondaryCarerGenerateInvitationQRUseCase extends WorkWithQRBaseUse
     return expiresAt;
   }
 
-  private async getActiveModuleIDList(): Promise<TID[]> {
+  private async getActiveModuleIDList(): Promise<
+    TInviteSecondaryCarerQRActiveModule[]
+  > {
     const moduleList = await this.adapters.moduleAdapter.getAll();
 
-    return moduleList.map((module) => module.id);
+    return moduleList.map((module) => {
+      return {
+        [QR_KEY.MODULE_ID]: module.id,
+        [QR_KEY.MODULE_FIELD_LIST]: (module.fieldList ?? [])
+          .filter((field) => field.status === STATUS_ENUM.ACTIVE)
+          .map((field) => field.id),
+      } satisfies TInviteSecondaryCarerQRActiveModule;
+    });
   }
 }

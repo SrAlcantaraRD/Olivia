@@ -18,6 +18,7 @@ import type { IBaseResponse } from '@/domain/core/interface/base-response.interf
 import { CACHE_KEY_ENUM, type ICachePort } from '@/domain/core/port/cache.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
 import { WorkWithQRBaseUseCase } from '@/domain/module/abstract/work-with-qr.use-case-abstract';
+import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
 
 export class SecondaryCarerConsumeInvitationQRUseCase extends WorkWithQRBaseUseCase<
@@ -31,6 +32,7 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends WorkWithQRBaseUseC
       qrAdapter: IQRPort;
       cacheAdapter: ICachePort;
       moduleAdapter: IModulePort;
+      moduleFieldAdapter: IModuleFieldPort;
     }
   ) {
     super(
@@ -93,14 +95,25 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends WorkWithQRBaseUseC
         [QR_KEY.ORIGIN_CARER_EXPIRES_AT]: expiresAt,
         [QR_KEY.ORIGIN_CARER_ID]: originalCarerID,
         [QR_KEY.ORIGIN_CARER_NAME]: name,
-        [QR_KEY.ORIGIN_CARER_ACTIVE_MODULE_ID_LIST]: activeModuleIDList,
+        [QR_KEY.MODULE_LIST]: activeModuleList,
       },
     } = parsedData.data;
 
     const carerExists =
       await this.adapters.carerAdapter.getByID(originalCarerID);
 
+    await this.adapters.moduleAdapter.batchDesactivate();
+    await this.adapters.moduleFieldAdapter.batchDesactivate();
+
+    const activeModuleIDList = activeModuleList.map(
+      (module) => module[QR_KEY.MODULE_ID]
+    );
+    const activeModuleFieldList = activeModuleList.flatMap(
+      (module) => module[QR_KEY.MODULE_FIELD_LIST]
+    );
+
     await this.adapters.moduleAdapter.batchActivate(activeModuleIDList);
+    await this.adapters.moduleFieldAdapter.batchActivate(activeModuleFieldList);
 
     if (carerExists) {
       this.adapters.cacheAdapter.set(

@@ -75,4 +75,10 @@ export class SQLiteModuleAdapter implements IModulePort {
       .set({ active: STATUS_ENUM.ACTIVE })
       .where(inArray(DB_SCHEMA.MODULE.id, idList));
   }
+
+  public async batchDesactivate(): Promise<void> {
+    await this.database
+      .update(DB_SCHEMA.MODULE)
+      .set({ active: STATUS_ENUM.INACTIVE });
+  }
 }
