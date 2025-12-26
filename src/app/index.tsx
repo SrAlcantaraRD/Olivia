@@ -17,7 +17,8 @@ import { useNavigation } from '@/ui/hook/use-navigation.hook';
 import { cn } from '@/ui/lib/utils';
 
 export default function SplashScreen() {
-  const { notifyAdapter, carerAdapter, navigationAdapter } = useAdapters();
+  const { notifyAdapter, carerAdapter, navigationAdapter, cacheAdapter } =
+    useAdapters();
   const { goToOnboarding } = useNavigation({ navigationAdapter });
 
   const foregroundColor = useThemeColor('foreground');
@@ -33,6 +34,7 @@ export default function SplashScreen() {
       notifyAdapter,
       carerAdapter,
       navigationAdapter,
+      cacheAdapter,
     });
 
   const handlerCheckExistence = async () => {

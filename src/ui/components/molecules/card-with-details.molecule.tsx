@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 
+import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { IconAtom, type IconName } from '@/ui/components/atoms/icon.atom';
-import { SelectableCard } from '@/ui/components/atoms/selectable-card.atom';
 import {
   TypographyParagraph,
   TypographyTitle,
@@ -28,14 +28,15 @@ export function CardWithDetails({
   testID,
 }: CardWithDetailsProps) {
   return (
-    <SelectableCard
+    <CardAtom
+      isSelectable
       isSelected={isSelected}
       onPress={onPress}
       testID={`${testID}.selectable-card`}
     >
       <View className="flex-row items-center gap-4">
         {/* Icon */}
-        <IconAtom name={icon} variant="contained" />
+        <IconAtom name={icon} />
 
         {/* Content */}
         <View className="flex-1">
@@ -62,13 +63,13 @@ export function CardWithDetails({
           {description && (
             <TypographyParagraph
               testID={`${testID}.description`}
-              variant="default"
+              variant="light"
               size="sm"
               i18nKey={description}
             />
           )}
         </View>
       </View>
-    </SelectableCard>
+    </CardAtom>
   );
 }

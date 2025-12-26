@@ -11,7 +11,10 @@ export default function CarerMnagmentLayout() {
 
       <Stack.Screen name="create-carer" options={{ presentation: 'modal' }} />
 
-      <Stack.Screen name="carer-detail/[carerID]" />
+      <Stack.Screen
+        name="carer-detail/[carerID]"
+        options={{ presentation: 'modal' }}
+      />
       <Stack.Screen
         name="carer-detail/[carerID]/delete-carer"
         options={{ presentation: 'modal' }}

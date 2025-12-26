@@ -9,45 +9,26 @@ export type IconVariant = 'default' | 'contained' | 'outlined';
 export type IconName = keyof typeof Ionicons.glyphMap;
 
 interface IconAtomProps {
-  /**
-   * Icon name from Ionicons
-   */
   name: IconName;
-  /**
-   * Visual variant
-   */
   variant?: IconVariant;
+  iconSize?: number;
+  color?: string;
+  className?: string;
 }
 
-/**
- * IconAtom - Consistent icon component for the entire app
- *
- * Provides three variants:
- * - default: Icon only, no container
- * - contained: Icon with colored background container
- * - outlined: Icon with border container
- *
- * Uses `useThemeColor` from heroui-native for theme-aware colors.
- *
- * @example
- * ```tsx
- * // Default icon
- * <IconAtom name="water" />
- *
- * // Contained with background
- * <IconAtom name="water" variant="contained" />
- *
- * // Outlined
- * <IconAtom name="settings" variant="outlined" />
- * ```
- */
-export function IconAtom({ name, variant = 'default' }: IconAtomProps) {
+export function IconAtom({
+  name,
+  variant = 'default',
+  iconSize = 24,
+  color,
+  className,
+}: IconAtomProps) {
   // Get theme colors
   const foregroundColor = useThemeColor('accent');
   const backgroundColor = useThemeColor('background');
+  const iconColor = color ?? foregroundColor;
 
   // Default size configuration
-  const iconSize = 28;
   const containerSize = 'w-14 h-14';
 
   // Default variant - just the icon
@@ -56,7 +37,8 @@ export function IconAtom({ name, variant = 'default' }: IconAtomProps) {
       <StyledIonicons
         name={name}
         size={iconSize}
-        style={{ color: foregroundColor }}
+        style={{ color: iconColor }}
+        className={className}
       />
     );
   }
@@ -71,7 +53,7 @@ export function IconAtom({ name, variant = 'default' }: IconAtomProps) {
         <StyledIonicons
           name={name}
           size={iconSize}
-          style={{ color: foregroundColor }}
+          style={{ color: iconColor }}
         />
       </View>
     );
@@ -81,12 +63,12 @@ export function IconAtom({ name, variant = 'default' }: IconAtomProps) {
   return (
     <View
       className={`rounded-2xl items-center justify-center border-2 ${containerSize}`}
-      style={{ borderColor: foregroundColor }}
+      style={{ borderColor: iconColor }}
     >
       <StyledIonicons
         name={name}
         size={iconSize}
-        style={{ color: foregroundColor }}
+        style={{ color: iconColor }}
       />
     </View>
   );

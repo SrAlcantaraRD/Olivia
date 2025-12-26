@@ -16,4 +16,16 @@ export abstract class BaseUseCase<BaseRequest, BaseResponse> {
   protected logError(message: string, details?: unknown): void {
     this.loggerAdapter.error(this.useCaseName, message, details);
   }
+
+  // protected validateRequest<T>(schema: z.ZodType<T>, request: unknown): T {
+  //   const parsed = schema.safeParse(request);
+
+  //   if (!parsed.success) {
+  //     const errorList = z.treeifyError(parsed.error).errors;
+  //     this.logError('Error on parsing request', errorList.join(', '));
+  //     throw new Error(`Invalid request: ${errorList.join(', ')}`);
+  //   }
+
+  //   return parsed.data;
+  // }
 }

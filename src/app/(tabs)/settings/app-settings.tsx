@@ -35,14 +35,12 @@ export default function AppSettingsScreen() {
           titleKey="page.app-settings.language.english"
           onPress={() => setLocale(ELocaleCode.en_EN)}
           testID="page.app-settings.button.change-language-english"
-          hasDivider
         />
         <SettingsRow
           iconName="globe"
           titleKey="page.app-settings.language.spanish"
           onPress={() => void setLocale(ELocaleCode.es_ES)}
           testID="page.app-settings.button.change-language-spanish"
-          hasDivider
         />
         <SettingsRow
           iconName="globe"

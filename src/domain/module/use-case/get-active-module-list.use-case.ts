@@ -36,8 +36,6 @@ export class GetActiveModuleListUseCase extends BaseUseCase<
           ) || [],
       }));
 
-    this.adapters.loggerAdapter.error({ targetList });
-
     return {
       success: true,
       message: 'common.success',

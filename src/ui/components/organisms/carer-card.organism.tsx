@@ -1,10 +1,9 @@
-import { Avatar, type ButtonVariant, Chip } from 'heroui-native';
+import { Avatar, type ButtonVariant, Card, Chip } from 'heroui-native';
 import { View } from 'react-native';
 
 import type { TCarer } from '@/domain/carer/entity/carer.entity';
 import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
 import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
-import { CardAtom } from '@/ui/components/atoms/card.atom';
 import type { IconName } from '@/ui/components/atoms/icon.atom';
 import { TextTranslation } from '@/ui/components/atoms/text-translations.atom';
 import {
@@ -102,8 +101,8 @@ export function CarerCardOrganism({
   ];
 
   return (
-    <CardAtom testID={`${testID}.card`}>
-      <View className="flex-row justify-between items-start mb-6">
+    <Card testID={`${testID}.card`} className="rounded-lg light:bg-white gap-4">
+      <View className="flex-row justify-between items-start">
         <View className="flex-row items-center gap-4">
           <Avatar size="md" alt="Large Avatar" variant="soft">
             <TextTranslation
@@ -138,7 +137,7 @@ export function CarerCardOrganism({
         </Chip>
       </View>
 
-      <View className="justify-between gap-2">
+      <View>
         {buttonItems
           .filter((item) => item.isVisible)
           .map((item) => (
@@ -156,6 +155,6 @@ export function CarerCardOrganism({
             </View>
           ))}
       </View>
-    </CardAtom>
+    </Card>
   );
 }

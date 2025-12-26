@@ -26,6 +26,7 @@ export const SummarySectionHeader: React.FC<SummarySectionHeaderProps> = ({
         testID={`${testID}.title`}
         i18nKey={titleKey}
         accessibilityRole="header"
+        variant="primary"
       />
       {actionKey && (
         <Pressable onPress={onActionPress} accessibilityRole="button">

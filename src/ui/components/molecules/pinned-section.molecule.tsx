@@ -1,5 +1,5 @@
 import type React from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
@@ -27,12 +27,7 @@ export const PinnedSection: React.FC<PinnedSectionProps> = ({
         onActionPress={onActionPress}
         testID={testID}
       />
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 4 }}
-      >
-        {children}
-      </ScrollView>
+      {children}
     </View>
   );
 };

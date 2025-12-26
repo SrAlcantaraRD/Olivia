@@ -21,4 +21,5 @@ type IBaseResponseSuccess<T> = T extends null | undefined
   ? IBaseResponseSuccessEmpty
   : IBaseResponseSuccessWithData<T>;
 
+// TODO: Generate a zod schema generator, and use it for parse use-case response. ex: return Response<use-case-name>Schema.parse(response)
 export type IBaseResponse<T> = IBaseResponseSuccess<T> | IBaseResponseError;

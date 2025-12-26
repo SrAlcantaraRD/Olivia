@@ -93,13 +93,14 @@ export function ModuleWizard({
       // Transform collected values into the domain create DTO
       const payload: TRecordCreate = {
         moduleID,
-        carerID: 0, // load from cache
+        carerID: -1, // to be filled by backend
         data: JSON.stringify(values),
         synchronized: false,
         createdAt: new Date(),
         fieldList: Object.entries(values).map(([fieldId, value]) => ({
           fieldID: Number(fieldId),
           value,
+          recordID: -1, // to be filled by backend
         })),
       } satisfies TRecordCreate;
 

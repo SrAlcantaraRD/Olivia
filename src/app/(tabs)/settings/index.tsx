@@ -80,7 +80,6 @@ export default function SettingsScreen() {
               captionKey="page.settings.app-settings-desc"
               onPress={goToAppSettings}
               testID="screen.settings.app-settings"
-              hasDivider
             />
 
             <SettingsRow
@@ -89,7 +88,6 @@ export default function SettingsScreen() {
               captionKey="page.settings.add-demo-data-desc"
               onPress={handleAddDemoData}
               testID="screen.settings.add-demo-data"
-              hasDivider
             />
 
             <SettingsRow

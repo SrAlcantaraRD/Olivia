@@ -99,7 +99,7 @@ export class AddDemoDataUseCase extends BaseUseCase<
           createdAt: recordDate,
         };
 
-        await this.adapters.recordAdapter.create(recordCreate);
+        await this.adapters.recordAdapter.upsert(recordCreate);
       }
     }
   }
