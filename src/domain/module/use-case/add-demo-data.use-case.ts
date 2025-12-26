@@ -4,6 +4,7 @@ import type { IBaseResponse } from '@/domain/core/interface/base-response.interf
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TModule } from '@/domain/module/entity/module.entity';
+import type { TRecordFieldCreate } from '@/domain/module/entity/record-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
@@ -18,6 +19,8 @@ export class AddDemoDataUseCase extends BaseUseCase<
   TRequestAddDemoData,
   TResponseAddDemoData
 > {
+  private readonly DAYS_TO_CREATE = 5;
+
   constructor(
     private readonly adapters: {
       loggerAdapter: TLoggerPort;
@@ -71,42 +74,49 @@ export class AddDemoDataUseCase extends BaseUseCase<
     const now = new Date();
 
     // Create records for the last 365 days, 5-9 records per day
-    for (let dayOffset = 0; dayOffset < 365; dayOffset++) {
+    for (let dayOffset = 0; dayOffset < this.DAYS_TO_CREATE; dayOffset++) {
       const recordDate = new Date(now);
       recordDate.setDate(now.getDate() - dayOffset);
 
       const numRecords = Math.floor(Math.random() * 5) + 5; // 5 to 9
       for (let i = 0; i < numRecords; i++) {
-        const recordData = `Demo record for ${module.name} - ${recordDate.toDateString()} - ${i + 1}`;
         const synchronized = false;
-
-        const fieldList = fields.map((field) => ({
-          fieldID: field.id,
-          value: this.generateDemoValue(field),
-        }));
 
         // Generate random hour and minute for the day
         const hour = Math.floor(Math.random() * 24);
         const minute = Math.floor(Math.random() * 60);
         recordDate.setHours(hour, minute, 0, 0);
 
+        // Create the record without nested fields, then create fields separately so they are associated with the created record id
         const recordCreate: TRecordCreate = {
           moduleID: module.id,
           carerID,
-          data: recordData,
           synchronized,
-          fieldList,
+          recordFieldList: [], // create fields afterwards using batchUpsert
           createdAt: recordDate,
         };
 
-        await this.adapters.recordAdapter.upsert(recordCreate);
+        const createdRecord =
+          await this.adapters.recordAdapter.upsert(recordCreate);
+
+        const fieldData = fields.map((field) => ({
+          recordID: createdRecord.id,
+          fieldID: field.id,
+          value: this.generateDemoValue(field),
+        })) satisfies TRecordFieldCreate[];
+
+        await this.adapters.recordFieldAdapter.batchUpsert(
+          createdRecord.id,
+          fieldData,
+          recordDate
+        );
       }
     }
   }
 
   private generateDemoValue(field: TModuleField): string {
     if (field.type === 'TEXT') {
-      return `Demo text for ${field.title}`;
+      return `Demo text for ${field.code}`;
     } else if (field.type === 'SELECT') {
       // Parse the JSON values
       try {

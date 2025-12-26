@@ -137,22 +137,17 @@ export function CarerCardOrganism({
         </Chip>
       </View>
 
-      <View>
+      <View className="gap-2">
         {buttonItems
           .filter((item) => item.isVisible)
           .map((item) => (
-            <View
+            <SettingsRow
+              onPress={item.onPress}
+              testID={item.testID}
+              title={item.title}
+              iconName={item.icon}
               key={`settings-row.${item.id}`}
-              style={{ flex: 1, paddingHorizontal: 4 }}
-            >
-              <SettingsRow
-                onPress={item.onPress}
-                testID={item.testID}
-                title={item.title}
-                iconName={item.icon}
-                key={`settings-row.${item.id}`}
-              />
-            </View>
+            />
           ))}
       </View>
     </Card>

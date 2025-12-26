@@ -276,7 +276,7 @@ export default function SummaryModuleDetailScreen() {
               fieldsHook.items.map((field) => (
                 <SummaryCard
                   key={`summary-field-${field.id}`}
-                  title={field.title}
+                  title={field.code}
                   metricValue={detailHook.items.todayValue ?? 0}
                   metricLabel={t('page.summary.metric-label.today')}
                   timeLabel=""

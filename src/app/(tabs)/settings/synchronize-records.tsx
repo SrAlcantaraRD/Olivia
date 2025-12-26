@@ -1,12 +1,11 @@
-import { useThemeColor } from 'heroui-native';
 import { useEffect, useMemo, useState } from 'react';
-import { useWindowDimensions, View } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
+import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { useActiveCarer } from '@/domain/carer/hook/use-active-carer.hook';
 import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 import { useGenerateRecordSynchronizationQr } from '@/domain/core/hook/use-generate-record-synchronization-qr.hook';
+import { QRCodeViewer } from '@/ui/components/atoms/qr-code-viewer.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import {
   Wizard,
@@ -18,9 +17,7 @@ export default function SynchronizeRecordsScreen() {
   const adapters = useAdapters();
   const { navigationAdapter } = adapters;
   const { goBack } = useNavigation({ navigationAdapter });
-  const accentColor = useThemeColor('accent');
   const { carer } = useActiveCarer(adapters);
-  const { width: windowWidth } = useWindowDimensions();
 
   const {
     execute: generateQr,
@@ -42,17 +39,9 @@ export default function SynchronizeRecordsScreen() {
           id: 'loading',
           isValid: false,
           content: (
-            <ScreenLayout
-              title="page.settings.sync-records"
-              subtitle="page.settings.sync-records-desc"
-              isLoading={isExecuting}
-              testID="sync-records.loading"
-              styles={{
-                container: 'p-0',
-              }}
-            >
-              <View />
-            </ScreenLayout>
+            <View className="flex-1 items-center justify-center p-4">
+              {/* Loading is handled by ScreenLayout */}
+            </View>
           ),
         },
       ];
@@ -63,24 +52,19 @@ export default function SynchronizeRecordsScreen() {
       isValid: true,
       content: (
         <ScreenLayout
-          title="page.settings.sync-records"
+          testID={`sync-records.chunk-${index}.desc`}
+          title="page.settings.synchronization.collection.progress"
           subtitle="page.settings.sync-records-desc"
-          testID={`sync-records.chunk-${index}`}
+          values={{ total: chunk[QR_KEY.CHUNK_TOTAL], count: index + 1 }}
+          styles={{
+            container: 'p-0',
+          }}
         >
-          <View className="items-center justify-center">
-            <QRCode
-              size={windowWidth * 0.9}
-              value={chunk[QR_KEY.CHUNK_DATA]}
-              color={accentColor}
-            />
-            <View className="mt-8">
-              {/* Optional: Add text indicating chunk X of Y */}
-            </View>
-          </View>
+          <QRCodeViewer data={JSON.stringify(chunk)} />
         </ScreenLayout>
       ),
     }));
-  }, [items, isExecuting, accentColor]);
+  }, [items]);
 
   const handleNext = () => {
     if (currentStepIndex < steps.length - 1) {
@@ -99,12 +83,14 @@ export default function SynchronizeRecordsScreen() {
   };
 
   return (
-    <Wizard
-      steps={steps}
-      currentStepIndex={currentStepIndex}
-      onNext={handleNext}
-      onBack={handleBack}
-      testID="sync-records.wizard"
-    />
+    <ScreenLayout testID="sync-records.screen" isLoading={isExecuting}>
+      <Wizard
+        steps={steps}
+        currentStepIndex={currentStepIndex}
+        onNext={handleNext}
+        onBack={handleBack}
+        testID="sync-records.wizard"
+      />
+    </ScreenLayout>
   );
 }

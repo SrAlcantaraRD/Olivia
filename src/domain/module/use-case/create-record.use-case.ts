@@ -46,7 +46,7 @@ export class CreateRecordUseCase extends BaseUseCase<TRecordCreate, TRecord> {
 
     await this.adapters.recordFieldAdapter.batchUpsert(
       record.id,
-      data.fieldList,
+      data.recordFieldList,
       record.createdAt
     );
 

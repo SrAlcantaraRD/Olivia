@@ -13,7 +13,6 @@ export const RecordFieldSyncSchema = z.object({
 export const RecordSyncSchema = z.object({
   [QR_KEY.RECORD_MODULE_ID]: IDSchema,
   [QR_KEY.RECORD_DATE]: z.string().min(1),
-  [QR_KEY.RECORD_DATA_RAW]: z.string(),
   [QR_KEY.RECORD_FIELDS]: z.array(RecordFieldSyncSchema).min(1),
 });
 

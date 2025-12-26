@@ -33,13 +33,13 @@ export const SettingsRow: React.FC<SettingsRowProps> = ({
     <CardAtom
       onPress={onPress}
       className={cn(
-        'flex flex-row  align-middle justify-between',
+        'flex flex-row align-center justify-between',
         className,
         variant === 'danger' && 'light:bg-danger/40 dark:bg-danger/30'
       )}
     >
       <View className="flex flex-row items-center gap-4">
-        <IconAtom name={iconName} variant={variant} />
+        <IconAtom name={iconName} variant={variant} iconSize={20} />
 
         <View className="flex flex-col">
           <TypographyParagraph i18nKey={title} testID={`${testID}.title`} />
@@ -54,7 +54,12 @@ export const SettingsRow: React.FC<SettingsRowProps> = ({
       </View>
 
       <View className="flex items-center justify-center">
-        <IconAtom name="chevron-forward" iconSize={20} variant={variant} />
+        <IconAtom
+          name="chevron-forward"
+          iconSize={20}
+          variant={variant}
+          emptyBackground
+        />
       </View>
     </CardAtom>
   );

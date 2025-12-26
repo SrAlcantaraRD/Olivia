@@ -9,13 +9,13 @@ import type {
 import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import type { IQRPort } from '@/domain/core/port/qr.port';
-import { WorkWithQRBaseUseCase } from '@/domain/module/abstract/work-with-qr.use-case-abstract';
-import type { IRecordPort } from '@/domain/module/port/record.port';
 import {
   RequestGenerateRecordSynchronizationQRSchema,
   type TRequestGenerateRecordSynchronizationQR,
   type TResponseGenerateRecordSynchronizationQR,
-} from '../use-case-schema/generate-record-synchronization-qr.use-case-schema';
+} from '@/domain/core/use-case-schema/generate-record-synchronization-qr.use-case-schema';
+import { WorkWithQRBaseUseCase } from '@/domain/module/abstract/work-with-qr.use-case-abstract';
+import type { IRecordPort } from '@/domain/module/port/record.port';
 
 export class GenerateRecordSynchronizationQRUseCase extends WorkWithQRBaseUseCase<
   TRequestGenerateRecordSynchronizationQR,

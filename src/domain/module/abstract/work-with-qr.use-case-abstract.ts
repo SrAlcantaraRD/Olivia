@@ -57,7 +57,7 @@ export abstract class WorkWithQRBaseUseCase<
 
     const chunks: TQRChunk[] = parts.map((dat, index) => ({
       [QR_KEY.BUNDLE_ID]: id,
-      [QR_KEY.CHUNK_INDEX]: index,
+      [QR_KEY.CHUNK_INDEX]: index + 1,
       [QR_KEY.CHUNK_TOTAL]: total,
       [QR_KEY.CHUNK_DATA]: dat,
     }));
@@ -98,13 +98,12 @@ export abstract class WorkWithQRBaseUseCase<
   }
 
   protected mapRecordToRecordSync(record: TRecord): TRecordSync {
-    const fieldList = record.fieldList || [];
+    const fieldList = record.recordFieldList || [];
     const moduleID = record.moduleID || -1;
 
     return {
       [QR_KEY.RECORD_MODULE_ID]: moduleID,
       [QR_KEY.RECORD_DATE]: record.createdAt.getTime().toString(),
-      [QR_KEY.RECORD_DATA_RAW]: record.data,
       [QR_KEY.RECORD_FIELDS]: fieldList.map((field) =>
         this.mapRecordFieldToRecordFieldSync(field)
       ),

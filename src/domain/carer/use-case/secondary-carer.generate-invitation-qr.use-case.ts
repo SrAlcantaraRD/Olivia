@@ -135,7 +135,7 @@ export class SecondaryCarerGenerateInvitationQRUseCase extends WorkWithQRBaseUse
     return moduleList.map((module) => {
       return {
         [QR_KEY.MODULE_ID]: module.id,
-        [QR_KEY.MODULE_FIELD_LIST]: (module.fieldList ?? [])
+        [QR_KEY.MODULE_FIELD_LIST]: (module.moduleFieldList ?? [])
           .filter((field) => field.status === STATUS_ENUM.ACTIVE)
           .map((field) => field.id),
       } satisfies TInviteSecondaryCarerQRActiveModule;

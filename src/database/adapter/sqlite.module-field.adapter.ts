@@ -67,7 +67,7 @@ export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
       createdAt: entity.createdAt,
 
       moduleId: entity.moduleID,
-      title: entity.title,
+      code: entity.code,
       description: entity.description ?? '',
       type,
       values: entity.values ?? '',

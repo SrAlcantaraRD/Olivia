@@ -10,11 +10,11 @@ export abstract class BaseUseCase<BaseRequest, BaseResponse> {
   ) {}
 
   protected logDebug(message: string, details?: unknown): void {
-    this.loggerAdapter.debug(this.useCaseName, message, details);
+    this.loggerAdapter.debug({ useCase: this.useCaseName, message, details });
   }
 
   protected logError(message: string, details?: unknown): void {
-    this.loggerAdapter.error(this.useCaseName, message, details);
+    this.loggerAdapter.error({ useCase: this.useCaseName, message, details });
   }
 
   // protected validateRequest<T>(schema: z.ZodType<T>, request: unknown): T {

@@ -36,6 +36,7 @@ export function useConsumeRecordSynchronizationQr(adapters: {
       IHookResponse<TResponseConsumeRecordSynchronizationQR | null>
     > => {
       setExecuting(true);
+
       adapters.notifyAdapter.loading({
         title: 'hook.consume-sync-qr.title',
         description: 'hook.consume-sync-qr.description',

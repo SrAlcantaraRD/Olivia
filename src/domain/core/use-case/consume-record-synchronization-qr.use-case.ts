@@ -1,12 +1,11 @@
 import z from 'zod';
 
-import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
+import { type TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import {
   RecordSyncBundleSchema,
   type TRecordSyncBundle,
 } from '@/domain/core/dto/sync-record.dto';
 import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
-import { ErrorInvalidBundle } from '@/domain/core/error/invalid-bundle.error';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import type { IQRPort } from '@/domain/core/port/qr.port';
 import { WorkWithQRBaseUseCase } from '@/domain/module/abstract/work-with-qr.use-case-abstract';
@@ -59,7 +58,10 @@ export class ConsumeRecordSynchronizationQRUseCase extends WorkWithQRBaseUseCase
 
     const bundle = await this.fromChunks<TRecordSyncBundle>(chunkList);
 
-    const parsedBundle = RecordSyncBundleSchema.safeParse(bundle);
+    const parsedBundle = RecordSyncBundleSchema.safeParse(
+      bundle[QR_KEY.PAYLOAD]
+    );
+
     if (!parsedBundle.success) {
       const errorList = z.treeifyError(parsedBundle.error).errors;
       this.logError(
@@ -67,14 +69,16 @@ export class ConsumeRecordSynchronizationQRUseCase extends WorkWithQRBaseUseCase
         errorList.join(', ')
       );
 
-      throw new ErrorInvalidBundle('INVALID_SCHEMA', errorList.join(', '));
+      return {
+        success: false,
+        message: 'use-case.consume-record-synchronization-qr.invalid-bundle',
+      };
     }
 
     for (const record of bundle[QR_KEY.PAYLOAD][QR_KEY.RECORDS]) {
       const {
         [QR_KEY.RECORD_MODULE_ID]: moduleID,
         [QR_KEY.RECORD_DATE]: rawRecordDate,
-        [QR_KEY.RECORD_DATA_RAW]: recordData,
         [QR_KEY.RECORD_FIELDS]: recordFields,
       } = record;
 
@@ -83,10 +87,9 @@ export class ConsumeRecordSynchronizationQRUseCase extends WorkWithQRBaseUseCase
       const existingRecord = await this.adapters.recordAdapter.upsert({
         moduleID,
         carerID: bundle[QR_KEY.PAYLOAD][QR_KEY.ORIGIN_CARER_ID],
-        data: recordData,
         synchronized: true,
         createdAt: recordDate,
-        fieldList: [],
+        recordFieldList: [],
       });
 
       const fieldData: TRecordFieldCreate[] = recordFields.map((field) => ({

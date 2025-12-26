@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 
-import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { ModuleFieldSelectValuesFromJsonStringSchema } from '@/domain/module/schemas/module-field-values.schema';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
@@ -10,7 +9,6 @@ import {
   type IModuleWizardAdapters,
   useModuleWizard,
 } from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';
-import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 // FIXME: Simplificate processing field values parsing
 export function parseFieldValues(values: string | undefined): string[] {
@@ -55,14 +53,6 @@ export function ModuleWizard({
     onGoBack,
   });
 
-  type StepItem = {
-    id: string;
-    titleKey: Ti18nKeys;
-    descriptionKey: Ti18nKeys;
-    field: TModuleField;
-    isValid: boolean;
-  };
-
   const wizardSteps = useMemo(
     () =>
       steps.map((step) => ({
@@ -74,7 +64,7 @@ export function ModuleWizard({
             subtitle={step.descriptionKey}
           >
             <ModuleFieldWrapper
-              step={step as StepItem}
+              step={step}
               values={values}
               setFieldValue={setFieldValue}
               selectOptionAndNext={selectOptionAndNext}
@@ -94,10 +84,9 @@ export function ModuleWizard({
       const payload: TRecordCreate = {
         moduleID,
         carerID: -1, // to be filled by backend
-        data: JSON.stringify(values),
         synchronized: false,
         createdAt: new Date(),
-        fieldList: Object.entries(values).map(([fieldId, value]) => ({
+        recordFieldList: Object.entries(values).map(([fieldId, value]) => ({
           fieldID: Number(fieldId),
           value,
           recordID: -1, // to be filled by backend

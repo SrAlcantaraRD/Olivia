@@ -19,7 +19,7 @@ function parseFieldValues(valuesStr: string | undefined): string[] {
   return result.data;
 }
 
-interface FieldStep {
+export interface ModuleWizardField {
   id: string;
   titleKey: Ti18nKeys;
   descriptionKey: Ti18nKeys;
@@ -34,7 +34,7 @@ interface FieldStep {
 }
 
 interface ModuleFieldWrapperProps {
-  step: FieldStep;
+  step: ModuleWizardField;
   values: Record<number, string>;
   setFieldValue: (fieldId: number, value: string) => void;
   selectOptionAndNext: (fieldId: number, value: string) => void;

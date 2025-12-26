@@ -6,6 +6,7 @@ import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
+import { ModuleWizardField } from '@/ui/components/organisms/module-wizard/module-field-wrapper.component';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 import { enEN } from '@/ui/i18n/locales/en-EN';
 
@@ -66,15 +67,24 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
   );
 
   const steps = useMemo(() => {
-    return fieldList.map((field) => ({
-      id: String(field.id),
-      titleKey: field.title as Ti18nKeys,
-      descriptionKey: isTi18nKey(field.description)
-        ? field.description
-        : FALLBACK_DESCRIPTION,
-      field,
-      isValid: isFieldValid(field),
-    }));
+    return fieldList.map(
+      (field) =>
+        ({
+          id: String(field.id),
+          titleKey: field.code as Ti18nKeys,
+          descriptionKey: isTi18nKey(field.description)
+            ? field.description
+            : FALLBACK_DESCRIPTION,
+          field: {
+            description: field.description || '',
+            id: field.id,
+            title: field.code || _FALLBACK_TITLE,
+            type: field.type,
+            values: field.values || null,
+          },
+          isValid: isFieldValid(field),
+        }) satisfies ModuleWizardField
+    );
   }, [fieldList, isFieldValid]);
 
   const goToNextStep = useCallback(() => {
@@ -108,9 +118,8 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
           const payload: TRecordCreate = {
             moduleID,
             carerID: 0,
-            data: JSON.stringify({ ...values, [fieldId]: value }),
             synchronized: false,
-            fieldList: [{ fieldID: fieldId, value }],
+            recordFieldList: [{ fieldID: fieldId, value, recordID: -1 }],
             createdAt: new Date(),
           };
           onComplete?.(payload);

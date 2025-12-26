@@ -15,8 +15,6 @@ export enum QR_KEY {
   ORIGIN_CARER_EXPIRES_AT = 'oe',
   BUNDLE_ID = 'b',
   RECORDS = 'rs',
-  SIGNATURE = 's',
-  RECORD_DATA_RAW = 'dr',
 
   // Module access keys
   MODULE_LIST = 'ml',

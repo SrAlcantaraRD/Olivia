@@ -15,7 +15,7 @@ export const ModuleFieldSchema = z
   .object({
     ...BaseEntitySchema.shape,
     moduleId: z.number().int(),
-    title: z.string().min(1),
+    code: z.string().min(1),
     description: z.string(),
     type: ModuleFieldTypeSchema,
     values: z.string(),

@@ -31,7 +31,7 @@ export class GetActiveModuleListUseCase extends BaseUseCase<
       .map((module) => ({
         ...module,
         fieldList:
-          module.fieldList?.filter(
+          module.moduleFieldList?.filter(
             (field) => field.status === STATUS_ENUM.ACTIVE
           ) || [],
       }));

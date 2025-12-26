@@ -17,6 +17,7 @@ import {
   type TAppDatabase,
 } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import {
   getStatusFromValue,
   STATUS_ENUM,
@@ -32,7 +33,7 @@ import type { IRecordPort } from '@/domain/module/port/record.port';
 export type TRecordAdapterEntity = typeof DB_SCHEMA.RECORD.$inferSelect & {
   carer?: TCarerAdapterEntity;
   module?: TModuleAdapterEntity;
-  recordFields?: TRecordFieldAdapterEntity[];
+  recordFieldList?: TRecordFieldAdapterEntity[];
 };
 
 type TRecordAdapterInsert = typeof DB_SCHEMA.RECORD.$inferInsert;
@@ -53,7 +54,6 @@ export class SQLiteRecordAdapter implements IRecordPort {
       carerID: entity.carerID,
       moduleID: entity.moduleID,
 
-      data: entity.data,
       synchronized: Boolean(entity.synced),
 
       ...(entity.carer && {
@@ -64,8 +64,8 @@ export class SQLiteRecordAdapter implements IRecordPort {
         module: SQLiteModuleAdapter.toDomainEntity(entity.module),
       }),
 
-      ...(entity.recordFields && {
-        fieldList: entity.recordFields.map(
+      ...(entity.recordFieldList && {
+        recordFieldList: entity.recordFieldList.map(
           SQLiteRecordFieldAdapter.toDomainEntity
         ),
       }),
@@ -76,7 +76,6 @@ export class SQLiteRecordAdapter implements IRecordPort {
     const insertPayload = {
       moduleID: Number(data.moduleID),
       carerID: Number(data.carerID),
-      data: data.data,
       synced: data.synchronized ? STATUS_ENUM.ACTIVE : STATUS_ENUM.INACTIVE,
       status: STATUS_ENUM.ACTIVE,
       createdAt: data.createdAt,
@@ -88,7 +87,6 @@ export class SQLiteRecordAdapter implements IRecordPort {
       .onConflictDoUpdate({
         target: DB_SCHEMA.RECORD.createdAt,
         set: {
-          data: insertPayload.data,
           synced: insertPayload.synced,
           status: insertPayload.status,
         },
@@ -125,6 +123,8 @@ export class SQLiteRecordAdapter implements IRecordPort {
         module: true,
       },
     });
+
+    BASE_LOGGER.error({ list });
 
     return list.map(SQLiteRecordAdapter.toDomainEntity);
   }

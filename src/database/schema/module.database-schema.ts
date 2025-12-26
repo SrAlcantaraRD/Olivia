@@ -69,8 +69,8 @@ export const MODULE_FIELD = sqliteTable(
 
 // Relations: MODULE -> MODULE_FIELD (1:N)
 export const MODULE_RELATIONS = relations(MODULE, ({ many }) => ({
-  fieldList: many(MODULE_FIELD),
-  recordList: many(RECORD),
+  moduleFieldList: many(MODULE_FIELD),
+  recordFieldList: many(RECORD),
 }));
 
 export const MODULE_FIELD_RELATIONS = relations(

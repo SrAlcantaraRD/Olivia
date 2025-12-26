@@ -1,11 +1,11 @@
 import { format } from 'date-fns';
 import { useThemeColor } from 'heroui-native';
 import { useMemo } from 'react';
-import { useWindowDimensions, View } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
+import { View } from 'react-native';
 
 import { getTimeToLiveOptions } from '@/domain/core/constant/time-to-live.constants';
 import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
+import { QRCodeViewer } from '@/ui/components/atoms/qr-code-viewer.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
@@ -26,7 +26,6 @@ export function GenerateInvitationQRWizard({
   testID,
 }: GenerateInvitationQRWizardProps) {
   const accentColor = useThemeColor('accent');
-  const { width: windowWidth } = useWindowDimensions();
 
   const {
     formData,
@@ -51,7 +50,8 @@ export function GenerateInvitationQRWizard({
             title="page.carer-management.ttl.heading"
             subtitle="page.carer-management.invitation-modal.subtitle"
             styles={{
-              container: 'p-0',
+              container: 'px-0',
+              content: 'py-0',
             }}
           >
             <View className="gap-4">
@@ -78,14 +78,14 @@ export function GenerateInvitationQRWizard({
             title="page.carer-management.invitation-modal.title"
             subtitle="page.carer-management.invitation-modal.subtitle"
             isLoading={isGenerating}
+            styles={{
+              container: 'px-0',
+              content: 'py-0',
+            }}
           >
             <View className="gap-4">
               <View className="items-center">
-                <QRCode
-                  value={formData.invitationDetails?.qrBundle}
-                  color={accentColor}
-                  size={windowWidth * 0.85}
-                />
+                <QRCodeViewer data={formData.invitationDetails?.qrBundle} />
               </View>
               <View className="gap-2">
                 <TypographySmall

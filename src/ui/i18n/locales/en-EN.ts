@@ -164,10 +164,10 @@ export const enEN = Object.freeze({
   'page.summary-trends.empty': 'No trends available yet',
 
   // Page: Summary Highlights
-  'page.summary-highlights.title': 'Highlights',
-  'page.summary-highlights.subtitle': 'Important insights',
-  'page.summary-highlights.heading': 'Highlights',
-  'page.summary-highlights.empty': 'No highlights available yet',
+  'page.summary_highlights.title': 'Highlights',
+  'page.summary_highlights.subtitle': 'Important insights',
+  'page.summary_highlights.heading': 'Highlights',
+  'page.summary_highlights.empty': 'No highlights available yet',
 
   // Page: Summary Detail
   'page.summary-detail.title': 'Summary detail',
@@ -232,11 +232,13 @@ export const enEN = Object.freeze({
   'page.settings.about': 'About',
   'page.settings.about-desc': 'Version and legal information',
   'page.settings.sync-records': 'Synchronize Records',
-  'page.settings.sync-records-desc': 'Share records with another device via QR',
+  'page.settings.sync-records-desc': 'Share records via QR',
   'page.settings.add-demo-data': 'Add Demo Data',
   'page.settings.add-demo-data-desc': 'Add sample records for testing',
   'page.settings.logout': 'Log out',
-  'page.settings.logout-desc': 'Delete all data and log out',
+  'page.settings.logout-desc': 'Log out and wipe local data',
+  'page.settings.role.primary': 'Primary Carer',
+  'page.settings.role.secondary': 'Secondary Carer',
 
   // Page: Settings Detail Screens
   'page.child-profile.title': 'Child Profile',
@@ -325,6 +327,17 @@ export const enEN = Object.freeze({
   'hook.generate-sync-qr.success-title': 'QR generated',
   'hook.generate-sync-qr.success-description':
     'The synchronization QR is ready to be scanned.',
+  'hook.secondary-carer.generate-invitation-qr.title':
+    'Generating invitation QR',
+  'hook.secondary-carer.generate-invitation-qr.description':
+    'Please wait while we generate the invitation QR bundle.',
+  'hook.secondary-carer.generate-invitation-qr.error-title':
+    'Generation failed',
+  'hook.secondary-carer.generate-invitation-qr.error-description':
+    'Could not generate the invitation QR code.',
+  'hook.secondary-carer.generate-invitation-qr.success-title': 'QR generated',
+  'hook.secondary-carer.generate-invitation-qr.success-description':
+    'The invitation QR is ready to be scanned.',
   'hook.consume-sync-qr.title': 'Syncing records',
   'hook.consume-sync-qr.description':
     'Processing the records from the scanned QR.',
@@ -518,18 +531,6 @@ export const enEN = Object.freeze({
   'hook.setup-parent.description': 'Please wait while we set up your account.',
   'hook.setup-parent.error-title': 'Setup Failed',
   'hook.setup-parent.success-title': 'Setup Successful',
-  'hook.generate-invitation-qr-for-secondary-carer.title': 'Preparing invite',
-  'hook.generate-invitation-qr-for-secondary-carer.description':
-    'Generating a signed QR bundle for the secondary caregiver.',
-  'hook.generate-invitation-qr-for-secondary-carer.success-title':
-    'Invite ready',
-  'hook.generate-invitation-qr-for-secondary-carer.success-description':
-    'Share the QR with another carer to start the sync.',
-  'hook.generate-invitation-qr-for-secondary-carer.error-title':
-    'Invite failed',
-  'hook.generate-invitation-qr-for-secondary-carer.error-description':
-    'Unable to create the invitation right now.',
-  'hook.import-invite.title': 'Importing invite',
   'hook.import-invite.description':
     'Validating the bundle before adding the secondary carer.',
   'hook.import-invite.success-title': 'Invite imported',
@@ -640,6 +641,21 @@ export const enEN = Object.freeze({
   'page.caregiver-setup.scan-qr.permission.description':
     'Please allow camera access to scan the invitation QR code.',
   'page.caregiver-setup.scan-qr.permission.request': 'Grant Camera Access',
+  'page.settings.synchronization.summary.title': 'Synchronization Summary',
+  'page.settings.synchronization.summary.desc':
+    'All chunks have been successfully retrieved. Press the button below to apply the changes to your database.',
+  'page.settings.synchronization.summary.stats.title':
+    'Statistics (Provisional):',
+  'page.settings.synchronization.summary.stats.chunks':
+    '• Processed chunks: {{count}}',
+  'page.settings.synchronization.summary.stats.records':
+    '• Detected records: {{count}}',
+  'page.settings.synchronization.summary.stats.dates':
+    '• Date range: {{startDate}} - {{endDate}}',
+  'page.settings.synchronization.collection.progress':
+    'Collected {{count}} of {{total}} chunks',
+  'page.settings.synchronization.collection.start':
+    'Scan the first QR code to start',
   'use-case.consume-record-synchronization-qr.success':
     'Records synchronized successfully',
   'use-case.generate-record-synchronization-qr.success':

@@ -29,7 +29,6 @@ export const RECORD = sqliteTable(
         onDelete: 'restrict',
         onUpdate: 'restrict',
       }),
-    data: text('data').notNull(),
     synced: integer('synced').notNull().default(0),
   },
   (table) => [
