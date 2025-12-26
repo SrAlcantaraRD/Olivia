@@ -65,7 +65,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
       }),
 
       ...(entity.recordFields && {
-        recordFields: entity.recordFields.map(
+        fieldList: entity.recordFields.map(
           SQLiteRecordFieldAdapter.toDomainEntity
         ),
       }),
@@ -113,8 +113,20 @@ export class SQLiteRecordAdapter implements IRecordPort {
     return list.map(SQLiteRecordAdapter.toDomainEntity);
   }
 
-  getPendingToSynchronized(): Promise<TRecord[]> {
-    throw new Error('Method not implemented.');
+  public async getPendingToSynchronized(): Promise<TRecord[]> {
+    const list = await this.database.query.RECORD.findMany({
+      where: (row, { eq, and }) =>
+        and(
+          eq(row.status, STATUS_ENUM.ACTIVE),
+          eq(row.synced, STATUS_ENUM.INACTIVE)
+        ),
+      with: {
+        recordFieldList: true,
+        module: true,
+      },
+    });
+
+    return list.map(SQLiteRecordAdapter.toDomainEntity);
   }
 
   public async getRecentRecords(limit = 10): Promise<TRecord[]> {

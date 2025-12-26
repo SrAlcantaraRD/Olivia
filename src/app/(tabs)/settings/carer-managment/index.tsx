@@ -65,7 +65,7 @@ export default function CarerManagementScreen() {
             iconName="add"
             onPress={goToCreateSecondaryCarer}
             testID="carer-management.create-secondary"
-            titleKey="page.carer-management.create-secondary"
+            title="page.carer-management.create-secondary"
           />
 
           <Divider className="my-2" />

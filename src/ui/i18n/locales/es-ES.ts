@@ -144,6 +144,9 @@ export const esES = Object.freeze({
   'page.settings.app-settings-desc': 'Tema, idioma y privacidad',
   'page.settings.about': 'Acerca de',
   'page.settings.about-desc': 'Versión e información legal',
+  'page.settings.sync-records': 'Sincronizar Registros',
+  'page.settings.sync-records-desc':
+    'Comparte registros con otro dispositivo vía QR',
   'page.settings.add-demo-data': 'Añadir Datos de Demo',
   'page.settings.add-demo-data-desc':
     'Añadir registros de muestra para pruebas',
@@ -506,6 +509,24 @@ export const esES = Object.freeze({
   'hook.sync-with-carer.success-title': 'Sincronización registrada',
   'hook.sync-with-carer.success-description':
     'El evento de sincronización se ha registrado correctamente.',
+  'hook.generate-sync-qr.title': 'Generando QR de sincronización',
+  'hook.generate-sync-qr.description':
+    'Por favor espera mientras generamos el pack de registros.',
+  'hook.generate-sync-qr.error-title': 'Error al generar',
+  'hook.generate-sync-qr.error-description':
+    'No se pudo generar el código QR de sincronización.',
+  'hook.generate-sync-qr.success-title': 'QR generado',
+  'hook.generate-sync-qr.success-description':
+    'El QR de sincronización está listo para ser escaneado.',
+  'hook.consume-sync-qr.title': 'Sincronizando registros',
+  'hook.consume-sync-qr.description':
+    'Procesando los registros del QR escaneado.',
+  'hook.consume-sync-qr.error-title': 'Error al sincronizar',
+  'hook.consume-sync-qr.error-description':
+    'No se pudieron sincronizar los registros. Por favor, intenta escanear de nuevo.',
+  'hook.consume-sync-qr.success-title': 'Sincronización completada',
+  'hook.consume-sync-qr.success-description':
+    'Los registros se han sincronizado correctamente.',
   'page.carer-detail.heading': 'Detalles del cuidador',
   'page.carer-detail.name-value': 'Nombre: <bold>{{name}}</bold>',
   'page.carer-detail.ttl':
@@ -551,6 +572,8 @@ export const esES = Object.freeze({
     'El cuidador ya existe',
   'use-case.sync-with-carer.invalid-request':
     'Solicitud inválida para sincronizar con cuidador',
+  'use-case.create-record.carer-not-found-in-cache':
+    'Cuidador no encontrado en la caché',
 
   'hook.create-secondary-carer.description':
     'Estamos creando un cuidador secundario de forma segura.',

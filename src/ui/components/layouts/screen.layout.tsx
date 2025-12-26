@@ -35,7 +35,7 @@ export function ScreenLayout({
     <View
       testID={testID}
       className={cn(
-        'flex-1 p-4 h-full w-full bg-background',
+        'flex-1 px-4 h-full w-full bg-background',
         styles?.container
       )}
       style={{ paddingTop: insets.top }}
@@ -85,6 +85,8 @@ function ScreenContentLayout({
   className?: string;
 }) {
   return (
-    <View className={cn('flex-1 w-full h-full', className)}>{children}</View>
+    <View className={cn('flex-1 w-full h-full py-4', className)}>
+      {children}
+    </View>
   );
 }

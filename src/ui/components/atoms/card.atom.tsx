@@ -67,7 +67,7 @@ export const CardAtom = ({
   return (
     <PressableFeedback
       feedbackVariant="ripple"
-      className="rounded-lg relative"
+      className="rounded-lg relative shadow-xl/10"
       onPress={handlerOnPress}
       animation={{
         ripple: {

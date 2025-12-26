@@ -12,6 +12,10 @@ export default function SettingsLayout() {
       <Stack.Screen name="app-settings" options={{ presentation: 'modal' }} />
       <Stack.Screen name="log-out" options={{ presentation: 'modal' }} />
       <Stack.Screen name="about" options={{ presentation: 'modal' }} />
+      <Stack.Screen
+        name="synchronize-records"
+        options={{ presentation: 'modal' }}
+      />
     </Stack>
   );
 }

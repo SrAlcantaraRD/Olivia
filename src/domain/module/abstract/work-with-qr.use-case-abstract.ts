@@ -99,13 +99,14 @@ export abstract class WorkWithQRBaseUseCase<
 
   protected mapRecordToRecordSync(record: TRecord): TRecordSync {
     const fieldList = record.fieldList || [];
-    const moduleID = record.module?.id || -1;
+    const moduleID = record.moduleID || -1;
 
     return {
       [QR_KEY.RECORD_MODULE_ID]: moduleID,
       [QR_KEY.RECORD_DATE]: record.createdAt.getTime().toString(),
-      [QR_KEY.RECORD_FIELDS]: fieldList.map(
-        this.mapRecordFieldToRecordFieldSync
+      [QR_KEY.RECORD_DATA_RAW]: record.data,
+      [QR_KEY.RECORD_FIELDS]: fieldList.map((field) =>
+        this.mapRecordFieldToRecordFieldSync(field)
       ),
     };
   }

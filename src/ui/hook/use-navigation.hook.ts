@@ -82,6 +82,10 @@ export const useNavigation = (adapters: {
     );
   }, []);
 
+  const goToRecordSynchronizationSender = useCallback(() => {
+    navigateTo('/(tabs)/settings/synchronize-records');
+  }, []);
+
   const goToLogOut = useCallback(() => {
     navigateTo('/(tabs)/settings/log-out');
   }, []);
@@ -140,6 +144,7 @@ export const useNavigation = (adapters: {
     goToCreateSecondaryCarer,
     goToDeleteCarer,
     goToGenerateInvitationQR,
+    goToRecordSynchronizationSender,
     goToLogOut,
     goToAbout,
     goToSummaryHome,

@@ -8,39 +8,44 @@ import {
   TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
+import { cn } from '@/ui/lib/utils';
 
-interface SettingsRowProps {
+export interface SettingsRowProps {
   iconName: IconName;
-  titleKey: Ti18nKeys;
-  captionKey?: Ti18nKeys;
+  title: Ti18nKeys;
+  description?: Ti18nKeys;
   onPress?: () => void;
   testID?: string;
+  className?: string;
+  variant?: 'default' | 'danger';
 }
 
 export const SettingsRow: React.FC<SettingsRowProps> = ({
   iconName,
-  titleKey,
-  captionKey,
+  title,
+  description,
   onPress,
   testID,
+  className,
+  variant = 'default',
 }) => {
   return (
     <CardAtom
       onPress={onPress}
-      className="flex flex-row  align-middle justify-between"
+      className={cn(
+        'flex flex-row  align-middle justify-between',
+        className,
+        variant === 'danger' && 'light:bg-danger/40 dark:bg-danger/30'
+      )}
     >
       <View className="flex flex-row items-center gap-4">
-        <IconAtom name={iconName} />
+        <IconAtom name={iconName} variant={variant} />
 
         <View className="flex flex-col">
-          <TypographyParagraph
-            i18nKey={titleKey}
-            testID={`${testID}.title`}
-            className="font-medium"
-          />
-          {captionKey && (
+          <TypographyParagraph i18nKey={title} testID={`${testID}.title`} />
+          {description && (
             <TypographySmall
-              i18nKey={captionKey}
+              i18nKey={description}
               testID={`${testID}.caption`}
               variant="light"
             />
@@ -49,7 +54,7 @@ export const SettingsRow: React.FC<SettingsRowProps> = ({
       </View>
 
       <View className="flex items-center justify-center">
-        <IconAtom name="chevron-forward" iconSize={20} />
+        <IconAtom name="chevron-forward" iconSize={20} variant={variant} />
       </View>
     </CardAtom>
   );

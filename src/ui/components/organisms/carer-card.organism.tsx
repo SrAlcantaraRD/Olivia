@@ -148,7 +148,7 @@ export function CarerCardOrganism({
               <SettingsRow
                 onPress={item.onPress}
                 testID={item.testID}
-                titleKey={item.title}
+                title={item.title}
                 iconName={item.icon}
                 key={`settings-row.${item.id}`}
               />

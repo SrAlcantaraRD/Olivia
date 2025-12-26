@@ -231,9 +231,12 @@ export const enEN = Object.freeze({
   'page.settings.app-settings-desc': 'Theme, language, and privacy',
   'page.settings.about': 'About',
   'page.settings.about-desc': 'Version and legal information',
+  'page.settings.sync-records': 'Synchronize Records',
+  'page.settings.sync-records-desc': 'Share records with another device via QR',
   'page.settings.add-demo-data': 'Add Demo Data',
   'page.settings.add-demo-data-desc': 'Add sample records for testing',
   'page.settings.logout': 'Log out',
+  'page.settings.logout-desc': 'Delete all data and log out',
 
   // Page: Settings Detail Screens
   'page.child-profile.title': 'Child Profile',
@@ -313,6 +316,24 @@ export const enEN = Object.freeze({
   'hook.sync-with-carer.success-title': 'Sync recorded',
   'hook.sync-with-carer.success-description':
     'The sync event has been logged successfully.',
+  'hook.generate-sync-qr.title': 'Generating sync QR',
+  'hook.generate-sync-qr.description':
+    'Please wait while we generate the synchronization QR bundle.',
+  'hook.generate-sync-qr.error-title': 'Generation failed',
+  'hook.generate-sync-qr.error-description':
+    'Could not generate the synchronization QR code.',
+  'hook.generate-sync-qr.success-title': 'QR generated',
+  'hook.generate-sync-qr.success-description':
+    'The synchronization QR is ready to be scanned.',
+  'hook.consume-sync-qr.title': 'Syncing records',
+  'hook.consume-sync-qr.description':
+    'Processing the records from the scanned QR.',
+  'hook.consume-sync-qr.error-title': 'Sync failed',
+  'hook.consume-sync-qr.error-description':
+    'Could not sync the records. Please try scanning again.',
+  'hook.consume-sync-qr.success-title': 'Sync complete',
+  'hook.consume-sync-qr.success-description':
+    'Records have been successfully synchronized.',
   'page.carer-detail.heading': 'Carer details',
   'page.carer-detail.name-value': 'Name: <bold>{{name}}</bold>',
   'page.carer-detail.ttl':
@@ -543,6 +564,7 @@ export const enEN = Object.freeze({
     'Invalid request for generating invitation QR',
   'use-case.generate-invitation-qr-for-secondary-carer.generation-failed':
     'Failed to generate invitation QR',
+  'use-case.create-record.carer-not-found-in-cache': 'Carer not found in cache',
   'use-case.create-carer.invalid-request': 'Invalid request for creating carer',
   'use-case.delete-carer.invalid-request': 'Invalid request for deleting carer',
   'use-case.create-secondary-carer.invalid-request':
@@ -618,6 +640,10 @@ export const enEN = Object.freeze({
   'page.caregiver-setup.scan-qr.permission.description':
     'Please allow camera access to scan the invitation QR code.',
   'page.caregiver-setup.scan-qr.permission.request': 'Grant Camera Access',
+  'use-case.consume-record-synchronization-qr.success':
+    'Records synchronized successfully',
+  'use-case.generate-record-synchronization-qr.success':
+    'Record synchronization QR generated successfully',
 } as const);
 
 type RecursiveKeyOf<TObj extends object> = {

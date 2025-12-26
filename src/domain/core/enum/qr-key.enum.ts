@@ -16,6 +16,7 @@ export enum QR_KEY {
   BUNDLE_ID = 'b',
   RECORDS = 'rs',
   SIGNATURE = 's',
+  RECORD_DATA_RAW = 'dr',
 
   // Module access keys
   MODULE_LIST = 'ml',

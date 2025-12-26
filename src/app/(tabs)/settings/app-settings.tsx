@@ -23,7 +23,7 @@ export default function AppSettingsScreen() {
       <View className="gap-2">
         <SettingsRow
           iconName={isLight ? 'sunny' : 'moon'}
-          titleKey="page.app-settings.section-theme"
+          title="page.app-settings.section-theme"
           onPress={toggleTheme}
           testID="page.app-settings.button.toggle-theme"
         />
@@ -32,19 +32,19 @@ export default function AppSettingsScreen() {
 
         <SettingsRow
           iconName="globe"
-          titleKey="page.app-settings.language.english"
+          title="page.app-settings.language.english"
           onPress={() => setLocale(ELocaleCode.en_EN)}
           testID="page.app-settings.button.change-language-english"
         />
         <SettingsRow
           iconName="globe"
-          titleKey="page.app-settings.language.spanish"
+          title="page.app-settings.language.spanish"
           onPress={() => void setLocale(ELocaleCode.es_ES)}
           testID="page.app-settings.button.change-language-spanish"
         />
         <SettingsRow
           iconName="globe"
-          titleKey="page.app-settings.language.catalan"
+          title="page.app-settings.language.catalan"
           onPress={() => void setLocale(ELocaleCode.ca_CA)}
           testID="page.app-settings.button.change-language-catalan"
         />

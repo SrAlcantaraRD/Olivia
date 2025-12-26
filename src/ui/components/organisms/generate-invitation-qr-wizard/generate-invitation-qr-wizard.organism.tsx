@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { useThemeColor } from 'heroui-native';
 import { useMemo } from 'react';
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
 import { getTimeToLiveOptions } from '@/domain/core/constant/time-to-live.constants';
@@ -26,6 +26,7 @@ export function GenerateInvitationQRWizard({
   testID,
 }: GenerateInvitationQRWizardProps) {
   const accentColor = useThemeColor('accent');
+  const { width: windowWidth } = useWindowDimensions();
 
   const {
     formData,
@@ -83,7 +84,7 @@ export function GenerateInvitationQRWizard({
                 <QRCode
                   value={formData.invitationDetails?.qrBundle}
                   color={accentColor}
-                  size={250}
+                  size={windowWidth * 0.85}
                 />
               </View>
               <View className="gap-2">
