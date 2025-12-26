@@ -4,10 +4,11 @@ import z from 'zod';
 import { useAdapters } from '@/adapter';
 import {
   InviteSecondaryCarerQRSchema,
-  type TInviteSecondaryCarerQR,
+  type TInviteSecondaryCarerQRPayload,
 } from '@/domain/carer/dto/invite-secondary-carer.qr.dto';
 import { useSecondaryCarerConsumeInvitationQR } from '@/domain/carer/hook/secondary-carer.consume-invitation-qr.hook';
 import type { TQRBundle } from '@/domain/core/dto/qr.dto';
+import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 import type { TID } from '@/domain/core/schemas/id.schema';
 import { useSecondaryCarerSetupStore } from '@/domain/core/stores/secondary-carer-setup.store';
 import { useGetModuleListByIDList } from '@/domain/module/hook/get-module-list-by-id-list.hook';
@@ -81,13 +82,15 @@ export function useSecondaryCarerSetupForm() {
 
   const handlerReadQR = async (qrBundle: TQRBundle) => {
     const raw =
-      await qrAdapter.decodeFromBundle<TInviteSecondaryCarerQR>(qrBundle);
-
+      await qrAdapter.unpackBundle<TInviteSecondaryCarerQRPayload>(qrBundle);
+    loggerAdapter.error({ raw });
     const parse = InviteSecondaryCarerQRSchema.safeParse({
       ...raw,
-      payload: {
-        ...raw.payload,
-        expiresAt: new Date(raw.payload.expiresAt),
+      [QR_KEY.PAYLOAD]: {
+        ...raw[QR_KEY.PAYLOAD],
+        [QR_KEY.ORIGIN_CARER_EXPIRES_AT]: new Date(
+          raw[QR_KEY.PAYLOAD][QR_KEY.ORIGIN_CARER_EXPIRES_AT]
+        ),
       },
     });
 
@@ -100,9 +103,14 @@ export function useSecondaryCarerSetupForm() {
       return;
     }
 
-    loggerAdapter.error({ activeModuleIDList: parse.data.payload });
+    loggerAdapter.error({
+      activeModuleIDList:
+        parse.data[QR_KEY.PAYLOAD][QR_KEY.ORIGIN_CARER_ACTIVE_MODULE_ID_LIST],
+    });
 
-    handlerGetList(parse.data.payload.activeModuleIDList);
+    handlerGetList(
+      parse.data[QR_KEY.PAYLOAD][QR_KEY.ORIGIN_CARER_ACTIVE_MODULE_ID_LIST]
+    );
 
     setFormData({
       qrBundle,

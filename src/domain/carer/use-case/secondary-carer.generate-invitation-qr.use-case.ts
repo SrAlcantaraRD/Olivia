@@ -10,15 +10,16 @@ import {
 } from '@/domain/carer/use-case-schema/secondary-carer.generate-invitation-qr.use-case-schema';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import { TIME_TO_LIVE } from '@/domain/core/constant/time-to-live.constants';
+import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 import { ErrorEntityNotFoundBy } from '@/domain/core/error/entity-not-found-by.error';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
-import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
 import type { TID } from '@/domain/core/schemas/id.schema';
+import { WorkWithQRBaseUseCase } from '@/domain/module/abstract/work-with-qr.use-case-abstract';
 import type { IModulePort } from '@/domain/module/port/module.port';
 
-export class SecondaryCarerGenerateInvitationQRUseCase extends BaseUseCase<
+export class SecondaryCarerGenerateInvitationQRUseCase extends WorkWithQRBaseUseCase<
   TRequestSecondaryCarerGenerateInvitationQR,
   TResponseSecondaryCarerGenerateInvitationQR
 > {
@@ -31,7 +32,11 @@ export class SecondaryCarerGenerateInvitationQRUseCase extends BaseUseCase<
       moduleAdapter: IModulePort;
     }
   ) {
-    super('generate-invitation-qr-for-secondary-carer', adapters.loggerAdapter);
+    super(
+      'generate-invitation-qr-for-secondary-carer',
+      adapters.qrAdapter,
+      adapters.loggerAdapter
+    );
   }
 
   public async execute(
@@ -68,21 +73,15 @@ export class SecondaryCarerGenerateInvitationQRUseCase extends BaseUseCase<
       const expiresAt = this.getExpireAt(timeToLive);
 
       const payload = {
-        id: carer.id,
-        name: carer.name,
-        expiresAt,
-        activeModuleIDList,
+        [QR_KEY.ORIGIN_CARER_ID]: carer.id,
+        [QR_KEY.ORIGIN_CARER_NAME]: carer.name,
+        [QR_KEY.ORIGIN_CARER_EXPIRES_AT]: expiresAt,
+        [QR_KEY.ORIGIN_CARER_ACTIVE_MODULE_ID_LIST]: activeModuleIDList,
       } satisfies TInviteSecondaryCarerQRPayload;
 
-      const qrData =
-        await this.adapters.qrAdapter.generateQRCode<TInviteSecondaryCarerQRPayload>(
-          payload
-        );
+      const qrData = this.generateQRCode(payload);
 
-      const qrBundle = await this.adapters.qrAdapter.encodeToBundle(qrData);
-
-      const qrChunkList =
-        await this.adapters.qrAdapter.encodeToChunks(qrBundle);
+      const qrBundle = await this.packBundle(qrData);
 
       return {
         success: true,
@@ -90,7 +89,6 @@ export class SecondaryCarerGenerateInvitationQRUseCase extends BaseUseCase<
         details: {
           qrBundle,
           qrData,
-          qrChunkList,
         },
       };
     } catch (error) {
@@ -113,21 +111,13 @@ export class SecondaryCarerGenerateInvitationQRUseCase extends BaseUseCase<
     const now = new Date();
     let expiresAt: Date;
 
-    switch (timeToLive) {
-      case TIME_TO_LIVE.ONE_DAY:
-        expiresAt = addDays(now, 1);
-        break;
-      case TIME_TO_LIVE.ONE_WEEK:
-        expiresAt = addWeeks(now, 1);
-        break;
-      case TIME_TO_LIVE.ONE_MONTH:
-        expiresAt = addMonths(now, 1);
-        break;
-      default:
-        throw new Error(
-          `Invalid timeToLive value: ${timeToLive} in SecondaryCarerGenerateInvitationQRUseCase`
-        );
-    }
+    const map: Record<TIME_TO_LIVE, (date: Date, amount: number) => Date> = {
+      [TIME_TO_LIVE.ONE_DAY]: addDays,
+      [TIME_TO_LIVE.ONE_WEEK]: addWeeks,
+      [TIME_TO_LIVE.ONE_MONTH]: addMonths,
+    };
+
+    expiresAt = map[timeToLive](now, 1);
 
     expiresAt = endOfDay(expiresAt);
 
