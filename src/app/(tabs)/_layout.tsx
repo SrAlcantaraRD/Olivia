@@ -1,6 +1,9 @@
-import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
+import { Tabs } from 'expo-router';
 import { useThemeColor } from 'heroui-native';
 import { useTranslation } from 'react-i18next';
+import { Platform, StyleSheet } from 'react-native';
 
 export default function TabLayout() {
   const { t } = useTranslation();
@@ -8,52 +11,101 @@ export default function TabLayout() {
   const accentColor = useThemeColor('accent');
   const mutedColor = useThemeColor('muted');
   const backgroundColor = useThemeColor('surface');
+  const foregroundColor = useThemeColor('foreground');
 
   return (
-    <NativeTabs
-      minimizeBehavior="onScrollDown"
-      tintColor={accentColor}
-      backgroundColor={backgroundColor}
-      disableTransparentOnScrollEdge={true}
-      blurEffect="none"
-      labelStyle={{
-        fontSize: 11,
-        fontWeight: '600',
-        color: useThemeColor('foreground'),
-      }}
-      iconColor={{
-        default: mutedColor,
-        selected: accentColor,
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: accentColor,
+        tabBarInactiveTintColor: mutedColor,
+        tabBarStyle: {
+          backgroundColor: Platform.select({
+            ios: 'transparent',
+            android: backgroundColor,
+          }),
+          position: Platform.select({
+            ios: 'absolute',
+            android: 'relative',
+          }),
+          borderTopWidth: 0,
+          elevation: 0,
+          height: Platform.select({
+            ios: 88,
+            android: 64,
+          }),
+          paddingBottom: Platform.select({
+            ios: 32,
+            android: 12,
+          }),
+          paddingTop: 12,
+        },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: '600',
+        },
+        tabBarBackground: () =>
+          Platform.OS === 'ios' ? (
+            <BlurView
+              intensity={80}
+              tint="systemChromeMaterial"
+              style={StyleSheet.absoluteFill}
+            />
+          ) : null,
       }}
     >
-      {/* Report Tab */}
-      <NativeTabs.Trigger name="report">
-        <Icon sf={{ default: 'chart.bar', selected: 'chart.bar.fill' }} />
-        <Label>{t('tab.report')}</Label>
-      </NativeTabs.Trigger>
-
-      {/* Summary Tab */}
-      <NativeTabs.Trigger name="summary">
-        <Icon
-          sf={{
-            default: 'heart.text.square',
-            selected: 'heart.text.square.fill',
-          }}
-        />
-        <Label>{t('tab.summary')}</Label>
-      </NativeTabs.Trigger>
-
-      {/* Register Tab - Default landing page (first tab) */}
-      <NativeTabs.Trigger name="register">
-        <Icon sf={{ default: 'plus.circle', selected: 'plus.circle.fill' }} />
-        <Label>{t('tab.register')}</Label>
-      </NativeTabs.Trigger>
-
-      {/* Settings Tab */}
-      <NativeTabs.Trigger name="settings">
-        <Icon sf={{ default: 'gearshape', selected: 'gearshape.fill' }} />
-        <Label>{t('tab.settings')}</Label>
-      </NativeTabs.Trigger>
-    </NativeTabs>
+      <Tabs.Screen
+        name="report"
+        options={{
+          title: t('tab.report'),
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'stats-chart' : 'stats-chart-outline'}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="summary"
+        options={{
+          title: t('tab.summary'),
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'reader' : 'reader-outline'}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="register"
+        options={{
+          title: t('tab.register'),
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'add-circle' : 'add-circle-outline'}
+              size={28}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: t('tab.settings'),
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'settings' : 'settings-outline'}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+    </Tabs>
   );
 }

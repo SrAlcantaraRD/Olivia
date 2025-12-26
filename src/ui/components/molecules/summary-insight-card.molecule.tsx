@@ -42,7 +42,7 @@ export const SummaryInsightCard: React.FC<SummaryInsightCardProps> = ({
   const mutedColor = useThemeColor('muted');
 
   return (
-    <CardAtom className="p-4 rounded-3xl">
+    <CardAtom className="p-4 rounded-lg">
       <Pressable
         accessibilityRole="button"
         onPress={onPress}

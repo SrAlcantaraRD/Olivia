@@ -14,7 +14,7 @@ interface WelcomeSlideContentProps {
   illustration: {
     icon: IconName;
     iconSize?: number;
-    shape?: 'rounded-full' | 'rounded-3xl';
+    shape?: 'rounded-full' | 'rounded-lg';
     secondaryIcon?: {
       name: IconName;
       size?: number;

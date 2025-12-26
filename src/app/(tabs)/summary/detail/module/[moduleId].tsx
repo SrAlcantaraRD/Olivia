@@ -178,7 +178,7 @@ export default function SummaryModuleDetailScreen() {
             testID="page.summary-detail.period"
           />
 
-          <CardAtom className="p-4 rounded-3xl">
+          <CardAtom className="p-4 rounded-lg">
             <TypographySmall
               testID="page.summary-detail.average-label"
               i18nKey="page.summary-detail.average-label"
@@ -213,7 +213,7 @@ export default function SummaryModuleDetailScreen() {
             )}
           </CardAtom>
 
-          <CardAtom className="p-4 rounded-3xl">
+          <CardAtom className="p-4 rounded-lg">
             <View className="flex-row items-center justify-between">
               <TypographyParagraph
                 testID="page.summary-detail.trend"
@@ -238,7 +238,7 @@ export default function SummaryModuleDetailScreen() {
             testID="page.summary-detail.insight"
           />
 
-          <CardAtom className="p-0 rounded-2xl">
+          <CardAtom className="p-0 rounded-lg">
             <View className="p-4">
               <SummarySectionHeader
                 titleKey="page.summary-detail.actions"

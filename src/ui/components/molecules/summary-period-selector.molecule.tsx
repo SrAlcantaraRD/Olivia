@@ -23,7 +23,7 @@ export const SummaryPeriodSelector: React.FC<SummaryPeriodSelectorProps> = ({
 
   return (
     <View
-      className="flex-row rounded-2xl p-1"
+      className="flex-row rounded-lg p-1"
       style={{ backgroundColor: `${mutedColor}20` }}
     >
       {options.map((option) => {
