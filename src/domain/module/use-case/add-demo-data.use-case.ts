@@ -1,3 +1,5 @@
+import { subDays } from 'date-fns';
+
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
@@ -19,7 +21,7 @@ export class AddDemoDataUseCase extends BaseUseCase<
   TRequestAddDemoData,
   TResponseAddDemoData
 > {
-  private readonly DAYS_TO_CREATE = 5;
+  private readonly DAYS_TO_CREATE = 400;
 
   constructor(
     private readonly adapters: {
@@ -75,8 +77,7 @@ export class AddDemoDataUseCase extends BaseUseCase<
 
     // Create records for the last 365 days, 5-9 records per day
     for (let dayOffset = 0; dayOffset < this.DAYS_TO_CREATE; dayOffset++) {
-      const recordDate = new Date(now);
-      recordDate.setDate(now.getDate() - dayOffset);
+      const recordDate = subDays(now, dayOffset);
 
       const numRecords = Math.floor(Math.random() * 5) + 5; // 5 to 9
       for (let i = 0; i < numRecords; i++) {
@@ -85,7 +86,9 @@ export class AddDemoDataUseCase extends BaseUseCase<
         // Generate random hour and minute for the day
         const hour = Math.floor(Math.random() * 24);
         const minute = Math.floor(Math.random() * 60);
-        recordDate.setHours(hour, minute, 0, 0);
+        // Use iteration index 'i' as seconds to ensure uniqueness within the same minute
+        const recordDateWithTime = new Date(recordDate);
+        recordDateWithTime.setHours(hour, minute, i % 60, 0);
 
         // Create the record without nested fields, then create fields separately so they are associated with the created record id
         const recordCreate: TRecordCreate = {
@@ -93,7 +96,7 @@ export class AddDemoDataUseCase extends BaseUseCase<
           carerID,
           synchronized,
           recordFieldList: [], // create fields afterwards using batchUpsert
-          createdAt: recordDate,
+          createdAt: recordDateWithTime,
         };
 
         const createdRecord =
@@ -118,7 +121,7 @@ export class AddDemoDataUseCase extends BaseUseCase<
     if (field.type === 'TEXT') {
       return `Demo text for ${field.code}`;
     } else if (field.type === 'SELECT') {
-      // Parse the JSON values
+      // ex: ["none", "mild", "pain"]
       try {
         const values = JSON.parse(field.values) as string[];
         return values[Math.floor(Math.random() * values.length)];

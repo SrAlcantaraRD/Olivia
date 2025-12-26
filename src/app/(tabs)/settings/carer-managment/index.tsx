@@ -7,7 +7,7 @@ import { useAdapters } from '@/adapter';
 import { ENTITY_NAME } from '@/domain/core/enum/entity-names.enum';
 import { useGetEntityList } from '@/domain/core/hook/get-entity-list.hook';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
-import { SettingsRow } from '@/ui/components/molecules/settings-row.molecule';
+import { RowAction } from '@/ui/components/molecules/row-action.molecule';
 import { CarerCardOrganism } from '@/ui/components/organisms/carer-card.organism';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
@@ -61,7 +61,7 @@ export default function CarerManagementScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View className="gap-4">
-          <SettingsRow
+          <RowAction
             iconName="add"
             onPress={goToCreateSecondaryCarer}
             testID="carer-management.create-secondary"

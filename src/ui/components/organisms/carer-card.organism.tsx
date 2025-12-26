@@ -10,7 +10,7 @@ import {
   TypographyParagraph,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
-import { SettingsRow } from '@/ui/components/molecules/settings-row.molecule';
+import { RowAction } from '@/ui/components/molecules/row-action.molecule';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface CarerCardOrganismProps {
@@ -141,7 +141,7 @@ export function CarerCardOrganism({
         {buttonItems
           .filter((item) => item.isVisible)
           .map((item) => (
-            <SettingsRow
+            <RowAction
               onPress={item.onPress}
               testID={item.testID}
               title={item.title}

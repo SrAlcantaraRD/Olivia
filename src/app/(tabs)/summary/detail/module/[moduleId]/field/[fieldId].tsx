@@ -19,15 +19,16 @@ import { usePinSummaryItem } from '@/domain/summary/hook/pin-summary-item.hook';
 import { useUnpinSummaryItem } from '@/domain/summary/hook/unpin-summary-item.hook';
 import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
+import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
 import {
   TypographyHeading,
   TypographyParagraph,
   TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { RowAction } from '@/ui/components/molecules/row-action.molecule';
 import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
 import { SummaryPeriodSelector } from '@/ui/components/molecules/summary-period-selector.molecule';
-import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
@@ -46,7 +47,9 @@ export default function SummaryFieldDetailScreen() {
     navigationAdapter,
   } = useAdapters();
 
-  const { goToSummaryModuleDetail } = useNavigation({ navigationAdapter });
+  const { goToSummaryModuleDetail, goToSummaryFieldRecords } = useNavigation({
+    navigationAdapter,
+  });
 
   const detailHook = useGetSummaryDetail({
     loggerAdapter: BASE_LOGGER,
@@ -161,7 +164,7 @@ export default function SummaryFieldDetailScreen() {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
-        <View className="gap-6">
+        <View className="gap-4">
           <SummaryPeriodSelector
             options={periodOptions}
             selected={selectedPeriod}
@@ -239,9 +242,9 @@ export default function SummaryFieldDetailScreen() {
               />
             </View>
             <View className="px-4 pb-4 gap-2">
-              <SummaryRow
+              <RowAction
                 iconName={isPinned ? 'bookmark' : 'bookmark-outline'}
-                titleKey={
+                title={
                   isPinned
                     ? 'page.summary-detail.unpin'
                     : 'page.summary-detail.pin'
@@ -249,15 +252,24 @@ export default function SummaryFieldDetailScreen() {
                 onPress={handlePinToggle}
                 testID="page.summary-detail.pin-toggle"
               />
-              <SummaryRow
+              <RowAction
                 iconName="list"
-                titleKey="page.summary-detail.back-to-module"
+                title="common.view-all"
+                onPress={() =>
+                  goToSummaryFieldRecords(String(moduleId), String(fieldId))
+                }
+                testID="page.summary-detail.view-all-records"
+              />
+              <RowAction
+                iconName="arrow-back"
+                title="page.summary-detail.back-to-module"
                 onPress={() => goToSummaryModuleDetail(String(moduleId))}
                 testID="page.summary-detail.back-to-module"
               />
             </View>
           </CardAtom>
         </View>
+        <RowEmptyAtom />
       </ScrollView>
     </ScreenLayout>
   );

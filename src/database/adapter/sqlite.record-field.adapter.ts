@@ -11,7 +11,10 @@ import {
 import { SQLITE_DB } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
 import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
-import { getStatusFromValue } from '@/domain/core/enum/status.enum';
+import {
+  getStatusFromValue,
+  STATUS_ENUM,
+} from '@/domain/core/enum/status.enum';
 import type { TID } from '@/domain/core/schemas/id.schema';
 import type {
   TRecordField,
@@ -66,6 +69,19 @@ export class SQLiteRecordFieldAdapter implements IRecordFieldPort {
   public async getAll(): Promise<TRecordField[]> {
     const list = await this.database.query.RECORD_FIELD.findMany({
       where: (row, { eq }) => eq(row.status, 1),
+    });
+
+    return list.map(SQLiteRecordFieldAdapter.toDomainEntity);
+  }
+
+  public async getAllByFieldId(fieldID: TID): Promise<TRecordField[]> {
+    const list = await this.database.query.RECORD_FIELD.findMany({
+      where: (row, { eq, and }) =>
+        and(
+          eq(row.status, STATUS_ENUM.ACTIVE),
+          eq(row.fieldID, Number(fieldID))
+        ),
+      orderBy: (row, { desc }) => [desc(row.createdAt)],
     });
 
     return list.map(SQLiteRecordFieldAdapter.toDomainEntity);

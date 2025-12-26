@@ -10,7 +10,7 @@ import {
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 import { cn } from '@/ui/lib/utils';
 
-export interface SettingsRowProps {
+export interface RowActionProps {
   iconName: IconName;
   title: Ti18nKeys;
   description?: Ti18nKeys;
@@ -20,7 +20,7 @@ export interface SettingsRowProps {
   variant?: 'default' | 'danger';
 }
 
-export const SettingsRow: React.FC<SettingsRowProps> = ({
+export const RowAction: React.FC<RowActionProps> = ({
   iconName,
   title,
   description,
@@ -33,16 +33,20 @@ export const SettingsRow: React.FC<SettingsRowProps> = ({
     <CardAtom
       onPress={onPress}
       className={cn(
-        'flex flex-row align-center justify-between',
+        'flex flex-row items-center justify-between',
         className,
         variant === 'danger' && 'light:bg-danger/40 dark:bg-danger/30'
       )}
     >
-      <View className="flex flex-row items-center gap-4">
+      <View className="flex flex-row items-center gap-4 flex-1">
         <IconAtom name={iconName} variant={variant} iconSize={20} />
 
-        <View className="flex flex-col">
-          <TypographyParagraph i18nKey={title} testID={`${testID}.title`} />
+        <View className="flex flex-col flex-1">
+          <TypographyParagraph
+            i18nKey={title}
+            testID={`${testID}.title`}
+            className="font-medium"
+          />
           {description && (
             <TypographySmall
               i18nKey={description}
@@ -53,7 +57,7 @@ export const SettingsRow: React.FC<SettingsRowProps> = ({
         </View>
       </View>
 
-      <View className="flex items-center justify-center">
+      <View className="flex items-center justify-center ml-2">
         <IconAtom
           name="chevron-forward"
           iconSize={20}

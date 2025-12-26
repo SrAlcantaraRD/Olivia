@@ -9,10 +9,11 @@ import { useGetListActiveModule } from '@/domain/module/hook/get-list-active-mod
 import { SUMMARY_PIN_TYPE_ENUM } from '@/domain/summary/enum/summary-pin-type.enum';
 import { useGetSummaryHome } from '@/domain/summary/hook/get-summary-home.hook';
 import { useSummaryRefresh } from '@/domain/summary/hook/use-summary-refresh.hook';
+import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { PinnedSection } from '@/ui/components/molecules/pinned-section.molecule';
+import { RowAction } from '@/ui/components/molecules/row-action.molecule';
 import { SummaryCard } from '@/ui/components/molecules/summary-card.molecule';
-import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
@@ -147,9 +148,9 @@ export default function SummaryHomeScreen() {
             testID="page.summary.pinned"
           >
             {pinnedModules.length === 0 ? (
-              <SummaryRow
+              <RowAction
                 iconName="add-circle"
-                titleKey="page.summary.pins-empty"
+                title="page.summary.pins-empty"
                 onPress={goToSummaryAllData}
                 testID="page.summary.pins-empty"
               />
@@ -174,21 +175,21 @@ export default function SummaryHomeScreen() {
             )}
           </PinnedSection>
 
-          <SummaryRow
+          <RowAction
             iconName="heart"
-            titleKey="page.summary.all-data"
+            title="page.summary.all-data"
             onPress={goToSummaryAllData}
             testID="page.summary.all-data"
           />
-          <SummaryRow
+          <RowAction
             iconName="trending-up"
-            titleKey="page.summary.trends"
+            title="page.summary.trends"
             onPress={goToSummaryTrends}
             testID="page.summary.trends"
           />
-          <SummaryRow
+          <RowAction
             iconName="sparkles"
-            titleKey="page.summary.highlights"
+            title="page.summary.highlights"
             onPress={goToSummaryHighlights}
             testID="page.summary.highlights"
           />
@@ -199,9 +200,9 @@ export default function SummaryHomeScreen() {
               testID="page.summary.modules"
             />
             {modules.length === 0 ? (
-              <SummaryRow
+              <RowAction
                 iconName="alert"
-                titleKey="page.summary.modules-empty"
+                title="page.summary.modules-empty"
                 onPress={goToSummaryAllData}
                 testID="page.summary.modules-empty"
               />
@@ -225,6 +226,7 @@ export default function SummaryHomeScreen() {
             )}
           </View>
         </View>
+        <RowEmptyAtom />
       </ScrollView>
     </ScreenLayout>
   );

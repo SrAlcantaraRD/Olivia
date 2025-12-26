@@ -8,6 +8,7 @@ import m0003 from './0003_rapid_may_parker.sql';
 import m0004 from './0004_uneven_prowler.sql';
 import m0005 from './0005_lush_sandman.sql';
 import m0006 from './0006_luxuriant_warbird.sql';
+import m0007 from './0007_common_marrow.sql';
 
 export default {
   journal,
@@ -19,5 +20,6 @@ export default {
     m0004,
     m0005,
     m0006,
+    m0007,
   },
 };

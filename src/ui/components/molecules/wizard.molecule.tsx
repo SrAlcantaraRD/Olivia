@@ -91,7 +91,7 @@ export function Wizard({
       </View>
 
       {/* Footer with Pagination and Next Button */}
-      <View className="pb-12 gap-6 flex flex-row items-center">
+      <View className="pb-12 gap-4 flex flex-row items-center">
         <View className="flex-1">
           <AtomPaginationDots
             testID={`${testID}.pagination-dots`}

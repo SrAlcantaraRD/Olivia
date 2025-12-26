@@ -125,6 +125,15 @@ export const useNavigation = (adapters: {
     navigateTo(`/(tabs)/summary/detail/trend/${trendId}`);
   }, []);
 
+  const goToSummaryFieldRecords = useCallback(
+    (moduleId: string, fieldId: string) => {
+      navigateTo(
+        `/(tabs)/summary/detail/module/${moduleId}/field/${fieldId}/records`
+      );
+    },
+    []
+  );
+
   // Add more as needed
 
   return {
@@ -154,5 +163,6 @@ export const useNavigation = (adapters: {
     goToSummaryModuleDetail,
     goToSummaryFieldDetail,
     goToSummaryTrendDetail,
+    goToSummaryFieldRecords,
   };
 };

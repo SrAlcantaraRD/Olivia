@@ -76,6 +76,8 @@ export function ScreenLayout({
         )}
 
         {children}
+
+        {/* Bottom spacer to allow scrolling past the absolute/transparent Tab Bar on iOS */}
       </ScreenContentLayout>
     </View>
   );

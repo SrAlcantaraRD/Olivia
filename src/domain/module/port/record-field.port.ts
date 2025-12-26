@@ -5,7 +5,7 @@ import type {
 } from '@/domain/module/entity/record-field.entity';
 
 export interface IRecordFieldPort {
-  getAll(): Promise<TRecordField[]>;
+  getAllByFieldId(fieldID: TID): Promise<TRecordField[]>;
   batchUpsert(
     recordID: TID,
     data: TRecordFieldCreate[],

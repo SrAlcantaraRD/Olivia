@@ -18,7 +18,7 @@ export function ConfirmationStep({
 }: ConfirmationStepProps) {
   return (
     <ScrollView className="flex-1 p-4">
-      <View className="gap-6">
+      <View className="gap-4">
         <View className="items-center py-4">
           <View className="w-16 h-16 rounded-full bg-accent/20 items-center justify-center">
             <TypographyTitle

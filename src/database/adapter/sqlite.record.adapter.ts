@@ -85,7 +85,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
       .insert(DB_SCHEMA.RECORD)
       .values(insertPayload)
       .onConflictDoUpdate({
-        target: DB_SCHEMA.RECORD.createdAt,
+        target: [DB_SCHEMA.RECORD.moduleID, DB_SCHEMA.RECORD.createdAt],
         set: {
           synced: insertPayload.synced,
           status: insertPayload.status,

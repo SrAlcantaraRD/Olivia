@@ -38,7 +38,7 @@ export default function SummaryTrendsScreen() {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
-        <View className="gap-6">
+        <View className="gap-4">
           <SummarySectionHeader
             titleKey="page.summary-trends.heading"
             testID="page.summary-trends.heading"

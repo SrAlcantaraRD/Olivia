@@ -6,9 +6,10 @@ import { useAdapters } from '@/adapter';
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import { useGetSummaryHighlights } from '@/domain/summary/hook/get-summary-highlights.hook';
+import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { RowAction } from '@/ui/components/molecules/row-action.molecule';
 import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
-import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
@@ -35,31 +36,31 @@ export default function SummaryHighlightsScreen() {
   return (
     <ScreenLayout
       testID="page.summary-highlights"
-      title="page.summary-highlights.title"
-      subtitle="page.summary-highlights.subtitle"
+      title="page.summary_highlights.title"
+      subtitle="page.summary_highlights.subtitle"
     >
       <ScrollView
         className="flex-1"
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
-        <View className="gap-6">
-          <SummaryRow
+        <View className="gap-4">
+          <RowAction
             iconName="heart"
-            titleKey="page.summary.all-data"
+            title="page.summary.all-data"
             onPress={goToSummaryAllData}
             testID="page.summary-highlights.all-data"
           />
 
           <SummarySectionHeader
-            titleKey="page.summary-highlights.heading"
+            titleKey="page.summary_highlights.heading"
             testID="page.summary-highlights.heading"
           />
 
           {highlightsHook.items.length === 0 ? (
             <SummaryInsightCard
-              titleKey="page.summary-highlights.empty"
-              descriptionKey="page.summary-highlights.empty"
+              titleKey="page.summary_highlights.empty"
+              descriptionKey="page.summary_highlights.empty"
               iconName="alert"
               chartValues={DEFAULT_HIGHLIGHT_SERIES}
               chartAverage={3}
@@ -86,13 +87,14 @@ export default function SummaryHighlightsScreen() {
             ))
           )}
 
-          <SummaryRow
+          <RowAction
             iconName="sparkles"
-            titleKey="page.summary.highlights"
+            title="page.summary.highlights"
             onPress={goToSummaryAllData}
             testID="page.summary-highlights.show-all"
           />
         </View>
+        <RowEmptyAtom />
       </ScrollView>
     </ScreenLayout>
   );

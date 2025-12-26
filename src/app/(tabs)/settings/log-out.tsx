@@ -110,7 +110,7 @@ export default function LogoutConfirmScreen() {
         contentContainerStyle={{ padding: 16 }}
         contentInsetAdjustmentBehavior="automatic"
       >
-        <View className="gap-6">
+        <View className="gap-4">
           <TypographyTitle
             testID="screen.settings.logout-confirm.title"
             i18nKey="page.settings.logout-confirm.title"

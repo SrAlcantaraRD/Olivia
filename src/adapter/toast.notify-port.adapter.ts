@@ -17,9 +17,9 @@ export class ToastUINotifyPortAdapter implements INotifyPort {
       text1: params.title,
       text2: params.description,
       position: 'top',
-      visibilityTime: 500,
+      visibilityTime: 2000,
       autoHide: true,
-      topOffset: 160,
+      topOffset: 220,
     });
   }
 

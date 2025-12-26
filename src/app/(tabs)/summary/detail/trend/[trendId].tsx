@@ -19,15 +19,16 @@ import { usePinSummaryItem } from '@/domain/summary/hook/pin-summary-item.hook';
 import { useUnpinSummaryItem } from '@/domain/summary/hook/unpin-summary-item.hook';
 import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
+import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
 import {
   TypographyHeading,
   TypographyParagraph,
   TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { RowAction } from '@/ui/components/molecules/row-action.molecule';
 import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
 import { SummaryPeriodSelector } from '@/ui/components/molecules/summary-period-selector.molecule';
-import { SummaryRow } from '@/ui/components/molecules/summary-row.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
@@ -103,7 +104,10 @@ export default function SummaryTrendDetailScreen() {
         case SUMMARY_PERIOD_ENUM.YEAR: {
           // dateStr is like "2025-12"
           const [year, month] = dateStr.split('-');
-          return format(new Date(parseInt(year), parseInt(month) - 1), 'MMM'); // Jan, Feb, etc.
+          return format(
+            new Date(parseInt(year, 10), parseInt(month, 10) - 1),
+            'MMM'
+          ); // Jan, Feb, etc.
         }
         default:
           return dateStr;
@@ -155,7 +159,7 @@ export default function SummaryTrendDetailScreen() {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
-        <View className="gap-6">
+        <View className="gap-4">
           <SummaryPeriodSelector
             options={periodOptions}
             selected={selectedPeriod}
@@ -233,9 +237,9 @@ export default function SummaryTrendDetailScreen() {
               />
             </View>
             <View className="px-4 pb-4 gap-2">
-              <SummaryRow
+              <RowAction
                 iconName={isPinned ? 'bookmark' : 'bookmark-outline'}
-                titleKey={
+                title={
                   isPinned
                     ? 'page.summary-detail.unpin'
                     : 'page.summary-detail.pin'
@@ -243,15 +247,16 @@ export default function SummaryTrendDetailScreen() {
                 onPress={handlePinToggle}
                 testID="page.summary-detail.pin-toggle"
               />
-              <SummaryRow
+              <RowAction
                 iconName="home"
-                titleKey="page.summary-detail.back-to-summary"
+                title="page.summary-detail.back-to-summary"
                 onPress={goToSummaryHome}
                 testID="page.summary-detail.back-to-summary"
               />
             </View>
           </CardAtom>
         </View>
+        <RowEmptyAtom />
       </ScrollView>
     </ScreenLayout>
   );

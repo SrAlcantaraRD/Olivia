@@ -32,13 +32,10 @@ export default function TabLayout() {
           borderTopWidth: 0,
           elevation: 0,
           height: Platform.select({
-            ios: 88,
+            ios: 64 + insets.bottom,
             android: 64 + insets.bottom * 1.3,
           }),
-          paddingBottom: Platform.select({
-            ios: 32,
-            android: insets.bottom,
-          }),
+          paddingBottom: insets.bottom,
           paddingTop: 12,
         },
         tabBarLabelStyle: {
