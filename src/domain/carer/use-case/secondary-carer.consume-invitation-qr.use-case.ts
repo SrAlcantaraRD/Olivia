@@ -121,6 +121,11 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends WorkWithQRBaseUseC
         expiresAt.getTime()
       );
 
+      await this.adapters.cacheAdapter.set(
+        CACHE_KEY_ENUM.CARER,
+        carerExists.id
+      );
+
       this.adapters.loggerAdapter.info({
         message: `Secondary carer with ID ${originalCarerID} already exists.`,
       });
@@ -148,6 +153,8 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends WorkWithQRBaseUseC
       CACHE_KEY_ENUM.SECONDARY_CARER_EXPIRES_AT,
       expiresAt.getTime()
     );
+
+    await this.adapters.cacheAdapter.set(CACHE_KEY_ENUM.CARER, carer.id);
 
     return {
       success: true,

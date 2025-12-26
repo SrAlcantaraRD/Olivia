@@ -56,7 +56,7 @@ export class SetupParentUseCase extends BaseUseCase<
 
       await this.moduleAdapter.batchActivate(moduleList);
 
-      await this.cacheAdapter.set(CACHE_KEY_ENUM.CARER, createdCarer);
+      await this.cacheAdapter.set(CACHE_KEY_ENUM.CARER, createdCarer.id);
 
       // pinHash is sensitive; persist in secure store
       if (createdCarer.pinHash) {

@@ -54,7 +54,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
       moduleID: entity.moduleID,
 
       data: entity.data,
-      synced: Boolean(entity.synced),
+      synchronized: Boolean(entity.synced),
 
       ...(entity.carer && {
         carer: SQLiteCarerAdapter.toDomainEntity(entity.carer),
@@ -72,12 +72,12 @@ export class SQLiteRecordAdapter implements IRecordPort {
     } satisfies TRecord;
   }
 
-  public async create(data: TRecordCreate): Promise<TRecord> {
+  public async upsert(data: TRecordCreate): Promise<TRecord> {
     const insertPayload = {
       moduleID: Number(data.moduleID),
       carerID: Number(data.carerID),
       data: data.data,
-      synced: data.synced ? STATUS_ENUM.ACTIVE : STATUS_ENUM.INACTIVE,
+      synced: data.synchronized ? STATUS_ENUM.ACTIVE : STATUS_ENUM.INACTIVE,
       status: STATUS_ENUM.ACTIVE,
       createdAt: data.createdAt,
     } satisfies TRecordAdapterInsert;
@@ -85,6 +85,14 @@ export class SQLiteRecordAdapter implements IRecordPort {
     const [record] = await this.database
       .insert(DB_SCHEMA.RECORD)
       .values(insertPayload)
+      .onConflictDoUpdate({
+        target: DB_SCHEMA.RECORD.createdAt,
+        set: {
+          data: insertPayload.data,
+          synced: insertPayload.synced,
+          status: insertPayload.status,
+        },
+      })
       .returning();
 
     return SQLiteRecordAdapter.toDomainEntity(record);
@@ -103,6 +111,10 @@ export class SQLiteRecordAdapter implements IRecordPort {
     const list = await this.database.query.RECORD.findMany();
 
     return list.map(SQLiteRecordAdapter.toDomainEntity);
+  }
+
+  getPendingToSynchronized(): Promise<TRecord[]> {
+    throw new Error('Method not implemented.');
   }
 
   public async getRecentRecords(limit = 10): Promise<TRecord[]> {

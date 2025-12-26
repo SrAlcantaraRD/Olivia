@@ -6,8 +6,9 @@ import type {
 
 export interface IRecordFieldPort {
   getAll(): Promise<TRecordField[]>;
-  batchCreate(
+  batchUpsert(
     recordID: TID,
-    data: TRecordFieldCreate[]
+    data: TRecordFieldCreate[],
+    date: Date
   ): Promise<TRecordField[]>;
 }

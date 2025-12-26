@@ -1,0 +1,649 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "812f08e5-5d55-4d03-b416-13ebfb239869",
+  "prevId": "b26a47eb-d58a-41ec-8a13-27d1bb2f5036",
+  "tables": {
+    "carer": {
+      "name": "carer",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "is_primary": {
+          "name": "is_primary",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "pin_hash": {
+          "name": "pin_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "carer__index__id": {
+          "name": "carer__index__id",
+          "columns": ["id"],
+          "isUnique": false
+        },
+        "carer__index__status": {
+          "name": "carer__index__status",
+          "columns": ["status"],
+          "isUnique": false
+        },
+        "carer__index__is_primary": {
+          "name": "carer__index__is_primary",
+          "columns": ["is_primary"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "module": {
+      "name": "module",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "active": {
+          "name": "active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "module_code_unique": {
+          "name": "module_code_unique",
+          "columns": ["code"],
+          "isUnique": true
+        },
+        "module__index__id": {
+          "name": "module__index__id",
+          "columns": ["id"],
+          "isUnique": false
+        },
+        "module__index__status": {
+          "name": "module__index__status",
+          "columns": ["status"],
+          "isUnique": false
+        },
+        "module__index__code": {
+          "name": "module__index__code",
+          "columns": ["code"],
+          "isUnique": false
+        },
+        "module__index__active": {
+          "name": "module__index__active",
+          "columns": ["active"],
+          "isUnique": false
+        },
+        "module__unique__code": {
+          "name": "module__unique__code",
+          "columns": ["code"],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "module_field": {
+      "name": "module_field",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "module_id": {
+          "name": "module_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "values": {
+          "name": "values",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "required": {
+          "name": "required",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "module_field__index__id": {
+          "name": "module_field__index__id",
+          "columns": ["id"],
+          "isUnique": false
+        },
+        "module_field__index__status": {
+          "name": "module_field__index__status",
+          "columns": ["status"],
+          "isUnique": false
+        },
+        "module_field__index__module_id": {
+          "name": "module_field__index__module_id",
+          "columns": ["module_id"],
+          "isUnique": false
+        },
+        "module_field__index__type": {
+          "name": "module_field__index__type",
+          "columns": ["type"],
+          "isUnique": false
+        },
+        "module_field__unique__module_id__title": {
+          "name": "module_field__unique__module_id__title",
+          "columns": ["module_id", "code"],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "module_field_module_id_module_id_fk": {
+          "name": "module_field_module_id_module_id_fk",
+          "tableFrom": "module_field",
+          "tableTo": "module",
+          "columnsFrom": ["module_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        },
+        "module_field__fk__module__id": {
+          "name": "module_field__fk__module__id",
+          "tableFrom": "module_field",
+          "tableTo": "module",
+          "columnsFrom": ["module_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "patient": {
+      "name": "patient",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "birth_date": {
+          "name": "birth_date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sex": {
+          "name": "sex",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "autonomy_level": {
+          "name": "autonomy_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "patient__index__id": {
+          "name": "patient__index__id",
+          "columns": ["id"],
+          "isUnique": false
+        },
+        "patient__index__status": {
+          "name": "patient__index__status",
+          "columns": ["status"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "record": {
+      "name": "record",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "module_id": {
+          "name": "module_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "carer_id": {
+          "name": "carer_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "data": {
+          "name": "data",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "synced": {
+          "name": "synced",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "record__index__id": {
+          "name": "record__index__id",
+          "columns": ["id"],
+          "isUnique": false
+        },
+        "record__index__status": {
+          "name": "record__index__status",
+          "columns": ["status"],
+          "isUnique": false
+        },
+        "record__index__module_id": {
+          "name": "record__index__module_id",
+          "columns": ["module_id"],
+          "isUnique": false
+        },
+        "record__index__carer_id": {
+          "name": "record__index__carer_id",
+          "columns": ["carer_id"],
+          "isUnique": false
+        },
+        "record__index__synced": {
+          "name": "record__index__synced",
+          "columns": ["synced"],
+          "isUnique": false
+        },
+        "record__index__created_at": {
+          "name": "record__index__created_at",
+          "columns": ["created_at"],
+          "isUnique": false
+        },
+        "record__unique__created_at": {
+          "name": "record__unique__created_at",
+          "columns": ["created_at"],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "record_module_id_module_id_fk": {
+          "name": "record_module_id_module_id_fk",
+          "tableFrom": "record",
+          "tableTo": "module",
+          "columnsFrom": ["module_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        },
+        "record_carer_id_carer_id_fk": {
+          "name": "record_carer_id_carer_id_fk",
+          "tableFrom": "record",
+          "tableTo": "carer",
+          "columnsFrom": ["carer_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        },
+        "record__fk__module__id": {
+          "name": "record__fk__module__id",
+          "tableFrom": "record",
+          "tableTo": "module",
+          "columnsFrom": ["module_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        },
+        "record__fk__carer__id": {
+          "name": "record__fk__carer__id",
+          "tableFrom": "record",
+          "tableTo": "carer",
+          "columnsFrom": ["carer_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "record_field": {
+      "name": "record_field",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "record_id": {
+          "name": "record_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "field_id": {
+          "name": "field_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "record_field__index__id": {
+          "name": "record_field__index__id",
+          "columns": ["id"],
+          "isUnique": false
+        },
+        "record_field__index__status": {
+          "name": "record_field__index__status",
+          "columns": ["status"],
+          "isUnique": false
+        },
+        "record_field__index__record_id": {
+          "name": "record_field__index__record_id",
+          "columns": ["record_id"],
+          "isUnique": false
+        },
+        "record_field__index__field_id": {
+          "name": "record_field__index__field_id",
+          "columns": ["field_id"],
+          "isUnique": false
+        },
+        "record_field__index__created_at": {
+          "name": "record_field__index__created_at",
+          "columns": ["created_at"],
+          "isUnique": false
+        },
+        "record_field__unique__created_at": {
+          "name": "record_field__unique__created_at",
+          "columns": ["created_at"],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "record_field_record_id_record_id_fk": {
+          "name": "record_field_record_id_record_id_fk",
+          "tableFrom": "record_field",
+          "tableTo": "record",
+          "columnsFrom": ["record_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        },
+        "record_field_field_id_module_field_id_fk": {
+          "name": "record_field_field_id_module_field_id_fk",
+          "tableFrom": "record_field",
+          "tableTo": "module_field",
+          "columnsFrom": ["field_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        },
+        "record_field__fk__record__id": {
+          "name": "record_field__fk__record__id",
+          "tableFrom": "record_field",
+          "tableTo": "record",
+          "columnsFrom": ["record_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        },
+        "record_field__fk__module_field__id": {
+          "name": "record_field__fk__module_field__id",
+          "tableFrom": "record_field",
+          "tableTo": "module_field",
+          "columnsFrom": ["field_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "restrict"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {
+      "\"module_field\".\"title\"": "\"module_field\".\"code\""
+    }
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

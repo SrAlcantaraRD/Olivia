@@ -4,6 +4,7 @@ import m0000 from './0000_worried_calypso.sql';
 import m0001 from './0001_seed-cic-module.sql';
 import m0002 from './0002_seed-cic-module-fields.sql';
 import m0003 from './0003_rapid_may_parker.sql';
+import m0004 from './0004_uneven_prowler.sql';
 import journal from './meta/_journal.json';
 
 export default {
@@ -13,5 +14,6 @@ export default {
     m0001,
     m0002,
     m0003,
+    m0004,
   },
 };

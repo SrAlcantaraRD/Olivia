@@ -5,11 +5,12 @@ import type {
 } from '@/domain/module/entity/record.entity';
 
 export interface IRecordPort {
-  create(data: TRecordCreate): Promise<TRecord>;
+  upsert(data: TRecordCreate): Promise<TRecord>;
   getByID(id: TID): Promise<TRecord | null>;
   getAll(): Promise<TRecord[]>;
+  getPendingToSynchronized(): Promise<TRecord[]>;
   getRecentRecords(limit?: number): Promise<TRecord[]>;
-  // Aggregations for reports
+  // Aggregations for reports. TODO: Move to a SummaryPort?
   getCountsByModule(criteria?: {
     startDate?: Date;
     endDate?: Date;

@@ -1,6 +1,7 @@
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 
-import SQLiteModuleFieldAdapter, {
+import {
+  SQLiteModuleFieldAdapter,
   type TModuleFieldAdapterEntity,
 } from '@/database/adapter/sqlite.module-field.adapter';
 import {
@@ -70,9 +71,10 @@ export class SQLiteRecordFieldAdapter implements IRecordFieldPort {
     return list.map(SQLiteRecordFieldAdapter.toDomainEntity);
   }
 
-  public async batchCreate(
+  public async batchUpsert(
     recordID: TID,
-    data: TRecordFieldCreate[]
+    data: TRecordFieldCreate[],
+    recordDate: Date
   ): Promise<TRecordField[]> {
     const insertPayload = data.map(
       (item) =>
@@ -80,6 +82,7 @@ export class SQLiteRecordFieldAdapter implements IRecordFieldPort {
           recordID: Number(recordID),
           fieldID: Number(item.fieldID),
           value: item.value,
+          createdAt: recordDate,
         }) satisfies TRecordFieldAdapterInsert
     );
 

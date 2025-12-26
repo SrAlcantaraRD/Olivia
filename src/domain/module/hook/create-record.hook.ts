@@ -5,11 +5,12 @@ import type {
   IHookResponse,
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
+import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
-import type { IRecordPort } from '@/domain/module/port/record.port';
 import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
+import type { IRecordPort } from '@/domain/module/port/record.port';
 import { CreateRecordUseCase } from '@/domain/module/use-case/create-record.use-case';
 
 export function useCreateRecord(adapters: {
@@ -17,12 +18,18 @@ export function useCreateRecord(adapters: {
   notifyAdapter: INotifyPort;
   recordAdapter: IRecordPort;
   recordFieldAdapter: IRecordFieldPort;
+  cacheAdapter: ICachePort;
 }): IUseHook<TRecordCreate, void> {
   const {
     actions: { startLoading, stopLoading },
   } = useListStore('record');
-  const { loggerAdapter, recordAdapter, notifyAdapter, recordFieldAdapter } =
-    adapters;
+  const {
+    loggerAdapter,
+    recordAdapter,
+    notifyAdapter,
+    recordFieldAdapter,
+    cacheAdapter,
+  } = adapters;
 
   const execute = useCallback(
     async (data: TRecordCreate): Promise<IHookResponse<void>> => {
@@ -32,6 +39,7 @@ export function useCreateRecord(adapters: {
           loggerAdapter,
           recordAdapter,
           recordFieldAdapter,
+          cacheAdapter,
         });
 
         const response = await useCase.execute(data);

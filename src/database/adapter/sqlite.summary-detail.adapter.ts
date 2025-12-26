@@ -65,7 +65,7 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
 
     // Get field info
     const fieldResult = await this.database
-      .select({ title: DB_SCHEMA.MODULE_FIELD.title })
+      .select({ title: DB_SCHEMA.MODULE_FIELD.code })
       .from(DB_SCHEMA.MODULE_FIELD)
       .where(eq(DB_SCHEMA.MODULE_FIELD.id, fieldId))
       .limit(1);

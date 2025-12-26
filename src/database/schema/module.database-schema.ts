@@ -5,6 +5,7 @@ import {
   integer,
   sqliteTable,
   text,
+  unique,
 } from 'drizzle-orm/sqlite-core';
 
 import { AUDIT_COLUMNS } from '@/database/schema/audit-columns';
@@ -25,6 +26,7 @@ export const MODULE = sqliteTable(
     index('module__index__status').on(table.status),
     index('module__index__code').on(table.code),
     index('module__index__active').on(table.active),
+    unique('module__unique__code').on(table.code),
   ]
 );
 
@@ -39,7 +41,7 @@ export const MODULE_FIELD = sqliteTable(
         onDelete: 'restrict',
         onUpdate: 'restrict',
       }),
-    title: text('title').notNull(),
+    code: text('code').notNull(),
     description: text('description'),
     type: text('type').notNull(),
     values: text('values'),
@@ -51,6 +53,10 @@ export const MODULE_FIELD = sqliteTable(
     index('module_field__index__status').on(table.status),
     index('module_field__index__module_id').on(table.moduleID),
     index('module_field__index__type').on(table.type),
+    unique('module_field__unique__module_id__title').on(
+      table.moduleID,
+      table.code
+    ),
     foreignKey({
       name: 'module_field__fk__module__id',
       columns: [table.moduleID],
