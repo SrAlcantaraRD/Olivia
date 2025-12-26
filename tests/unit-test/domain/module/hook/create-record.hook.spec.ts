@@ -63,7 +63,7 @@ describe('[Hook] - CreateRecord', () => {
       const response = await execute(
         mockRecordCreate({
           moduleID: 1,
-          synced: false,
+          synchronized: false,
           data: record.data,
           fieldList: [],
         })

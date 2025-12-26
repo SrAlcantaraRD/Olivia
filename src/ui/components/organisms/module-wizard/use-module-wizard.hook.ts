@@ -109,7 +109,7 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
             moduleID,
             carerID: 0,
             data: JSON.stringify({ ...values, [fieldId]: value }),
-            synced: false,
+            synchronized: false,
             fieldList: [{ fieldID: fieldId, value }],
             createdAt: new Date(),
           };

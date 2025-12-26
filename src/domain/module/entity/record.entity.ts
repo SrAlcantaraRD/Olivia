@@ -14,7 +14,7 @@ export const RecordSchema = z.object({
   moduleID: IDSchema,
   carerID: IDSchema,
   data: z.string().min(1),
-  synced: z.boolean(),
+  synchronized: z.boolean(),
 });
 
 export const RecordCreateSchema = GenerateCreateEntitySchema(RecordSchema);
