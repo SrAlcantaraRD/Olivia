@@ -7,11 +7,10 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
-import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import type { TSummaryPin } from '@/domain/summary/entity/summary-pin.entity';
 import type { ISummaryPinsPort } from '@/domain/summary/port/summary-pins.port';
-import { PinSummaryItemUseCase } from '@/domain/summary/use-case/pin-summary-item.use-case';
 import type { TRequestPinSummaryItem } from '@/domain/summary/use-case-schema/pin-summary-item.use-case-schema';
+import { PinSummaryItemUseCase } from '@/domain/summary/use-case/pin-summary-item.use-case';
 
 export function usePinSummaryItem(adapters: {
   loggerAdapter: TLoggerPort;
@@ -39,7 +38,7 @@ export function usePinSummaryItem(adapters: {
 
         if (!response.success || !response.details) {
           notifyAdapter.error({
-            title: 'hook.pin-summary-item.error' as Ti18nKeys,
+            title: 'hook.pin-summary-item.error',
             description: response.message,
           });
           return { success: false };

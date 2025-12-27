@@ -7,7 +7,6 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
-import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import type { TSummaryTrend } from '@/domain/summary/entity/summary-trend.entity';
 import type { ISummaryTrendPort } from '@/domain/summary/port/summary-trend.port';
 import { GetSummaryTrendsUseCase } from '@/domain/summary/use-case/get-summary-trends.use-case';
@@ -37,7 +36,7 @@ export function useGetSummaryTrends(adapters: {
 
       if (!response.success || !response.details) {
         notifyAdapter.error({
-          title: 'hook.get-summary-trends.error' as Ti18nKeys,
+          title: 'hook.get-summary-trends.error',
           description: response.message,
         });
         return { success: false };

@@ -7,11 +7,10 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
-import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
 import type { TSummaryModule } from '@/domain/summary/entity/summary-module.entity';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
-import { GetSummaryModulesUseCase } from '@/domain/summary/use-case/get-summary-modules.use-case';
 import type { TRequestGetSummaryModules } from '@/domain/summary/use-case-schema/get-summary-modules.use-case-schema';
+import { GetSummaryModulesUseCase } from '@/domain/summary/use-case/get-summary-modules.use-case';
 
 export function useGetSummaryModules(adapters: {
   loggerAdapter: TLoggerPort;
@@ -39,7 +38,7 @@ export function useGetSummaryModules(adapters: {
 
         if (!response.success || !response.details) {
           notifyAdapter.error({
-            title: 'hook.get-summary-modules.error' as Ti18nKeys,
+            title: 'hook.get-summary-modules.error',
             description: response.message,
           });
           return { success: false };
