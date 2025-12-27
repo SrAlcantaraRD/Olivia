@@ -66,15 +66,7 @@ export class SQLiteRecordFieldAdapter implements IRecordFieldPort {
     } satisfies TRecordField;
   }
 
-  public async getAll(): Promise<TRecordField[]> {
-    const list = await this.database.query.RECORD_FIELD.findMany({
-      where: (row, { eq }) => eq(row.status, 1),
-    });
-
-    return list.map(SQLiteRecordFieldAdapter.toDomainEntity);
-  }
-
-  public async getAllByFieldId(fieldID: TID): Promise<TRecordField[]> {
+  public async getAllByFieldID(fieldID: TID): Promise<TRecordField[]> {
     const list = await this.database.query.RECORD_FIELD.findMany({
       where: (row, { eq, and }) =>
         and(

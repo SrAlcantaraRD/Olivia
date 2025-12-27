@@ -6,11 +6,7 @@ import type {
 
 export interface IRecordPort {
   upsert(data: TRecordCreate): Promise<TRecord>;
-  getByID(id: TID): Promise<TRecord | null>;
-  getAll(): Promise<TRecord[]>;
   getPendingToSynchronized(): Promise<TRecord[]>;
-  getRecentRecords(limit?: number): Promise<TRecord[]>;
-  // Aggregations for reports. TODO: Move to a SummaryPort?
   getCountsByModule(criteria?: {
     startDate?: Date;
     endDate?: Date;
@@ -25,5 +21,4 @@ export interface IRecordPort {
     startDate?: Date;
     endDate?: Date;
   }): Promise<{ value: string; count: number }[]>;
-  getLatestRecordDateByModule(moduleID: TID): Promise<Date | null>;
 }

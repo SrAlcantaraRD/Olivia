@@ -1,4 +1,4 @@
-import { and, count, desc, eq, gte, lte, sql } from 'drizzle-orm';
+import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
 
 import {
   SQLiteCarerAdapter,
@@ -96,21 +96,6 @@ export class SQLiteRecordAdapter implements IRecordPort {
     return SQLiteRecordAdapter.toDomainEntity(record);
   }
 
-  public async getByID(id: TID): Promise<TRecord | null> {
-    const record = await this.database.query.RECORD.findFirst({
-      where: (row, { eq }) => eq(row.id, id),
-    });
-    if (!record) return null;
-
-    return SQLiteRecordAdapter.toDomainEntity(record);
-  }
-
-  public async getAll(): Promise<TRecord[]> {
-    const list = await this.database.query.RECORD.findMany();
-
-    return list.map(SQLiteRecordAdapter.toDomainEntity);
-  }
-
   public async getPendingToSynchronized(): Promise<TRecord[]> {
     const list = await this.database.query.RECORD.findMany({
       where: (row, { eq, and }) =>
@@ -127,17 +112,6 @@ export class SQLiteRecordAdapter implements IRecordPort {
     BASE_LOGGER.error({ list });
 
     return list.map(SQLiteRecordAdapter.toDomainEntity);
-  }
-
-  public async getRecentRecords(limit = 10): Promise<TRecord[]> {
-    const rows = await this.database
-      .select()
-      .from(DB_SCHEMA.RECORD)
-      .where(eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE))
-      .orderBy(desc(DB_SCHEMA.RECORD.createdAt))
-      .limit(limit);
-
-    return rows.map(SQLiteRecordAdapter.toDomainEntity);
   }
 
   public async getCountsByModule(criteria?: {
@@ -226,31 +200,5 @@ export class SQLiteRecordAdapter implements IRecordPort {
       .groupBy(DB_SCHEMA.RECORD_FIELD.value);
 
     return rows;
-  }
-
-  public async getLatestRecordDateByModule(
-    moduleID: TID
-  ): Promise<Date | null> {
-    const rows = await this.database
-      .select({
-        createdAt: DB_SCHEMA.RECORD.createdAt,
-      })
-      .from(DB_SCHEMA.RECORD)
-      .where(
-        and(
-          eq(DB_SCHEMA.RECORD.moduleID, moduleID),
-          eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE)
-        )
-      )
-      .orderBy(desc(DB_SCHEMA.RECORD.createdAt))
-      .limit(1);
-
-    if (!rows.length) return null;
-
-    // createdAt stored in unix epoch seconds
-    const timestamp = Number(rows[0].createdAt);
-    if (!Number.isFinite(timestamp)) return null;
-
-    return new Date(timestamp * 1000);
   }
 }

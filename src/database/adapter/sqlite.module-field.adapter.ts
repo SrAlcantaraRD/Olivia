@@ -95,12 +95,6 @@ export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
       .where(inArray(DB_SCHEMA.MODULE_FIELD.id, idList));
   }
 
-  public async getAll(): Promise<TModuleField[]> {
-    const list = await this.database.query.MODULE_FIELD.findMany({});
-
-    return list.map(SQLiteModuleFieldAdapter.toDomainEntity);
-  }
-
   public async getAllByModuleId(moduleId: TID): Promise<TModuleField[]> {
     const list = await this.database.query.MODULE_FIELD.findMany({
       where: (row, { eq }) => eq(row.moduleID, moduleId),

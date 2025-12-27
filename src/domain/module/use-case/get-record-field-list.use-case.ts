@@ -24,7 +24,7 @@ export class GetRecordFieldListUseCase extends BaseUseCase<
     request: TRequestGetRecordFieldList
   ): Promise<IBaseResponse<TResponseGetRecordFieldList>> {
     try {
-      const records = await this.adapters.recordFieldAdapter.getAllByFieldId(
+      const records = await this.adapters.recordFieldAdapter.getAllByFieldID(
         request.fieldId
       );
 
