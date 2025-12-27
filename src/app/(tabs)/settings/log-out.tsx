@@ -241,7 +241,7 @@ export default function LogoutConfirmScreen() {
             accessibilityRole="header"
           />
 
-          <View className="flex-row gap-3">
+          <View className="flex-row gap-2">
             <View style={{ flex: 2 }}>
               <ButtonAtom
                 title="common.cancel"

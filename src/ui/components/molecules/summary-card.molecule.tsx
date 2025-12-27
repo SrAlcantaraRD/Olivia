@@ -4,6 +4,7 @@ import type React from 'react';
 import { View } from 'react-native';
 import { withUniwind } from 'uniwind';
 
+import { MODULE_FIELD_TYPE_ENUM } from '@/domain/module/enum/module-field-type.enum';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import type { IconName } from '@/ui/components/atoms/icon.atom';
 import {
@@ -13,6 +14,7 @@ import {
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
 import { SummaryMiniBarChart } from '@/ui/components/molecules/summary-mini-bar-chart.molecule';
+import { SummaryMiniPieChart } from '@/ui/components/molecules/summary-mini-pie-chart.molecule';
 
 const StyledIonicons = withUniwind(Ionicons);
 
@@ -22,10 +24,11 @@ interface SummaryCardProps {
   metricLabel: string;
   timeLabel?: string;
   iconName?: IconName;
-  chartValues?: number[];
+  chartValues?: number[] | { label: string; count: number }[];
   chartAverage?: number | null;
   showAverageLine?: boolean;
   highlightLastBar?: boolean;
+  fieldType?: MODULE_FIELD_TYPE_ENUM;
   onPress?: () => void;
   testID: string;
 }
@@ -39,6 +42,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
   chartValues = [],
   chartAverage,
   showAverageLine = false,
+  fieldType,
   onPress,
   testID,
 }) => {
@@ -49,7 +53,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
   return (
     <CardAtom className="p-4" onPress={onPress}>
       <View className="flex-row items-center justify-between mb-4">
-        <View className="flex-row items-center gap-3">
+        <View className="flex-row items-center gap-2">
           {iconName && (
             <View
               style={{
@@ -115,14 +119,28 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
           </View>
         </View>
 
-        <View className="flex-[1.3]">
-          <SummaryMiniBarChart
-            testID={`${testID}.chart`}
-            values={chartValues}
-            average={showAverageLine ? (chartAverage ?? null) : null}
-            showLabels={false}
-            highlightLastBar
-          />
+        <View className="flex-[1.3] items-end justify-center">
+          {fieldType === MODULE_FIELD_TYPE_ENUM.SELECT &&
+          Array.isArray(chartValues) &&
+          chartValues.length > 0 &&
+          typeof chartValues[0] === 'object' ? (
+            <SummaryMiniPieChart
+              data={chartValues as { label: string; count: number }[]}
+              testID={`${testID}.chart.pie`}
+            />
+          ) : (
+            <SummaryMiniBarChart
+              testID={`${testID}.chart.bar`}
+              values={
+                Array.isArray(chartValues) && typeof chartValues[0] === 'number'
+                  ? (chartValues as number[])
+                  : []
+              }
+              average={showAverageLine ? (chartAverage ?? null) : null}
+              showLabels={false}
+              highlightLastBar
+            />
+          )}
         </View>
       </View>
     </CardAtom>

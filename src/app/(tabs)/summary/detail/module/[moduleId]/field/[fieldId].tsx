@@ -17,8 +17,8 @@ import { useGetSummaryDetail } from '@/domain/summary/hook/get-summary-detail.ho
 import { useGetSummaryPins } from '@/domain/summary/hook/get-summary-pins.hook';
 import { usePinSummaryItem } from '@/domain/summary/hook/pin-summary-item.hook';
 import { useUnpinSummaryItem } from '@/domain/summary/hook/unpin-summary-item.hook';
-import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
+import { BarChartAtom } from '@/ui/components/atoms/chart.bar.atom';
 import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
 import {
   TypographyHeading,

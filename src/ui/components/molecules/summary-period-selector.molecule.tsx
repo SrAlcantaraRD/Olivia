@@ -21,9 +21,15 @@ export const SummaryPeriodSelector: React.FC<SummaryPeriodSelectorProps> = ({
 }) => {
   const mutedColor = useThemeColor('muted');
 
+  const handlerOnSelect = (value: string) => {
+    setTimeout(() => {
+      onSelect?.(value);
+    }, 300);
+  };
+
   return (
     <View
-      className="flex-row rounded-lg p-1"
+      className="flex-row rounded-lg p-1 justify-between"
       style={{ backgroundColor: `${mutedColor}20` }}
     >
       {options.map((option) => {
@@ -32,13 +38,14 @@ export const SummaryPeriodSelector: React.FC<SummaryPeriodSelectorProps> = ({
             key={`${testID}.range-select.${option.value}`}
             testID={`${testID}.range-select.${option.value}`}
             isSelected={selected === option.value}
-            onPress={() => onSelect?.(option.value)}
-            className="h-20 w-20 justify-center items-center"
+            isSelectable
+            onPress={() => handlerOnSelect(option.value)}
+            className="flex-1 h-12 justify-center items-center"
           >
             <TypographySmall
               testID={`${testID}.${option.value}.label`}
               i18nKey={option.labelKey}
-              className="font-semibold"
+              className="font-medium text-[10px]"
             />
           </CardAtom>
         );

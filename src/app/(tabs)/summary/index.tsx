@@ -194,7 +194,7 @@ export default function SummaryHomeScreen() {
             testID="page.summary.highlights"
           />
 
-          <View className="gap-3">
+          <View className="gap-2">
             <SummarySectionHeader
               titleKey="page.summary.section.modules"
               testID="page.summary.modules"

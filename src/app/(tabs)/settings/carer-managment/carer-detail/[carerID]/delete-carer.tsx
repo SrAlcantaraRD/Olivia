@@ -58,7 +58,7 @@ export default function ModalDeleteCarer() {
           values={{ name: carerName ?? '' }}
           testID="modal.delete.subtitle"
         />
-        <View className="flex-row gap-3">
+        <View className="flex-row gap-2">
           <ButtonAtom
             title="common.cancel"
             onPress={handleCancel}

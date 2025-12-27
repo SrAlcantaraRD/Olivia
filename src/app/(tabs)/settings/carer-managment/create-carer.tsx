@@ -62,7 +62,7 @@ export default function ModalCreateSecondaryCarer() {
           onChangeText={setCarerName}
           testID="modal.create.name"
         />
-        <View className="flex-row gap-3">
+        <View className="flex-row gap-2">
           <ButtonAtom
             title="common.cancel"
             onPress={handleCancel}

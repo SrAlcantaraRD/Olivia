@@ -52,6 +52,7 @@ export function useSplashCarerValidation(adapters: {
         return { success: false };
       }
 
+      // FIXME: remove previous navigation stack to avoid go-back
       goToRegisterHome();
 
       return { success: true, data: response.details };

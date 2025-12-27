@@ -1,5 +1,4 @@
-// no direct React import required for modern JSX runtime
-
+import { useThemeColor } from 'heroui-native';
 import { useWindowDimensions, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 
@@ -19,13 +18,19 @@ export function BarChartAtom({
   values,
   height,
   width,
-  color = '#4f46e5',
+  color,
   secondaryColor,
   barColors,
   showLine = false,
   showAxisLabels = true,
   testID,
 }: BarChartProps) {
+  const accentColor = useThemeColor('accent');
+  const mutedColor = useThemeColor('muted');
+
+  const resolvedColor = color ?? accentColor;
+  const resolvedSecondaryColor = secondaryColor ?? resolvedColor;
+  const resolvedMutedColor = mutedColor;
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const resolvedHeight =
     typeof height === 'number' ? height : Math.floor(windowHeight * 0.2);
@@ -59,15 +64,18 @@ export function BarChartAtom({
     return { label: v.value, value: Number.isFinite(n) ? n : 0 };
   });
 
-  const alt = secondaryColor ?? color;
   const data = sanitized.map((v, index) => ({
     value: v.value,
     label: v.label,
-    frontColor: barColors?.[index] ?? (index % 2 === 0 ? color : alt),
-    gradientColor: barColors?.[index] ?? (index % 2 === 0 ? color : alt),
+    frontColor:
+      barColors?.[index] ??
+      (index % 2 === 0 ? resolvedColor : resolvedSecondaryColor),
+    gradientColor:
+      barColors?.[index] ??
+      (index % 2 === 0 ? resolvedColor : resolvedSecondaryColor),
   }));
 
-  // Fit bars into available width to avoid horizontal scroll hiding recent bars.
+  // Fit bars into available width...
   const count = Math.max(1, data.length);
   const unit = availableForBars / count;
   const barWidth = Math.max(3, Math.min(16, Math.floor(unit * 0.55)));
@@ -100,32 +108,34 @@ export function BarChartAtom({
         data={data}
         height={resolvedHeight}
         width={windowWidth}
-        barWidth={(barWidth / values.length) * 10}
+        barWidth={(barWidth / (values.length || 1)) * 10}
         initialSpacing={10}
         spacing={spacing}
         barBorderRadius={4}
         showGradient
         yAxisThickness={0}
         xAxisType={'dashed'}
-        xAxisColor={showAxisLabels ? color : 'transparent'}
+        xAxisColor={showAxisLabels ? resolvedMutedColor : 'transparent'}
         xAxisThickness={showAxisLabels ? 1 : 0}
-        yAxisTextStyle={{ color: showAxisLabels ? color : 'transparent' }}
+        yAxisTextStyle={{
+          color: showAxisLabels ? resolvedMutedColor : 'transparent',
+        }}
         stepValue={stepValue}
         maxValue={maxValue}
         noOfSections={noOfSections}
-        rulesColor={showAxisLabels ? color : 'transparent'}
+        rulesColor={showAxisLabels ? `${resolvedMutedColor}40` : 'transparent'}
         rulesThickness={showAxisLabels ? 1 : 0}
         yAxisLabelTexts={yAxisLabelTexts}
         xAxisLabelTexts={showAxisLabels ? data.map((d) => d.label) : undefined}
         labelWidth={showAxisLabels ? 40 : 0}
         xAxisLabelTextStyle={{
-          color: showAxisLabels ? color : 'transparent',
+          color: showAxisLabels ? resolvedMutedColor : 'transparent',
           textAlign: 'center',
           fontSize: 10,
         }}
         showLine={showLine}
         lineConfig={{
-          color: alt,
+          color: resolvedSecondaryColor,
           thickness: 3,
           curved: true,
           hideDataPoints: true,

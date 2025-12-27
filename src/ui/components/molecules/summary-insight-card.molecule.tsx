@@ -49,7 +49,7 @@ export const SummaryInsightCard: React.FC<SummaryInsightCardProps> = ({
         style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}
       >
         <View className="flex-row items-center justify-between">
-          <View className="flex-row items-center gap-3">
+          <View className="flex-row items-center gap-2">
             {iconName && (
               <View
                 style={{

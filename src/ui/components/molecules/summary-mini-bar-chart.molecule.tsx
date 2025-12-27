@@ -2,7 +2,7 @@ import { useThemeColor } from 'heroui-native';
 import { useState } from 'react';
 import { View } from 'react-native';
 
-import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
+import { BarChartAtom } from '@/ui/components/atoms/chart.bar.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
 
 interface SummaryMiniBarChartProps {

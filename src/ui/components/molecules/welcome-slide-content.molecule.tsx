@@ -74,9 +74,9 @@ export function WelcomeSlideContent({
         )}
 
         {bulletPoints && (
-          <View className="gap-3 w-full mt-4">
+          <View className="gap-2 w-full mt-4">
             {bulletPoints.map((item) => (
-              <View key={item} className="flex-row items-center gap-3">
+              <View key={item} className="flex-row items-center gap-2">
                 <View
                   style={{ backgroundColor: accentColor }}
                   className="w-1.5 h-1.5 rounded-full"
