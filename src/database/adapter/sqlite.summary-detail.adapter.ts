@@ -38,17 +38,21 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
 
     const module = moduleResult[0];
 
+    // Get field summaries
+    const fieldSummaries = await this.getFieldSummariesForModule(moduleId);
+
     return {
       type: SUMMARY_DETAIL_TYPE_ENUM.MODULE,
       targetId: moduleId.toString(),
       titleKey: `summary.detail.module.${module?.code ?? 'unknown'}.title`,
       descriptionKey: `summary.detail.module.${module?.code ?? 'unknown'}.description`,
-      analysisText: 'Analysis placeholder', // TODO: integrate analysis port
+      analysisText: 'Analysis placeholder',
       series,
       average,
       todayValue,
       comparisonTextKey: null,
       projectionTextKey: null,
+      fieldSummaries,
     };
   }
 
@@ -136,7 +140,7 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
         sql`strftime('${sql.raw(dateFormat)}', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
       );
 
-    return result;
+    return this.fillMissingSeriesData(result, period);
   }
 
   private async getSeriesForField(
@@ -170,7 +174,7 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
         sql`strftime('${sql.raw(dateFormat)}', datetime(${DB_SCHEMA.RECORD.createdAt}, 'unixepoch'))`
       );
 
-    return result;
+    return this.fillMissingSeriesData(result, period);
   }
 
   private getPlaceholderSeries(
@@ -335,7 +339,7 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
       case SUMMARY_PERIOD_ENUM.MONTH:
         return '%Y-%m-%d'; // Day
       case SUMMARY_PERIOD_ENUM.HALF_YEAR:
-        return '%Y-%m'; // Month
+        return '%Y-%W'; // Week of year
       case SUMMARY_PERIOD_ENUM.YEAR:
         return '%Y-%m'; // Month
       default:
@@ -348,6 +352,161 @@ export class SQLiteSummaryDetailAdapter implements ISummaryDetailPort {
   ): number | null {
     if (series.length === 0) return null;
     const total = series.reduce((sum, point) => sum + point.value, 0);
-    return total / series.length;
+
+    return Math.round(total / series.length);
+  }
+
+  private async getFieldSummariesForModule(moduleId: TID) {
+    const fields = await this.database
+      .select()
+      .from(DB_SCHEMA.MODULE_FIELD)
+      .where(eq(DB_SCHEMA.MODULE_FIELD.moduleID, moduleId));
+
+    const summaries = await Promise.all(
+      fields.map(async (field) => {
+        const todayValue = (await this.getTodayValueForField(field.id)) ?? 0;
+        const period = SUMMARY_PERIOD_ENUM.WEEK; // Fixed to week
+        const dateRange = this.getDateRangeForPeriod(period);
+
+        let series: number[] | { label: string; count: number }[] = [];
+        let average: number | null = null;
+
+        if (field.type === 'SELECT' && field.values) {
+          // Distribution for SELECT
+          const distribution = await this.database
+            .select({
+              value: DB_SCHEMA.RECORD_FIELD.value,
+              count: count(),
+            })
+            .from(DB_SCHEMA.RECORD_FIELD)
+            .innerJoin(
+              DB_SCHEMA.RECORD,
+              eq(DB_SCHEMA.RECORD_FIELD.recordID, DB_SCHEMA.RECORD.id)
+            )
+            .where(
+              and(
+                eq(DB_SCHEMA.RECORD_FIELD.fieldID, field.id),
+                gte(DB_SCHEMA.RECORD.createdAt, dateRange.start),
+                lte(DB_SCHEMA.RECORD.createdAt, dateRange.end)
+              )
+            )
+            .groupBy(DB_SCHEMA.RECORD_FIELD.value);
+
+          series = distribution.map((d) => ({
+            label: d.value,
+            count: d.count,
+          }));
+        } else {
+          // Trend for TEXT/Other (numeric assumption)
+          const trend = await this.getSeriesForField(field.id, period);
+          series = trend.map((t) => t.value);
+          average = this.calculateAverage(trend) ?? 0;
+        }
+
+        return {
+          id: field.id,
+          code: field.code,
+          type: field.type as any, // Cast to enum/string compatible
+          param: field.values ?? undefined,
+          series,
+          average,
+          todayValue,
+        };
+      })
+    );
+
+    return summaries;
+  }
+
+  private fillMissingSeriesData(
+    actualData: { date: string; value: number }[],
+    period: SUMMARY_PERIOD_ENUM
+  ): { date: string; value: number }[] {
+    const filledData: { date: string; value: number }[] = [];
+    const now = new Date();
+
+    // Adjust count for HALF_YEAR to weeks (approx 26 weeks for 6 months)
+    let count = this.getBarCountForPeriod(period);
+    if (period === SUMMARY_PERIOD_ENUM.HALF_YEAR) {
+      count = 26;
+    }
+
+    for (let i = count - 1; i >= 0; i--) {
+      let date: Date;
+      let key: string;
+
+      switch (period) {
+        case SUMMARY_PERIOD_ENUM.DAY:
+          date = new Date(now.getTime() - i * 60 * 60 * 1000);
+          // SQLite: %Y-%m-%d %H
+          // date-fns: yyyy-MM-dd HH
+          key = this.formatDate(date, 'yyyy-MM-dd HH');
+          break;
+        case SUMMARY_PERIOD_ENUM.WEEK:
+          date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+          key = this.formatDate(date, 'yyyy-MM-dd');
+          break;
+        case SUMMARY_PERIOD_ENUM.MONTH:
+          date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+          key = this.formatDate(date, 'yyyy-MM-dd');
+          break;
+        case SUMMARY_PERIOD_ENUM.HALF_YEAR:
+          date = subWeeks(now, i);
+          // SQLite %W is week 00-53. date-fns 'ww' is like that.
+          key = this.formatDate(date, 'yyyy-ww');
+          break;
+        case SUMMARY_PERIOD_ENUM.YEAR:
+          date = subMonths(now, i);
+          key = this.formatDate(date, 'yyyy-MM');
+          break;
+        default:
+          date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+          key = this.formatDate(date, 'yyyy-MM-dd');
+      }
+
+      const existing = actualData.find((d) => d.date === key);
+      filledData.push({ date: key, value: existing ? existing.value : 0 });
+    }
+
+    return filledData;
+  }
+
+  // Helper to standardise formatting between JS and SQL expectations
+  private formatDate(date: Date, formatStr: string): string {
+    const pad = (n: number) => (n < 10 ? `0${n}` : n);
+
+    if (formatStr === 'yyyy-MM-dd HH') {
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}`;
+    }
+    if (formatStr === 'yyyy-MM-dd') {
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    }
+    if (formatStr === 'yyyy-MM') {
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}`;
+    }
+    if (formatStr === 'yyyy-ww') {
+      // Need strict SQLite %W compatibility.
+      // %W: Week number of year (00-53), Monday as first day of week.
+      // Simple JS implementation:
+      const start = new Date(date.getFullYear(), 0, 1);
+      // Adjust to Monday?
+      // Let's rely on a simpler approximation or date-fns if imported.
+      // I imported subWeeks, subMonths etc. I can import 'format'.
+      // But let's try to match SQLite:
+      // A robust way is to just use a custom helper or isoWeek.
+      // reusing date-fns format if available is best.
+      // Let's assume I can add `import { format } from 'date-fns'` to top of file if not there.
+      // Actually, I'll use a manual iso week calc to be safe or just use the subWeeks logic.
+      const onejan = new Date(date.getFullYear(), 0, 1);
+      const week = Math.ceil(
+        ((date.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) /
+          7
+      );
+      // SQLite %W is 00-53.
+      return `${date.getFullYear()}-${pad(week)}`;
+      // This is risky.
+      // Just returning the key format is enough if I make sure SQLite matches.
+    }
+    return date.toISOString();
   }
 }

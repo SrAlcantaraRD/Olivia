@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,11 +17,9 @@ import { useGetSummaryDetail } from '@/domain/summary/hook/get-summary-detail.ho
 import { useGetSummaryPins } from '@/domain/summary/hook/get-summary-pins.hook';
 import { usePinSummaryItem } from '@/domain/summary/hook/pin-summary-item.hook';
 import { useUnpinSummaryItem } from '@/domain/summary/hook/unpin-summary-item.hook';
-import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
 import {
-  TypographyHeading,
   TypographyParagraph,
   TypographySmall,
 } from '@/ui/components/atoms/typography.atom';
@@ -32,6 +29,7 @@ import { SummaryCard } from '@/ui/components/molecules/summary-card.molecule';
 import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
 import { SummaryPeriodSelector } from '@/ui/components/molecules/summary-period-selector.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
+import { SummaryTrendChart } from '@/ui/components/molecules/summary-trend-chart.molecule';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
@@ -95,42 +93,6 @@ export default function SummaryModuleDetailScreen() {
     void pinsListHook.execute();
   }, [moduleId, selectedPeriod]);
 
-  const formatChartLabel = (
-    dateStr: string,
-    period: SUMMARY_PERIOD_ENUM
-  ): string => {
-    try {
-      switch (period) {
-        case SUMMARY_PERIOD_ENUM.DAY: {
-          // dateStr is like "2025-12-19 14"
-          const hour = dateStr.split(' ')[1];
-          return `${hour}h`;
-        }
-        case SUMMARY_PERIOD_ENUM.WEEK:
-          // dateStr is like "2025-12-19"
-          return format(new Date(dateStr), 'EEE'); // Mon, Tue, etc.
-        case SUMMARY_PERIOD_ENUM.MONTH:
-          // dateStr is like "2025-12-19"
-          return format(new Date(dateStr), 'dd'); // 01, 02, etc.
-        case SUMMARY_PERIOD_ENUM.HALF_YEAR:
-        case SUMMARY_PERIOD_ENUM.YEAR: {
-          // dateStr is like "2025-12"
-          const [year, month] = dateStr.split('-');
-          return format(new Date(parseInt(year), parseInt(month) - 1), 'MMM'); // Jan, Feb, etc.
-        }
-        default:
-          return dateStr;
-      }
-    } catch {
-      return dateStr;
-    }
-  };
-
-  const chartValues = detailHook.items.series.map((item) => ({
-    value: formatChartLabel(item.date, selectedPeriod),
-    count: item.value,
-  }));
-
   const isPinned = pinsListHook.items.some(
     (pin) =>
       pin.type === SUMMARY_PIN_TYPE_ENUM.MODULE &&
@@ -156,8 +118,6 @@ export default function SummaryModuleDetailScreen() {
     labelKey: SUMMARY_PERIOD_I18N_MAP[period],
   }));
 
-  const hasSeries = detailHook.items.series.length > 0;
-
   return (
     <ScreenLayout
       testID="page.summary-detail-module"
@@ -179,39 +139,13 @@ export default function SummaryModuleDetailScreen() {
             testID="page.summary-detail.period"
           />
 
-          <CardAtom className="p-4 rounded-lg">
-            <TypographySmall
-              testID="page.summary-detail.average-label"
-              i18nKey="page.summary-detail.average-label"
-              variant="light"
+          <CardAtom className="rounded-lg overflow-hidden">
+            <SummaryTrendChart
+              average={detailHook.items.average ?? 0}
+              series={detailHook.items.series}
+              period={selectedPeriod}
+              testID="page.summary-detail.trend-chart"
             />
-            <TypographyHeading
-              testID="page.summary-detail.average-value"
-              i18nKey="common.raw-value"
-              values={{ value: detailHook.items.average ?? 0 }}
-            />
-            <TypographySmall
-              testID="page.summary-detail.range"
-              i18nKey="page.summary-detail.range-placeholder"
-              variant="light"
-            />
-            {hasSeries ? (
-              <View className="mt-4">
-                <BarChartAtom
-                  values={chartValues}
-                  height={180}
-                  showAxisLabels={true}
-                  testID="page.summary-detail.chart"
-                />
-              </View>
-            ) : (
-              <TypographySmall
-                testID="page.summary-detail.empty"
-                i18nKey="page.summary-detail.empty"
-                variant="light"
-                className="mt-4"
-              />
-            )}
           </CardAtom>
 
           <CardAtom className="p-4 rounded-lg">
@@ -239,33 +173,48 @@ export default function SummaryModuleDetailScreen() {
             testID="page.summary-detail.insight"
           />
 
-          <CardAtom className="p-0 rounded-lg">
-            <View className="p-4">
-              <SummarySectionHeader
-                titleKey="page.summary-detail.actions"
-                testID="page.summary-detail.actions"
-              />
-            </View>
-            <View className="px-4 pb-4 gap-2">
-              <RowAction
-                iconName={isPinned ? 'bookmark' : 'bookmark-outline'}
-                title={
-                  isPinned
-                    ? 'page.summary-detail.unpin'
-                    : 'page.summary-detail.pin'
-                }
-                onPress={handlePinToggle}
-                testID="page.summary-detail.pin-toggle"
-              />
-            </View>
-          </CardAtom>
+          <View className="gap-2">
+            <SummarySectionHeader
+              titleKey="page.summary-detail.actions"
+              testID="page.summary-detail.actions"
+            />
+            <RowAction
+              iconName={isPinned ? 'bookmark' : 'bookmark-outline'}
+              title={
+                isPinned
+                  ? 'page.summary-detail.unpin'
+                  : 'page.summary-detail.pin'
+              }
+              onPress={handlePinToggle}
+              testID="page.summary-detail.pin-toggle"
+            />
+          </View>
 
-          <View className="gap-3">
+          <View className="gap-2">
             <SummarySectionHeader
               titleKey="page.summary-detail.fields"
               testID="page.summary-detail.fields"
             />
-            {fieldsHook.items.length === 0 ? (
+            {detailHook.items.fieldSummaries &&
+            detailHook.items.fieldSummaries.length > 0 ? (
+              detailHook.items.fieldSummaries.map((field) => (
+                <SummaryCard
+                  key={`summary-field-${field.id}`}
+                  title={field.code}
+                  metricValue={field.todayValue ?? 0}
+                  metricLabel={t('page.summary.metric-label.today')}
+                  timeLabel=""
+                  iconName="flame"
+                  chartValues={field.series}
+                  chartAverage={field.average}
+                  fieldType={field.type}
+                  onPress={() =>
+                    goToSummaryFieldDetail(String(moduleId), String(field.id))
+                  }
+                  testID={`page.summary-detail.field.${field.id}`}
+                />
+              ))
+            ) : fieldsHook.items.length === 0 ? (
               <CardAtom>
                 <TypographySmall
                   testID="page.summary-detail.fields-empty"
