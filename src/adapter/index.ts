@@ -4,8 +4,8 @@ import { ExpoRouterNavigationAdapter } from '@/adapter/expo-router-navigation.ad
 import { SecureStoreCacheAdapter } from '@/adapter/expo-secure-store.cache-port.adapter';
 import { QrPortAdapter } from '@/adapter/minizlib.qr.adapter';
 import { ToastUINotifyPortAdapter } from '@/adapter/toast.notify-port.adapter';
-import { SecureStoreSummaryPinsAdapter } from '@/database/adapter/secure-store.summary-pins.adapter';
-import { SecureStoreSummarySnapshotAdapter } from '@/database/adapter/secure-store.summary-snapshot.adapter';
+import { CachePortSummaryPinsAdapter } from '@/database/adapter/cache-port.summary-pins.adapter';
+import { CachePortSummarySnapshotAdapter } from '@/database/adapter/cache-port.summary-snapshot.adapter';
 import { SQLiteCarerAdapter } from '@/database/adapter/sqlite.carer.adapter';
 import { SQLiteModuleFieldAdapter } from '@/database/adapter/sqlite.module-field.adapter';
 import { SQLiteModuleAdapter } from '@/database/adapter/sqlite.module.adapter';
@@ -78,10 +78,10 @@ export const useAdapters = (): Readonly<IAdapters> => {
   const summaryDetailAdapter = new SQLiteSummaryDetailAdapter();
   const summaryTrendAdapter = new SQLiteSummaryTrendAdapter();
   const summaryHighlightAdapter = new SQLiteSummaryHighlightAdapter();
-  const summaryPinsAdapter = new SecureStoreSummaryPinsAdapter(
+  const summaryPinsAdapter = new CachePortSummaryPinsAdapter(
     secureStoreAdapter
   );
-  const summarySnapshotAdapter = new SecureStoreSummarySnapshotAdapter(
+  const summarySnapshotAdapter = new CachePortSummarySnapshotAdapter(
     secureStoreAdapter
   );
   const qrAdapter = new QrPortAdapter(BASE_LOGGER);

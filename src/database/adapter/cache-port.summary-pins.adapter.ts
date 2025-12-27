@@ -4,7 +4,7 @@ import type { TSummaryPin } from '@/domain/summary/entity/summary-pin.entity';
 import type { SUMMARY_PIN_TYPE_ENUM } from '@/domain/summary/enum/summary-pin-type.enum';
 import type { ISummaryPinsPort } from '@/domain/summary/port/summary-pins.port';
 
-export class SecureStoreSummaryPinsAdapter implements ISummaryPinsPort {
+export class CachePortSummaryPinsAdapter implements ISummaryPinsPort {
   private readonly cache: ICachePort;
   private readonly cacheKey = CACHE_KEY_ENUM.SUMMARY_PINS;
 

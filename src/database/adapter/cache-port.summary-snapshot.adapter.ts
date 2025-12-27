@@ -3,7 +3,7 @@ import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { TSummarySnapshot } from '@/domain/summary/entity/summary-snapshot.entity';
 import type { ISummarySnapshotPort } from '@/domain/summary/port/summary-snapshot.port';
 
-export class SecureStoreSummarySnapshotAdapter implements ISummarySnapshotPort {
+export class CachePortSummarySnapshotAdapter implements ISummarySnapshotPort {
   private readonly cache: ICachePort;
   private readonly cacheKey = CACHE_KEY_ENUM.SUMMARY_SNAPSHOT;
 
