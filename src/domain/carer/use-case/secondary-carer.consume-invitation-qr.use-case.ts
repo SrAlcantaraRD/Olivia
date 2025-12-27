@@ -102,8 +102,8 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends WorkWithQRBaseUseC
     const carerExists =
       await this.adapters.carerAdapter.getByID(originalCarerID);
 
-    await this.adapters.moduleAdapter.batchDesactivate();
-    await this.adapters.moduleFieldAdapter.batchDesactivate();
+    await this.adapters.moduleAdapter.batchDeactivate();
+    await this.adapters.moduleFieldAdapter.batchDeactivate();
 
     const activeModuleIDList = activeModuleList.map(
       (module) => module[QR_KEY.MODULE_ID]

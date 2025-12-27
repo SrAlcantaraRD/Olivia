@@ -110,7 +110,7 @@ export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
     return list.map(SQLiteModuleFieldAdapter.toDomainEntity);
   }
 
-  public async batchDesactivate(): Promise<void> {
+  public async batchDeactivate(): Promise<void> {
     await this.database
       .update(DB_SCHEMA.MODULE_FIELD)
       .set({ status: STATUS_ENUM.INACTIVE });
