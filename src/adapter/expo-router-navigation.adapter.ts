@@ -12,4 +12,8 @@ export class ExpoRouterNavigationAdapter implements INavigationPort {
   goBack(): void {
     this.router.back();
   }
+
+  replaceTo(route: string): void {
+    this.router.replace(route as Href);
+  }
 }

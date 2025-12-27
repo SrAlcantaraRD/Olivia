@@ -11,6 +11,7 @@ describe('[Hook] useNavigation', () => {
     mockNavigationAdapter = {
       navigateTo: jest.fn(),
       goBack: jest.fn(),
+      replaceTo: jest.fn(),
     };
   });
 
@@ -72,15 +73,27 @@ describe('[Hook] useNavigation', () => {
     );
   });
 
-  it('should call navigateTo with onboarding route on goToOnboarding', () => {
+  it('should call replaceTo on adapter when replaceTo is called', () => {
     const { result } = renderHook(() =>
       useNavigation({ navigationAdapter: mockNavigationAdapter })
     );
 
-    result.current.goToOnboarding();
+    result.current.replaceTo('/(tabs)/register');
 
-    expect(mockNavigationAdapter.navigateTo).toHaveBeenCalledWith(
-      '/(onboarding)' satisfies Href
+    expect(mockNavigationAdapter.replaceTo).toHaveBeenCalledWith(
+      '/(tabs)/register' satisfies Href
+    );
+  });
+
+  it('should call replaceTo with register home route on goToRegisterHomeReplace', () => {
+    const { result } = renderHook(() =>
+      useNavigation({ navigationAdapter: mockNavigationAdapter })
+    );
+
+    result.current.goToRegisterHomeReplace();
+
+    expect(mockNavigationAdapter.replaceTo).toHaveBeenCalledWith(
+      '/(tabs)/register' satisfies Href
     );
   });
 });

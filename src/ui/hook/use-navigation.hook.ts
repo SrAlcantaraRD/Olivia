@@ -19,6 +19,10 @@ export const useNavigation = (adapters: {
     navigationAdapter.goBack();
   }, []);
 
+  const replaceTo = useCallback((route: AppRoute) => {
+    navigationAdapter.replaceTo(route as string);
+  }, []);
+
   // Semantic navigation methods
   const goToRoleSelection = useCallback(() => {
     navigateTo('/(onboarding)/role-selection');
@@ -49,7 +53,7 @@ export const useNavigation = (adapters: {
   }, []);
 
   const goToRegisterHome = useCallback(() => {
-    navigateTo('/(tabs)/register');
+    replaceTo('/(tabs)/register');
   }, []);
 
   const goToOnboarding = useCallback(() => {
@@ -121,10 +125,6 @@ export const useNavigation = (adapters: {
     []
   );
 
-  const goToSummaryTrendDetail = useCallback((trendId: string) => {
-    navigateTo(`/(tabs)/summary/detail/trend/${trendId}`);
-  }, []);
-
   const goToSummaryFieldRecords = useCallback(
     (moduleId: string, fieldId: string) => {
       navigateTo(
@@ -162,7 +162,6 @@ export const useNavigation = (adapters: {
     goToSummaryHighlights,
     goToSummaryModuleDetail,
     goToSummaryFieldDetail,
-    goToSummaryTrendDetail,
     goToSummaryFieldRecords,
   };
 };
