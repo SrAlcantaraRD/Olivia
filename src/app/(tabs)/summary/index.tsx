@@ -8,6 +8,7 @@ import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { PinnedSection } from '@/ui/components/molecules/pinned-section.molecule';
 import { RowAction } from '@/ui/components/molecules/row-action.molecule';
+import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 import { ModulesSection } from '@/ui/components/organisms/modules-section.organism';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
@@ -45,9 +46,14 @@ export default function SummaryHomeScreen() {
         }
       >
         <View className="gap-4">
-          <PinnedSection testID="page.summary.pinned" />
+          <ModulesSection testID="page.summary.modules" />
 
           <View className="gap-2">
+            <SummarySectionHeader
+              titleKey="page.summary.section.can-interest-you"
+              testID="page.summary.section.can-interest-you"
+            />
+
             <RowAction
               iconName="heart"
               title="page.summary.all-data"
@@ -70,8 +76,9 @@ export default function SummaryHomeScreen() {
             />
           </View>
 
-          <ModulesSection testID="page.summary.modules" />
+          <PinnedSection testID="summary.pinned-section" />
         </View>
+
         <RowEmptyAtom />
       </ScrollView>
     </ScreenLayout>
