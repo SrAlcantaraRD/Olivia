@@ -75,18 +75,18 @@ const ownStore = create<Store>((set, get) => ({
   },
 }));
 
-export const useListStore = <T>(entity: string) => {
+export const useListStore = <T>(storeName: string) => {
   const store = ownStore();
 
   return {
-    items: (store.state[entity]?.items || []) as T[],
+    items: (store.state[storeName]?.items || []) as T[],
     actions: {
-      saveItems: (items: T[]) => store.actions.saveItems<T>(entity, items),
-      getItems: () => store.actions.getItems<T>(entity),
-      clearStore: () => store.actions.clearStore(entity),
-      isLoading: () => store.actions.isLoading(entity),
-      startLoading: () => store.actions.startLoading(entity),
-      stopLoading: () => store.actions.stopLoading(entity),
+      saveItems: (items: T[]) => store.actions.saveItems<T>(storeName, items),
+      getItems: () => store.actions.getItems<T>(storeName),
+      clearStore: () => store.actions.clearStore(storeName),
+      isLoading: () => store.actions.isLoading(storeName),
+      startLoading: () => store.actions.startLoading(storeName),
+      stopLoading: () => store.actions.stopLoading(storeName),
     },
   };
 };

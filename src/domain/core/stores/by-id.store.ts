@@ -1,90 +1,151 @@
 import { create } from 'zustand';
 
-import type { TBaseEntity } from '@/domain/core/entity/base-entity.entity';
-import type { TID } from '@/domain/core/schemas/id.schema';
+type StoreEntryID = string;
 
-type StoreProps = {
+type StoreEntry<T> = {
+  item: T;
+  isLoading: boolean;
+};
+
+type StoreState<T> = {
   [storeName: string]: {
-    [id: TID]: TBaseEntity;
+    [id: StoreEntryID]: StoreEntry<T>;
   };
 };
 
-interface StoreActions {
-  saveItem: <T extends TBaseEntity>(storeName: string, item: T) => void;
-  getItem: <T extends TBaseEntity>(storeName: string, id: TID) => T | null;
-  removeItem: (storeName: string, id: TID) => void;
+interface StoreActions<T> {
+  saveItem: (storeName: string, id: StoreEntryID, item: T) => void;
+  getItem: (storeName: string, id: StoreEntryID) => T | null;
+  removeItem: (storeName: string, id: StoreEntryID) => void;
+  startLoading: (storeName: string, id: StoreEntryID) => void;
+  stopLoading: (storeName: string, id: StoreEntryID) => void;
+  isLoading: (storeName: string, id: StoreEntryID) => boolean;
   clearStore: (storeName: string) => void;
 }
 
-type Store = {
-  items: StoreProps;
-  actions: StoreActions;
+type Store<T> = {
+  state: StoreState<T>;
+  actions: StoreActions<T>;
 };
 
-const initialState: StoreProps = {};
-
-// Single global store instance
-const ownStore = create<Store>((set, get) => ({
-  items: initialState,
+const ownStore = create<Store<unknown>>((set, get) => ({
+  state: {},
   actions: {
-    saveItem: <T extends TBaseEntity>(storeName: string, item: T) => {
+    saveItem: (storeName, id, item) => {
       set((state) => ({
-        items: {
-          ...state.items,
+        state: {
+          ...state.state,
           [storeName]: {
-            ...state.items[storeName],
-            [item.id]: item,
+            ...(state.state[storeName] || {}),
+            [id]: {
+              item,
+              isLoading: false,
+            },
           },
         },
       }));
     },
-    getItem: <T extends TBaseEntity>(storeName: string, id: TID): T | null => {
-      const state = get().items;
+    getItem: (storeName, id) => {
+      const entry = get().state[storeName]?.[id];
 
-      if (!state[storeName]) {
+      if (!entry) {
         return null;
       }
 
-      if (!state[storeName][id]) {
-        return null;
-      }
-
-      return state[storeName][id] as T;
+      return entry.item;
     },
-    removeItem: (storeName: string, id: TID) => {
+    removeItem: (storeName, id) => {
       set((state) => {
-        if (!state.items[storeName]) return state;
+        const store = state.state[storeName];
 
-        const { [id]: _, ...rest } = state.items[storeName];
+        if (!store || !store[id]) {
+          return state;
+        }
+
+        const { [id]: _, ...rest } = store;
+
         return {
-          items: {
-            ...state.items,
+          state: {
+            ...state.state,
             [storeName]: rest,
           },
         };
       });
     },
-    clearStore: (storeName: string) => {
+    startLoading: (storeName, id) => {
       set((state) => {
-        const { [storeName]: _, ...rest } = state.items;
+        const entry = state.state[storeName]?.[id];
 
         return {
-          items: rest,
+          state: {
+            ...state.state,
+            [storeName]: {
+              ...(state.state[storeName] || {}),
+              [id]: {
+                item: entry?.item ?? {},
+                isLoading: true,
+              },
+            },
+          },
+        };
+      });
+    },
+    stopLoading: (storeName, id) => {
+      set((state) => {
+        const entry = state.state[storeName]?.[id];
+
+        if (!entry) {
+          return state;
+        }
+
+        return {
+          state: {
+            ...state.state,
+            [storeName]: {
+              ...(state.state[storeName] || {}),
+              [id]: {
+                item: entry.item,
+                isLoading: false,
+              },
+            },
+          },
+        };
+      });
+    },
+    isLoading: (storeName, id) => {
+      return get().state[storeName]?.[id]?.isLoading ?? false;
+    },
+    clearStore: (storeName) => {
+      set((state) => {
+        const { [storeName]: _, ...rest } = state.state;
+
+        return {
+          state: rest,
         };
       });
     },
   },
 }));
 
-export const useByIDStore = <T extends TBaseEntity>(storeName: string) => {
+export const useByIDStore = <T>(storeName: string) => {
   const store = ownStore();
 
   return {
-    items: (store.items[storeName] || {}) as Record<TID, T>,
+    items: (store.state[storeName] || {}) as Record<
+      StoreEntryID,
+      StoreEntry<T>
+    >,
     actions: {
-      saveItem: (item: T) => store.actions.saveItem(storeName, item),
-      getItem: (id: TID) => store.actions.getItem<T>(storeName, id),
-      removeItem: (id: TID) => store.actions.removeItem(storeName, id),
+      saveItem: (id: StoreEntryID, item: T) =>
+        store.actions.saveItem(storeName, id, item),
+      getItem: (id: StoreEntryID) =>
+        store.actions.getItem(storeName, id) as T | null,
+      removeItem: (id: StoreEntryID) => store.actions.removeItem(storeName, id),
+      startLoading: (id: StoreEntryID) =>
+        store.actions.startLoading(storeName, id),
+      stopLoading: (id: StoreEntryID) =>
+        store.actions.stopLoading(storeName, id),
+      isLoading: (id: StoreEntryID) => store.actions.isLoading(storeName, id),
       clearStore: () => store.actions.clearStore(storeName),
     },
   };
