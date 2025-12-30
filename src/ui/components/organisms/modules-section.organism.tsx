@@ -2,7 +2,8 @@ import { type FC, useEffect } from 'react';
 import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
-import { useGetSummaryModuleByPeriod } from '@/domain/summary/hook/use-modules-summary.hook';
+import { SUMMARY_PERIOD_ENUM } from '@/domain/summary/enum/summary-period.enum';
+import { useGetSummaryModuleListByPeriod } from '@/domain/summary/hook/use-get-summary-module-list-by-period.hook';
 import { RowAction } from '@/ui/components/molecules/row-action.molecule';
 import {
   SummaryCard,
@@ -32,19 +33,20 @@ export const ModulesSection: FC<ModulesSectionProps> = ({ testID }) => {
     navigationAdapter,
   });
 
-  const { items: modulesSummary, execute } = useGetSummaryModuleByPeriod({
-    loggerAdapter,
-    notifyAdapter,
-    cacheAdapter,
-    moduleAdapter,
-    moduleFieldAdapter,
-    recordFieldAdapter,
-    recordAdapter,
-    summaryAdapter,
-  });
+  const { items: summaryModuleList, execute: loadSummaryModuleList } =
+    useGetSummaryModuleListByPeriod({
+      loggerAdapter,
+      notifyAdapter,
+      cacheAdapter,
+      moduleAdapter,
+      moduleFieldAdapter,
+      recordFieldAdapter,
+      recordAdapter,
+      summaryAdapter,
+    });
 
   const handlerLoadData = async () => {
-    execute({ moduleIds: [] });
+    loadSummaryModuleList({ period: SUMMARY_PERIOD_ENUM.WEEK });
   };
 
   useEffect(() => {
@@ -57,7 +59,7 @@ export const ModulesSection: FC<ModulesSectionProps> = ({ testID }) => {
         titleKey="page.summary.section.modules"
         testID={testID}
       />
-      {modulesSummary.length === 0 ? (
+      {summaryModuleList.length === 0 ? (
         <RowAction
           iconName="alert"
           title="page.summary.modules-empty"
@@ -65,7 +67,7 @@ export const ModulesSection: FC<ModulesSectionProps> = ({ testID }) => {
           testID={`${testID}.empty`}
         />
       ) : (
-        modulesSummary.map((summary) => (
+        summaryModuleList.map((summary) => (
           <SummaryCard
             key={`summary-module-${summary.module.id}`}
             summary={summary}
