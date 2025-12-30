@@ -1,16 +1,13 @@
 import { z } from 'zod';
 
-import { IDSchema } from '@/domain/core/schemas/id.schema';
-import { ModuleKeySchema } from '@/domain/module/enum/module-key.enum';
-import { SummarySeriesPointSchema } from '@/domain/summary/entity/summary-series-point.entity';
+import { ModuleSchema } from '@/domain/module/entity/module.entity';
+import { SummaryPeriodResultSchema } from '@/domain/summary/entity/summary-period.entity';
+import { SummaryStatisticsSchema } from '@/domain/summary/entity/summary-statistics.entity';
 
 export const SummaryModuleSchema = z.object({
-  moduleId: IDSchema,
-  moduleKey: ModuleKeySchema,
-  todayCount: z.number().nonnegative(),
-  lastRecordedAt: z.string().nullable(),
-  last7Days: z.array(SummarySeriesPointSchema),
-  previousPeriodAverage: z.number().nullable(),
+  module: ModuleSchema,
+  groupedData: SummaryPeriodResultSchema,
+  statistics: SummaryStatisticsSchema,
 });
 
 export type TSummaryModule = z.infer<typeof SummaryModuleSchema>;

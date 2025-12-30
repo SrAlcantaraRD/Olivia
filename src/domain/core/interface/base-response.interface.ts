@@ -17,6 +17,7 @@ type IBaseResponseSuccessWithData<T> = IBase & {
   details: T;
 };
 
+// TODO: BaseResponseSuccess should be always with success true, and if anythinkg is wrong, then should throw a domain error and the base-hook will catch it and show the message.
 type IBaseResponseSuccess<T> = T extends null | undefined
   ? IBaseResponseSuccessEmpty
   : IBaseResponseSuccessWithData<T>;

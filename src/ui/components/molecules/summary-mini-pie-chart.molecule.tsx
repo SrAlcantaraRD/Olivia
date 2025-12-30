@@ -1,10 +1,11 @@
 import type React from 'react';
 import { View } from 'react-native';
 
+import type { TTimeBucketItem } from '@/domain/summary/entity/summary-time-bucket.entity';
 import { PieChartAtom } from '@/ui/components/atoms/chart.pie.atom';
 
 interface SummaryMiniPieChartProps {
-  data: { label: string; count: number }[];
+  data: TTimeBucketItem[];
   size?: number;
   testID: string;
 }
@@ -18,7 +19,7 @@ export const SummaryMiniPieChart: React.FC<SummaryMiniPieChartProps> = ({
   const innerRadius = radius * 0.6;
 
   const chartData = data.map((item) => ({
-    value: item.count,
+    value: item.value,
     label: item.label,
   }));
 

@@ -11,4 +11,12 @@ export interface IRecordFieldPort {
     data: TRecordFieldCreate[],
     date: Date
   ): Promise<TRecordField[]>;
+  getAll(criteria: {
+    moduleId?: TID;
+    fieldId?: TID;
+    recordId?: TID;
+    dateFrom?: Date;
+    dateTo?: Date;
+    carerID?: TID;
+  }): Promise<TRecordField[]>;
 }

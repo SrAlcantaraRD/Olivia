@@ -2,18 +2,16 @@ import z from 'zod';
 
 import { SummaryModuleSchema } from '@/domain/summary/entity/summary-module.entity';
 
-export const RequestGetSummaryModulesSchema = z.object({
+export const RequestGetSummaryModuleByPeriodSchema = z.object({
   moduleIds: z.array(z.number().int()),
 });
 
-export const ResponseGetSummaryModulesSchema = z.object({
-  items: z.array(SummaryModuleSchema),
-});
+export const ResponseGetSummaryModuleByPeriod = z.array(SummaryModuleSchema);
 
-export type TRequestGetSummaryModules = z.infer<
-  typeof RequestGetSummaryModulesSchema
+export type TRequestGetSummaryModuleByPeriods = z.infer<
+  typeof RequestGetSummaryModuleByPeriodSchema
 >;
 
-export type TResponseGetSummaryModules = z.infer<
-  typeof ResponseGetSummaryModulesSchema
+export type TResponseGetSummaryModuleByPeriod = z.infer<
+  typeof ResponseGetSummaryModuleByPeriod
 >;
