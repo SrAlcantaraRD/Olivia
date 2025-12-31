@@ -129,6 +129,8 @@ export default function TabLayout() {
       screenOptions={{
         swipeEnabled: true,
         lazy: true,
+        lazyPreloadDistance: 1,
+        animationEnabled: true,
       }}
     >
       <MaterialTopTabs.Screen
