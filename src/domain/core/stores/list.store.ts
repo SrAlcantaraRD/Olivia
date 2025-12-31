@@ -27,15 +27,15 @@ const initialState: StoreProps = {};
 const ownStore = create<Store>((set, get) => ({
   state: initialState,
   actions: {
-    isLoading: (entity: string) => {
-      return get().state[entity]?.isLoading || false;
+    isLoading: (storeName: string) => {
+      return get().state[storeName]?.isLoading || false;
     },
-    stopLoading: (entity: string) => {
+    stopLoading: (storeName: string) => {
       set((state) => ({
         state: {
           ...state.state,
-          [entity]: {
-            ...(state.state[entity] || {
+          [storeName]: {
+            ...(state.state[storeName] || {
               items: [],
               listLoaded: false,
             }),
@@ -44,12 +44,12 @@ const ownStore = create<Store>((set, get) => ({
         },
       }));
     },
-    startLoading: (entity: string) => {
+    startLoading: (storeName: string) => {
       set((state) => ({
         state: {
           ...state.state,
-          [entity]: {
-            ...(state.state[entity] || {
+          [storeName]: {
+            ...(state.state[storeName] || {
               items: [],
               listLoaded: false,
             }),
@@ -58,17 +58,18 @@ const ownStore = create<Store>((set, get) => ({
         },
       }));
     },
-    saveItems: <T>(entity: string, items: T[]) =>
+    saveItems: <T>(storeName: string, items: T[]) =>
       set((state) => ({
         state: {
           ...state.state,
-          [entity]: { items, listLoaded: true, isLoading: false },
+          [storeName]: { items, listLoaded: true, isLoading: false },
         },
       })),
-    getItems: <T>(entity: string) => (get().state[entity]?.items || []) as T[],
-    clearStore: (entity: string) =>
+    getItems: <T>(storeName: string) =>
+      (get().state[storeName]?.items || []) as T[],
+    clearStore: (storeName: string) =>
       set((state) => {
-        const { [entity]: _, ...rest } = state.state;
+        const { [storeName]: _, ...rest } = state.state;
 
         return { state: rest };
       }),
@@ -80,6 +81,7 @@ export const useListStore = <T>(storeName: string) => {
 
   return {
     items: (store.state[storeName]?.items || []) as T[],
+    isLoading: store.state[storeName]?.isLoading ?? false,
     actions: {
       saveItems: (items: T[]) => store.actions.saveItems<T>(storeName, items),
       getItems: () => store.actions.getItems<T>(storeName),

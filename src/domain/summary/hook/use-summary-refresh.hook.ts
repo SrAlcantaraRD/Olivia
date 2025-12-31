@@ -7,24 +7,30 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
-import type { TSummarySnapshot } from '@/domain/summary/entity/summary-snapshot.entity';
-import type { TRequestRefreshSummarySnapshots } from '@/domain/summary/use-case-schema/refresh-summary-snapshots.use-case-schema';
+import type {
+  TRequestRefreshSummarySnapshots,
+  TResponseRefreshSummarySnapshots,
+} from '@/domain/summary/use-case-schema/refresh-summary-snapshots.use-case-schema';
 import { RefreshSummarySnapshotsUseCase } from '@/domain/summary/use-case/refresh-summary-snapshots.use-case';
 
 export function useSummaryRefresh(adapters: {
   loggerAdapter: TLoggerPort;
   notifyAdapter: INotifyPort;
-}): IUseHook<TRequestRefreshSummarySnapshots, TSummarySnapshot> {
+}): IUseHook<
+  TRequestRefreshSummarySnapshots,
+  TResponseRefreshSummarySnapshots
+> {
   const {
-    actions: { saveItems, getItems, isLoading, startLoading, stopLoading },
-  } = useListStore<TSummarySnapshot>('summary-snapshot');
+    actions: { saveItems, getItems, startLoading, stopLoading },
+    isLoading,
+  } = useListStore<TResponseRefreshSummarySnapshots>('summary-snapshot');
 
   const { loggerAdapter, notifyAdapter } = adapters;
 
   const execute = useCallback(
     async (
       data: TRequestRefreshSummarySnapshots
-    ): Promise<IHookResponse<TSummarySnapshot>> => {
+    ): Promise<IHookResponse<TResponseRefreshSummarySnapshots>> => {
       startLoading();
       try {
         const useCase = new RefreshSummarySnapshotsUseCase({
@@ -51,7 +57,7 @@ export function useSummaryRefresh(adapters: {
         stopLoading();
       }
     },
-    [loggerAdapter, notifyAdapter]
+    []
   );
 
   const items = getItems()[0] ?? {
@@ -63,7 +69,7 @@ export function useSummaryRefresh(adapters: {
 
   return {
     execute,
-    isExecuting: isLoading(),
+    isExecuting: isLoading,
     items,
   };
 }
