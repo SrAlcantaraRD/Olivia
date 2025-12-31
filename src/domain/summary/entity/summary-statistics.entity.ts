@@ -10,3 +10,12 @@ export const SummaryStatisticsSchema = z.object({
 });
 
 export type TSummaryStatistics = z.infer<typeof SummaryStatisticsSchema>;
+
+export const BASE_SUMMARY_STATISTICS = {
+  currentPeriodTotal: 0,
+  previousPeriodTotal: 0,
+  percentageChange: 0,
+  lastRecordedAt: new Date(0),
+  previousPeriodAverage: null,
+  currentPeriodAverage: null,
+} satisfies TSummaryStatistics;

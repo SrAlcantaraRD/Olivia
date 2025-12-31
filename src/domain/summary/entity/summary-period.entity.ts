@@ -86,3 +86,16 @@ export type THalfYearSummaryResult = z.infer<
 export type TYearSummaryResult = z.infer<typeof SummaryYearResultSchema>;
 
 export type TSummaryPeriodResult = z.infer<typeof SummaryPeriodResultSchema>;
+
+export const SUMMARY_PERIOD_VALUES = {
+  buckets: [],
+  metadata: {
+    dateRange: {
+      from: new Date(),
+      to: new Date(),
+    },
+    totalCount: 0,
+    uniqueRecords: 0,
+  },
+  period: SUMMARY_PERIOD_ENUM.WEEK,
+} satisfies TWeekSummaryResult;
