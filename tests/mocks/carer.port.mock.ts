@@ -9,7 +9,6 @@ export function mockCarerPort(
     create: jest.fn(),
     getByID: jest.fn(),
     getAll: jest.fn(),
-    existsAny: jest.fn(),
     addSecondaryCarer: jest.fn(),
     updateStatus: jest.fn(),
     ...overrides,
