@@ -22,7 +22,6 @@ export default function SummaryLayout() {
           animation: 'fade_from_bottom',
         }}
       />
-      <Stack.Screen name="detail/trend/[trendId]" />
     </Stack>
   );
 }

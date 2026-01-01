@@ -4,14 +4,14 @@ import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
-import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TModule } from '@/domain/module/entity/module.entity';
-import type { TRecordFieldCreate } from '@/domain/module/entity/record-field.entity';
+import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
-import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
+import type { TRecordFieldCreate } from '@/domain/module/entity/record-field.entity';
 import type { IModulePort } from '@/domain/module/port/module.port';
-import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
+import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IRecordPort } from '@/domain/module/port/record.port';
+import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import type {
   TRequestAddDemoData,
   TResponseAddDemoData,

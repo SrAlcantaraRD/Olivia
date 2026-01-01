@@ -7,13 +7,13 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
+import { ConsumeRecordSynchronizationQRUseCase } from '@/domain/core/use-case/consume-record-synchronization-qr.use-case';
 import type {
   TRequestConsumeRecordSynchronizationQR,
   TResponseConsumeRecordSynchronizationQR,
 } from '@/domain/core/use-case-schema/consume-record-synchronization-qr.use-case-schema';
-import { ConsumeRecordSynchronizationQRUseCase } from '@/domain/core/use-case/consume-record-synchronization-qr.use-case';
-import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import type { IRecordPort } from '@/domain/module/port/record.port';
+import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 
 export function useConsumeRecordSynchronizationQr(adapters: {
   loggerAdapter: TLoggerPort;

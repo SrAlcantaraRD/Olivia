@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react';
 
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
+import { SetupParentUseCase } from '@/domain/carer/use-case/setup-parent.use-case';
 import type {
   TRequestSetupParent,
   TResponseSetupParent,
 } from '@/domain/carer/use-case-schema/setup-parent.use-case-schema';
-import { SetupParentUseCase } from '@/domain/carer/use-case/setup-parent.use-case';
-import { type TLoggerPort } from '@/domain/core/adapter/logger.adapter';
+import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
   IHookResponse,
   IUseHook,

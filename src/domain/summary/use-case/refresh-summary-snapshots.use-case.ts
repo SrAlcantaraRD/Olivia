@@ -41,6 +41,9 @@ export class RefreshSummarySnapshotsUseCase extends BaseUseCase<
       )}`
     );
 
+    // await 1s to simulate processing time
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     const snapshot: TResponseRefreshSummarySnapshots = {
       modules: [],
       trends: [],

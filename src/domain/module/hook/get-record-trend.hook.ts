@@ -20,7 +20,7 @@ export function useGetRecordTrend(adapters: {
 > {
   const {
     actions: { getItems, startLoading, stopLoading },
-  } = useListStore('report-trend');
+  } = useListStore<{ day: string; count: number }>('report-trend');
 
   const { loggerAdapter, recordAdapter, notifyAdapter } = adapters;
 
@@ -61,8 +61,5 @@ export function useGetRecordTrend(adapters: {
     execute,
     isExecuting: false,
     items: getItems() ?? [],
-  } as unknown as IUseHook<
-    { startDate?: Date; endDate?: Date; moduleID?: number },
-    { day: string; count: number }[]
-  >;
+  };
 }

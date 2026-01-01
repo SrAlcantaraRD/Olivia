@@ -134,25 +134,6 @@ export default function TabLayout() {
       }}
     >
       <MaterialTopTabs.Screen
-        name="report"
-        options={{
-          title: t('tab.report'),
-          tabBarIcon: ({
-            color,
-            focused,
-          }: {
-            color: string;
-            focused: boolean;
-          }) => (
-            <Ionicons
-              name={focused ? 'stats-chart' : 'stats-chart-outline'}
-              size={24}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <MaterialTopTabs.Screen
         name="summary"
         options={{
           title: t('tab.summary'),

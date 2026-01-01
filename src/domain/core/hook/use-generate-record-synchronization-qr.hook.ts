@@ -7,11 +7,11 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
+import { GenerateRecordSynchronizationQRUseCase } from '@/domain/core/use-case/generate-record-synchronization-qr.use-case';
 import type {
   TRequestGenerateRecordSynchronizationQR,
   TResponseGenerateRecordSynchronizationQR,
 } from '@/domain/core/use-case-schema/generate-record-synchronization-qr.use-case-schema';
-import { GenerateRecordSynchronizationQRUseCase } from '@/domain/core/use-case/generate-record-synchronization-qr.use-case';
 import type { IRecordPort } from '@/domain/module/port/record.port';
 
 export function useGenerateRecordSynchronizationQr(adapters: {

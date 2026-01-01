@@ -1,7 +1,7 @@
 import z from 'zod';
 
-import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 import { QRBundlerVersionSchema } from '@/domain/core/enum/qr.enum';
+import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 
 export const QRMetadataSchema = z.object({
   [QR_KEY.VERSION]: QRBundlerVersionSchema,

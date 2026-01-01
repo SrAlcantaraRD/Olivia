@@ -9,8 +9,8 @@ import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
 import type { TSummaryPin } from '@/domain/summary/entity/summary-pin.entity';
 import type { ISummaryPinsPort } from '@/domain/summary/port/summary-pins.port';
-import type { TRequestPinSummaryItem } from '@/domain/summary/use-case-schema/pin-summary-item.use-case-schema';
 import { PinSummaryItemUseCase } from '@/domain/summary/use-case/pin-summary-item.use-case';
+import type { TRequestPinSummaryItem } from '@/domain/summary/use-case-schema/pin-summary-item.use-case-schema';
 
 export function usePinSummaryItem(adapters: {
   loggerAdapter: TLoggerPort;

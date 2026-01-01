@@ -6,7 +6,7 @@ import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
-import { ModuleWizardField } from '@/ui/components/organisms/module-wizard/module-field-wrapper.component';
+import type { ModuleWizardField } from '@/ui/components/organisms/module-wizard/module-field-wrapper.component';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 import { enEN } from '@/ui/i18n/locales/en-EN';
 

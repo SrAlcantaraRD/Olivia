@@ -58,7 +58,7 @@ export const ModuleFieldWrapper: FC<ModuleFieldWrapperProps> = ({
           <CardWithDetails
             key={`option-${option}`}
             icon="mic-circle"
-            title={option as unknown as Ti18nKeys}
+            title={option as Ti18nKeys}
             isSelected={values[field.id] === option}
             onPress={() => selectOptionAndNext(field.id, option)}
             testID={`${testID}.field.${field.id}.option.${option}`}

@@ -5,8 +5,8 @@ import { useAdapters } from '@/adapter';
 import { useSecondaryCarerGenerateInvitationQR } from '@/domain/carer/hook/secondary-carer.generate-invitation-qr.hook';
 import type { TResponseSecondaryCarerGenerateInvitationQR } from '@/domain/carer/use-case-schema/secondary-carer.generate-invitation-qr.use-case-schema';
 import { TIME_TO_LIVE } from '@/domain/core/constant/time-to-live.constants';
-import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 import { QR_BUNDLER_VERSION } from '@/domain/core/enum/qr.enum';
+import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 
 export interface GenerateInvitationQRFormData {
   selectedTTL: TIME_TO_LIVE;

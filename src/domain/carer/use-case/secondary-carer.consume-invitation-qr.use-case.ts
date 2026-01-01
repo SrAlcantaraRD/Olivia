@@ -18,8 +18,8 @@ import type { IBaseResponse } from '@/domain/core/interface/base-response.interf
 import { CACHE_KEY_ENUM, type ICachePort } from '@/domain/core/port/cache.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
 import { WorkWithQRBaseUseCase } from '@/domain/module/abstract/work-with-qr.use-case-abstract';
-import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
+import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 
 export class SecondaryCarerConsumeInvitationQRUseCase extends WorkWithQRBaseUseCase<
   TRequestSecondaryCarerConsumeInvitation,
