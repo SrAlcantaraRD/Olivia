@@ -19,6 +19,7 @@ import {
 } from '@/domain/core/enum/status.enum';
 import type { TID } from '@/domain/core/schemas/id.schema';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
+import { getModuleFieldKeyFromValue } from '@/domain/module/enum/module-field-key.enum';
 import {
   getModuleFieldTypeFromValue,
   MODULE_FIELD_TYPE_ENUM,
@@ -55,7 +56,7 @@ export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
         break;
       default:
         // if the db contains uppercase domain values, keep as-is
-        normalizedType = entity.type as MODULE_FIELD_TYPE_ENUM;
+        normalizedType = MODULE_FIELD_TYPE_ENUM.SELECT;
     }
 
     // Use domain enum validator to ensure it's valid; if invalid it will throw a domain error
@@ -67,8 +68,7 @@ export class SQLiteModuleFieldAdapter implements IModuleFieldPort {
       createdAt: entity.createdAt,
 
       moduleId: entity.moduleID,
-      code: entity.code,
-      description: entity.description ?? '',
+      code: getModuleFieldKeyFromValue(entity.code),
       type,
       values: entity.values ?? '',
       required: Boolean(Number(entity.required)),

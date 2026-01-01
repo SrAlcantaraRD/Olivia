@@ -17,7 +17,6 @@ import {
   type TAppDatabase,
 } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import {
   getStatusFromValue,
   STATUS_ENUM,
@@ -108,8 +107,6 @@ export class SQLiteRecordAdapter implements IRecordPort {
         module: true,
       },
     });
-
-    BASE_LOGGER.error({ list });
 
     return list.map(SQLiteRecordAdapter.toDomainEntity);
   }

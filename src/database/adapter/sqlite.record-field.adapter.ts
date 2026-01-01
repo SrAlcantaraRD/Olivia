@@ -1,4 +1,4 @@
-import { drizzle } from 'drizzle-orm/expo-sqlite';
+import { eq, gte, lte, type SQLWrapper } from 'drizzle-orm';
 
 import {
   SQLiteModuleFieldAdapter,
@@ -8,9 +8,11 @@ import {
   SQLiteRecordAdapter,
   type TRecordAdapterEntity,
 } from '@/database/adapter/sqlite.record.adapter';
-import { SQLITE_DB } from '@/database/config/database.config';
+import {
+  buildAdapterClient,
+  type TAppDatabase,
+} from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
-import { DrizzleLogger } from '@/domain/core/adapter/drizzle.logger';
 import {
   getStatusFromValue,
   STATUS_ENUM,
@@ -34,11 +36,8 @@ export type TRecordFieldAdapterInsert =
 export class SQLiteRecordFieldAdapter implements IRecordFieldPort {
   private readonly database;
 
-  constructor() {
-    this.database = drizzle(SQLITE_DB, {
-      schema: DB_SCHEMA,
-      logger: new DrizzleLogger('Module Field Adapter'),
-    });
+  constructor(database?: TAppDatabase) {
+    this.database = database ?? buildAdapterClient('RecordField');
   }
 
   public static toDomainEntity(
@@ -100,5 +99,54 @@ export class SQLiteRecordFieldAdapter implements IRecordFieldPort {
       .returning();
 
     return inserted.map(SQLiteRecordFieldAdapter.toDomainEntity);
+  }
+
+  public async getAll(criteria: {
+    moduleId?: TID;
+    fieldId?: TID;
+    recordId?: TID;
+    dateFrom?: Date;
+    dateTo?: Date;
+    carerID?: TID;
+  }): Promise<TRecordField[]> {
+    const { moduleId, fieldId, recordId, dateFrom, dateTo, carerID } = criteria;
+
+    const conditions: SQLWrapper[] = [];
+
+    if (fieldId) {
+      conditions.push(eq(DB_SCHEMA.RECORD_FIELD.fieldID, fieldId));
+    }
+
+    if (recordId) {
+      conditions.push(eq(DB_SCHEMA.RECORD_FIELD.recordID, recordId));
+    }
+
+    if (moduleId) {
+      conditions.push(eq(DB_SCHEMA.MODULE_FIELD.moduleID, moduleId));
+    }
+
+    if (carerID) {
+      conditions.push(eq(DB_SCHEMA.RECORD.carerID, carerID));
+    }
+
+    if (dateFrom) {
+      conditions.push(gte(DB_SCHEMA.RECORD.createdAt, dateFrom));
+    }
+
+    if (dateTo) {
+      conditions.push(lte(DB_SCHEMA.RECORD.createdAt, dateTo));
+    }
+
+    const list = await this.database.query.RECORD_FIELD.findMany({
+      where: (row, { eq, and }) =>
+        and(eq(row.status, STATUS_ENUM.ACTIVE), ...conditions),
+      orderBy: (row, { desc }) => [desc(row.createdAt)],
+      with: {
+        record: true,
+        moduleField: true,
+      },
+    });
+
+    return list.map(SQLiteRecordFieldAdapter.toDomainEntity);
   }
 }
