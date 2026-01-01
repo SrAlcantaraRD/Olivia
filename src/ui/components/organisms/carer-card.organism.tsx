@@ -1,17 +1,16 @@
-import { Avatar, type ButtonVariant, Chip } from 'heroui-native';
+import { Avatar, type ButtonVariant, Card, Chip } from 'heroui-native';
 import { View } from 'react-native';
 
 import type { TCarer } from '@/domain/carer/entity/carer.entity';
 import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
 import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
-import { CardAtom } from '@/ui/components/atoms/card.atom';
 import type { IconName } from '@/ui/components/atoms/icon.atom';
 import { TextTranslation } from '@/ui/components/atoms/text-translations.atom';
 import {
   TypographyParagraph,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
-import { SettingsRow } from '@/ui/components/molecules/settings-row.molecule';
+import { RowAction } from '@/ui/components/molecules/row-action.molecule';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface CarerCardOrganismProps {
@@ -102,8 +101,8 @@ export function CarerCardOrganism({
   ];
 
   return (
-    <CardAtom testID={`${testID}.card`}>
-      <View className="flex-row justify-between items-start mb-6">
+    <Card testID={`${testID}.card`} className="rounded-lg light:bg-white gap-4">
+      <View className="flex-row justify-between items-start">
         <View className="flex-row items-center gap-4">
           <Avatar size="md" alt="Large Avatar" variant="soft">
             <TextTranslation
@@ -138,24 +137,19 @@ export function CarerCardOrganism({
         </Chip>
       </View>
 
-      <View className="justify-between gap-2">
+      <View className="gap-2">
         {buttonItems
           .filter((item) => item.isVisible)
           .map((item) => (
-            <View
+            <RowAction
+              onPress={item.onPress}
+              testID={item.testID}
+              title={item.title}
+              iconName={item.icon}
               key={`settings-row.${item.id}`}
-              style={{ flex: 1, paddingHorizontal: 4 }}
-            >
-              <SettingsRow
-                onPress={item.onPress}
-                testID={item.testID}
-                titleKey={item.title}
-                iconName={item.icon}
-                key={`settings-row.${item.id}`}
-              />
-            </View>
+            />
           ))}
       </View>
-    </CardAtom>
+    </Card>
   );
 }

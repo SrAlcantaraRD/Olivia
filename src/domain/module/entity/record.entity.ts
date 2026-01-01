@@ -13,18 +13,18 @@ export const RecordSchema = z.object({
   ...BaseEntitySchema.shape,
   moduleID: IDSchema,
   carerID: IDSchema,
-  data: z.string().min(1),
-  synced: z.boolean(),
+  synchronized: z.boolean(),
 });
 
 export const RecordCreateSchema = GenerateCreateEntitySchema(RecordSchema);
 
 export type TRecord = z.infer<typeof RecordSchema> & {
   module?: TModule;
-  fieldList?: TRecordField[];
+
+  recordFieldList?: TRecordField[];
 };
 
 export type TRecordCreate = z.infer<typeof RecordCreateSchema> & {
   createdAt: Date;
-  fieldList: TRecordFieldCreate[];
+  recordFieldList: TRecordFieldCreate[];
 };

@@ -5,9 +5,18 @@ import type {
 } from '@/domain/module/entity/record-field.entity';
 
 export interface IRecordFieldPort {
-  getAll(): Promise<TRecordField[]>;
-  batchCreate(
+  getAllByFieldID(fieldID: TID): Promise<TRecordField[]>;
+  batchUpsert(
     recordID: TID,
-    data: TRecordFieldCreate[]
+    data: TRecordFieldCreate[],
+    date: Date
   ): Promise<TRecordField[]>;
+  getAll(criteria: {
+    moduleId?: TID;
+    fieldId?: TID;
+    recordId?: TID;
+    dateFrom?: Date;
+    dateTo?: Date;
+    carerID?: TID;
+  }): Promise<TRecordField[]>;
 }

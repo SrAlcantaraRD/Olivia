@@ -7,6 +7,5 @@ export interface ICarerPort {
   addSecondaryCarer(originCarerID: TID, dto: TCarerCreate): Promise<TCarer>;
   getByID(id: TID): Promise<TCarer | null>;
   getAll(): Promise<TCarer[]>;
-  existsAny(): Promise<boolean>;
   updateStatus(id: TID, status: STATUS_ENUM): Promise<TCarer>;
 }

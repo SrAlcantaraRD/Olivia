@@ -2,11 +2,12 @@ import { useThemeColor } from 'heroui-native';
 import { useState } from 'react';
 import { View } from 'react-native';
 
-import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
+import type { TTimeBucketItem } from '@/domain/summary/entity/summary-time-bucket.entity';
+import { BarChartAtom } from '@/ui/components/atoms/chart.bar.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
 
 interface SummaryMiniBarChartProps {
-  values: number[];
+  data: TTimeBucketItem[];
   average?: number | null;
   height?: number;
   showLabels?: boolean;
@@ -16,9 +17,9 @@ interface SummaryMiniBarChartProps {
 }
 
 export function SummaryMiniBarChart({
-  values,
+  data,
   average,
-  height = 72,
+  height = 64,
   showLabels = true,
   labels,
   highlightLastBar = true,
@@ -28,15 +29,11 @@ export function SummaryMiniBarChart({
   const mutedColor = useThemeColor('muted');
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
+  const values = data.map((bucket) => bucket.value);
   const safeValues = values.length > 0 ? values : [0];
   const max = Math.max(...safeValues, 1);
   const avg = typeof average === 'number' ? average : null;
   const avgRatio = avg !== null ? Math.min(avg / max, 1) : null;
-
-  const barLabels =
-    labels && labels.length === values.length
-      ? labels
-      : ['D', 'L', 'M', 'X', 'J', 'V', 'S'].slice(0, values.length);
 
   const barValues = values.map((value) => ({ value: '', count: value }));
   const barColors = values.map((_, index) => {
@@ -84,7 +81,7 @@ export function SummaryMiniBarChart({
 
       {showLabels && (
         <View className="flex-row justify-between px-2 mt-2">
-          {barLabels.map((label) => (
+          {labels?.map((label) => (
             <View key={`${testID}.label.${label}`} className="flex-1">
               <TypographySmall
                 testID={`${testID}.label.${label}`}
@@ -92,6 +89,7 @@ export function SummaryMiniBarChart({
                 values={{ value: label }}
                 className="text-center"
                 variant="light"
+                size="xs"
               />
             </View>
           ))}

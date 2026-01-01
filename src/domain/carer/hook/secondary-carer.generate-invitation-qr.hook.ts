@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
+import { SecondaryCarerGenerateInvitationQRUseCase } from '@/domain/carer/use-case/secondary-carer.generate-invitation-qr.use-case';
 import type {
   TRequestSecondaryCarerGenerateInvitationQR,
   TResponseSecondaryCarerGenerateInvitationQR,
 } from '@/domain/carer/use-case-schema/secondary-carer.generate-invitation-qr.use-case-schema';
-import { SecondaryCarerGenerateInvitationQRUseCase } from '@/domain/carer/use-case/secondary-carer.generate-invitation-qr.use-case';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
   IHookResponse,
@@ -40,9 +40,8 @@ export function useSecondaryCarerGenerateInvitationQR(adapters: {
     ): Promise<IHookResponse<TResponseSecondaryCarerGenerateInvitationQR>> => {
       setExecuting(true);
       adapters.notifyAdapter.loading({
-        title: 'hook.generate-invitation-qr-for-secondary-carer.title',
-        description:
-          'hook.generate-invitation-qr-for-secondary-carer.description',
+        title: 'hook.secondary-carer.generate-invitation-qr.title',
+        description: 'hook.secondary-carer.generate-invitation-qr.description',
       });
 
       try {
@@ -58,19 +57,17 @@ export function useSecondaryCarerGenerateInvitationQR(adapters: {
 
         if (!response.success) {
           adapters.notifyAdapter.error({
-            title:
-              'hook.generate-invitation-qr-for-secondary-carer.error-title',
+            title: 'hook.secondary-carer.generate-invitation-qr.error-title',
             description:
-              'hook.generate-invitation-qr-for-secondary-carer.error-description',
+              'hook.secondary-carer.generate-invitation-qr.error-description',
           });
           return { success: false };
         }
 
         adapters.notifyAdapter.success({
-          title:
-            'hook.generate-invitation-qr-for-secondary-carer.success-title',
+          title: 'hook.secondary-carer.generate-invitation-qr.success-title',
           description:
-            'hook.generate-invitation-qr-for-secondary-carer.success-description',
+            'hook.secondary-carer.generate-invitation-qr.success-description',
         });
 
         setItems(response.details);
@@ -81,12 +78,12 @@ export function useSecondaryCarerGenerateInvitationQR(adapters: {
         };
       } catch (error) {
         adapters.notifyAdapter.error({
-          title: 'hook.generate-invitation-qr-for-secondary-carer.error-title',
+          title: 'hook.secondary-carer.generate-invitation-qr.error-title',
           description:
-            'hook.generate-invitation-qr-for-secondary-carer.error-description',
+            'hook.secondary-carer.generate-invitation-qr.error-description',
         });
         adapters.loggerAdapter.error(
-          'use-generate-invitation-qr-for-secondary-carer',
+          'use-secondary-carer.generate-invitation-qr',
           error
         );
         return { success: false };

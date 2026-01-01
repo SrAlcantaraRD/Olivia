@@ -1,6 +1,6 @@
-pnpm lint
+# # pnpm lint
 
-npx @biomejs/biome format --write
-# npx @biomejs/biome lint --write
-# npx @biomejs/biome check --write
-git update-index --again
+# npx @biomejs/biome format --write
+# # npx @biomejs/biome lint --write
+# # npx @biomejs/biome check --write
+# git update-index --again

@@ -7,55 +7,41 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
-import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
-import type { TSummarySnapshot } from '@/domain/summary/entity/summary-snapshot.entity';
-import type { ISummaryHighlightPort } from '@/domain/summary/port/summary-highlight.port';
-import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
-import type { ISummarySnapshotPort } from '@/domain/summary/port/summary-snapshot.port';
-import type { ISummaryTrendPort } from '@/domain/summary/port/summary-trend.port';
+import type {
+  TRequestRefreshSummarySnapshots,
+  TResponseRefreshSummarySnapshots,
+} from '@/domain/summary/use-case-schema/refresh-summary-snapshots.use-case-schema';
 import { RefreshSummarySnapshotsUseCase } from '@/domain/summary/use-case/refresh-summary-snapshots.use-case';
-import type { TRequestRefreshSummarySnapshots } from '@/domain/summary/use-case-schema/refresh-summary-snapshots.use-case-schema';
 
 export function useSummaryRefresh(adapters: {
   loggerAdapter: TLoggerPort;
-  summaryModuleAdapter: ISummaryModulePort;
-  summaryTrendAdapter: ISummaryTrendPort;
-  summaryHighlightAdapter: ISummaryHighlightPort;
-  summarySnapshotAdapter: ISummarySnapshotPort;
   notifyAdapter: INotifyPort;
-}): IUseHook<TRequestRefreshSummarySnapshots, TSummarySnapshot> {
+}): IUseHook<
+  TRequestRefreshSummarySnapshots,
+  TResponseRefreshSummarySnapshots
+> {
   const {
-    actions: { saveItems, getItems, isLoading, startLoading, stopLoading },
-  } = useListStore<TSummarySnapshot>('summary-snapshot');
+    actions: { saveItems, getItems, startLoading, stopLoading },
+    isLoading,
+  } = useListStore<TResponseRefreshSummarySnapshots>('summary-snapshot');
 
-  const {
-    loggerAdapter,
-    summaryModuleAdapter,
-    summaryTrendAdapter,
-    summaryHighlightAdapter,
-    summarySnapshotAdapter,
-    notifyAdapter,
-  } = adapters;
+  const { loggerAdapter, notifyAdapter } = adapters;
 
   const execute = useCallback(
     async (
       data: TRequestRefreshSummarySnapshots
-    ): Promise<IHookResponse<TSummarySnapshot>> => {
+    ): Promise<IHookResponse<TResponseRefreshSummarySnapshots>> => {
       startLoading();
       try {
         const useCase = new RefreshSummarySnapshotsUseCase({
           loggerAdapter,
-          summaryModuleAdapter,
-          summaryTrendAdapter,
-          summaryHighlightAdapter,
-          summarySnapshotAdapter,
         });
 
         const response = await useCase.execute(data);
 
         if (!response.success || !response.details) {
           notifyAdapter.error({
-            title: 'hook.use-summary-refresh.error' as Ti18nKeys,
+            title: 'common.error',
             description: response.message,
           });
           return { success: false };
@@ -71,14 +57,7 @@ export function useSummaryRefresh(adapters: {
         stopLoading();
       }
     },
-    [
-      loggerAdapter,
-      summaryModuleAdapter,
-      summaryTrendAdapter,
-      summaryHighlightAdapter,
-      summarySnapshotAdapter,
-      notifyAdapter,
-    ]
+    []
   );
 
   const items = getItems()[0] ?? {
@@ -90,7 +69,7 @@ export function useSummaryRefresh(adapters: {
 
   return {
     execute,
-    isExecuting: isLoading(),
+    isExecuting: isLoading,
     items,
   };
 }

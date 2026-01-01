@@ -12,7 +12,6 @@ import * as DB_SCHEMA from '@/database/schema';
 import type { TCarer, TCarerCreate } from '@/domain/carer/entity/carer.entity';
 import { getCarerTypeFromValue } from '@/domain/carer/enum/carer-type.enums';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import {
   getStatusFromValue,
   STATUS_ENUM,
@@ -94,18 +93,6 @@ export class SQLiteCarerAdapter implements ICarerPort {
     const list = await this.database.query.CARER.findMany();
 
     return list.map((row) => SQLiteCarerAdapter.toDomainEntity(row));
-  }
-
-  public async existsAny(): Promise<boolean> {
-    const item = await this.database.query.CARER.findFirst({
-      where: (row, { eq }) => eq(row.status, STATUS_ENUM.ACTIVE),
-    });
-
-    BASE_LOGGER.info(
-      `[SQLiteCarerAdapter] existsAny result: ${JSON.stringify(item)}[${!!item}]`
-    );
-
-    return !!item;
   }
 
   public async updateStatus(id: TID, status: STATUS_ENUM): Promise<TCarer> {

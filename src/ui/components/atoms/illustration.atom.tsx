@@ -18,7 +18,7 @@ interface IllustrationAtomProps {
   /**
    * Shape of the inner container
    */
-  shape?: 'rounded-full' | 'rounded-3xl';
+  shape?: 'rounded-full' | 'rounded-lg';
   /**
    * Optional secondary icon (e.g., badge or overlay)
    */
@@ -68,7 +68,7 @@ const SIZE_CONFIG = {
  *
  * <IllustrationAtom
  *   icon="time-outline"
- *   shape="rounded-3xl"
+ *   shape="rounded-lg"
  *   secondaryIcon={{
  *     name: 'checkmark-done-outline',
  *     size: 40,

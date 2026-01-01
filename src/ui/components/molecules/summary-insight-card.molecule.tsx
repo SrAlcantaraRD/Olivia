@@ -4,6 +4,7 @@ import type React from 'react';
 import { Pressable, View } from 'react-native';
 import { withUniwind } from 'uniwind';
 
+import type { TTimeBucketItem } from '@/domain/summary/entity/summary-time-bucket.entity';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import type { IconName } from '@/ui/components/atoms/icon.atom';
 import {
@@ -19,9 +20,9 @@ interface SummaryInsightCardProps {
   titleKey: Ti18nKeys;
   descriptionKey: Ti18nKeys;
   iconName?: IconName;
-  metricValue?: number | string;
-  metricLabel?: string;
-  chartValues?: number[];
+  metricValue?: number | Ti18nKeys;
+  metricLabel?: Ti18nKeys;
+  data: TTimeBucketItem[];
   chartAverage?: number | null;
   onPress?: () => void;
   testID: string;
@@ -33,7 +34,7 @@ export const SummaryInsightCard: React.FC<SummaryInsightCardProps> = ({
   iconName,
   metricValue,
   metricLabel,
-  chartValues = [],
+  data = [],
   chartAverage,
   onPress,
   testID,
@@ -42,14 +43,14 @@ export const SummaryInsightCard: React.FC<SummaryInsightCardProps> = ({
   const mutedColor = useThemeColor('muted');
 
   return (
-    <CardAtom className="p-4 rounded-3xl">
+    <CardAtom className="p-4 rounded-lg" testID={`${testID}.card`}>
       <Pressable
         accessibilityRole="button"
         onPress={onPress}
         style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}
       >
         <View className="flex-row items-center justify-between">
-          <View className="flex-row items-center gap-3">
+          <View className="flex-row items-center gap-2">
             {iconName && (
               <View
                 style={{
@@ -109,7 +110,7 @@ export const SummaryInsightCard: React.FC<SummaryInsightCardProps> = ({
           <View className="flex-[1.4]">
             <SummaryMiniBarChart
               testID={`${testID}.chart`}
-              values={chartValues}
+              data={data}
               average={chartAverage ?? null}
               showLabels
             />

@@ -17,7 +17,7 @@ export const ModuleSchema = z.object({
 export const ModuleCreateSchema = GenerateCreateEntitySchema(ModuleSchema);
 
 export type TModule = z.infer<typeof ModuleSchema> & {
-  fieldList?: TModuleField[];
+  moduleFieldList?: TModuleField[];
   recordList?: TRecord[];
 };
 

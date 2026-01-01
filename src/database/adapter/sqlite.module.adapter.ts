@@ -23,7 +23,7 @@ import { getModuleKeyFromValue } from '@/domain/module/enum/module-key.enum';
 import type { IModulePort } from '@/domain/module/port/module.port';
 
 export type TModuleAdapterEntity = typeof DB_SCHEMA.MODULE.$inferSelect & {
-  fieldList?: TModuleFieldAdapterEntity[];
+  moduleFieldList?: TModuleFieldAdapterEntity[];
   recordList?: TRecordAdapterEntity[];
 };
 
@@ -45,8 +45,8 @@ export class SQLiteModuleAdapter implements IModulePort {
       description: entity.description,
       isActive: entity.active === STATUS_ENUM.ACTIVE,
 
-      ...(entity.fieldList && {
-        fieldList: entity.fieldList.map(
+      ...(entity.moduleFieldList && {
+        moduleFieldList: entity.moduleFieldList.map(
           SQLiteModuleFieldAdapter.toDomainEntity
         ),
       }),
@@ -60,7 +60,7 @@ export class SQLiteModuleAdapter implements IModulePort {
   public async getAll(): Promise<TModule[]> {
     const list = await this.database.query.MODULE.findMany({
       with: {
-        fieldList: true,
+        moduleFieldList: true,
       },
     });
 
@@ -74,5 +74,11 @@ export class SQLiteModuleAdapter implements IModulePort {
       .update(DB_SCHEMA.MODULE)
       .set({ active: STATUS_ENUM.ACTIVE })
       .where(inArray(DB_SCHEMA.MODULE.id, idList));
+  }
+
+  public async batchDeactivate(): Promise<void> {
+    await this.database
+      .update(DB_SCHEMA.MODULE)
+      .set({ active: STATUS_ENUM.INACTIVE });
   }
 }

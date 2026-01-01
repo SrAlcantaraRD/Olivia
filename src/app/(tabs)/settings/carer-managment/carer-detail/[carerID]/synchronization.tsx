@@ -1,23 +1,16 @@
-import { View } from 'react-native';
-
-import {
-  TypographyParagraph,
-  TypographyTitle,
-} from '@/ui/components/atoms/typography.atom';
+import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
+import { useSynchronizationWizard } from '@/ui/components/organisms/synchronization-wizard/use-synchronization-wizard.hook';
+import { SynchronizationWizard } from '@/ui/components/organisms/synchronization-wizard/use-synchronization-wizard.organism';
 
 export default function SynchronizationScreen() {
+  const syncState = useSynchronizationWizard();
+
   return (
-    <View className="flex-1 bg-background p-4">
-      <TypographyTitle
-        testID="screen.settings.synchronization.title"
-        i18nKey="page.carer-detail.sync-history.title"
-        accessibilityRole="header"
-      />
-      <TypographyParagraph
-        testID="screen.settings.synchronization.placeholder"
-        i18nKey="page.carer-detail.sync-history.empty"
-        variant="light"
-      />
-    </View>
+    <ScreenLayout
+      testID="screen.settings.synchronization"
+      isLoading={syncState.isExecutingConsume || syncState.isDecoding}
+    >
+      <SynchronizationWizard {...syncState} />
+    </ScreenLayout>
   );
 }

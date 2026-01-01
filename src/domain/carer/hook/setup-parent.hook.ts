@@ -6,10 +6,7 @@ import type {
   TRequestSetupParent,
   TResponseSetupParent,
 } from '@/domain/carer/use-case-schema/setup-parent.use-case-schema';
-import {
-  BASE_LOGGER,
-  type TLoggerPort,
-} from '@/domain/core/adapter/logger.adapter';
+import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type {
   IHookResponse,
   IUseHook,
@@ -59,8 +56,6 @@ export function useSetupParent(adapters: {
           cacheAdapter,
           secureStoreAdapter
         );
-
-        BASE_LOGGER.error({ data });
 
         const response = await usecase.execute(data);
 

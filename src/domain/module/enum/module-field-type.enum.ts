@@ -14,7 +14,7 @@ export const getModuleFieldTypeFromValue = (
 ): MODULE_FIELD_TYPE_ENUM => {
   const types: MODULE_FIELD_TYPE_ENUM[] = Object.values(MODULE_FIELD_TYPE_ENUM);
 
-  const type = types.find((column) => column === value);
+  const type = types.find((column) => column === value.toUpperCase());
 
   if (typeof type === 'undefined') {
     throw new ErrorCannotParseSchema(

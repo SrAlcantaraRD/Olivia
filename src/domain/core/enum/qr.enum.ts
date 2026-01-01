@@ -1,7 +1,7 @@
 import z from 'zod';
 
-export enum QR_BUNDLE_VERSION {
+export enum QR_BUNDLER_VERSION {
   V1 = '1',
 }
 
-export const QRBunderVersionSchema = z.enum(QR_BUNDLE_VERSION);
+export const QRBundlerVersionSchema = z.enum(QR_BUNDLER_VERSION);

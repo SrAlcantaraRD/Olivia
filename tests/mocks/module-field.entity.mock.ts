@@ -51,7 +51,7 @@ export const mockRecordEntity = (overrides: Partial<TRecord> = {}) =>
     carerID: 1,
     moduleID: 1,
     data: '{"field1":"value1","field2":"value2"}',
-    synced: false,
+    synchronized: false,
     ...overrides,
   }) satisfies TRecord;
 
@@ -75,7 +75,7 @@ export const mockRecordCreate = (
     carerID: 1,
     data: '{"field1":"value1","field2":"value2"}',
     moduleID: 1,
-    synced: false,
+    synchronized: false,
     fieldList: [],
     createdAt: new Date('2026-01-01T00:00:00Z'),
     ...overrides,

@@ -55,7 +55,12 @@ describe('[Hook] - GetListActiveModule', () => {
       if (!response.success) {
         throw new Error('Expected success hook response');
       }
-      expect(response.data).toEqual([activeModule]);
+      const expectedList = [activeModule].map((module) => ({
+        ...module,
+        fieldList: [],
+      }));
+
+      expect(response.data).toEqual(expectedList);
       expect(moduleAdapter.getAll).toHaveBeenCalled();
     });
   });

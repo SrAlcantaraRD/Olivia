@@ -13,14 +13,15 @@ import {
   type TResponseSecondaryCarerConsumeInvitation,
 } from '@/domain/carer/use-case-schema/secondary-carer.consume-invitation-qr.use-case-schema';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
-import type { TQR } from '@/domain/core/dto/qr.dto';
+import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
-import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import { CACHE_KEY_ENUM, type ICachePort } from '@/domain/core/port/cache.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
+import { WorkWithQRBaseUseCase } from '@/domain/module/abstract/work-with-qr.use-case-abstract';
 import type { IModulePort } from '@/domain/module/port/module.port';
+import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 
-export class SecondaryCarerConsumeInvitationQRUseCase extends BaseUseCase<
+export class SecondaryCarerConsumeInvitationQRUseCase extends WorkWithQRBaseUseCase<
   TRequestSecondaryCarerConsumeInvitation,
   TResponseSecondaryCarerConsumeInvitation
 > {
@@ -31,9 +32,14 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends BaseUseCase<
       qrAdapter: IQRPort;
       cacheAdapter: ICachePort;
       moduleAdapter: IModulePort;
+      moduleFieldAdapter: IModuleFieldPort;
     }
   ) {
-    super('secondary-carer-consume-invitation-qr', adapters.loggerAdapter);
+    super(
+      'secondary-carer-consume-invitation-qr',
+      adapters.qrAdapter,
+      adapters.loggerAdapter
+    );
   }
 
   public async execute(
@@ -57,14 +63,16 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends BaseUseCase<
 
     const { qrBundle } = parse.data;
 
-    const rawData: TQR<TInviteSecondaryCarerQRPayload> =
-      await this.adapters.qrAdapter.decodeFromBundle(qrBundle);
+    const qrData =
+      await this.unpackBundle<TInviteSecondaryCarerQRPayload>(qrBundle);
 
     const parsedData = InviteSecondaryCarerQRSchema.safeParse({
-      ...rawData,
-      payload: {
-        ...rawData.payload,
-        expiresAt: new Date(rawData.payload.expiresAt),
+      ...qrData,
+      [QR_KEY.PAYLOAD]: {
+        ...qrData[QR_KEY.PAYLOAD],
+        [QR_KEY.ORIGIN_CARER_EXPIRES_AT]: new Date(
+          qrData[QR_KEY.PAYLOAD][QR_KEY.ORIGIN_CARER_EXPIRES_AT]
+        ),
       },
     });
 
@@ -83,18 +91,39 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends BaseUseCase<
     }
 
     const {
-      payload: { expiresAt, id: originalCarerID, name, activeModuleIDList },
+      [QR_KEY.PAYLOAD]: {
+        [QR_KEY.ORIGIN_CARER_EXPIRES_AT]: expiresAt,
+        [QR_KEY.ORIGIN_CARER_ID]: originalCarerID,
+        [QR_KEY.ORIGIN_CARER_NAME]: name,
+        [QR_KEY.MODULE_LIST]: activeModuleList,
+      },
     } = parsedData.data;
 
     const carerExists =
       await this.adapters.carerAdapter.getByID(originalCarerID);
 
+    await this.adapters.moduleAdapter.batchDeactivate();
+    await this.adapters.moduleFieldAdapter.batchDeactivate();
+
+    const activeModuleIDList = activeModuleList.map(
+      (module) => module[QR_KEY.MODULE_ID]
+    );
+    const activeModuleFieldList = activeModuleList.flatMap(
+      (module) => module[QR_KEY.MODULE_FIELD_LIST]
+    );
+
     await this.adapters.moduleAdapter.batchActivate(activeModuleIDList);
+    await this.adapters.moduleFieldAdapter.batchActivate(activeModuleFieldList);
 
     if (carerExists) {
       this.adapters.cacheAdapter.set(
         CACHE_KEY_ENUM.SECONDARY_CARER_EXPIRES_AT,
         expiresAt.getTime()
+      );
+
+      await this.adapters.cacheAdapter.set(
+        CACHE_KEY_ENUM.CARER,
+        carerExists.id
       );
 
       this.adapters.loggerAdapter.info({
@@ -124,6 +153,8 @@ export class SecondaryCarerConsumeInvitationQRUseCase extends BaseUseCase<
       CACHE_KEY_ENUM.SECONDARY_CARER_EXPIRES_AT,
       expiresAt.getTime()
     );
+
+    await this.adapters.cacheAdapter.set(CACHE_KEY_ENUM.CARER, carer.id);
 
     return {
       success: true,

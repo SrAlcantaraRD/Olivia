@@ -51,7 +51,12 @@ describe('[UseCase] - GetActiveModuleList', () => {
       if (!response.success) {
         throw new Error('Expected success response');
       }
-      expect(response.details.items).toEqual([active1, active2]);
+      const expectedItems = [active1, active2].map((module) => ({
+        ...module,
+        fieldList: [],
+      }));
+
+      expect(response.details.items).toEqual(expectedItems);
       expect(moduleAdapter.getAll).toHaveBeenCalled();
     });
   });

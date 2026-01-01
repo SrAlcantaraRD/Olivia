@@ -28,7 +28,6 @@ export class GetModuleListByIDListUseCase extends BaseUseCase<
     const list = await this.adapters.moduleAdapter.getAll();
 
     const targetList = list.filter((module) => idList.includes(module.id));
-    this.adapters.loggerAdapter.error({ list, idList, targetList });
 
     return {
       success: true,

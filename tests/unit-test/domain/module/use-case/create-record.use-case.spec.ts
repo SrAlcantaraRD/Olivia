@@ -45,7 +45,7 @@ describe('[UseCase] - CreateRecord', () => {
       const payload: TRecordCreate = mockRecordCreate({
         moduleID: 1,
         data: mockRecord.data,
-        synced: false,
+        synchronized: false,
       });
 
       recordAdapter.create.mockResolvedValue(mockRecord);

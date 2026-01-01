@@ -15,7 +15,7 @@ interface WelcomeSlide {
   illustration: {
     icon: IconName;
     iconSize?: number;
-    shape?: 'rounded-full' | 'rounded-3xl';
+    shape?: 'rounded-full' | 'rounded-lg';
     secondaryIcon?: {
       name: IconName;
       size?: number;
@@ -41,7 +41,7 @@ const WELCOME_SLIDES: WelcomeSlide[] = [
     illustration: {
       icon: 'time-outline',
       iconSize: 60,
-      shape: 'rounded-3xl',
+      shape: 'rounded-lg',
       secondaryIcon: {
         name: 'checkmark-done-outline',
         size: 40,
@@ -59,7 +59,7 @@ const WELCOME_SLIDES: WelcomeSlide[] = [
     illustration: {
       icon: 'cloud-outline',
       iconSize: 60,
-      shape: 'rounded-3xl',
+      shape: 'rounded-lg',
       secondaryIcon: {
         name: 'lock-closed',
         size: 40,

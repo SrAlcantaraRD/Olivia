@@ -1,136 +1,103 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useThemeColor } from 'heroui-native';
 import type React from 'react';
-import { Pressable, View } from 'react-native';
-import { withUniwind } from 'uniwind';
+import { View } from 'react-native';
 
+import type { TTimeBucketItem } from '@/domain/summary/entity/summary-time-bucket.entity';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
-import type { IconName } from '@/ui/components/atoms/icon.atom';
 import {
   TypographyHeading,
   TypographyParagraph,
   TypographySmall,
   TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
-import { SummaryMiniBarChart } from '@/ui/components/molecules/summary-mini-bar-chart.molecule';
-
-const StyledIonicons = withUniwind(Ionicons);
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface SummaryCardProps {
+  chartData: TTimeBucketItem[];
   title: string;
   metricValue: number | string;
-  metricLabel: string;
-  timeLabel?: string;
-  iconName?: IconName;
-  chartValues?: number[];
+  metricLabel?: Ti18nKeys;
+  timeValue?: string;
+  iconElement?: React.ReactNode;
   chartAverage?: number | null;
-  showAverageLine?: boolean;
-  highlightLastBar?: boolean;
   onPress?: () => void;
   testID: string;
+  chartComponent: React.ReactNode;
 }
 
 export const SummaryCard: React.FC<SummaryCardProps> = ({
+  chartData,
   title,
   metricValue,
   metricLabel,
-  timeLabel,
-  iconName,
-  chartValues = [],
-  chartAverage,
-  showAverageLine = false,
+  timeValue,
+  iconElement,
   onPress,
   testID,
-}) => {
-  const accentColor = useThemeColor('accent');
-  const mutedColor = useThemeColor('muted');
-  const foregroundColor = useThemeColor('foreground');
-
-  return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={onPress}
-      style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}
-    >
-      <CardAtom className="p-4">
-        <View className="flex-row items-center justify-between mb-4">
-          <View className="flex-row items-center gap-3">
-            {iconName && (
-              <View
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 12,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: `${accentColor}20`,
-                }}
-              >
-                <StyledIonicons
-                  name={iconName}
-                  size={18}
-                  style={{ color: accentColor }}
-                />
-              </View>
-            )}
-            <TypographyTitle
-              testID={`${testID}.title`}
-              i18nKey="common.raw-value"
-              values={{ value: title }}
-              className="font-semibold text-lg"
-              variant="default"
-            />
+  chartComponent,
+}) => (
+  <CardAtom className="p-4" onPress={onPress} testID={`${testID}.card`}>
+    <View className="flex-row items-center justify-between mb-4">
+      <View className="flex-row items-center gap-2">
+        {iconElement && (
+          <View
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 12,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {iconElement}
           </View>
+        )}
+        {title && (
+          <TypographyTitle
+            testID={`${testID}.title`}
+            i18nKey="common.raw-value"
+            values={{ value: title }}
+            className="font-semibold text-lg"
+            variant="default"
+          />
+        )}
+      </View>
 
-          <View className="flex-row items-center gap-2">
-            {timeLabel && (
-              <TypographySmall
-                testID={`${testID}.time`}
-                i18nKey="common.raw-value"
-                values={{ value: timeLabel }}
-                variant="light"
-                className="text-xs"
-              />
-            )}
-            <StyledIonicons
-              name="chevron-forward"
-              size={16}
-              style={{ color: mutedColor }}
+      <View className="flex-row items-center gap-2">
+        {timeValue && (
+          <TypographySmall
+            testID={`${testID}.time`}
+            i18nKey="common.raw-value"
+            values={{ value: timeValue }}
+            variant="light"
+            className="text-xs"
+          />
+        )}
+      </View>
+    </View>
+
+    <View className="flex-row items-end justify-between gap-4">
+      <View className="flex-1">
+        <View className="flex-row items-end gap-2">
+          <TypographyHeading
+            testID={`${testID}.metric`}
+            i18nKey="common.raw-value"
+            values={{ value: metricValue }}
+            className="text-4xl"
+          />
+          {metricLabel && (
+            <TypographyParagraph
+              testID={`${testID}.metric-label`}
+              i18nKey={metricLabel}
+              variant="light"
+              className="text-base"
             />
-          </View>
+          )}
         </View>
+      </View>
 
-        <View className="flex-row items-end justify-between gap-4">
-          <View className="flex-1">
-            <View className="flex-row items-end gap-2">
-              <TypographyHeading
-                testID={`${testID}.metric`}
-                i18nKey="common.raw-value"
-                values={{ value: metricValue }}
-                className="text-4xl"
-                style={{ color: foregroundColor }}
-              />
-              <TypographyParagraph
-                testID={`${testID}.metric-label`}
-                i18nKey="common.raw-value"
-                values={{ value: metricLabel }}
-                variant="light"
-                className="text-base"
-              />
-            </View>
-          </View>
-
-          <View className="flex-[1.3]">
-            <SummaryMiniBarChart
-              testID={`${testID}.chart`}
-              values={chartValues}
-              average={showAverageLine ? (chartAverage ?? null) : null}
-              showLabels={false}
-              highlightLastBar
-            />
-          </View>
-        </View>
-      </CardAtom>
-    </Pressable>
-  );
-};
+      <View className="flex-[1.3] items-end justify-center">
+        {chartComponent}
+      </View>
+    </View>
+  </CardAtom>
+);

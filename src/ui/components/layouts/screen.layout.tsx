@@ -2,6 +2,7 @@ import { View } from 'react-native';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import type { ITextTranslationEntity } from '@/ui/components/atoms/text-translations.atom';
 import {
   TypographySubtitle,
   TypographyTitle,
@@ -19,6 +20,7 @@ interface ScreenLayoutProps {
   };
   title?: Ti18nKeys;
   subtitle?: Ti18nKeys;
+  values?: ITextTranslationEntity;
 }
 
 export function ScreenLayout({
@@ -28,6 +30,7 @@ export function ScreenLayout({
   isLoading = false,
   title,
   subtitle,
+  values,
 }: ScreenLayoutProps) {
   const insets = useSafeAreaInsets();
 
@@ -35,7 +38,7 @@ export function ScreenLayout({
     <View
       testID={testID}
       className={cn(
-        'flex-1 p-4 h-full w-full bg-background',
+        'flex-1 px-4 h-full w-full bg-background',
         styles?.container
       )}
       style={{ paddingTop: insets.top }}
@@ -55,7 +58,7 @@ export function ScreenLayout({
                   testID="screen.settings.title"
                   i18nKey={title}
                   accessibilityRole="header"
-                  className="mb-0"
+                  values={values}
                 />
               )}
               {subtitle && (
@@ -64,6 +67,7 @@ export function ScreenLayout({
                   testID="screen.settings.subtitle"
                   accessibilityRole="header"
                   i18nKey={subtitle}
+                  values={values}
                   variant="light"
                 />
               )}
@@ -72,6 +76,8 @@ export function ScreenLayout({
         )}
 
         {children}
+
+        {/* Bottom spacer to allow scrolling past the absolute/transparent Tab Bar on iOS */}
       </ScreenContentLayout>
     </View>
   );
@@ -85,6 +91,8 @@ function ScreenContentLayout({
   className?: string;
 }) {
   return (
-    <View className={cn('flex-1 w-full h-full', className)}>{children}</View>
+    <View className={cn('flex-1 w-full h-full py-4', className)}>
+      {children}
+    </View>
   );
 }

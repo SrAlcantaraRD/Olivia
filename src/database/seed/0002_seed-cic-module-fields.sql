@@ -1,0 +1,43 @@
+-- Insert CIC fields
+INSERT INTO
+  module_field (
+    module_id,
+    code,
+    type,
+    "values",
+    required,
+    "order"
+  )
+VALUES
+  (
+    1,
+    'volumen-level',
+    'select',
+    '["low","normal","high"]',
+    1,
+    1
+  ),
+  (
+    1,
+    'color',
+    'select',
+    '["transparent","light_yellow","dark_yellow","abnormal"]',
+    1,
+    2
+  ),
+  (
+    1,
+    'turbidity',
+    'select',
+    '["clear","mild","high"]',
+    1,
+    3
+  ),
+  (
+    1,
+    'discomfort-level',
+    'select',
+    '["none","mild","pain"]',
+    1,
+    4
+  );

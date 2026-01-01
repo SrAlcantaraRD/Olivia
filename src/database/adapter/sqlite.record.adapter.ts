@@ -1,4 +1,4 @@
-import { and, count, desc, eq, gte, lte, sql } from 'drizzle-orm';
+import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
 
 import {
   SQLiteCarerAdapter,
@@ -32,7 +32,7 @@ import type { IRecordPort } from '@/domain/module/port/record.port';
 export type TRecordAdapterEntity = typeof DB_SCHEMA.RECORD.$inferSelect & {
   carer?: TCarerAdapterEntity;
   module?: TModuleAdapterEntity;
-  recordFields?: TRecordFieldAdapterEntity[];
+  recordFieldList?: TRecordFieldAdapterEntity[];
 };
 
 type TRecordAdapterInsert = typeof DB_SCHEMA.RECORD.$inferInsert;
@@ -53,8 +53,7 @@ export class SQLiteRecordAdapter implements IRecordPort {
       carerID: entity.carerID,
       moduleID: entity.moduleID,
 
-      data: entity.data,
-      synced: Boolean(entity.synced),
+      synchronized: Boolean(entity.synced),
 
       ...(entity.carer && {
         carer: SQLiteCarerAdapter.toDomainEntity(entity.carer),
@@ -64,20 +63,19 @@ export class SQLiteRecordAdapter implements IRecordPort {
         module: SQLiteModuleAdapter.toDomainEntity(entity.module),
       }),
 
-      ...(entity.recordFields && {
-        recordFields: entity.recordFields.map(
+      ...(entity.recordFieldList && {
+        recordFieldList: entity.recordFieldList.map(
           SQLiteRecordFieldAdapter.toDomainEntity
         ),
       }),
     } satisfies TRecord;
   }
 
-  public async create(data: TRecordCreate): Promise<TRecord> {
+  public async upsert(data: TRecordCreate): Promise<TRecord> {
     const insertPayload = {
       moduleID: Number(data.moduleID),
       carerID: Number(data.carerID),
-      data: data.data,
-      synced: data.synced ? STATUS_ENUM.ACTIVE : STATUS_ENUM.INACTIVE,
+      synced: data.synchronized ? STATUS_ENUM.ACTIVE : STATUS_ENUM.INACTIVE,
       status: STATUS_ENUM.ACTIVE,
       createdAt: data.createdAt,
     } satisfies TRecordAdapterInsert;
@@ -85,35 +83,32 @@ export class SQLiteRecordAdapter implements IRecordPort {
     const [record] = await this.database
       .insert(DB_SCHEMA.RECORD)
       .values(insertPayload)
+      .onConflictDoUpdate({
+        target: [DB_SCHEMA.RECORD.moduleID, DB_SCHEMA.RECORD.createdAt],
+        set: {
+          synced: insertPayload.synced,
+          status: insertPayload.status,
+        },
+      })
       .returning();
 
     return SQLiteRecordAdapter.toDomainEntity(record);
   }
 
-  public async getByID(id: TID): Promise<TRecord | null> {
-    const record = await this.database.query.RECORD.findFirst({
-      where: (row, { eq }) => eq(row.id, id),
+  public async getPendingToSynchronized(): Promise<TRecord[]> {
+    const list = await this.database.query.RECORD.findMany({
+      where: (row, { eq, and }) =>
+        and(
+          eq(row.status, STATUS_ENUM.ACTIVE),
+          eq(row.synced, STATUS_ENUM.INACTIVE)
+        ),
+      with: {
+        recordFieldList: true,
+        module: true,
+      },
     });
-    if (!record) return null;
-
-    return SQLiteRecordAdapter.toDomainEntity(record);
-  }
-
-  public async getAll(): Promise<TRecord[]> {
-    const list = await this.database.query.RECORD.findMany();
 
     return list.map(SQLiteRecordAdapter.toDomainEntity);
-  }
-
-  public async getRecentRecords(limit = 10): Promise<TRecord[]> {
-    const rows = await this.database
-      .select()
-      .from(DB_SCHEMA.RECORD)
-      .where(eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE))
-      .orderBy(desc(DB_SCHEMA.RECORD.createdAt))
-      .limit(limit);
-
-    return rows.map(SQLiteRecordAdapter.toDomainEntity);
   }
 
   public async getCountsByModule(criteria?: {
@@ -202,31 +197,5 @@ export class SQLiteRecordAdapter implements IRecordPort {
       .groupBy(DB_SCHEMA.RECORD_FIELD.value);
 
     return rows;
-  }
-
-  public async getLatestRecordDateByModule(
-    moduleID: TID
-  ): Promise<Date | null> {
-    const rows = await this.database
-      .select({
-        createdAt: DB_SCHEMA.RECORD.createdAt,
-      })
-      .from(DB_SCHEMA.RECORD)
-      .where(
-        and(
-          eq(DB_SCHEMA.RECORD.moduleID, moduleID),
-          eq(DB_SCHEMA.RECORD.status, STATUS_ENUM.ACTIVE)
-        )
-      )
-      .orderBy(desc(DB_SCHEMA.RECORD.createdAt))
-      .limit(1);
-
-    if (!rows.length) return null;
-
-    // createdAt stored in unix epoch seconds
-    const timestamp = Number(rows[0].createdAt);
-    if (!Number.isFinite(timestamp)) return null;
-
-    return new Date(timestamp * 1000);
   }
 }

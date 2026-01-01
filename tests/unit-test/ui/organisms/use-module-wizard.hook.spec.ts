@@ -23,7 +23,7 @@ describe('[Hook] useModuleWizard', () => {
     const mockField = mockModuleFieldEntity({ required: true });
 
     const mockModule = mockModuleEntity({
-      fieldList: [mockField],
+      moduleFieldList: [mockField],
     });
 
     moduleFieldAdapter.getAllByModuleId.mockResolvedValue([mockField]);

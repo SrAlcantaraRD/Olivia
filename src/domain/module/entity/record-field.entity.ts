@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { GenerateCreateEntitySchema } from '@/domain/core/entity/base-dto.entity';
 import { BaseEntitySchema } from '@/domain/core/entity/base-entity.entity';
 import { IDSchema } from '@/domain/core/schemas/id.schema';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
@@ -12,12 +13,8 @@ export const RecordFieldSchema = z.object({
   value: z.string().min(1),
 });
 
-export const RecordFieldCreateSchema = RecordFieldSchema.omit({
-  id: true,
-  recordID: true,
-  status: true,
-  createdAt: true,
-});
+export const RecordFieldCreateSchema =
+  GenerateCreateEntitySchema(RecordFieldSchema);
 
 export type TRecordField = z.infer<typeof RecordFieldSchema> & {
   record?: TRecord;

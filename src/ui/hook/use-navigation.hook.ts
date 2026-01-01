@@ -19,6 +19,10 @@ export const useNavigation = (adapters: {
     navigationAdapter.goBack();
   }, []);
 
+  const replaceTo = useCallback((route: AppRoute) => {
+    navigationAdapter.replaceTo(route as string);
+  }, []);
+
   // Semantic navigation methods
   const goToRoleSelection = useCallback(() => {
     navigateTo('/(onboarding)/role-selection');
@@ -49,7 +53,7 @@ export const useNavigation = (adapters: {
   }, []);
 
   const goToRegisterHome = useCallback(() => {
-    navigateTo('/(tabs)/register');
+    replaceTo('/(tabs)/register');
   }, []);
 
   const goToOnboarding = useCallback(() => {
@@ -72,6 +76,20 @@ export const useNavigation = (adapters: {
     navigateTo(`/(tabs)/settings/carer-managment/carer-detail/${carerID}`);
   }, []);
 
+  const goToCreateSecondaryCarer = useCallback(() => {
+    navigateTo('/(tabs)/settings/carer-managment/create-carer');
+  }, []);
+
+  const goToDeleteCarer = useCallback((carerID: TID) => {
+    navigateTo(
+      `/(tabs)/settings/carer-managment/carer-detail/${carerID}/delete-carer`
+    );
+  }, []);
+
+  const goToRecordSynchronizationSender = useCallback(() => {
+    navigateTo('/(tabs)/settings/synchronize-records');
+  }, []);
+
   const goToLogOut = useCallback(() => {
     navigateTo('/(tabs)/settings/log-out');
   }, []);
@@ -82,18 +100,6 @@ export const useNavigation = (adapters: {
 
   const goToSummaryHome = useCallback(() => {
     navigateTo('/(tabs)/summary');
-  }, []);
-
-  const goToSummaryAllData = useCallback(() => {
-    navigateTo('/(tabs)/summary/all-data');
-  }, []);
-
-  const goToSummaryTrends = useCallback(() => {
-    navigateTo('/(tabs)/summary/trends');
-  }, []);
-
-  const goToSummaryHighlights = useCallback(() => {
-    navigateTo('/(tabs)/summary/highlights');
   }, []);
 
   const goToSummaryModuleDetail = useCallback((moduleId: string) => {
@@ -107,9 +113,14 @@ export const useNavigation = (adapters: {
     []
   );
 
-  const goToSummaryTrendDetail = useCallback((trendId: string) => {
-    navigateTo(`/(tabs)/summary/detail/trend/${trendId}`);
-  }, []);
+  const goToSummaryFieldRecords = useCallback(
+    (moduleId: string, fieldId: string) => {
+      navigateTo(
+        `/(tabs)/summary/detail/module/${moduleId}/field/${fieldId}/records`
+      );
+    },
+    []
+  );
 
   // Add more as needed
 
@@ -127,15 +138,15 @@ export const useNavigation = (adapters: {
     goToChildProfile,
     goToCarerManagement,
     goToCarerDetail,
+    goToCreateSecondaryCarer,
+    goToDeleteCarer,
     goToGenerateInvitationQR,
+    goToRecordSynchronizationSender,
     goToLogOut,
     goToAbout,
     goToSummaryHome,
-    goToSummaryAllData,
-    goToSummaryTrends,
-    goToSummaryHighlights,
     goToSummaryModuleDetail,
     goToSummaryFieldDetail,
-    goToSummaryTrendDetail,
+    goToSummaryFieldRecords,
   };
 };

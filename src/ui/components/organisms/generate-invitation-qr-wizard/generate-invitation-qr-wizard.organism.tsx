@@ -2,9 +2,10 @@ import { format } from 'date-fns';
 import { useThemeColor } from 'heroui-native';
 import { useMemo } from 'react';
 import { View } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
 
 import { getTimeToLiveOptions } from '@/domain/core/constant/time-to-live.constants';
+import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
+import { QRCodeViewer } from '@/ui/components/atoms/qr-code-viewer.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { CardWithDetails } from '@/ui/components/molecules/card-with-details.molecule';
@@ -49,7 +50,8 @@ export function GenerateInvitationQRWizard({
             title="page.carer-management.ttl.heading"
             subtitle="page.carer-management.invitation-modal.subtitle"
             styles={{
-              container: 'p-0',
+              container: 'px-0',
+              content: 'py-0',
             }}
           >
             <View className="gap-4">
@@ -76,14 +78,14 @@ export function GenerateInvitationQRWizard({
             title="page.carer-management.invitation-modal.title"
             subtitle="page.carer-management.invitation-modal.subtitle"
             isLoading={isGenerating}
+            styles={{
+              container: 'px-0',
+              content: 'py-0',
+            }}
           >
             <View className="gap-4">
               <View className="items-center">
-                <QRCode
-                  value={formData.invitationDetails?.qrBundle}
-                  color={accentColor}
-                  size={250}
-                />
+                <QRCodeViewer data={formData.invitationDetails?.qrBundle} />
               </View>
               <View className="gap-2">
                 <TypographySmall
@@ -91,7 +93,9 @@ export function GenerateInvitationQRWizard({
                   values={{
                     ttl: formData.selectedTTL,
                     expiresAt: format(
-                      formData.invitationDetails?.qrData.payload.expiresAt,
+                      formData.invitationDetails?.qrData[QR_KEY.PAYLOAD][
+                        QR_KEY.ORIGIN_CARER_EXPIRES_AT
+                      ],
                       'yyyy-MM-dd'
                     ),
                   }}
@@ -105,6 +109,17 @@ export function GenerateInvitationQRWizard({
                   i18nKey="page.carer-management.invitation-modal.bundle"
                   values={{
                     value: JSON.stringify(formData.invitationDetails?.qrData),
+                  }}
+                  testID="modal.invite.bundle"
+                />
+
+                <TypographySmall
+                  className="opacity-30"
+                  variant="light"
+                  size="xs"
+                  i18nKey="page.carer-management.invitation-modal.bundle"
+                  values={{
+                    value: JSON.stringify(formData.invitationDetails?.qrBundle),
                   }}
                   testID="modal.invite.bundle"
                 />

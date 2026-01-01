@@ -11,6 +11,7 @@ import type {
   IHookResponse,
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
+import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INavigationPort } from '@/domain/core/port/navigation.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
@@ -20,47 +21,50 @@ export function useSplashCarerValidation(adapters: {
   notifyAdapter: INotifyPort;
   carerAdapter: ICarerPort;
   navigationAdapter: INavigationPort;
+  cacheAdapter: ICachePort;
 }): IUseHook<TCheckCarerExistenceRequest, TCheckCarerExistenceResponse> {
   const [isExecuting, setExecuting] = useState<boolean>(false);
 
   // add a zustand store
 
-  const { loggerAdapter, notifyAdapter, carerAdapter, navigationAdapter } =
-    adapters;
+  const {
+    loggerAdapter,
+    notifyAdapter,
+    carerAdapter,
+    cacheAdapter,
+    navigationAdapter,
+  } = adapters;
   const { goToRegisterHome } = useNavigation({ navigationAdapter });
 
-  const execute = useCallback(
-    async (
-      data: TCheckCarerExistenceRequest
-    ): Promise<IHookResponse<TCheckCarerExistenceResponse>> => {
-      setExecuting(true);
+  const execute = useCallback(async (): Promise<
+    IHookResponse<TCheckCarerExistenceResponse>
+  > => {
+    setExecuting(true);
 
-      try {
-        const useCase = new CheckCarerExistenceUseCase(
-          loggerAdapter,
-          carerAdapter
-        );
-        const response = await useCase.execute(data);
+    try {
+      const useCase = new CheckCarerExistenceUseCase({
+        loggerAdapter,
+        cacheAdapter,
+      });
+      const response = await useCase.execute();
 
-        if (!response.success || !response.details.exists) {
-          return { success: false };
-        }
-
-        goToRegisterHome();
-
-        return { success: true, data: response.details };
-      } catch (_error) {
-        notifyAdapter.error({
-          title: 'common.error',
-          description: 'common.error',
-        });
+      if (!response.success || !response.details.exists) {
         return { success: false };
-      } finally {
-        setExecuting(false);
       }
-    },
-    [loggerAdapter, notifyAdapter, carerAdapter, goToRegisterHome]
-  );
+
+      goToRegisterHome();
+
+      return { success: true, data: response.details };
+    } catch (_error) {
+      notifyAdapter.error({
+        title: 'common.error',
+        description: 'common.error',
+      });
+      return { success: false };
+    } finally {
+      setExecuting(false);
+    }
+  }, [loggerAdapter, notifyAdapter, carerAdapter]);
 
   return {
     execute,

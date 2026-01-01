@@ -1,17 +1,22 @@
-import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, View } from 'react-native';
+import { useMemo } from 'react';
+import { ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
+import { useActiveCarer } from '@/domain/carer/hook/use-active-carer.hook';
 import { useAddDemoData } from '@/domain/core/hook/add-demo-data.hook';
-import { CardAtom } from '@/ui/components/atoms/card.atom';
-import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
+import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
+import {
+  TypographyParagraph,
+  TypographyTitle,
+} from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
-import { SettingsRow } from '@/ui/components/molecules/settings-row.molecule';
+import {
+  RowAction,
+  type RowActionProps,
+} from '@/ui/components/molecules/row-action.molecule';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 export default function SettingsScreen() {
-  const { t } = useTranslation();
-
   const adapters = useAdapters();
   const { navigationAdapter } = adapters;
   const {
@@ -19,14 +24,50 @@ export default function SettingsScreen() {
     goToLogOut,
     goToChildProfile,
     goToCarerManagement,
+    goToRecordSynchronizationSender,
     goToAbout,
   } = useNavigation({ navigationAdapter });
+
+  const { carer } = useActiveCarer(adapters);
 
   const { execute: addDemoData } = useAddDemoData(adapters);
 
   const handleAddDemoData = async () => {
     await addDemoData();
   };
+
+  const dynamicSettingsRows: RowActionProps[] = useMemo(() => {
+    const isPrimaryCarer = carer?.isPrimary ?? false;
+
+    if (isPrimaryCarer) {
+      return [
+        {
+          testID: 'screen.settings.section_configuration',
+          title: 'page.settings.section-configuration',
+          description: 'page.settings.child-profile-desc',
+          iconName: 'person-circle',
+          onPress: goToChildProfile,
+        },
+        {
+          testID: 'screen.settings.manage-carers',
+          title: 'page.settings.manage-carers',
+          description: 'page.settings.manage-carers-desc',
+          iconName: 'people',
+          onPress: goToCarerManagement,
+        },
+      ] satisfies RowActionProps[];
+    }
+
+    return [
+      {
+        testID: 'screen.settings.sync-records',
+        title: 'page.settings.sync-records',
+        description: 'page.settings.sync-records-desc',
+        iconName: 'sync',
+        onPress: goToRecordSynchronizationSender,
+      },
+    ] satisfies RowActionProps[];
+  }, [carer?.isPrimary]);
 
   return (
     <ScreenLayout
@@ -43,27 +84,24 @@ export default function SettingsScreen() {
           {/* TODO: Añadir avatar del carer logueada y nombre */}
           <View className="gap-2">
             {/* Child Profile Section */}
-            <TypographyParagraph
-              testID="screen.settings.section_carers"
+            <TypographyTitle
+              testID="screen.settings.section_configuration"
               i18nKey="page.settings.section-configuration"
+              size="lg"
               className="font-semibold text-default-400 uppercase"
               accessibilityRole="header"
             />
-            <SettingsRow
-              iconName="person"
-              titleKey="page.settings.child-profile"
-              captionKey="page.settings.child-profile-desc"
-              onPress={goToChildProfile}
-              testID="screen.settings.child-profile"
-            />
 
-            <SettingsRow
-              iconName="people"
-              titleKey="page.settings.manage-carers"
-              captionKey="page.settings.manage-carers-desc"
-              onPress={goToCarerManagement}
-              testID="screen.settings.manage-carers"
-            />
+            {dynamicSettingsRows.map((row) => (
+              <RowAction
+                key={row.testID}
+                iconName={row.iconName}
+                title={row.title}
+                description={row.description}
+                onPress={row.onPress}
+                testID={row.testID}
+              />
+            ))}
           </View>
           <View className="gap-2">
             {/* App Settings Section */}
@@ -74,51 +112,42 @@ export default function SettingsScreen() {
               accessibilityRole="header"
             />
 
-            <SettingsRow
+            <RowAction
               iconName="settings"
-              titleKey="page.settings.app-settings"
-              captionKey="page.settings.app-settings-desc"
+              title="page.settings.app-settings"
+              description="page.settings.app-settings-desc"
               onPress={goToAppSettings}
               testID="screen.settings.app-settings"
-              hasDivider
             />
 
-            <SettingsRow
+            <RowAction
               iconName="add-circle"
-              titleKey="page.settings.add-demo-data"
-              captionKey="page.settings.add-demo-data-desc"
+              title="page.settings.add-demo-data"
+              description="page.settings.add-demo-data-desc"
               onPress={handleAddDemoData}
               testID="screen.settings.add-demo-data"
-              hasDivider
             />
 
-            <SettingsRow
+            <RowAction
               iconName="information-circle"
-              titleKey="page.settings.about"
-              captionKey="page.settings.about-desc"
+              title="page.settings.about"
+              description="page.settings.about-desc"
               onPress={goToAbout}
               testID="screen.settings.about"
             />
-          </View>
 
-          {/* Danger Zone */}
-          <CardAtom className="bg-danger/80">
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t('a11y.button.logout')}
-              accessibilityHint="a11y.hint.logout-action"
+            {/* Danger Zone */}
+            <RowAction
+              iconName="log-out"
+              title="page.settings.logout"
+              description="page.settings.logout-desc"
               onPress={goToLogOut}
-            >
-              <View className="flex-row items-center justify-center p-0 bg-transparent h-10">
-                <TypographyParagraph
-                  testID="screen.settings.logout"
-                  i18nKey="page.settings.logout"
-                  className="font-semibold text-white"
-                />
-              </View>
-            </Pressable>
-          </CardAtom>
+              testID="screen.settings.logout-row"
+              variant="danger"
+            />
+          </View>
         </View>
+        <RowEmptyAtom />
       </ScrollView>
     </ScreenLayout>
   );

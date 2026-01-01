@@ -6,6 +6,8 @@ import {
   logger,
 } from 'react-native-logs';
 
+import { ENVIRONMENT_VARIABLES } from '@/domain/core/constant/environment-variables.constants';
+
 const isFileSystemSupported =
   Platform.OS !== 'web' && Boolean(FileSystem.documentDirectory);
 
@@ -26,7 +28,7 @@ const transportOptions = {
 
 const BASE_LOGGER = logger.createLogger({
   transport,
-  severity: __DEV__ ? 'debug' : 'error',
+  severity: ENVIRONMENT_VARIABLES.LOG_LEVEL,
   levels: {
     custom: 0,
     debug: 1,
@@ -43,6 +45,8 @@ const BASE_LOGGER = logger.createLogger({
   fixedExtLvlLength: false,
   enabled: true,
 });
+
+BASE_LOGGER.debug(ENVIRONMENT_VARIABLES, 'Loaded environment variables');
 
 export type TLoggerPort = typeof BASE_LOGGER;
 

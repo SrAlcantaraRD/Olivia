@@ -5,7 +5,6 @@ import { Animated, Pressable, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
 import { useSplashCarerValidation } from '@/domain/carer/hook/use-splash-carer-validation.hook';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { AtomLogoSVG } from '@/ui/components/atoms/logo.atom';
 import {
   TypographyHeading,
@@ -17,7 +16,13 @@ import { useNavigation } from '@/ui/hook/use-navigation.hook';
 import { cn } from '@/ui/lib/utils';
 
 export default function SplashScreen() {
-  const { notifyAdapter, carerAdapter, navigationAdapter } = useAdapters();
+  const {
+    notifyAdapter,
+    loggerAdapter,
+    carerAdapter,
+    navigationAdapter,
+    cacheAdapter,
+  } = useAdapters();
   const { goToOnboarding } = useNavigation({ navigationAdapter });
 
   const foregroundColor = useThemeColor('foreground');
@@ -29,10 +34,11 @@ export default function SplashScreen() {
 
   const { execute: checkCarerExistence, isExecuting } =
     useSplashCarerValidation({
-      loggerAdapter: BASE_LOGGER,
+      loggerAdapter,
       notifyAdapter,
       carerAdapter,
       navigationAdapter,
+      cacheAdapter,
     });
 
   const handlerCheckExistence = async () => {

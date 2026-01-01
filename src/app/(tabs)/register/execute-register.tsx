@@ -19,6 +19,7 @@ export default function ExecuteRegister() {
     loggerAdapter,
     navigationAdapter,
     moduleFieldAdapter,
+    cacheAdapter,
   } = useAdapters();
 
   const { isExecuting: isModulesLoading, execute: executeGetModuleFieldList } =
@@ -35,6 +36,7 @@ export default function ExecuteRegister() {
       recordAdapter,
       notifyAdapter,
       recordFieldAdapter,
+      cacheAdapter,
     });
 
   const handlerLoadModuleFieldList = async (moduleID: TID) => {
@@ -64,6 +66,7 @@ export default function ExecuteRegister() {
         moduleID={Number(moduleID)}
         adapters={{ loggerAdapter, moduleFieldAdapter, notifyAdapter }}
         onComplete={handleOnComplete}
+        onGoBack={() => navigationAdapter.goBack()}
       />
     </ScreenLayout>
   );

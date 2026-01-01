@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { useWipeLocalData } from '@/domain/core/hook/use-wipe-local-data.hook';
 import { useGetRecordStatistics } from '@/domain/module/hook/get-record-statistics.hook';
 import { ButtonAtom } from '@/ui/components/atoms/button.atom';
@@ -19,11 +18,16 @@ import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 export default function LogoutConfirmScreen() {
   const router = useRouter();
-  const { recordAdapter, notifyAdapter, cacheAdapter, secureStoreAdapter } =
-    useAdapters();
+  const {
+    recordAdapter,
+    notifyAdapter,
+    cacheAdapter,
+    loggerAdapter,
+    secureStoreAdapter,
+  } = useAdapters();
 
   const { execute: executeGetStats, items: stats } = useGetRecordStatistics({
-    loggerAdapter: BASE_LOGGER,
+    loggerAdapter,
     recordAdapter,
     notifyAdapter,
   });
@@ -75,7 +79,7 @@ export default function LogoutConfirmScreen() {
   const onCancel = () => router.back();
 
   const { execute: executeWipe, isExecuting: isWiping } = useWipeLocalData({
-    loggerAdapter: BASE_LOGGER,
+    loggerAdapter,
     cacheAdapter,
     secureStoreAdapter,
   });
@@ -110,14 +114,17 @@ export default function LogoutConfirmScreen() {
         contentContainerStyle={{ padding: 16 }}
         contentInsetAdjustmentBehavior="automatic"
       >
-        <View className="gap-6">
+        <View className="gap-4">
           <TypographyTitle
             testID="screen.settings.logout-confirm.title"
             i18nKey="page.settings.logout-confirm.title"
             accessibilityRole="header"
           />
 
-          <CardAtom className="p-4 bg-danger/10 border border-danger-soft-hover">
+          <CardAtom
+            className="p-4 bg-danger/10 border border-danger-soft-hover"
+            testID="screen.settings.logout-confirm.warning-card"
+          >
             <TypographyParagraph
               testID="screen.settings.logout-confirm.warning"
               i18nKey="page.settings.logout-confirm.warning"
@@ -241,7 +248,7 @@ export default function LogoutConfirmScreen() {
             accessibilityRole="header"
           />
 
-          <View className="flex-row gap-3">
+          <View className="flex-row gap-2">
             <View style={{ flex: 2 }}>
               <ButtonAtom
                 title="common.cancel"

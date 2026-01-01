@@ -3,10 +3,21 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@/i18n": ["./src/ui/i18n/*"],
-      "@/tests/*": ["./tests/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@/i18n": [
+        "./src/ui/i18n/*"
+      ],
+      "@/tests/*": [
+        "./tests/*"
+      ]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+  ]
 }

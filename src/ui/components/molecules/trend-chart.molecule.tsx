@@ -3,8 +3,8 @@
 import { useWindowDimensions, View } from 'react-native';
 
 import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
-import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
-import { Sparkline } from '@/ui/components/atoms/sparkline.atom';
+import { BarChartAtom } from '@/ui/components/atoms/chart.bar.atom';
+import { Sparkline } from '@/ui/components/atoms/chart.sparkline.atom';
 
 interface TrendChartProps {
   data: number[];

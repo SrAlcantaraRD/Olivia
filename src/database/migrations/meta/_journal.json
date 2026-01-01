@@ -5,29 +5,22 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1765399724888,
-      "tag": "0000_worried_calypso",
+      "when": 1767265626473,
+      "tag": "0000_mighty_lady_deathstrike",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "6",
-      "when": 1765399726918,
+      "when": 1767265638363,
       "tag": "0001_seed-cic-module",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "6",
-      "when": 1765399779628,
+      "when": 1767265640810,
       "tag": "0002_seed-cic-module-fields",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1765496314671,
-      "tag": "0003_rapid_may_parker",
       "breakpoints": true
     }
   ]

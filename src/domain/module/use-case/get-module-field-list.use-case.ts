@@ -1,4 +1,5 @@
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
+import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
@@ -27,11 +28,15 @@ export class GetModuleFieldListUseCase extends BaseUseCase<
       data.moduleID
     );
 
+    const targetList = list.filter(
+      (field) => field.status === STATUS_ENUM.ACTIVE
+    );
+
     return {
       success: true,
       message: 'common.success',
       details: {
-        items: list,
+        items: targetList,
       },
     };
   }

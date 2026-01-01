@@ -5,6 +5,7 @@ import {
   integer,
   sqliteTable,
   text,
+  unique,
 } from 'drizzle-orm/sqlite-core';
 
 import { AUDIT_COLUMNS } from '@/database/schema/audit-columns';
@@ -25,6 +26,7 @@ export const MODULE = sqliteTable(
     index('module__index__status').on(table.status),
     index('module__index__code').on(table.code),
     index('module__index__active').on(table.active),
+    unique('module__unique__code').on(table.code),
   ]
 );
 
@@ -39,10 +41,9 @@ export const MODULE_FIELD = sqliteTable(
         onDelete: 'restrict',
         onUpdate: 'restrict',
       }),
-    title: text('title').notNull(),
-    description: text('description'),
+    code: text('code').notNull(),
     type: text('type').notNull(),
-    values: text('values'),
+    values: text('values').notNull(),
     required: integer('required').notNull().default(0),
     order: integer('order').notNull().default(0),
   },
@@ -51,6 +52,10 @@ export const MODULE_FIELD = sqliteTable(
     index('module_field__index__status').on(table.status),
     index('module_field__index__module_id').on(table.moduleID),
     index('module_field__index__type').on(table.type),
+    unique('module_field__unique__module_id__title').on(
+      table.moduleID,
+      table.code
+    ),
     foreignKey({
       name: 'module_field__fk__module__id',
       columns: [table.moduleID],
@@ -63,8 +68,8 @@ export const MODULE_FIELD = sqliteTable(
 
 // Relations: MODULE -> MODULE_FIELD (1:N)
 export const MODULE_RELATIONS = relations(MODULE, ({ many }) => ({
-  fieldList: many(MODULE_FIELD),
-  recordList: many(RECORD),
+  moduleFieldList: many(MODULE_FIELD),
+  recordFieldList: many(RECORD),
 }));
 
 export const MODULE_FIELD_RELATIONS = relations(

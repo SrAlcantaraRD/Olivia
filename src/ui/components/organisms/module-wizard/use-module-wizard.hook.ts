@@ -6,13 +6,9 @@ import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
+import type { ModuleWizardField } from '@/ui/components/organisms/module-wizard/module-field-wrapper.component';
+import { MODULE_FIELD_KEY_ENUM_I18NKEYS } from '@/ui/i18n/enum-maps/module-field-kwy.enum-i18n';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
-import { enEN } from '@/ui/i18n/locales/en-EN';
-
-function isTi18nKey(value: string | undefined): value is Ti18nKeys {
-  if (!value) return false;
-  return Object.hasOwn(enEN, value);
-}
 
 const _FALLBACK_TITLE: Ti18nKeys = 'parent-setup.modules.unknown.title';
 const FALLBACK_DESCRIPTION: Ti18nKeys =
@@ -29,10 +25,11 @@ export interface IModuleWizardOptions {
   initialValues: Record<number, string>;
   onComplete?: (data: TRecordCreate) => void;
   adapters: IModuleWizardAdapters;
+  onGoBack?: () => void;
 }
 
 export function useModuleWizard(opts: IModuleWizardOptions) {
-  const { moduleID, initialValues, onComplete, adapters } = opts;
+  const { moduleID, initialValues, onComplete, adapters, onGoBack } = opts;
 
   const { loggerAdapter, moduleFieldAdapter, notifyAdapter } = adapters;
 
@@ -65,15 +62,23 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
   );
 
   const steps = useMemo(() => {
-    return fieldList.map((field) => ({
-      id: String(field.id),
-      titleKey: field.title as Ti18nKeys,
-      descriptionKey: isTi18nKey(field.description)
-        ? field.description
-        : FALLBACK_DESCRIPTION,
-      field,
-      isValid: isFieldValid(field),
-    }));
+    return fieldList.map(
+      (field) =>
+        ({
+          id: String(field.id),
+          titleKey: MODULE_FIELD_KEY_ENUM_I18NKEYS[field.code],
+          descriptionKey:
+            MODULE_FIELD_KEY_ENUM_I18NKEYS[field.code] ?? FALLBACK_DESCRIPTION,
+          field: {
+            description: 'to.be.added.later',
+            id: field.id,
+            title: field.code || _FALLBACK_TITLE,
+            type: field.type,
+            values: field.values || null,
+          },
+          isValid: isFieldValid(field),
+        }) satisfies ModuleWizardField
+    );
   }, [fieldList, isFieldValid]);
 
   const goToNextStep = useCallback(() => {
@@ -81,8 +86,12 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
   }, [totalSteps]);
 
   const goToPreviousStep = useCallback(() => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
-  }, []);
+    if (currentStep === 0) {
+      onGoBack?.();
+    } else {
+      setCurrentStep((prev) => prev - 1);
+    }
+  }, [currentStep, onGoBack]);
 
   const goToStep = useCallback(
     (idx: number) => {
@@ -103,9 +112,8 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
           const payload: TRecordCreate = {
             moduleID,
             carerID: 0,
-            data: JSON.stringify({ ...values, [fieldId]: value }),
-            synced: false,
-            fieldList: [{ fieldID: fieldId, value }],
+            synchronized: false,
+            recordFieldList: [{ fieldID: fieldId, value, recordID: -1 }],
             createdAt: new Date(),
           };
           onComplete?.(payload);

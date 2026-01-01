@@ -19,7 +19,7 @@ function parseFieldValues(valuesStr: string | undefined): string[] {
   return result.data;
 }
 
-interface FieldStep {
+export interface ModuleWizardField {
   id: string;
   titleKey: Ti18nKeys;
   descriptionKey: Ti18nKeys;
@@ -34,7 +34,7 @@ interface FieldStep {
 }
 
 interface ModuleFieldWrapperProps {
-  step: FieldStep;
+  step: ModuleWizardField;
   values: Record<number, string>;
   setFieldValue: (fieldId: number, value: string) => void;
   selectOptionAndNext: (fieldId: number, value: string) => void;
@@ -58,7 +58,7 @@ export const ModuleFieldWrapper: FC<ModuleFieldWrapperProps> = ({
           <CardWithDetails
             key={`option-${option}`}
             icon="mic-circle"
-            title={option as unknown as Ti18nKeys}
+            title={option as Ti18nKeys}
             isSelected={values[field.id] === option}
             onPress={() => selectOptionAndNext(field.id, option)}
             testID={`${testID}.field.${field.id}.option.${option}`}

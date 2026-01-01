@@ -2,8 +2,7 @@
 INSERT INTO
   module_field (
     module_id,
-    title,
-    description,
+    code,
     type,
     "values",
     required,
@@ -12,9 +11,8 @@ INSERT INTO
 VALUES
   (
     1,
-    'volumeLevel',
-    NULL,
-    'enum',
+    'volumen-level',
+    'select',
     '["low","normal","high"]',
     1,
     1
@@ -22,8 +20,7 @@ VALUES
   (
     1,
     'color',
-    NULL,
-    'enum',
+    'select',
     '["transparent","light_yellow","dark_yellow","abnormal"]',
     1,
     2
@@ -31,36 +28,16 @@ VALUES
   (
     1,
     'turbidity',
-    NULL,
-    'enum',
+    'select',
     '["clear","mild","high"]',
     1,
     3
   ),
   (
     1,
-    'discomfortLevel',
-    NULL,
-    'enum',
+    'discomfort-level',
+    'select',
     '["none","mild","pain"]',
     1,
     4
-  ),
-  (
-    1,
-    'notes',
-    NULL,
-    'string',
-    NULL,
-    0,
-    5
-  ),
-  (
-    1,
-    'source',
-    NULL,
-    'enum',
-    '["primary","secondary"]',
-    1,
-    6
   );

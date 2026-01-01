@@ -94,7 +94,7 @@ describe('[Integration][Adapter] SQLiteRecordAdapter', () => {
       moduleID,
       carerID,
       data: '{"hello":"world"}',
-      synced: false,
+      synchronized: false,
       fieldList: [],
       createdAt: new Date(),
     });
@@ -102,7 +102,7 @@ describe('[Integration][Adapter] SQLiteRecordAdapter', () => {
     expect(created.id).toBeGreaterThan(0);
     expect(created.moduleID).toBe(moduleID);
     expect(created.carerID).toBe(carerID);
-    expect(created.synced).toBe(false);
+    expect(created.synchronized).toBe(false);
     expect(created.createdAt).toBeInstanceOf(Date);
 
     const fetched = await adapter.getByID(created.id);

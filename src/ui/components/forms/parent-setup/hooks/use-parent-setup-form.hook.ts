@@ -4,7 +4,6 @@ import { useAdapters } from '@/adapter';
 import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
 import { useSetupParent } from '@/domain/carer/hook/setup-parent.hook';
 import type { TRequestSetupParent } from '@/domain/carer/use-case-schema/setup-parent.use-case-schema';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { AUTONOMY_LEVEL_ENUM } from '@/domain/patient/enum/autonomy-level.enum';
 import { SEX_ENUM } from '@/domain/patient/enum/sex.enum';
 import type { ParentSetupFormData, Relationship } from '../types';
@@ -18,9 +17,11 @@ export function useParentSetupForm() {
     notifyAdapter,
     cacheAdapter,
     secureStoreAdapter,
+    loggerAdapter,
   } = useAdapters();
+
   const { execute, isExecuting } = useSetupParent({
-    loggerAdapter: BASE_LOGGER,
+    loggerAdapter,
     notifyAdapter,
     carerAdapter,
     patientAdapter,

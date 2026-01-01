@@ -3,11 +3,11 @@ import { useCallback, useState } from 'react';
 import type { TCarer } from '@/domain/carer/entity/carer.entity';
 import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
+import { SecondaryCarerConsumeInvitationQRUseCase } from '@/domain/carer/use-case/secondary-carer.consume-invitation-qr.use-case';
 import type {
   TRequestSecondaryCarerConsumeInvitation,
   TResponseSecondaryCarerConsumeInvitation,
 } from '@/domain/carer/use-case-schema/secondary-carer.consume-invitation-qr.use-case-schema';
-import { SecondaryCarerConsumeInvitationQRUseCase } from '@/domain/carer/use-case/secondary-carer.consume-invitation-qr.use-case';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 import type {
@@ -18,6 +18,7 @@ import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
+import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 
 export function useSecondaryCarerConsumeInvitationQR(adapters: {
   loggerAdapter: TLoggerPort;
@@ -26,6 +27,7 @@ export function useSecondaryCarerConsumeInvitationQR(adapters: {
   cacheAdapter: ICachePort;
   qrAdapter: IQRPort;
   moduleAdapter: IModulePort;
+  moduleFieldAdapter: IModuleFieldPort;
 }): IUseHook<
   TRequestSecondaryCarerConsumeInvitation,
   TResponseSecondaryCarerConsumeInvitation
@@ -58,6 +60,7 @@ export function useSecondaryCarerConsumeInvitationQR(adapters: {
           cacheAdapter: adapters.cacheAdapter,
           qrAdapter: adapters.qrAdapter,
           moduleAdapter: adapters.moduleAdapter,
+          moduleFieldAdapter: adapters.moduleFieldAdapter,
         });
 
         const response = await useCase.execute(data);

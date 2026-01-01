@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 
-import type { TModuleField } from '@/domain/module/entity/module-field.entity';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { ModuleFieldSelectValuesFromJsonStringSchema } from '@/domain/module/schemas/module-field-values.schema';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
@@ -10,7 +9,6 @@ import {
   type IModuleWizardAdapters,
   useModuleWizard,
 } from '@/ui/components/organisms/module-wizard/use-module-wizard.hook';
-import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 // FIXME: Simplificate processing field values parsing
 export function parseFieldValues(values: string | undefined): string[] {
@@ -29,6 +27,7 @@ interface ModuleWizardProps {
   onComplete: (data: TRecordCreate) => void;
   testID: string;
   adapters: IModuleWizardAdapters;
+  onGoBack?: () => void;
 }
 
 export function ModuleWizard({
@@ -36,6 +35,7 @@ export function ModuleWizard({
   onComplete,
   testID,
   adapters,
+  onGoBack,
 }: ModuleWizardProps) {
   const {
     currentStep,
@@ -50,15 +50,8 @@ export function ModuleWizard({
     initialValues: {},
     onComplete,
     adapters,
+    onGoBack,
   });
-
-  type StepItem = {
-    id: string;
-    titleKey: Ti18nKeys;
-    descriptionKey: Ti18nKeys;
-    field: TModuleField;
-    isValid: boolean;
-  };
 
   const wizardSteps = useMemo(
     () =>
@@ -71,7 +64,7 @@ export function ModuleWizard({
             subtitle={step.descriptionKey}
           >
             <ModuleFieldWrapper
-              step={step as StepItem}
+              step={step}
               values={values}
               setFieldValue={setFieldValue}
               selectOptionAndNext={selectOptionAndNext}
@@ -90,13 +83,13 @@ export function ModuleWizard({
       // Transform collected values into the domain create DTO
       const payload: TRecordCreate = {
         moduleID,
-        carerID: 0, // load from cache
-        data: JSON.stringify(values),
-        synced: false,
+        carerID: -1, // to be filled by backend
+        synchronized: false,
         createdAt: new Date(),
-        fieldList: Object.entries(values).map(([fieldId, value]) => ({
+        recordFieldList: Object.entries(values).map(([fieldId, value]) => ({
           fieldID: Number(fieldId),
           value,
+          recordID: -1, // to be filled by backend
         })),
       } satisfies TRecordCreate;
 

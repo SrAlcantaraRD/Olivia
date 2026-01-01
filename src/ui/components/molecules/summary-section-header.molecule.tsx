@@ -2,8 +2,8 @@ import type React from 'react';
 import { Pressable, View } from 'react-native';
 
 import {
-  TypographyHeading,
   TypographyParagraph,
+  TypographyTitle,
 } from '@/ui/components/atoms/typography.atom';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
@@ -21,11 +21,13 @@ export const SummarySectionHeader: React.FC<SummarySectionHeaderProps> = ({
   testID,
 }) => {
   return (
-    <View className="flex-row items-center justify-between">
-      <TypographyHeading
+    <View className="flex-row items-center justify-between py-2">
+      <TypographyTitle
         testID={`${testID}.title`}
         i18nKey={titleKey}
         accessibilityRole="header"
+        variant="primary"
+        size="lg"
       />
       {actionKey && (
         <Pressable onPress={onActionPress} accessibilityRole="button">

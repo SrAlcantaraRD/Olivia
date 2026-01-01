@@ -1,6 +1,7 @@
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
+import { CACHE_KEY_ENUM, type ICachePort } from '@/domain/core/port/cache.port';
 import type {
   TRecord,
   TRecordCreate,
@@ -14,21 +15,39 @@ export class CreateRecordUseCase extends BaseUseCase<TRecordCreate, TRecord> {
       loggerAdapter: TLoggerPort;
       recordAdapter: IRecordPort;
       recordFieldAdapter: IRecordFieldPort;
+      cacheAdapter: ICachePort;
     }
   ) {
     super('create-record', adapters.loggerAdapter);
   }
 
   public async execute(data: TRecordCreate): Promise<IBaseResponse<TRecord>> {
-    const record = await this.adapters.recordAdapter.create(data);
+    const carerID = await this.adapters.cacheAdapter.get<number>(
+      CACHE_KEY_ENUM.CARER
+    );
+
+    if (carerID === null) {
+      this.logError('Carer not found in cache');
+
+      return {
+        success: false,
+        message: 'use-case.create-record.carer-not-found-in-cache',
+      };
+    }
+
+    const record = await this.adapters.recordAdapter.upsert({
+      ...data,
+      carerID,
+    });
 
     this.adapters.loggerAdapter.info(`Record created with ID: ${record.id}`);
 
     this.adapters.loggerAdapter.error(data);
 
-    await this.adapters.recordFieldAdapter.batchCreate(
+    await this.adapters.recordFieldAdapter.batchUpsert(
       record.id,
-      data.fieldList
+      data.recordFieldList,
+      record.createdAt
     );
 
     return {

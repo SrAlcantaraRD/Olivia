@@ -8,6 +8,8 @@ import { ENVIRONMENT_VARIABLES } from '@/domain/core/constant/environment-variab
 
 export class DrizzleLogger implements Logger {
   private readonly logger: TLoggerPort;
+  private readonly logLevel =
+    ENVIRONMENT_VARIABLES.LOG_LEVEL_POSTGRESQL.toLowerCase();
 
   constructor(entityName: string) {
     BASE_LOGGER.setSeverity(ENVIRONMENT_VARIABLES.LOG_LEVEL_POSTGRESQL);
@@ -17,6 +19,23 @@ export class DrizzleLogger implements Logger {
   }
 
   logQuery(query: string, params: unknown[]): void {
-    this.logger.info({ query, params });
+    const payload = { query, params };
+
+    return;
+
+    switch (this.logLevel) {
+      case 'error':
+        this.logger.error(payload);
+        break;
+      case 'warn':
+        this.logger.warn(payload);
+        break;
+      case 'info':
+        this.logger.info(payload);
+        break;
+      default:
+        this.logger.debug(payload);
+        break;
+    }
   }
 }

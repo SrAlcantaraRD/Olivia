@@ -13,7 +13,7 @@ export default function ChildProfileScreen() {
         contentContainerStyle={{ padding: 16 }}
         contentInsetAdjustmentBehavior="automatic"
       >
-        <View className="gap-6">
+        <View className="gap-4">
           <TypographyTitle
             testID="screen.settings.child-profile.title"
             i18nKey="page.child-profile.title"

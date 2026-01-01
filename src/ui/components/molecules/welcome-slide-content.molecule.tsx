@@ -14,7 +14,7 @@ interface WelcomeSlideContentProps {
   illustration: {
     icon: IconName;
     iconSize?: number;
-    shape?: 'rounded-full' | 'rounded-3xl';
+    shape?: 'rounded-full' | 'rounded-lg';
     secondaryIcon?: {
       name: IconName;
       size?: number;
@@ -74,9 +74,9 @@ export function WelcomeSlideContent({
         )}
 
         {bulletPoints && (
-          <View className="gap-3 w-full mt-4">
+          <View className="gap-2 w-full mt-4">
             {bulletPoints.map((item) => (
-              <View key={item} className="flex-row items-center gap-3">
+              <View key={item} className="flex-row items-center gap-2">
                 <View
                   style={{ backgroundColor: accentColor }}
                   className="w-1.5 h-1.5 rounded-full"

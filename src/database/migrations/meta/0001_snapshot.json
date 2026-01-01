@@ -1,6 +1,6 @@
 {
-  "id": "c2073039-3e8d-4d90-8345-d9dbfd5c878d",
-  "prevId": "03a81b0e-459c-4cfe-9e95-6e69a0a8dc7d",
+  "id": "654c33cd-5b99-4f0d-8ae2-1ce6ee38b768",
+  "prevId": "3d96ba9a-d932-4ae5-8007-743ffaaa582b",
   "version": "6",
   "dialect": "sqlite",
   "tables": {
@@ -63,17 +63,23 @@
       "indexes": {
         "carer__index__id": {
           "name": "carer__index__id",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         },
         "carer__index__status": {
           "name": "carer__index__status",
-          "columns": ["status"],
+          "columns": [
+            "status"
+          ],
           "isUnique": false
         },
         "carer__index__is_primary": {
           "name": "carer__index__is_primary",
-          "columns": ["is_primary"],
+          "columns": [
+            "is_primary"
+          ],
           "isUnique": false
         }
       },
@@ -141,28 +147,45 @@
       "indexes": {
         "module_code_unique": {
           "name": "module_code_unique",
-          "columns": ["code"],
+          "columns": [
+            "code"
+          ],
           "isUnique": true
         },
         "module__index__id": {
           "name": "module__index__id",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         },
         "module__index__status": {
           "name": "module__index__status",
-          "columns": ["status"],
+          "columns": [
+            "status"
+          ],
           "isUnique": false
         },
         "module__index__code": {
           "name": "module__index__code",
-          "columns": ["code"],
+          "columns": [
+            "code"
+          ],
           "isUnique": false
         },
         "module__index__active": {
           "name": "module__index__active",
-          "columns": ["active"],
+          "columns": [
+            "active"
+          ],
           "isUnique": false
+        },
+        "module__unique__code": {
+          "name": "module__unique__code",
+          "columns": [
+            "code"
+          ],
+          "isUnique": true
         }
       },
       "foreignKeys": {},
@@ -203,18 +226,11 @@
           "notNull": true,
           "autoincrement": false
         },
-        "title": {
-          "name": "title",
+        "code": {
+          "name": "code",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
           "autoincrement": false
         },
         "type": {
@@ -228,7 +244,7 @@
           "name": "values",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "required": {
@@ -251,41 +267,65 @@
       "indexes": {
         "module_field__index__id": {
           "name": "module_field__index__id",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         },
         "module_field__index__status": {
           "name": "module_field__index__status",
-          "columns": ["status"],
+          "columns": [
+            "status"
+          ],
           "isUnique": false
         },
         "module_field__index__module_id": {
           "name": "module_field__index__module_id",
-          "columns": ["module_id"],
+          "columns": [
+            "module_id"
+          ],
           "isUnique": false
         },
         "module_field__index__type": {
           "name": "module_field__index__type",
-          "columns": ["type"],
+          "columns": [
+            "type"
+          ],
           "isUnique": false
+        },
+        "module_field__unique__module_id__title": {
+          "name": "module_field__unique__module_id__title",
+          "columns": [
+            "module_id",
+            "code"
+          ],
+          "isUnique": true
         }
       },
       "foreignKeys": {
         "module_field_module_id_module_id_fk": {
           "name": "module_field_module_id_module_id_fk",
           "tableFrom": "module_field",
-          "columnsFrom": ["module_id"],
+          "columnsFrom": [
+            "module_id"
+          ],
           "tableTo": "module",
-          "columnsTo": ["id"],
+          "columnsTo": [
+            "id"
+          ],
           "onUpdate": "restrict",
           "onDelete": "restrict"
         },
         "module_field__fk__module__id": {
           "name": "module_field__fk__module__id",
           "tableFrom": "module_field",
-          "columnsFrom": ["module_id"],
+          "columnsFrom": [
+            "module_id"
+          ],
           "tableTo": "module",
-          "columnsTo": ["id"],
+          "columnsTo": [
+            "id"
+          ],
           "onUpdate": "restrict",
           "onDelete": "restrict"
         }
@@ -352,12 +392,16 @@
       "indexes": {
         "patient__index__id": {
           "name": "patient__index__id",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         },
         "patient__index__status": {
           "name": "patient__index__status",
-          "columns": ["status"],
+          "columns": [
+            "status"
+          ],
           "isUnique": false
         }
       },
@@ -406,13 +450,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "data": {
-          "name": "data",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "synced": {
           "name": "synced",
           "type": "integer",
@@ -425,59 +462,105 @@
       "indexes": {
         "record__index__id": {
           "name": "record__index__id",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         },
         "record__index__status": {
           "name": "record__index__status",
-          "columns": ["status"],
+          "columns": [
+            "status"
+          ],
           "isUnique": false
         },
         "record__index__module_id": {
           "name": "record__index__module_id",
-          "columns": ["module_id"],
+          "columns": [
+            "module_id"
+          ],
+          "isUnique": false
+        },
+        "record__index__carer_id": {
+          "name": "record__index__carer_id",
+          "columns": [
+            "carer_id"
+          ],
           "isUnique": false
         },
         "record__index__synced": {
           "name": "record__index__synced",
-          "columns": ["synced"],
+          "columns": [
+            "synced"
+          ],
           "isUnique": false
+        },
+        "record__index__created_at": {
+          "name": "record__index__created_at",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "record__unique__module_id__created_at": {
+          "name": "record__unique__module_id__created_at",
+          "columns": [
+            "module_id",
+            "created_at"
+          ],
+          "isUnique": true
         }
       },
       "foreignKeys": {
         "record_module_id_module_id_fk": {
           "name": "record_module_id_module_id_fk",
           "tableFrom": "record",
-          "columnsFrom": ["module_id"],
+          "columnsFrom": [
+            "module_id"
+          ],
           "tableTo": "module",
-          "columnsTo": ["id"],
+          "columnsTo": [
+            "id"
+          ],
           "onUpdate": "restrict",
           "onDelete": "restrict"
         },
         "record_carer_id_carer_id_fk": {
           "name": "record_carer_id_carer_id_fk",
           "tableFrom": "record",
-          "columnsFrom": ["carer_id"],
+          "columnsFrom": [
+            "carer_id"
+          ],
           "tableTo": "carer",
-          "columnsTo": ["id"],
+          "columnsTo": [
+            "id"
+          ],
           "onUpdate": "restrict",
           "onDelete": "restrict"
         },
         "record__fk__module__id": {
           "name": "record__fk__module__id",
           "tableFrom": "record",
-          "columnsFrom": ["module_id"],
+          "columnsFrom": [
+            "module_id"
+          ],
           "tableTo": "module",
-          "columnsTo": ["id"],
+          "columnsTo": [
+            "id"
+          ],
           "onUpdate": "restrict",
           "onDelete": "restrict"
         },
         "record__fk__carer__id": {
           "name": "record__fk__carer__id",
           "tableFrom": "record",
-          "columnsFrom": ["carer_id"],
+          "columnsFrom": [
+            "carer_id"
+          ],
           "tableTo": "carer",
-          "columnsTo": ["id"],
+          "columnsTo": [
+            "id"
+          ],
           "onUpdate": "restrict",
           "onDelete": "restrict"
         }
@@ -537,59 +620,98 @@
       "indexes": {
         "record_field__index__id": {
           "name": "record_field__index__id",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         },
         "record_field__index__status": {
           "name": "record_field__index__status",
-          "columns": ["status"],
+          "columns": [
+            "status"
+          ],
           "isUnique": false
         },
         "record_field__index__record_id": {
           "name": "record_field__index__record_id",
-          "columns": ["record_id"],
+          "columns": [
+            "record_id"
+          ],
           "isUnique": false
         },
         "record_field__index__field_id": {
           "name": "record_field__index__field_id",
-          "columns": ["field_id"],
+          "columns": [
+            "field_id"
+          ],
           "isUnique": false
+        },
+        "record_field__index__created_at": {
+          "name": "record_field__index__created_at",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "record_field__unique__record_id__field_id": {
+          "name": "record_field__unique__record_id__field_id",
+          "columns": [
+            "record_id",
+            "field_id"
+          ],
+          "isUnique": true
         }
       },
       "foreignKeys": {
         "record_field_record_id_record_id_fk": {
           "name": "record_field_record_id_record_id_fk",
           "tableFrom": "record_field",
-          "columnsFrom": ["record_id"],
+          "columnsFrom": [
+            "record_id"
+          ],
           "tableTo": "record",
-          "columnsTo": ["id"],
+          "columnsTo": [
+            "id"
+          ],
           "onUpdate": "restrict",
           "onDelete": "restrict"
         },
         "record_field_field_id_module_field_id_fk": {
           "name": "record_field_field_id_module_field_id_fk",
           "tableFrom": "record_field",
-          "columnsFrom": ["field_id"],
+          "columnsFrom": [
+            "field_id"
+          ],
           "tableTo": "module_field",
-          "columnsTo": ["id"],
+          "columnsTo": [
+            "id"
+          ],
           "onUpdate": "restrict",
           "onDelete": "restrict"
         },
         "record_field__fk__record__id": {
           "name": "record_field__fk__record__id",
           "tableFrom": "record_field",
-          "columnsFrom": ["record_id"],
+          "columnsFrom": [
+            "record_id"
+          ],
           "tableTo": "record",
-          "columnsTo": ["id"],
+          "columnsTo": [
+            "id"
+          ],
           "onUpdate": "restrict",
           "onDelete": "restrict"
         },
         "record_field__fk__module_field__id": {
           "name": "record_field__fk__module_field__id",
           "tableFrom": "record_field",
-          "columnsFrom": ["field_id"],
+          "columnsFrom": [
+            "field_id"
+          ],
           "tableTo": "module_field",
-          "columnsTo": ["id"],
+          "columnsTo": [
+            "id"
+          ],
           "onUpdate": "restrict",
           "onDelete": "restrict"
         }
