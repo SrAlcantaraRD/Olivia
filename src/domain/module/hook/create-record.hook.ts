@@ -49,6 +49,7 @@ export function useCreateRecord(adapters: {
             title: 'hook.create-record.error-title',
             description: response.message,
           });
+
           return { success: false };
         }
 
@@ -71,5 +72,6 @@ export function useCreateRecord(adapters: {
   return {
     execute,
     isExecuting: false,
-  } as unknown as IUseHook<TRecordCreate, void>;
+    items: undefined,
+  };
 }
