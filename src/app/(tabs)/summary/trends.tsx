@@ -1,31 +1,65 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
-import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
-import { useGetSummaryTrends } from '@/domain/summary/hook/get-summary-trends.hook';
+import { useGetListActiveModule } from '@/domain/module/hook/get-list-active-module.hook';
+import { SUMMARY_PERIOD_ENUM } from '@/domain/summary/enum/summary-period.enum';
+import { useGetSummaryModuleListByPeriod } from '@/domain/summary/hook/use-get-summary-module-list-by-period.hook';
+import { CardAtom } from '@/ui/components/atoms/card.atom';
+import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
+import { TypographyParagraph } from '@/ui/components/atoms/typography.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
-import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
+import { SummaryModuleCard } from '@/ui/components/molecules/summary-card.module-field.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
-const DEFAULT_TREND_SERIES = [2, 4, 3, 5, 3, 2, 4, 3, 5, 4, 3, 2];
-
 export default function SummaryTrendsScreen() {
-  const { summaryTrendAdapter, notifyAdapter, navigationAdapter } =
-    useAdapters();
-  const { goToSummaryTrendDetail } = useNavigation({ navigationAdapter });
+  const { t } = useTranslation();
+  const {
+    moduleAdapter,
+    notifyAdapter,
+    loggerAdapter,
+    navigationAdapter,
+    summaryModuleAdapter,
+    cacheAdapter,
+  } = useAdapters();
 
-  const trendsHook = useGetSummaryTrends({
-    loggerAdapter: BASE_LOGGER,
-    summaryTrendAdapter,
+  const { goToSummaryModuleDetail } = useNavigation({ navigationAdapter });
+
+  const activeModuleHook = useGetListActiveModule({
+    loggerAdapter,
+    moduleAdapter,
     notifyAdapter,
   });
 
+  // Week period is good for trends (Last 7 days)
+  const [period] = React.useState(SUMMARY_PERIOD_ENUM.WEEK);
+
+  const activeModuleIds = React.useMemo(
+    () => activeModuleHook.items?.map((m) => m.id) ?? [],
+    [activeModuleHook.items]
+  );
+
+  const { data: modulesSummary } = useGetSummaryModuleListByPeriod({
+    loggerAdapter,
+    notifyAdapter,
+    cacheAdapter,
+    summaryModuleAdapter,
+  });
+
   React.useEffect(() => {
-    void trendsHook.execute();
+    void activeModuleHook.execute();
   }, []);
+
+  // Sort by percentage change magnitude (descending)
+  const sortedSummaries = React.useMemo(() => {
+    return [...modulesSummary].sort((a, b) => {
+      const changeA = Math.abs(a.statistics.percentageChange ?? 0);
+      const changeB = Math.abs(b.statistics.percentageChange ?? 0);
+      return changeB - changeA;
+    });
+  }, [modulesSummary]);
 
   return (
     <ScreenLayout
@@ -44,30 +78,32 @@ export default function SummaryTrendsScreen() {
             testID="page.summary-trends.heading"
           />
 
-          {trendsHook.items.length === 0 ? (
-            <SummaryInsightCard
-              titleKey="page.summary-trends.empty"
-              descriptionKey="page.summary-trends.empty"
-              iconName="alert"
-              chartValues={DEFAULT_TREND_SERIES}
-              chartAverage={3}
-              testID="page.summary-trends.empty"
-            />
+          {sortedSummaries.length === 0 ? (
+            <CardAtom className="p-4">
+              <TypographyParagraph i18nKey="page.summary-trends.empty" />
+            </CardAtom>
           ) : (
-            trendsHook.items.map((trend) => (
-              <SummaryInsightCard
-                key={`summary-trend-${trend.id}`}
-                titleKey={trend.titleKey as Ti18nKeys}
-                descriptionKey={trend.descriptionKey as Ti18nKeys}
-                iconName="flame"
-                chartValues={DEFAULT_TREND_SERIES}
-                chartAverage={3}
-                onPress={() => goToSummaryTrendDetail(trend.id)}
-                testID={`page.summary-trends.item.${trend.id}`}
+            sortedSummaries.map((summary) => (
+              <SummaryModuleCard
+                key={`summary-trend-${summary.module.id}`}
+                summary={summary}
+                metricValue={summary.statistics.currentPeriodTotal}
+                metricLabel="page.summary.metric-label.total"
+                chartAverage={
+                  summary.statistics.previousPeriodTotal > 0
+                    ? summary.statistics.previousPeriodTotal /
+                      summary.groupedData.buckets.length
+                    : null
+                }
+                onPress={() =>
+                  goToSummaryModuleDetail(String(summary.module.id))
+                }
+                testID={`page.summary-trends.item.${summary.module.id}`}
               />
             ))
           )}
         </View>
+        <RowEmptyAtom />
       </ScrollView>
     </ScreenLayout>
   );

@@ -1,24 +1,19 @@
-import { format } from 'date-fns';
 import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
-import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
-import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
-import { SUMMARY_DETAIL_TYPE_ENUM } from '@/domain/summary/enum/summary-detail-type.enum';
 import {
   SUMMARY_PERIOD_ENUM,
   SUMMARY_PERIOD_I18N_MAP,
   SUMMARY_PERIOD_VALUES,
 } from '@/domain/summary/enum/summary-period.enum';
 import { SUMMARY_PIN_TYPE_ENUM } from '@/domain/summary/enum/summary-pin-type.enum';
-import { useGetSummaryDetail } from '@/domain/summary/hook/get-summary-detail.hook';
 import { useGetSummaryPins } from '@/domain/summary/hook/get-summary-pins.hook';
 import { usePinSummaryItem } from '@/domain/summary/hook/pin-summary-item.hook';
 import { useUnpinSummaryItem } from '@/domain/summary/hook/unpin-summary-item.hook';
+import { useFieldSummary } from '@/domain/summary/hook/use-field-summary.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
-import { BarChartAtom } from '@/ui/components/atoms/chart.bar.atom';
 import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
 import {
   TypographyHeading,
@@ -30,7 +25,9 @@ import { RowAction } from '@/ui/components/molecules/row-action.molecule';
 import { SummaryInsightCard } from '@/ui/components/molecules/summary-insight-card.molecule';
 import { SummaryPeriodSelector } from '@/ui/components/molecules/summary-period-selector.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
+import { SummaryTrendChart } from '@/ui/components/molecules/summary-trend-chart.molecule';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 export default function SummaryFieldDetailScreen() {
   const params = useLocalSearchParams<{
@@ -41,91 +38,50 @@ export default function SummaryFieldDetailScreen() {
   const fieldId = Number(params.fieldId ?? 0);
 
   const {
-    summaryDetailAdapter,
+    summaryGroupingPort,
     notifyAdapter,
     summaryPinsAdapter,
     navigationAdapter,
+    loggerAdapter,
   } = useAdapters();
 
   const { goToSummaryModuleDetail, goToSummaryFieldRecords } = useNavigation({
     navigationAdapter,
   });
 
-  const detailHook = useGetSummaryDetail({
-    loggerAdapter: BASE_LOGGER,
-    summaryDetailAdapter,
-    notifyAdapter,
-  });
-
-  const pinsListHook = useGetSummaryPins({
-    loggerAdapter: BASE_LOGGER,
-    summaryPinsAdapter,
-    notifyAdapter,
-  });
-
   const [selectedPeriod, setSelectedPeriod] = React.useState(
     SUMMARY_PERIOD_ENUM.WEEK
   );
 
+  const { data: fieldSummary, loading } = useFieldSummary({
+    fieldId,
+    period: selectedPeriod,
+    loggerAdapter,
+    summaryGroupingPort,
+    notifyAdapter,
+  });
+
+  const pinsListHook = useGetSummaryPins({
+    loggerAdapter,
+    summaryPinsAdapter,
+    notifyAdapter,
+  });
+
   const pinHook = usePinSummaryItem({
-    loggerAdapter: BASE_LOGGER,
+    loggerAdapter,
     summaryPinsAdapter,
     notifyAdapter,
   });
 
   const unpinHook = useUnpinSummaryItem({
-    loggerAdapter: BASE_LOGGER,
+    loggerAdapter,
     summaryPinsAdapter,
     notifyAdapter,
   });
 
   React.useEffect(() => {
-    if (!moduleId || !fieldId) return;
-    void detailHook.execute({
-      type: SUMMARY_DETAIL_TYPE_ENUM.FIELD,
-      moduleId,
-      fieldId,
-      period: selectedPeriod,
-    });
     void pinsListHook.execute();
-  }, [moduleId, fieldId, selectedPeriod]);
-
-  const formatChartLabel = (
-    dateStr: string,
-    period: SUMMARY_PERIOD_ENUM
-  ): string => {
-    try {
-      switch (period) {
-        case SUMMARY_PERIOD_ENUM.DAY: {
-          // dateStr is like "2025-12-19 14"
-          const hour = dateStr.split(' ')[1];
-          return `${hour}h`;
-        }
-        case SUMMARY_PERIOD_ENUM.WEEK:
-          // dateStr is like "2025-12-19"
-          return format(new Date(dateStr), 'EEE'); // Mon, Tue, etc.
-        case SUMMARY_PERIOD_ENUM.MONTH:
-          // dateStr is like "2025-12-19"
-          return format(new Date(dateStr), 'dd'); // 01, 02, etc.
-        case SUMMARY_PERIOD_ENUM.HALF_YEAR:
-        case SUMMARY_PERIOD_ENUM.YEAR: {
-          // dateStr is like "2025-12"
-          const [year, month] = dateStr.split('-');
-          return format(new Date(parseInt(year), parseInt(month) - 1), 'MMM'); // Jan, Feb, etc.
-        }
-        default:
-          return dateStr;
-      }
-    } catch {
-      return dateStr;
-    }
-  };
-
-  const chartValues = detailHook.items.series.map((item) => ({
-    value: formatChartLabel(item.date, selectedPeriod),
-    count: item.value,
-  }));
-  const hasSeries = detailHook.items.series.length > 0;
+  }, []);
 
   const targetId = `${moduleId}:${fieldId}`;
   const isPinned = pinsListHook.items.some(
@@ -152,6 +108,23 @@ export default function SummaryFieldDetailScreen() {
     value: period,
     labelKey: SUMMARY_PERIOD_I18N_MAP[period],
   }));
+
+  const chartSeries =
+    fieldSummary?.groupedData.buckets.map((bucket) => ({
+      date: bucket.timestamp.toISOString(),
+      value: bucket.value,
+    })) ?? [];
+
+  // Use weightedAverage if available, otherwise regular average
+  const averageValue =
+    fieldSummary?.statistics.weightedAverage ??
+    fieldSummary?.statistics.averageValue ??
+    0;
+
+  const hasSeries = chartSeries.length > 0;
+
+  // Trend description key - reusing one for now or falling back
+  const trendDescriptionKey: Ti18nKeys = 'page.summary-detail.trend';
 
   return (
     <ScreenLayout
@@ -183,19 +156,26 @@ export default function SummaryFieldDetailScreen() {
             <TypographyHeading
               testID="page.summary-detail.average-value"
               i18nKey="common.raw-value"
-              values={{ value: detailHook.items.average ?? 0 }}
+              values={{ value: averageValue.toFixed(1) }}
             />
             <TypographySmall
               testID="page.summary-detail.range"
               i18nKey="page.summary-detail.range-placeholder"
               variant="light"
             />
-            {hasSeries ? (
+            {loading ? (
+              <TypographySmall
+                testID="page.summary-detail.loading"
+                i18nKey="common.loading"
+                variant="light"
+                className="mt-4"
+              />
+            ) : hasSeries ? (
               <View className="mt-4">
-                <BarChartAtom
-                  values={chartValues}
-                  height={180}
-                  showAxisLabels={true}
+                <SummaryTrendChart
+                  average={averageValue}
+                  series={chartSeries}
+                  period={selectedPeriod}
                   testID="page.summary-detail.chart"
                 />
               </View>
@@ -216,21 +196,21 @@ export default function SummaryFieldDetailScreen() {
                 i18nKey="page.summary-detail.trend"
               />
               <TypographySmall
-                testID="page.summary-detail.trend-empty"
-                i18nKey="page.summary-detail.trend-empty"
+                testID="page.summary-detail.trend-value"
                 variant="light"
+                i18nKey="page.summary-detail.trend-empty"
               />
             </View>
           </CardAtom>
 
           <SummaryInsightCard
             titleKey="page.summary-detail.highlights"
-            descriptionKey={detailHook.items.descriptionKey as Ti18nKeys}
+            descriptionKey={trendDescriptionKey}
             iconName="flame"
-            metricValue={detailHook.items.average ?? 0}
+            metricValue={averageValue}
             metricLabel=""
-            chartValues={detailHook.items.series.map((item) => item.value)}
-            chartAverage={detailHook.items.average}
+            chartValues={chartSeries.map((item) => item.value)}
+            chartAverage={averageValue}
             testID="page.summary-detail.insight"
           />
 
