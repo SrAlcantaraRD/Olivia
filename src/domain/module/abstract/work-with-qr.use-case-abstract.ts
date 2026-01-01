@@ -5,12 +5,12 @@ import type {
   TRecordFieldSync,
   TRecordSync,
 } from '@/domain/core/dto/sync-record.dto';
-import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 import { QR_BUNDLER_VERSION } from '@/domain/core/enum/qr.enum';
+import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import type { IQRPort } from '@/domain/core/port/qr.port';
-import type { TRecordField } from '@/domain/module/entity/record-field.entity';
 import type { TRecord } from '@/domain/module/entity/record.entity';
+import type { TRecordField } from '@/domain/module/entity/record-field.entity';
 
 /**
  * The chain of responsibility pattern is a behavioral design pattern that allows an object to pass a request along a chain of handlers. Upon receiving a request, each handler decides either to process the request or to pass it along the chain.

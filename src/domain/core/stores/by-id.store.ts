@@ -1,10 +1,11 @@
 import { create } from 'zustand';
 
-type StoreEntryID = string;
+export type StoreEntryID = string;
 
-type StoreEntry<T> = {
+export type StoreEntry<T> = {
   item: T;
   isLoading: boolean;
+  wasLoaded: boolean;
 };
 
 type StoreState<T> = {
@@ -20,6 +21,7 @@ interface StoreActions<T> {
   startLoading: (storeName: string, id: StoreEntryID) => void;
   stopLoading: (storeName: string, id: StoreEntryID) => void;
   isLoading: (storeName: string, id: StoreEntryID) => boolean;
+  wasLoaded: (storeName: string, id: StoreEntryID) => boolean;
   clearStore: (storeName: string) => void;
 }
 
@@ -40,6 +42,7 @@ const ownStore = create<Store<unknown>>((set, get) => ({
             [id]: {
               item,
               isLoading: false,
+              wasLoaded: true,
             },
           },
         },
@@ -84,6 +87,7 @@ const ownStore = create<Store<unknown>>((set, get) => ({
               [id]: {
                 item: entry?.item ?? {},
                 isLoading: true,
+                wasLoaded: entry?.wasLoaded ?? false,
               },
             },
           },
@@ -106,6 +110,7 @@ const ownStore = create<Store<unknown>>((set, get) => ({
               [id]: {
                 item: entry.item,
                 isLoading: false,
+                wasLoaded: entry.wasLoaded ?? false,
               },
             },
           },
@@ -114,6 +119,9 @@ const ownStore = create<Store<unknown>>((set, get) => ({
     },
     isLoading: (storeName, id) => {
       return get().state[storeName]?.[id]?.isLoading ?? false;
+    },
+    wasLoaded: (storeName, id) => {
+      return get().state[storeName]?.[id]?.wasLoaded ?? false;
     },
     clearStore: (storeName) => {
       set((state) => {
@@ -138,8 +146,8 @@ export const useByIDStore = <T>(storeName: string) => {
     actions: {
       saveItem: (id: StoreEntryID, item: T) =>
         store.actions.saveItem(storeName, id, item),
-      getItem: (id: StoreEntryID) =>
-        store.actions.getItem(storeName, id) as T | null,
+      getItem: (id: StoreEntryID) => store.actions.getItem(storeName, id) as T,
+      wasLoaded: (id: StoreEntryID) => store.actions.wasLoaded(storeName, id),
       removeItem: (id: StoreEntryID) => store.actions.removeItem(storeName, id),
       startLoading: (id: StoreEntryID) =>
         store.actions.startLoading(storeName, id),

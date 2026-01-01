@@ -1,40 +1,31 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
 import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
+import type { TID } from '@/domain/core/schemas/id.schema';
 import { SUMMARY_PERIOD_ENUM } from '@/domain/summary/enum/summary-period.enum';
 import { useGetSummaryModuleDetailByPeriod } from '@/domain/summary/hook/use-get-summary-module-detail-by-period.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
-import {
-  SummaryCard,
-  SummaryCardChartType,
-} from '@/ui/components/molecules/summary-card.molecule';
+import { SummaryModuleFieldCard } from '@/ui/components/molecules/summary-card.module-field.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
-import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 interface SummaryModuleFieldsSectionProps {
   moduleID: number;
-  testID?: string;
+  testID: string;
 }
 
 export const SummaryModuleFieldsSection = ({
   moduleID,
-  testID = 'page.summary-detail.fields',
+  testID,
 }: SummaryModuleFieldsSectionProps) => {
   const {
-    moduleAdapter,
-    moduleFieldAdapter,
-    recordAdapter,
-    recordFieldAdapter,
     notifyAdapter,
     loggerAdapter,
     cacheAdapter,
-    summaryAdapter,
-    navigationAdapter,
+    summaryModuleAdapter,
+    summaryModuleFieldAdapter,
   } = useAdapters();
-
-  const { goToSummaryFieldDetail } = useNavigation({ navigationAdapter });
 
   const {
     items: summaryModule,
@@ -44,35 +35,22 @@ export const SummaryModuleFieldsSection = ({
     loggerAdapter,
     notifyAdapter,
     cacheAdapter,
-    moduleAdapter,
-    moduleFieldAdapter,
-    recordAdapter,
-    recordFieldAdapter,
-    summaryAdapter,
+    summaryModuleAdapter,
+    summaryModuleFieldAdapter,
   });
 
-  const loadFields = useCallback(async () => {
+  const loadFields = useCallback(async (moduleID: TID) => {
     await execute({
       period: SUMMARY_PERIOD_ENUM.WEEK,
       moduleID,
     });
-  }, [moduleID]);
-
-  useEffect(() => {
-    loadFields();
   }, []);
 
-  const totalCount = summaryModule.groupedData?.metadata.totalCount ?? 0;
-  const bucketCount = summaryModule.groupedData?.buckets?.length ?? 0;
-  const averageValue =
-    bucketCount > 0 && summaryModule.statistics?.lastRecordedAt
-      ? totalCount / bucketCount
-      : 0;
+  useEffect(() => {
+    loadFields(moduleID);
+  }, [moduleID]);
 
-  const fieldList = useMemo(
-    () => summaryModule.moduleFieldList ?? [],
-    [summaryModule]
-  );
+  const summaryModuleFieldList = summaryModule.summaryModuleFieldList;
 
   return (
     <View className="gap-2" testID={testID}>
@@ -89,7 +67,7 @@ export const SummaryModuleFieldsSection = ({
             variant="light"
           />
         </CardAtom>
-      ) : fieldList.length === 0 ? (
+      ) : summaryModuleFieldList.length === 0 ? (
         <CardAtom>
           <TypographySmall
             testID={`${testID}.empty`}
@@ -98,20 +76,11 @@ export const SummaryModuleFieldsSection = ({
           />
         </CardAtom>
       ) : (
-        fieldList.map((field) => (
-          <SummaryCard
-            chartType={SummaryCardChartType.BAR}
-            key={`summary-field-${field.id}`}
-            title={field.code}
-            metricValue={totalCount}
-            metricLabel="page.summary.metric-label.total"
-            iconName="flame"
-            chartAverage={averageValue}
-            fieldType={field.type}
-            onPress={() =>
-              goToSummaryFieldDetail(String(moduleID), String(field.id))
-            }
-            testID={`${testID}.${field.id}`}
+        summaryModuleFieldList.map((field) => (
+          <SummaryModuleFieldCard
+            key={`summary-field-${field.metadata.moduleField.id}`}
+            testID={`${testID}.${field.metadata.moduleField.id}`}
+            summaryModuleField={field}
           />
         ))
       )}

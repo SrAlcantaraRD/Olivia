@@ -5,6 +5,7 @@ import { GenerateCreateEntitySchema } from '@/domain/core/entity/base-dto.entity
 import { BaseEntitySchema } from '@/domain/core/entity/base-entity.entity';
 import type { TModule } from '@/domain/module/entity/module.entity';
 import type { TRecordField } from '@/domain/module/entity/record-field.entity';
+import { ModuleFieldKeySchema } from '@/domain/module/enum/module-field-key.enum';
 import {
   MODULE_FIELD_TYPE_ENUM,
   ModuleFieldTypeSchema,
@@ -15,10 +16,9 @@ export const ModuleFieldSchema = z
   .object({
     ...BaseEntitySchema.shape,
     moduleId: z.number().int(),
-    code: z.string().min(1),
-    description: z.string(),
+    code: ModuleFieldKeySchema,
     type: ModuleFieldTypeSchema,
-    values: z.string(),
+    values: z.string(), // TODO: change to z.array(z.string())
     required: z.boolean(),
     order: z.number().int(),
     //TODO: add "isActive" field to handler "development" fields

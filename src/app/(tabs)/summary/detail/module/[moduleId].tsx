@@ -22,9 +22,20 @@ export default function SummaryModuleDetailScreen() {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
       >
-        <SummaryModuleTrendSection moduleID={moduleID} />
-        <SummaryModuleActionsSection moduleID={moduleID} />
-        <SummaryModuleFieldsSection moduleID={moduleID} />
+        <SummaryModuleTrendSection
+          moduleID={moduleID}
+          testID="page.summary-detail.trend"
+        />
+
+        <SummaryModuleActionsSection
+          moduleID={moduleID}
+          testID="page.summary-detail.actions"
+        />
+
+        <SummaryModuleFieldsSection
+          moduleID={moduleID}
+          testID="page.summary-detail.fields"
+        />
 
         <RowEmptyAtom />
       </ScrollView>

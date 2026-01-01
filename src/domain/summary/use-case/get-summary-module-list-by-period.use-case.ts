@@ -2,10 +2,6 @@ import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import type { ICachePort } from '@/domain/core/port/cache.port';
-import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
-import type { IModulePort } from '@/domain/module/port/module.port';
-import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
-import type { IRecordPort } from '@/domain/module/port/record.port';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
 import {
   RequestGetSummaryModuleListByPeriodSchema,
@@ -25,13 +21,7 @@ export class GetSummaryModuleListByPeriodUseCase extends BaseUseCase<
     private readonly adapters: {
       loggerAdapter: TLoggerPort;
       cacheAdapter: ICachePort;
-      summaryAdapter: ISummaryModulePort;
-      moduleAdapter: IModulePort;
-      moduleFieldAdapter: IModuleFieldPort;
-      recordAdapter: IRecordPort;
-      recordFieldAdapter: IRecordFieldPort;
-      // summaryModuleAdapter: ISummaryModulePort;
-      // summaryModuleFieldAdapter: ISummaryModuleFieldPort;
+      summaryModuleAdapter: ISummaryModulePort;
     }
   ) {
     super('get-summary-by-period', adapters.loggerAdapter);
@@ -49,7 +39,7 @@ export class GetSummaryModuleListByPeriodUseCase extends BaseUseCase<
 
     const { period } = parse.data;
 
-    const list = await this.adapters.summaryAdapter.getAll({
+    const list = await this.adapters.summaryModuleAdapter.getAll({
       period,
     });
 

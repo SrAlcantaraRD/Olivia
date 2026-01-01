@@ -11,35 +11,28 @@ import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-
 
 interface SummaryModuleActionsSectionProps {
   moduleID: number;
-  testID?: string;
+  testID: string;
 }
 
 export const SummaryModuleActionsSection = ({
   moduleID,
-  testID = 'page.summary-detail.actions',
+  testID,
 }: SummaryModuleActionsSectionProps) => {
   const { summaryPinsAdapter, notifyAdapter, loggerAdapter } = useAdapters();
 
-  const {
-    execute: loadPins,
-    items: pins,
-  } = useGetSummaryPins({
+  const { execute: loadPins, items: pins } = useGetSummaryPins({
     loggerAdapter,
     summaryPinsAdapter,
     notifyAdapter,
   });
 
-  const {
-    execute: pinItem,
-  } = usePinSummaryItem({
+  const { execute: pinItem } = usePinSummaryItem({
     loggerAdapter,
     summaryPinsAdapter,
     notifyAdapter,
   });
 
-  const {
-    execute: unpinItem,
-  } = useUnpinSummaryItem({
+  const { execute: unpinItem } = useUnpinSummaryItem({
     loggerAdapter,
     summaryPinsAdapter,
     notifyAdapter,
@@ -47,7 +40,7 @@ export const SummaryModuleActionsSection = ({
 
   useEffect(() => {
     loadPins();
-  }, [loadPins]);
+  }, []);
 
   const isPinned = pins.some(
     (pin) =>
@@ -79,9 +72,7 @@ export const SummaryModuleActionsSection = ({
       <RowAction
         iconName={isPinned ? 'bookmark' : 'bookmark-outline'}
         title={
-          isPinned
-            ? 'page.summary-detail.unpin'
-            : 'page.summary-detail.pin'
+          isPinned ? 'page.summary-detail.unpin' : 'page.summary-detail.pin'
         }
         onPress={handlePinToggle}
         testID={`${testID}.pin-toggle`}

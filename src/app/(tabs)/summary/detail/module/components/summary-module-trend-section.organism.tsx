@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
+import type { TID } from '@/domain/core/schemas/id.schema';
 import {
   SUMMARY_PERIOD_ENUM,
   SUMMARY_PERIOD_I18N_MAP,
@@ -20,54 +21,48 @@ import { SummaryTrendChart } from '@/ui/components/molecules/summary-trend-chart
 
 interface SummaryModuleTrendSectionProps {
   moduleID: number;
-  testID?: string;
+  testID: string;
 }
 
 export const SummaryModuleTrendSection = ({
   moduleID,
-  testID = 'page.summary-detail.trend',
+  testID,
 }: SummaryModuleTrendSectionProps) => {
   const { t } = useTranslation();
+
   const {
-    moduleAdapter,
-    moduleFieldAdapter,
-    recordAdapter,
-    recordFieldAdapter,
-    notifyAdapter,
-    loggerAdapter,
     cacheAdapter,
-    summaryAdapter,
+    loggerAdapter,
+    notifyAdapter,
+    summaryModuleAdapter,
+    summaryModuleFieldAdapter,
   } = useAdapters();
 
   const [selectedPeriod, setSelectedPeriod] = useState(
     SUMMARY_PERIOD_ENUM.WEEK
   );
 
-  const {
-    items: summaryModule,
-    execute,
-    isExecuting,
-  } = useGetSummaryModuleDetailByPeriod({
-    loggerAdapter,
-    notifyAdapter,
+  const { items: summaryModule, execute } = useGetSummaryModuleDetailByPeriod({
     cacheAdapter,
-    moduleAdapter,
-    moduleFieldAdapter,
-    recordFieldAdapter,
-    recordAdapter,
-    summaryAdapter,
+    summaryModuleAdapter,
+    notifyAdapter,
+    loggerAdapter,
+    summaryModuleFieldAdapter,
   });
 
-  const handlerLoadData = useCallback(async () => {
-    await execute({
-      period: selectedPeriod,
-      moduleID,
-    });
-  }, [moduleID, selectedPeriod]);
+  const handlerLoadData = useCallback(
+    async (moduleID: TID, period: SUMMARY_PERIOD_ENUM) => {
+      await execute({
+        period,
+        moduleID,
+      });
+    },
+    []
+  );
 
   useEffect(() => {
-    handlerLoadData();
-  }, []);
+    handlerLoadData(moduleID, selectedPeriod);
+  }, [selectedPeriod, moduleID]);
 
   const periodOptions = useMemo(
     () =>
@@ -104,21 +99,21 @@ export const SummaryModuleTrendSection = ({
 
   return (
     <View className="gap-4" testID={testID}>
-      <SummaryPeriodSelector
-        options={periodOptions}
-        selected={selectedPeriod}
-        onSelect={(value) => setSelectedPeriod(value as SUMMARY_PERIOD_ENUM)}
-        testID={`${testID}.period`}
-      />
+      <View className="gap-2">
+        <SummaryPeriodSelector
+          options={periodOptions}
+          selected={selectedPeriod}
+          onSelect={(value) => setSelectedPeriod(value)}
+          testID={`${testID}.period`}
+        />
 
-      <CardAtom className="rounded-lg overflow-hidden">
         <SummaryTrendChart
           average={averageValue}
           series={chartSeries}
           period={selectedPeriod}
           testID={`${testID}.trend-chart`}
         />
-      </CardAtom>
+      </View>
 
       <CardAtom className="p-4 rounded-lg">
         <View className="flex-row items-center justify-between">
@@ -143,7 +138,7 @@ export const SummaryModuleTrendSection = ({
         iconName="flame"
         metricValue={totalCount}
         metricLabel={t('page.summary.metric-label.total')}
-        chartValues={chartSeries.map((item) => item.value)}
+        data={summaryModule.groupedData.buckets}
         chartAverage={averageValue}
         testID={`${testID}.insight`}
       />
