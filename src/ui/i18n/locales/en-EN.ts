@@ -135,19 +135,17 @@ export const enEN = Object.freeze({
   'common.day.thursday': 'Thursday',
   'common.day.friday': 'Friday',
   'common.day.saturday': 'Saturday',
-  'common.days.sunday': 'Sunday',
-  'common.days.monday': 'Monday',
-  'common.days.tuesday': 'Tuesday',
-  'common.days.wednesday': 'Wednesday',
-  'common.days.thursday': 'Thursday',
-  'common.days.friday': 'Friday',
-  'common.days.saturday': 'Saturday',
 
   // Tab navigation
   'tab.register': 'Register',
   'tab.report': 'Report',
   'tab.summary': 'Summary',
   'tab.settings': 'Settings',
+
+  'enum.module-field-key.color': 'Color',
+  'enum.module-field-key.discomfort-level': 'Discomfort Level',
+  'enum.module-field-key.turbidity': 'Turbidity',
+  'enum.module-field-key.volumen-level': 'Volume Level',
 
   // Page: Register Tab
   'page.register.title': 'Register',
@@ -170,7 +168,6 @@ export const enEN = Object.freeze({
   'page.summary.section.pinned': 'Pinned data',
   'page.summary.section.modules': 'Modules',
   'page.summary.section.can-interest-you': 'You might be interested in',
-  'page.summary.pins-empty': 'Pin items to see them here',
   'page.summary.modules-empty': 'No module summaries available',
   'page.summary.today-count': 'Today: {{value}}',
   'page.summary.metric-label.today': 'Today',
@@ -688,6 +685,8 @@ export const enEN = Object.freeze({
     'Records synchronized successfully',
   'use-case.generate-record-synchronization-qr.success':
     'Record synchronization QR generated successfully',
+  'use-case.consume-record-synchronization-qr.invalid-bundle':
+    'Invalid synchronization bundle provided',
 } as const);
 
 type RecursiveKeyOf<TObj extends object> = {

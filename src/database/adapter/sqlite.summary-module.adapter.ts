@@ -278,6 +278,8 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
         previousPeriodTotal > 0
           ? previousPeriodTotal / groupedData.metadata.uniqueRecords // Approximation
           : null,
+      mostCommonValue: null,
+      weightedAverage: null,
     } satisfies TSummaryStatistics;
   }
 

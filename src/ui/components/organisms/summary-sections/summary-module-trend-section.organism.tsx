@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
@@ -28,8 +27,6 @@ export const SummaryModuleTrendSection = ({
   moduleID,
   testID,
 }: SummaryModuleTrendSectionProps) => {
-  const { t } = useTranslation();
-
   const {
     cacheAdapter,
     loggerAdapter,
@@ -115,7 +112,7 @@ export const SummaryModuleTrendSection = ({
         />
       </View>
 
-      <CardAtom className="p-4 rounded-lg">
+      <CardAtom className="p-4 rounded-lg" testID={`${testID}.trend-card`}>
         <View className="flex-row items-center justify-between">
           <TypographyParagraph
             testID={`${testID}.trend`}
@@ -137,7 +134,7 @@ export const SummaryModuleTrendSection = ({
         descriptionKey="page.summary-detail.trend"
         iconName="flame"
         metricValue={totalCount}
-        metricLabel={t('page.summary.metric-label.total')}
+        metricLabel="page.summary.metric-label.total"
         data={summaryModule.groupedData.buckets}
         chartAverage={averageValue}
         testID={`${testID}.insight`}

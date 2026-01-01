@@ -7,11 +7,11 @@ import type {
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
-import { GetRecordFieldListUseCase } from '@/domain/module/use-case/get-record-field-list.use-case';
 import type {
   TRequestGetRecordFieldList,
   TResponseGetRecordFieldList,
 } from '@/domain/module/use-case-schema/get-record-field-list.use-case-schema';
+import { GetRecordFieldListUseCase } from '@/domain/module/use-case/get-record-field-list.use-case';
 
 export function useGetRecordFieldList(adapters: {
   loggerAdapter: TLoggerPort;
@@ -38,7 +38,7 @@ export function useGetRecordFieldList(adapters: {
 
         if (!response.success || response.details === undefined) {
           notifyAdapter.error({
-            title: 'hook.get-record-field-list.error',
+            title: 'common.error',
             description: response.message,
           });
           return { success: false };

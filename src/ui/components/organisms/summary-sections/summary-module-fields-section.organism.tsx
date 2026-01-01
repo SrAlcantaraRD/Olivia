@@ -60,7 +60,7 @@ export const SummaryModuleFieldsSection = ({
       />
 
       {isExecuting ? (
-        <CardAtom>
+        <CardAtom testID={`${testID}.loading-card`}>
           <TypographySmall
             testID={`${testID}.loading`}
             i18nKey="common.loading"
@@ -68,7 +68,7 @@ export const SummaryModuleFieldsSection = ({
           />
         </CardAtom>
       ) : summaryModuleFieldList.length === 0 ? (
-        <CardAtom>
+        <CardAtom testID={`${testID}.empty-card`}>
           <TypographySmall
             testID={`${testID}.empty`}
             i18nKey="page.summary-detail.fields-empty"

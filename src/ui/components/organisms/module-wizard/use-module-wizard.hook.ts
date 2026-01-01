@@ -7,13 +7,8 @@ import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { ModuleWizardField } from '@/ui/components/organisms/module-wizard/module-field-wrapper.component';
+import { MODULE_FIELD_KEY_ENUM_I18NKEYS } from '@/ui/i18n/enum-maps/module-field-kwy.enum-i18n';
 import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
-import { enEN } from '@/ui/i18n/locales/en-EN';
-
-function isTi18nKey(value: string | undefined): value is Ti18nKeys {
-  if (!value) return false;
-  return Object.hasOwn(enEN, value);
-}
 
 const _FALLBACK_TITLE: Ti18nKeys = 'parent-setup.modules.unknown.title';
 const FALLBACK_DESCRIPTION: Ti18nKeys =
@@ -71,12 +66,11 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
       (field) =>
         ({
           id: String(field.id),
-          titleKey: field.code as Ti18nKeys,
-          descriptionKey: isTi18nKey(field.description)
-            ? field.description
-            : FALLBACK_DESCRIPTION,
+          titleKey: MODULE_FIELD_KEY_ENUM_I18NKEYS[field.code],
+          descriptionKey:
+            MODULE_FIELD_KEY_ENUM_I18NKEYS[field.code] ?? FALLBACK_DESCRIPTION,
           field: {
-            description: field.description || '',
+            description: 'to.be.added.later',
             id: field.id,
             title: field.code || _FALLBACK_TITLE,
             type: field.type,

@@ -20,8 +20,8 @@ interface SummaryInsightCardProps {
   titleKey: Ti18nKeys;
   descriptionKey: Ti18nKeys;
   iconName?: IconName;
-  metricValue?: number | string;
-  metricLabel?: string;
+  metricValue?: number | Ti18nKeys;
+  metricLabel?: Ti18nKeys;
   data: TTimeBucketItem[];
   chartAverage?: number | null;
   onPress?: () => void;
@@ -43,7 +43,7 @@ export const SummaryInsightCard: React.FC<SummaryInsightCardProps> = ({
   const mutedColor = useThemeColor('muted');
 
   return (
-    <CardAtom className="p-4 rounded-lg">
+    <CardAtom className="p-4 rounded-lg" testID={`${testID}.card`}>
       <Pressable
         accessibilityRole="button"
         onPress={onPress}

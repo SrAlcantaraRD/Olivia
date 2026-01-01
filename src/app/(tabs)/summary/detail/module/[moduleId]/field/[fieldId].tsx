@@ -8,11 +8,6 @@ import {
   SUMMARY_PERIOD_I18N_MAP,
   SUMMARY_PERIOD_VALUES,
 } from '@/domain/summary/enum/summary-period.enum';
-import { SUMMARY_PIN_TYPE_ENUM } from '@/domain/summary/enum/summary-pin-type.enum';
-import { useGetSummaryPins } from '@/domain/summary/hook/get-summary-pins.hook';
-import { usePinSummaryItem } from '@/domain/summary/hook/pin-summary-item.hook';
-import { useUnpinSummaryItem } from '@/domain/summary/hook/unpin-summary-item.hook';
-import { useFieldSummary } from '@/domain/summary/hook/use-field-summary.hook';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
 import {
@@ -27,7 +22,6 @@ import { SummaryPeriodSelector } from '@/ui/components/molecules/summary-period-
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 import { SummaryTrendChart } from '@/ui/components/molecules/summary-trend-chart.molecule';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
-import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 export default function SummaryFieldDetailScreen() {
   const params = useLocalSearchParams<{
@@ -37,13 +31,7 @@ export default function SummaryFieldDetailScreen() {
   const moduleId = Number(params.moduleId ?? 0);
   const fieldId = Number(params.fieldId ?? 0);
 
-  const {
-    summaryGroupingPort,
-    notifyAdapter,
-    summaryPinsAdapter,
-    navigationAdapter,
-    loggerAdapter,
-  } = useAdapters();
+  const { navigationAdapter } = useAdapters();
 
   const { goToSummaryModuleDetail, goToSummaryFieldRecords } = useNavigation({
     navigationAdapter,
@@ -53,78 +41,10 @@ export default function SummaryFieldDetailScreen() {
     SUMMARY_PERIOD_ENUM.WEEK
   );
 
-  const { data: fieldSummary, loading } = useFieldSummary({
-    fieldId,
-    period: selectedPeriod,
-    loggerAdapter,
-    summaryGroupingPort,
-    notifyAdapter,
-  });
-
-  const pinsListHook = useGetSummaryPins({
-    loggerAdapter,
-    summaryPinsAdapter,
-    notifyAdapter,
-  });
-
-  const pinHook = usePinSummaryItem({
-    loggerAdapter,
-    summaryPinsAdapter,
-    notifyAdapter,
-  });
-
-  const unpinHook = useUnpinSummaryItem({
-    loggerAdapter,
-    summaryPinsAdapter,
-    notifyAdapter,
-  });
-
-  React.useEffect(() => {
-    void pinsListHook.execute();
-  }, []);
-
-  const targetId = `${moduleId}:${fieldId}`;
-  const isPinned = pinsListHook.items.some(
-    (pin) =>
-      pin.type === SUMMARY_PIN_TYPE_ENUM.FIELD && pin.targetId === targetId
-  );
-
-  const handlePinToggle = async () => {
-    if (isPinned) {
-      await unpinHook.execute({
-        type: SUMMARY_PIN_TYPE_ENUM.FIELD,
-        targetId,
-      });
-      return;
-    }
-
-    await pinHook.execute({
-      type: SUMMARY_PIN_TYPE_ENUM.FIELD,
-      targetId,
-    });
-  };
-
   const periodOptions = SUMMARY_PERIOD_VALUES.map((period) => ({
     value: period,
     labelKey: SUMMARY_PERIOD_I18N_MAP[period],
   }));
-
-  const chartSeries =
-    fieldSummary?.groupedData.buckets.map((bucket) => ({
-      date: bucket.timestamp.toISOString(),
-      value: bucket.value,
-    })) ?? [];
-
-  // Use weightedAverage if available, otherwise regular average
-  const averageValue =
-    fieldSummary?.statistics.weightedAverage ??
-    fieldSummary?.statistics.averageValue ??
-    0;
-
-  const hasSeries = chartSeries.length > 0;
-
-  // Trend description key - reusing one for now or falling back
-  const trendDescriptionKey: Ti18nKeys = 'page.summary-detail.trend';
 
   return (
     <ScreenLayout
@@ -147,7 +67,10 @@ export default function SummaryFieldDetailScreen() {
             testID="page.summary-detail.period"
           />
 
-          <CardAtom className="p-4 rounded-lg">
+          <CardAtom
+            className="p-4 rounded-lg"
+            testID="page.summary-detail.summary-card"
+          >
             <TypographySmall
               testID="page.summary-detail.average-label"
               i18nKey="page.summary-detail.average-label"
@@ -156,40 +79,25 @@ export default function SummaryFieldDetailScreen() {
             <TypographyHeading
               testID="page.summary-detail.average-value"
               i18nKey="common.raw-value"
-              values={{ value: averageValue.toFixed(1) }}
+              values={{ value: -1 }}
             />
             <TypographySmall
               testID="page.summary-detail.range"
               i18nKey="page.summary-detail.range-placeholder"
               variant="light"
             />
-            {loading ? (
-              <TypographySmall
-                testID="page.summary-detail.loading"
-                i18nKey="common.loading"
-                variant="light"
-                className="mt-4"
-              />
-            ) : hasSeries ? (
-              <View className="mt-4">
-                <SummaryTrendChart
-                  average={averageValue}
-                  series={chartSeries}
-                  period={selectedPeriod}
-                  testID="page.summary-detail.chart"
-                />
-              </View>
-            ) : (
-              <TypographySmall
-                testID="page.summary-detail.empty"
-                i18nKey="page.summary-detail.empty"
-                variant="light"
-                className="mt-4"
-              />
-            )}
+            <SummaryTrendChart
+              average={-1}
+              series={[]}
+              period={selectedPeriod}
+              testID="page.summary-detail.trend-chart"
+            />
           </CardAtom>
 
-          <CardAtom className="p-4 rounded-lg">
+          <CardAtom
+            className="p-4 rounded-lg"
+            testID="page.summary-detail.trend-card"
+          >
             <View className="flex-row items-center justify-between">
               <TypographyParagraph
                 testID="page.summary-detail.trend"
@@ -204,17 +112,20 @@ export default function SummaryFieldDetailScreen() {
           </CardAtom>
 
           <SummaryInsightCard
-            titleKey="page.summary-detail.highlights"
-            descriptionKey={trendDescriptionKey}
-            iconName="flame"
-            metricValue={averageValue}
-            metricLabel=""
-            chartValues={chartSeries.map((item) => item.value)}
-            chartAverage={averageValue}
             testID="page.summary-detail.insight"
+            titleKey="page.summary-detail.highlights"
+            descriptionKey="page.summary-detail.trend"
+            iconName="flame"
+            metricValue={-1}
+            metricLabel="page.summary.metric-label.total"
+            data={[]}
+            chartAverage={-1}
           />
 
-          <CardAtom className="p-0 rounded-lg">
+          <CardAtom
+            className="p-0 rounded-lg"
+            testID="page.summary-detail.actions-card"
+          >
             <View className="p-4">
               <SummarySectionHeader
                 titleKey="page.summary-detail.actions"
@@ -223,14 +134,10 @@ export default function SummaryFieldDetailScreen() {
             </View>
             <View className="px-4 pb-4 gap-2">
               <RowAction
-                iconName={isPinned ? 'bookmark' : 'bookmark-outline'}
-                title={
-                  isPinned
-                    ? 'page.summary-detail.unpin'
-                    : 'page.summary-detail.pin'
-                }
-                onPress={handlePinToggle}
+                iconName="bookmark-outline"
+                title="page.summary-detail.pin"
                 testID="page.summary-detail.pin-toggle"
+                onPress={() => {}}
               />
               <RowAction
                 iconName="list"

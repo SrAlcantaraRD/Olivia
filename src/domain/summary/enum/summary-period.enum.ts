@@ -35,13 +35,13 @@ export const SUMMARY_PERIOD_DAYS_MAP: Record<
   SUMMARY_PERIOD_DAYS_ENUM,
   Ti18nKeys
 > = Object.freeze({
-  [SUMMARY_PERIOD_DAYS_ENUM.SUNDAY]: 'common.days.sunday',
-  [SUMMARY_PERIOD_DAYS_ENUM.MONDAY]: 'common.days.monday',
-  [SUMMARY_PERIOD_DAYS_ENUM.TUESDAY]: 'common.days.tuesday',
-  [SUMMARY_PERIOD_DAYS_ENUM.WEDNESDAY]: 'common.days.wednesday',
-  [SUMMARY_PERIOD_DAYS_ENUM.THURSDAY]: 'common.days.thursday',
-  [SUMMARY_PERIOD_DAYS_ENUM.FRIDAY]: 'common.days.friday',
-  [SUMMARY_PERIOD_DAYS_ENUM.SATURDAY]: 'common.days.saturday',
+  [SUMMARY_PERIOD_DAYS_ENUM.SUNDAY]: 'common.day.sunday',
+  [SUMMARY_PERIOD_DAYS_ENUM.MONDAY]: 'common.day.monday',
+  [SUMMARY_PERIOD_DAYS_ENUM.TUESDAY]: 'common.day.tuesday',
+  [SUMMARY_PERIOD_DAYS_ENUM.WEDNESDAY]: 'common.day.wednesday',
+  [SUMMARY_PERIOD_DAYS_ENUM.THURSDAY]: 'common.day.thursday',
+  [SUMMARY_PERIOD_DAYS_ENUM.FRIDAY]: 'common.day.friday',
+  [SUMMARY_PERIOD_DAYS_ENUM.SATURDAY]: 'common.day.saturday',
 } as const);
 
 export const SUMMARY_PERIOD_VALUES = Object.values(

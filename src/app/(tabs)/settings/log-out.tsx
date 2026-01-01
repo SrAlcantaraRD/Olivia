@@ -121,7 +121,10 @@ export default function LogoutConfirmScreen() {
             accessibilityRole="header"
           />
 
-          <CardAtom className="p-4 bg-danger/10 border border-danger-soft-hover">
+          <CardAtom
+            className="p-4 bg-danger/10 border border-danger-soft-hover"
+            testID="screen.settings.logout-confirm.warning-card"
+          >
             <TypographyParagraph
               testID="screen.settings.logout-confirm.warning"
               i18nKey="page.settings.logout-confirm.warning"

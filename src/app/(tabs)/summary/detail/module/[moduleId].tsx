@@ -1,11 +1,11 @@
 import { useLocalSearchParams } from 'expo-router';
 import { ScrollView } from 'react-native';
 
-import { SummaryModuleFieldsSection } from '@/app/(tabs)/summary/detail/module/components/summary-module-fields-section.organism';
-import { SummaryModuleTrendSection } from '@/app/(tabs)/summary/detail/module/components/summary-module-trend-section.organism';
 import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
-import { SummaryModuleActionsSection } from './components/summary-module-actions-section.organism';
+import { SummaryModuleFieldsSection } from '@/ui/components/organisms/summary-sections/summary-module-fields-section.organism';
+import { SummaryModuleTrendSection } from '@/ui/components/organisms/summary-sections/summary-module-trend-section.organism';
+import { SummaryModuleActionsSection } from '../../../../../ui/components/organisms/summary-sections/summary-module-actions-section.organism';
 
 export default function SummaryModuleDetailScreen() {
   const params = useLocalSearchParams<{ moduleId?: string }>();

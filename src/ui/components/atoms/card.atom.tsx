@@ -15,6 +15,7 @@ type CardAtomProps = React.ComponentProps<typeof Card> & {
   onPress?: () => void;
   isSelectable?: boolean;
   isSelected?: boolean;
+  testID: string;
 };
 
 export const CardAtom = ({
@@ -23,6 +24,7 @@ export const CardAtom = ({
   onPress,
   isSelectable = false,
   isSelected = false,
+  testID,
   ...props
 }: CardAtomProps) => {
   const handlerOnPress = () => {
@@ -76,9 +78,11 @@ export const CardAtom = ({
           progress: { baseDuration: 600 },
         },
       }}
+      testID={`${testID}.pressable`}
     >
       <Card
         {...props}
+        testID={`${testID}.card`}
         className={cn('rounded-lg', 'light:bg-white', className)}
       >
         {children}
@@ -89,6 +93,7 @@ export const CardAtom = ({
           pointerEvents="none"
           style={animatedBorderStyle}
           className="absolute inset-0 rounded-lg"
+          testID={`${testID}.selection-border`}
         />
       )}
     </PressableFeedback>

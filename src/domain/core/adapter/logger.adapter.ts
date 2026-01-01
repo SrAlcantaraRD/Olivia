@@ -46,6 +46,8 @@ const BASE_LOGGER = logger.createLogger({
   enabled: true,
 });
 
+BASE_LOGGER.debug(ENVIRONMENT_VARIABLES, 'Loaded environment variables');
+
 export type TLoggerPort = typeof BASE_LOGGER;
 
 export { BASE_LOGGER };

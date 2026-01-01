@@ -41,7 +41,7 @@ export class GetRecordFieldListUseCase extends BaseUseCase<
 
       return {
         success: false,
-        message: 'error.get-record-field-list',
+        message: 'common.error',
       };
     }
   }

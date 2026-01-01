@@ -35,7 +35,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
   testID,
   chartComponent,
 }) => (
-  <CardAtom className="p-4" onPress={onPress}>
+  <CardAtom className="p-4" onPress={onPress} testID={`${testID}.card`}>
     <View className="flex-row items-center justify-between mb-4">
       <View className="flex-row items-center gap-2">
         {iconElement && (

@@ -75,6 +75,7 @@ export const SummaryModuleFieldCard: React.FC<SummaryModuleFieldCardProps> = ({
           data={summaryModuleField.distribution.map((d) => ({
             label: d.value,
             value: d.count,
+            timestamp: new Date(),
           }))}
         />
       }

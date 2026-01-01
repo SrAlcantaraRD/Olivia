@@ -31,6 +31,7 @@ export const RowAction: React.FC<RowActionProps> = ({
 }) => {
   return (
     <CardAtom
+      testID={`${testID}.card`}
       onPress={onPress}
       className={cn(
         'flex flex-row items-center justify-between',

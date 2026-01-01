@@ -126,12 +126,36 @@ export const caCA = Object.freeze({
   'common.required': 'Obligatori',
   'common.view-all': 'Veure tot',
   'common.number': '{{value}}',
+  'common.month.january': 'Gener',
+  'common.month.february': 'Febrer',
+  'common.month.march': 'Març',
+  'common.month.april': 'Abril',
+  'common.month.may': 'Maig',
+  'common.month.june': 'Juny',
+  'common.month.july': 'Juliol',
+  'common.month.august': 'Agost',
+  'common.month.september': 'Setembre',
+  'common.month.october': 'Octubre',
+  'common.month.november': 'Novembre',
+  'common.month.december': 'Desembre',
+  'common.day.sunday': 'Diumenge',
+  'common.day.monday': 'Dilluns',
+  'common.day.tuesday': 'Dimarts',
+  'common.day.wednesday': 'Dimecres',
+  'common.day.thursday': 'Dijous',
+  'common.day.friday': 'Divendres',
+  'common.day.saturday': 'Dissabte',
 
   // Tab navigation
   'tab.register': 'Registre',
   'tab.report': 'Informe',
   'tab.summary': 'Resum',
   'tab.settings': 'Configuració',
+
+  'enum.module-field-key.color': 'Color',
+  'enum.module-field-key.discomfort-level': "Nivell d'incomoditat",
+  'enum.module-field-key.turbidity': 'Turbidesa',
+  'enum.module-field-key.volumen-level': 'Nivell de volum',
 
   // Page: Register Tab
   'page.register.title': 'Registre',
@@ -153,10 +177,11 @@ export const caCA = Object.freeze({
   'page.summary.subtitle': 'Vista ràpida de dades de salut',
   'page.summary.section.pinned': 'Dades fixades',
   'page.summary.section.modules': 'Mòduls',
-  'page.summary.pins-empty': 'Fixa elements per veure-los aquí',
+  'page.summary.section.can-interest-you': 'Pot interessar-te',
   'page.summary.modules-empty': 'No hi ha mòduls per mostrar',
   'page.summary.today-count': 'Avui: {{value}}',
   'page.summary.metric-label.today': 'Avui',
+  'page.summary.metric-label.total': 'Total',
   'page.summary.metric-label.steps': 'passos',
   'page.summary.all-data': 'Mostrar totes les dades de salut',
   'page.summary.trends': 'Tendències',
@@ -175,10 +200,10 @@ export const caCA = Object.freeze({
   'page.summary-trends.empty': 'No hi ha tendències disponibles',
 
   // Page: Summary Highlights
-  'page.summary-highlights.title': 'Dades importants',
-  'page.summary-highlights.subtitle': 'Insights rellevants',
-  'page.summary-highlights.heading': 'Dades importants',
-  'page.summary-highlights.empty': 'No hi ha dades importants encara',
+  'page.summary_highlights.title': 'Destacats',
+  'page.summary_highlights.subtitle': 'Informació rellevant',
+  'page.summary_highlights.heading': 'Destacats',
+  'page.summary_highlights.empty': 'No hi ha destacats disponibles encara',
 
   // Page: Summary Detail
   'page.summary-detail.title': 'Detall del resum',
@@ -243,9 +268,14 @@ export const caCA = Object.freeze({
   'page.settings.app-settings-desc': 'Tema, idioma i privacitat',
   'page.settings.about': 'Sobre',
   'page.settings.about-desc': 'Versió i informació legal',
+  'page.settings.sync-records': 'Sincronitzar registres',
+  'page.settings.sync-records-desc': 'Comparteix registres via QR',
   'page.settings.add-demo-data': 'Afegeix Dades de Demo',
   'page.settings.add-demo-data-desc': 'Afegeix registres de mostra per proves',
   'page.settings.logout': 'Tanca sessió',
+  'page.settings.logout-desc': 'Tanca sessió i borra les dades locals',
+  'page.settings.role.primary': 'Cuidador principal',
+  'page.settings.role.secondary': 'Cuidador secundari',
 
   // Page: Settings Detail Screens
   'page.child-profile.title': 'Perfil del Nen/a',
@@ -438,7 +468,6 @@ export const caCA = Object.freeze({
     'Si us plau espera mentre configurem el teu compte.',
   'hook.setup-parent.error-title': 'Configuració Fallida',
   'hook.setup-parent.success-title': 'Configuració Exitosa',
-  'hook.import-invite.title': 'Important la invitació',
   'hook.import-invite.description':
     "Validant el paquet abans d'afegir el cuidador secundari.",
   'hook.import-invite.success-title': 'Invitació importada',
@@ -506,6 +535,53 @@ export const caCA = Object.freeze({
   'hook.sync-with-carer.success-title': 'Sincronització registrada',
   'hook.sync-with-carer.success-description':
     "L'esdeveniment de sincronització s'ha registrat correctament.",
+  'hook.generate-sync-qr.title': 'Generant QR de sincronització',
+  'hook.generate-sync-qr.description':
+    'Si us plau, espera mentre generem el paquet QR de sincronització.',
+  'hook.generate-sync-qr.error-title': 'Error en generar',
+  'hook.generate-sync-qr.error-description':
+    'No s\'ha pogut generar el codi QR de sincronització.',
+  'hook.generate-sync-qr.success-title': 'QR generat',
+  'hook.generate-sync-qr.success-description':
+    'El QR de sincronització està llest per ser escanejat.',
+  'hook.consume-sync-qr.title': 'Sincronitzant registres',
+  'hook.consume-sync-qr.description':
+    'Processant els registres del QR escanejat.',
+  'hook.consume-sync-qr.error-title': 'Sincronització fallida',
+  'hook.consume-sync-qr.error-description':
+    'No s\'ha pogut sincronitzar els registres. Torna-ho a provar.',
+  'hook.consume-sync-qr.success-title': 'Sincronització completada',
+  'hook.consume-sync-qr.success-description':
+    'Els registres s\'han sincronitzat correctament.',
+  'hook.secondary-carer.generate-invitation-qr.title':
+    "Generant QR d'invitació",
+  'hook.secondary-carer.generate-invitation-qr.description':
+    "Si us plau espera mentre generem el bundle QR d'invitació.",
+  'hook.secondary-carer.generate-invitation-qr.error-title': 'Error en generar',
+  'hook.secondary-carer.generate-invitation-qr.error-description':
+    "No s'ha pogut generar el codi QR d'invitació.",
+  'hook.secondary-carer.generate-invitation-qr.success-title': 'QR generat',
+  'hook.secondary-carer.generate-invitation-qr.success-description':
+    "El QR d'invitació està llest per ser escanejat.",
+  'page.settings.synchronization.summary.title': 'Resum de sincronització',
+  'page.settings.synchronization.summary.desc':
+    "S'han recuperat correctament tots els fragments. Prem el botó a continuació per aplicar els canvis a la teva base de dades.",
+  'page.settings.synchronization.summary.stats.title':
+    'Estadístiques (Provisional):',
+  'page.settings.synchronization.summary.stats.chunks':
+    '• Fragments processats: {{count}}',
+  'page.settings.synchronization.summary.stats.records':
+    '• Registres detectats: {{count}}',
+  'page.settings.synchronization.summary.stats.dates':
+    '• Rang de dates: {{startDate}} - {{endDate}}',
+  'page.settings.synchronization.collection.progress':
+    'Recollits {{count}} de {{total}} fragments',
+  'page.settings.synchronization.collection.start':
+    'Escaneja el primer codi QR per començar',
+  'use-case.consume-record-synchronization-qr.success':
+    'Registres sincronitzats correctament',
+  'use-case.generate-record-synchronization-qr.success':
+    'QR de sincronització de registres generat correctament',
   'page.carer-detail.heading': 'Detalls del cuidador',
   'page.carer-detail.name-value': 'Nom: <bold>{{name}}</bold>',
   'page.carer-detail.ttl':
@@ -539,6 +615,8 @@ export const caCA = Object.freeze({
     'Sol·licitud invàlida per generar QR de invitació',
   'use-case.generate-invitation-qr-for-secondary-carer.generation-failed':
     'Fallada en generar QR de invitació',
+  'use-case.create-record.carer-not-found-in-cache':
+    'No s\'ha trobat el cuidador a la memòria cau',
   'use-case.create-carer.invalid-request':
     'Sol·licitud invàlida per crear cuidador',
   'use-case.delete-carer.invalid-request':
@@ -551,6 +629,8 @@ export const caCA = Object.freeze({
     'El cuidador ja existeix',
   'use-case.sync-with-carer.invalid-request':
     'Sol·licitud invàlida per sincronitzar amb cuidador',
+  'use-case.consume-record-synchronization-qr.invalid-bundle':
+    'Paquet de sincronització invàlid proporcionat',
   'page.carer-management.create-secondary': 'Crear cuidador secundari',
   'page.carer-management.section.primary': 'Cuidador Principal',
   'page.carer-management.section.secondary': 'Cuidadors Secundaris',
@@ -558,17 +638,6 @@ export const caCA = Object.freeze({
   'page.carer-management.ttl-expired.description':
     'La invitació ha expirat. Genera una nova.',
   'page.carer-management.ttl-expired.sync': 'Sincronitzar amb nova invitació',
-  'hook.generate-invitation-qr-for-secondary-carer.title': 'Generant codi QR',
-  'hook.generate-invitation-qr-for-secondary-carer.description':
-    'Per favor espera mentre es genera el codi QR per al cuidador secundari.',
-  'hook.generate-invitation-qr-for-secondary-carer.success-title':
-    'Codi QR generat',
-  'hook.generate-invitation-qr-for-secondary-carer.success-description':
-    'Comparteix el codi QR amb el dispositiu secundari.',
-  'hook.generate-invitation-qr-for-secondary-carer.error-title':
-    'Error generant codi QR',
-  'hook.generate-invitation-qr-for-secondary-carer.error-description':
-    "No s'ha pogut generar el codi QR. Torna-ho a provar.",
   'page.carer-detail.subtitle': 'Detalls i gestió del cuidador secundari',
   'page.carer-detail.title': 'Detalls del Cuidador',
 

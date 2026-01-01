@@ -4,14 +4,12 @@ import { ExpoRouterNavigationAdapter } from '@/adapter/expo-router-navigation.ad
 import { SecureStoreCacheAdapter } from '@/adapter/expo-secure-store.cache-port.adapter';
 import { QrPortAdapter } from '@/adapter/minizlib.qr.adapter';
 import { ToastUINotifyPortAdapter } from '@/adapter/toast.notify-port.adapter';
-import { CachePortSummaryPinsAdapter } from '@/database/adapter/cache-port.summary-pins.adapter';
 import { SQLiteCarerAdapter } from '@/database/adapter/sqlite.carer.adapter';
 import { SQLiteModuleFieldAdapter } from '@/database/adapter/sqlite.module-field.adapter';
 import { SQLiteModuleAdapter } from '@/database/adapter/sqlite.module.adapter';
 import { SQLitePatientAdapter } from '@/database/adapter/sqlite.patient.adapter';
 import { SQLiteRecordFieldAdapter } from '@/database/adapter/sqlite.record-field.adapter';
 import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
-import { SqliteSummaryGroupingAdapter } from '@/database/adapter/sqlite.summary-grouping.adapter';
 import { SQLiteSummaryModuleFieldAdapter } from '@/database/adapter/sqlite.summary-module-field.adapter';
 import { SQLiteSummaryModuleAdapter } from '@/database/adapter/sqlite.summary-module.adapter';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
@@ -30,7 +28,6 @@ import type { IRecordPort } from '@/domain/module/port/record.port';
 import type { IPatientPort } from '@/domain/patient/port/patient.port';
 import type { ISummaryModuleFieldPort } from '@/domain/summary/port/summary-module-field.port';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
-import type { ISummaryPinsPort } from '@/domain/summary/port/summary-pins.port';
 
 interface IAdapters {
   cacheAdapter: ICachePort;
@@ -44,7 +41,6 @@ interface IAdapters {
   recordAdapter: IRecordPort;
   recordFieldAdapter: IRecordFieldPort;
   secureStoreAdapter: ICachePort;
-  summaryPinsAdapter: ISummaryPinsPort;
   qrAdapter: IQRPort;
   summaryModuleAdapter: ISummaryModulePort;
   summaryModuleFieldAdapter: ISummaryModuleFieldPort;
@@ -62,8 +58,6 @@ const recordFieldAdapter = new SQLiteRecordFieldAdapter();
 const secureStoreAdapter = new SecureStoreCacheAdapter();
 // const cacheAdapter = new SecureStoreCacheAdapter();
 
-const summaryGroupingPort = new SqliteSummaryGroupingAdapter();
-const summaryPinsAdapter = new CachePortSummaryPinsAdapter(secureStoreAdapter);
 const qrAdapter = new QrPortAdapter(BASE_LOGGER);
 
 const summaryModuleAdapter = new SQLiteSummaryModuleAdapter();
@@ -83,8 +77,6 @@ export const useAdapters = (): Readonly<IAdapters> => {
     recordAdapter,
     navigationAdapter,
     recordFieldAdapter,
-    summaryGroupingPort,
-    summaryPinsAdapter,
     cacheAdapter: secureStoreAdapter,
     secureStoreAdapter,
     qrAdapter,

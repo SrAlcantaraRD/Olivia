@@ -102,18 +102,6 @@ export const useNavigation = (adapters: {
     navigateTo('/(tabs)/summary');
   }, []);
 
-  const goToSummaryAllData = useCallback(() => {
-    navigateTo('/(tabs)/summary/all-data');
-  }, []);
-
-  const goToSummaryTrends = useCallback(() => {
-    navigateTo('/(tabs)/summary/trends');
-  }, []);
-
-  const goToSummaryHighlights = useCallback(() => {
-    navigateTo('/(tabs)/summary/highlights');
-  }, []);
-
   const goToSummaryModuleDetail = useCallback((moduleId: string) => {
     navigateTo(`/(tabs)/summary/detail/module/${moduleId}`);
   }, []);
@@ -157,9 +145,6 @@ export const useNavigation = (adapters: {
     goToLogOut,
     goToAbout,
     goToSummaryHome,
-    goToSummaryAllData,
-    goToSummaryTrends,
-    goToSummaryHighlights,
     goToSummaryModuleDetail,
     goToSummaryFieldDetail,
     goToSummaryFieldRecords,

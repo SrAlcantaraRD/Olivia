@@ -7,15 +7,15 @@ import type {
   IUseHook,
 } from '@/domain/core/interface/hook.interface';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
-import type { IModulePort } from '@/domain/module/port/module.port';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
-import type { IRecordPort } from '@/domain/module/port/record.port';
+import type { IModulePort } from '@/domain/module/port/module.port';
 import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
-import { AddDemoDataUseCase } from '@/domain/module/use-case/add-demo-data.use-case';
+import type { IRecordPort } from '@/domain/module/port/record.port';
 import type {
   TRequestAddDemoData,
   TResponseAddDemoData,
 } from '@/domain/module/use-case-schema/add-demo-data.use-case-schema';
+import { AddDemoDataUseCase } from '@/domain/module/use-case/add-demo-data.use-case';
 
 export function useAddDemoData(adapters: {
   loggerAdapter: TLoggerPort;
@@ -53,10 +53,10 @@ export function useAddDemoData(adapters: {
 
         return { success: true, data: response.details };
       } catch (_error) {
+        adapters.loggerAdapter.error('Error in useAddDemoData hook', _error);
         adapters.notifyAdapter.error({
           title: 'hook.add-demo-data.error-title',
-          description:
-            _error?.message ?? 'hook.add-demo-data.error-description',
+          description: 'hook.add-demo-data.error-description',
         });
         return { success: false };
       } finally {

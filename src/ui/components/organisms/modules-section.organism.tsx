@@ -7,24 +7,14 @@ import { useGetSummaryModuleListByPeriod } from '@/domain/summary/hook/use-get-s
 import { RowAction } from '@/ui/components/molecules/row-action.molecule';
 import { SummaryModuleCard } from '@/ui/components/molecules/summary-card.module.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
-import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 interface ModulesSectionProps {
   testID: string;
 }
 
 export const ModulesSection: FC<ModulesSectionProps> = ({ testID }) => {
-  const {
-    notifyAdapter,
-    navigationAdapter,
-    loggerAdapter,
-    cacheAdapter,
-    summaryModuleAdapter,
-  } = useAdapters();
-
-  const { goToSummaryAllData } = useNavigation({
-    navigationAdapter,
-  });
+  const { notifyAdapter, loggerAdapter, cacheAdapter, summaryModuleAdapter } =
+    useAdapters();
 
   const { items: summaryModuleList, execute: loadSummaryModuleList } =
     useGetSummaryModuleListByPeriod({
@@ -52,7 +42,7 @@ export const ModulesSection: FC<ModulesSectionProps> = ({ testID }) => {
         <RowAction
           iconName="alert"
           title="page.summary.modules-empty"
-          onPress={goToSummaryAllData}
+          onPress={() => {}}
           testID={`${testID}.empty`}
         />
       ) : (

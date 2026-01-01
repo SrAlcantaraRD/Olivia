@@ -19,7 +19,7 @@ export default function CarerDetailScreen() {
         className="flex-1 px-4 space-y-4"
         contentContainerStyle={{ paddingVertical: 12 }}
       >
-        <CardAtom className="p-4 space-y-3">
+        <CardAtom className="p-4 space-y-3" testID="carer-detail.card">
           <TypographyTitle
             testID="carer-detail.heading"
             i18nKey="page.carer-detail.heading"

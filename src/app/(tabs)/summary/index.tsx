@@ -6,17 +6,12 @@ import { useAdapters } from '@/adapter';
 import { useSummaryRefresh } from '@/domain/summary/hook/use-summary-refresh.hook';
 import { RowEmptyAtom } from '@/ui/components/atoms/row-empty.atom';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
-import { PinnedSection } from '@/ui/components/molecules/pinned-section.molecule';
 import { RowAction } from '@/ui/components/molecules/row-action.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 import { ModulesSection } from '@/ui/components/organisms/modules-section.organism';
-import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
 export default function SummaryHomeScreen() {
-  const { navigationAdapter, loggerAdapter, notifyAdapter } = useAdapters();
-
-  const { goToSummaryAllData, goToSummaryHighlights, goToSummaryTrends } =
-    useNavigation({ navigationAdapter });
+  const { loggerAdapter, notifyAdapter } = useAdapters();
 
   const { isExecuting: isRefreshing, execute: executeSummaryRefresh } =
     useSummaryRefresh({
@@ -57,26 +52,24 @@ export default function SummaryHomeScreen() {
             <RowAction
               iconName="heart"
               title="page.summary.all-data"
-              onPress={goToSummaryAllData}
+              onPress={() => {}}
               testID="page.summary.all-data"
             />
 
             <RowAction
               iconName="trending-up"
               title="page.summary.trends"
-              onPress={goToSummaryTrends}
+              onPress={() => {}}
               testID="page.summary.trends"
             />
 
             <RowAction
               iconName="sparkles"
               title="page.summary.highlights"
-              onPress={goToSummaryHighlights}
+              onPress={() => {}}
               testID="page.summary.highlights"
             />
           </View>
-
-          <PinnedSection testID="summary.pinned-section" />
         </View>
 
         <RowEmptyAtom />

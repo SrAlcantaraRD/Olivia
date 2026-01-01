@@ -119,12 +119,36 @@ export const esES = Object.freeze({
   'common.optional': 'Opcional',
   'common.required': 'Obligatorio',
   'common.view-all': 'Ver todo',
+  'common.month.january': 'Enero',
+  'common.month.february': 'Febrero',
+  'common.month.march': 'Marzo',
+  'common.month.april': 'Abril',
+  'common.month.may': 'Mayo',
+  'common.month.june': 'Junio',
+  'common.month.july': 'Julio',
+  'common.month.august': 'Agosto',
+  'common.month.september': 'Septiembre',
+  'common.month.october': 'Octubre',
+  'common.month.november': 'Noviembre',
+  'common.month.december': 'Diciembre',
+  'common.day.sunday': 'Domingo',
+  'common.day.monday': 'Lunes',
+  'common.day.tuesday': 'Martes',
+  'common.day.wednesday': 'Miércoles',
+  'common.day.thursday': 'Jueves',
+  'common.day.friday': 'Viernes',
+  'common.day.saturday': 'Sábado',
 
   // Tab navigation
   'tab.register': 'Registro',
   'tab.report': 'Reporte',
   'tab.summary': 'Resumen',
   'tab.settings': 'Ajustes',
+
+  'enum.module-field-key.color': 'Color',
+  'enum.module-field-key.discomfort-level': 'Nivel de incomodidad',
+  'enum.module-field-key.turbidity': 'Turbidez',
+  'enum.module-field-key.volumen-level': 'Nivel de volumen',
 
   // Page: Register Tab
   'page.register.title': 'Registro',
@@ -146,10 +170,11 @@ export const esES = Object.freeze({
   'page.summary.subtitle': 'Una vista rápida de los datos de salud',
   'page.summary.section.pinned': 'Datos fijados',
   'page.summary.section.modules': 'Módulos',
-  'page.summary.pins-empty': 'Fija elementos para verlos aquí',
+  'page.summary.section.can-interest-you': 'Te puede interesar',
   'page.summary.modules-empty': 'No hay resúmenes de módulos disponibles',
   'page.summary.today-count': 'Hoy: {{value}}',
   'page.summary.metric-label.today': 'Hoy',
+  'page.summary.metric-label.total': 'Total',
   'page.summary.metric-label.steps': 'pasos',
   'page.summary.all-data': 'Mostrar todos los datos de salud',
   'page.summary.trends': 'Tendencias',
@@ -338,6 +363,16 @@ export const esES = Object.freeze({
   'hook.generate-sync-qr.success-title': 'QR generado',
   'hook.generate-sync-qr.success-description':
     'El QR de sincronización está listo para ser escaneado.',
+  'hook.secondary-carer.generate-invitation-qr.title':
+    'Generando QR de invitación',
+  'hook.secondary-carer.generate-invitation-qr.description':
+    'Por favor, espera mientras generamos el bundle QR de invitación.',
+  'hook.secondary-carer.generate-invitation-qr.error-title': 'Error al generar',
+  'hook.secondary-carer.generate-invitation-qr.error-description':
+    'No se pudo generar el código QR de invitación.',
+  'hook.secondary-carer.generate-invitation-qr.success-title': 'QR generado',
+  'hook.secondary-carer.generate-invitation-qr.success-description':
+    'El QR de invitación está listo para ser escaneado.',
   'hook.consume-sync-qr.title': 'Sincronizando registros',
   'hook.consume-sync-qr.description':
     'Procesando los registros del QR escaneado.',
@@ -347,6 +382,25 @@ export const esES = Object.freeze({
   'hook.consume-sync-qr.success-title': 'Sincronización completada',
   'hook.consume-sync-qr.success-description':
     'Los registros se han sincronizado correctamente.',
+  'page.settings.synchronization.summary.title': 'Resumen de sincronización',
+  'page.settings.synchronization.summary.desc':
+    'Todos los fragmentos se han recuperado correctamente. Presiona el botón abajo para aplicar los cambios en tu base de datos.',
+  'page.settings.synchronization.summary.stats.title':
+    'Estadísticas (Provisional):',
+  'page.settings.synchronization.summary.stats.chunks':
+    '• Fragmentos procesados: {{count}}',
+  'page.settings.synchronization.summary.stats.records':
+    '• Registros detectados: {{count}}',
+  'page.settings.synchronization.summary.stats.dates':
+    '• Rango de fechas: {{startDate}} - {{endDate}}',
+  'page.settings.synchronization.collection.progress':
+    'Recogidos {{count}} de {{total}} fragmentos',
+  'page.settings.synchronization.collection.start':
+    'Escanea el primer código QR para empezar',
+  'use-case.consume-record-synchronization-qr.success':
+    'Registros sincronizados correctamente',
+  'use-case.generate-record-synchronization-qr.success':
+    'QR de sincronización de registros generado correctamente',
   'page.carer-detail.heading': 'Detalles del cuidador',
   'page.carer-detail.name-value': 'Nombre: <bold>{{name}}</bold>',
   'page.carer-detail.ttl':
@@ -635,17 +689,15 @@ export const esES = Object.freeze({
   'secondary-carer-setup.qr-info.user-name':
     'Tu nombre: <bold>{{userName}}</bold>',
   'secondary-carer-setup.qr-info.form-title': 'Tu información',
-
   'secondary-carer-setup.modules.title': 'Módulos activos',
   'secondary-carer-setup.modules.description':
     'Revisa los módulos a los que tendrás acceso.',
-  'secondary-carer-setup.modules.empty':
-    'No se han encontrado módulos activos.',
+  'secondary-carer-setup.modules.empty': 'No se han encontrado módulos activos.',
   'secondary-carer-setup.modules.note':
-    'Podrás ver y contribuir a estos módulos de salud.',
+    'Podrás ver y contribuir en estos módulos de salud.',
   'secondary-carer-setup.summary.title': 'Revisa tu información',
   'secondary-carer-setup.summary.description':
-    'Confirma que todo es correcto antes de continuar',
+    'Confirma que todo esté correcto antes de continuar',
   'secondary-carer-setup.summary.carer-name': 'Nombre',
   'secondary-carer-setup.summary.relationship': 'Relación',
   'secondary-carer-setup.summary.notes': 'Notas',
@@ -654,28 +706,11 @@ export const esES = Object.freeze({
   'secondary-carer-setup.summary.confirmation-note':
     'Al continuar, aceptas compartir datos de salud de forma segura.',
   'page.caregiver-setup.scan-qr.permission.title':
-    'Se necesita permiso de cámara',
+    'Permiso de cámara necesario',
   'page.caregiver-setup.scan-qr.permission.description':
     'Por favor, permite el acceso a la cámara para escanear el código QR de invitación.',
   'page.caregiver-setup.scan-qr.permission.request':
-    'Conceder acceso a la cámara',
-  'page.settings.synchronization.summary.title': 'Resumen de sincronización',
-  'page.settings.synchronization.summary.desc':
-    'Se han recuperado todos los fragmentos con éxito. Pulsa el botón de abajo para aplicar los cambios en tu base de datos.',
-  'page.settings.synchronization.summary.stats.title':
-    'Estadísticas (Provisionales):',
-  'page.settings.synchronization.summary.stats.chunks':
-    '• Fragmentos procesados: {{count}}',
-  'page.settings.synchronization.summary.stats.records':
-    '• Registros detectados: {{count}}',
-  'page.settings.synchronization.summary.stats.dates':
-    '• Rango de fechas: {{range}}',
-  'page.settings.synchronization.collection.progress':
-    'Recogidos {{count}} de {{total}} fragmentos',
-  'page.settings.synchronization.collection.start':
-    'Escanea el primer código QR para empezar',
-  'use-case.consume-record-synchronization-qr.success':
-    'Registros sincronizados correctamente',
-  'use-case.generate-record-synchronization-qr.success':
-    'QR de sincronización de registros generado correctamente',
+    'Concede acceso a la cámara',
+  'use-case.consume-record-synchronization-qr.invalid-bundle':
+    'Paquete de sincronización inválido proporcionado',
 }) satisfies Record<Ti18nKeys, string>;
