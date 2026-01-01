@@ -2,14 +2,15 @@ import { useThemeColor } from 'heroui-native';
 import type React from 'react';
 import { View } from 'react-native';
 
-import type { Ti18nKeys } from '@/domain/core/types/i18n.types';
+import type { SUMMARY_PERIOD_ENUM } from '@/domain/summary/enum/summary-period.enum';
 import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { TypographySmall } from '@/ui/components/atoms/typography.atom';
+import type { Ti18nKeys } from '@/ui/i18n/locales/en-EN';
 
 interface SummaryPeriodSelectorProps {
-  options: { value: string; labelKey: Ti18nKeys }[];
-  selected: string;
-  onSelect?: (value: string) => void;
+  options: { value: SUMMARY_PERIOD_ENUM; labelKey: Ti18nKeys }[];
+  selected: SUMMARY_PERIOD_ENUM;
+  onSelect?: (value: SUMMARY_PERIOD_ENUM) => void;
   testID: string;
 }
 
@@ -21,7 +22,7 @@ export const SummaryPeriodSelector: React.FC<SummaryPeriodSelectorProps> = ({
 }) => {
   const mutedColor = useThemeColor('muted');
 
-  const handlerOnSelect = (value: string) => {
+  const handlerOnSelect = (value: SUMMARY_PERIOD_ENUM) => {
     setTimeout(() => {
       onSelect?.(value);
     }, 300);

@@ -5,10 +5,7 @@ import { useAdapters } from '@/adapter';
 import { SUMMARY_PERIOD_ENUM } from '@/domain/summary/enum/summary-period.enum';
 import { useGetSummaryModuleListByPeriod } from '@/domain/summary/hook/use-get-summary-module-list-by-period.hook';
 import { RowAction } from '@/ui/components/molecules/row-action.molecule';
-import {
-  SummaryCard,
-  SummaryCardChartType,
-} from '@/ui/components/molecules/summary-card.molecule';
+import { SummaryModuleCard } from '@/ui/components/molecules/summary-card.module.molecule';
 import { SummarySectionHeader } from '@/ui/components/molecules/summary-section-header.molecule';
 import { useNavigation } from '@/ui/hook/use-navigation.hook';
 
@@ -18,18 +15,14 @@ interface ModulesSectionProps {
 
 export const ModulesSection: FC<ModulesSectionProps> = ({ testID }) => {
   const {
-    moduleAdapter,
-    moduleFieldAdapter,
-    recordFieldAdapter,
     notifyAdapter,
     navigationAdapter,
     loggerAdapter,
-    recordAdapter,
     cacheAdapter,
-    summaryAdapter,
+    summaryModuleAdapter,
   } = useAdapters();
 
-  const { goToSummaryAllData, goToSummaryModuleDetail } = useNavigation({
+  const { goToSummaryAllData } = useNavigation({
     navigationAdapter,
   });
 
@@ -38,11 +31,7 @@ export const ModulesSection: FC<ModulesSectionProps> = ({ testID }) => {
       loggerAdapter,
       notifyAdapter,
       cacheAdapter,
-      moduleAdapter,
-      moduleFieldAdapter,
-      recordFieldAdapter,
-      recordAdapter,
-      summaryAdapter,
+      summaryModuleAdapter,
     });
 
   const handlerLoadData = async () => {
@@ -68,12 +57,10 @@ export const ModulesSection: FC<ModulesSectionProps> = ({ testID }) => {
         />
       ) : (
         summaryModuleList.map((summary) => (
-          <SummaryCard
-            key={`summary-module-${summary.module.id}`}
+          <SummaryModuleCard
+            key={`summary-module-${summary.metadata.module.id}`}
+            testID={`${testID}.${summary.metadata.module.id}`}
             summary={summary}
-            chartType={SummaryCardChartType.BAR}
-            onPress={() => goToSummaryModuleDetail(String(summary.module.id))}
-            testID={`${testID}.${summary.module.id}`}
           />
         ))
       )}

@@ -1,9 +1,9 @@
 import { format } from 'date-fns';
 import type React from 'react';
 import { useMemo } from 'react';
-import { View } from 'react-native';
 
 import { SUMMARY_PERIOD_ENUM } from '@/domain/summary/enum/summary-period.enum';
+import { CardAtom } from '@/ui/components/atoms/card.atom';
 import { BarChartAtom } from '@/ui/components/atoms/chart.bar.atom';
 import {
   TypographyHeading,
@@ -78,7 +78,7 @@ export const SummaryTrendChart: React.FC<SummaryTrendChartProps> = ({
   const hasSeries = series.length > 0;
 
   return (
-    <View testID={testID}>
+    <CardAtom testID={testID} className="rounded-lg overflow-hidden">
       <TypographySmall
         testID={`${testID}.average-label`}
         i18nKey="page.summary-detail.average-label"
@@ -87,7 +87,7 @@ export const SummaryTrendChart: React.FC<SummaryTrendChartProps> = ({
       <TypographyHeading
         testID={`${testID}.average-value`}
         i18nKey="common.raw-value"
-        values={{ value: average ?? 0 }}
+        values={{ value: Math.round(average) }}
       />
       <TypographySmall
         testID={`${testID}.range`}
@@ -110,6 +110,6 @@ export const SummaryTrendChart: React.FC<SummaryTrendChartProps> = ({
           variant="light"
         />
       )}
-    </View>
+    </CardAtom>
   );
 };
