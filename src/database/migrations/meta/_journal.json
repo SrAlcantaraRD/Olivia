@@ -5,57 +5,22 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1765399724888,
-      "tag": "0000_worried_calypso",
+      "when": 1767265626473,
+      "tag": "0000_mighty_lady_deathstrike",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "6",
-      "when": 1765399726918,
+      "when": 1767265638363,
       "tag": "0001_seed-cic-module",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "6",
-      "when": 1765399779628,
+      "when": 1767265640810,
       "tag": "0002_seed-cic-module-fields",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1765496314671,
-      "tag": "0003_rapid_may_parker",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1766714944000,
-      "tag": "0004_uneven_prowler",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1766771857727,
-      "tag": "0005_lush_sandman",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1766774898444,
-      "tag": "0006_luxuriant_warbird",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1766778238128,
-      "tag": "0007_common_marrow",
       "breakpoints": true
     }
   ]
