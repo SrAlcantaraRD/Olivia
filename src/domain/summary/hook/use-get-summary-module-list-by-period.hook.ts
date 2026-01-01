@@ -8,10 +8,6 @@ import type {
 import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
-import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
-import type { IModulePort } from '@/domain/module/port/module.port';
-import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
-import type { IRecordPort } from '@/domain/module/port/record.port';
 import type { TSummaryModule } from '@/domain/summary/entity/summary-module.entity';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
 import type {
@@ -19,34 +15,17 @@ import type {
   TResponseGetSummaryModuleListByPeriod,
 } from '@/domain/summary/use-case-schema/get-summary-module-list-by-period.use-case-schema';
 import { GetSummaryModuleListByPeriodUseCase } from '@/domain/summary/use-case/get-summary-module-list-by-period.use-case';
-
-/**
- * Hook for getting multiple modules summary (for home screen)
- * Autonomous hook that directly consumes the use-case
- */
 export const useGetSummaryModuleListByPeriod = (params: {
   loggerAdapter: TLoggerPort;
   notifyAdapter: INotifyPort;
-  moduleAdapter: IModulePort;
-  moduleFieldAdapter: IModuleFieldPort;
-  recordAdapter: IRecordPort;
-  recordFieldAdapter: IRecordFieldPort;
   cacheAdapter: ICachePort;
-  summaryAdapter: ISummaryModulePort;
+  summaryModuleAdapter: ISummaryModulePort;
 }): IUseHook<
   TRequestGetSummaryModuleListByPeriod,
   TResponseGetSummaryModuleListByPeriod
 > => {
-  const {
-    loggerAdapter,
-    notifyAdapter,
-    cacheAdapter,
-    summaryAdapter,
-    moduleAdapter,
-    moduleFieldAdapter,
-    recordAdapter,
-    recordFieldAdapter,
-  } = params;
+  const { loggerAdapter, notifyAdapter, cacheAdapter, summaryModuleAdapter } =
+    params;
 
   const {
     actions: { startLoading, stopLoading, saveItems, getItems },
@@ -62,11 +41,7 @@ export const useGetSummaryModuleListByPeriod = (params: {
         const useCase = new GetSummaryModuleListByPeriodUseCase({
           loggerAdapter,
           cacheAdapter,
-          summaryAdapter,
-          moduleAdapter,
-          moduleFieldAdapter,
-          recordAdapter,
-          recordFieldAdapter,
+          summaryModuleAdapter,
         });
 
         const response = await useCase.execute(data);
