@@ -5,7 +5,11 @@ import { act, renderHook } from '@testing-library/react-native';
 import type { IHookResponse } from '@/domain/core/interface/hook.interface';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { useCreateRecord } from '@/domain/module/hook/create-record.hook';
-import { mockLoggerPort, mockNotifyPort } from '@/tests/mocks/core.port.mock';
+import {
+  mockCachePort,
+  mockLoggerPort,
+  mockNotifyPort,
+} from '@/tests/mocks/core.port.mock';
 import {
   mockRecordCreate,
   mockRecordEntity,
@@ -17,17 +21,18 @@ import {
 
 describe('[Hook] - CreateRecord', () => {
   const prepareSuiteCase = () => {
-    // Arrange
     const loggerAdapter = mockLoggerPort();
     const recordAdapter = mockRecordPort();
     const recordFieldAdapter = mockRecordFieldPort();
     const notifyAdapter = mockNotifyPort();
+    const cacheAdapter = mockCachePort();
 
     const adapters = {
       loggerAdapter,
       recordAdapter,
       recordFieldAdapter,
       notifyAdapter,
+      cacheAdapter,
     };
 
     const { result } = renderHook(() => useCreateRecord(adapters));
@@ -53,25 +58,29 @@ describe('[Hook] - CreateRecord', () => {
 
   describe('Happy Path', () => {
     it('creates record successfully when useCase succeeds', async () => {
-      const { execute, recordAdapter, recordFieldAdapter, notifyAdapter } =
-        prepareSuiteCase();
+      const {
+        execute,
+        recordAdapter,
+        recordFieldAdapter,
+        cacheAdapter,
+        notifyAdapter,
+      } = prepareSuiteCase();
       const record = mockRecordEntity({ id: 1 });
-      recordAdapter.create.mockResolvedValue(record);
-      recordFieldAdapter.batchCreate.mockResolvedValue([]);
+      cacheAdapter.get.mockResolvedValue(2);
+      recordAdapter.upsert.mockResolvedValue(record);
+      recordFieldAdapter.batchUpsert.mockResolvedValue([]);
 
-      // Act
       const response = await execute(
         mockRecordCreate({
           moduleID: 1,
           synchronized: false,
           data: record.data,
-          fieldList: [],
+          recordFieldList: [],
         })
       );
 
-      // Assert
       expect(response.success).toBe(true);
-      expect(recordAdapter.create).toHaveBeenCalled();
+      expect(recordAdapter.upsert).toHaveBeenCalled();
       expect(notifyAdapter.success).toHaveBeenCalled();
     });
   });

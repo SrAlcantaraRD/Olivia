@@ -48,7 +48,7 @@ export class GenerateRecordSynchronizationQRUseCase extends WorkWithQRBaseUseCas
 
       return {
         success: false,
-        message: 'use-case.delete-carer.invalid-request',
+        message: 'use-case.generate-record-synchronization-qr.invalid-request',
       };
     }
 

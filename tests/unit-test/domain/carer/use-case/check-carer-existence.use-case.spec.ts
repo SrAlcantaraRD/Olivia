@@ -1,23 +1,26 @@
 import { CheckCarerExistenceUseCase } from '@/domain/carer/use-case/check-carer-existence.use-case';
-import { mockCarerPort } from '@/tests/mocks/carer.port.mock';
-import { mockLoggerPort } from '@/tests/mocks/core.port.mock';
+import { CACHE_KEY_ENUM } from '@/domain/core/port/cache.port';
+import { mockCachePort, mockLoggerPort } from '@/tests/mocks/core.port.mock';
 
 describe('[UseCase] - CheckCarerExistence', () => {
   const prepareSuiteCase = () => {
-    const carerPort = mockCarerPort();
-    const loggerPort = mockLoggerPort();
+    const cacheAdapter = mockCachePort();
+    const loggerAdapter = mockLoggerPort();
 
-    const useCase = new CheckCarerExistenceUseCase(loggerPort, carerPort);
+    const useCase = new CheckCarerExistenceUseCase({
+      loggerAdapter,
+      cacheAdapter,
+    });
 
-    return { useCase, carerPort, loggerPort };
+    return { useCase, cacheAdapter, loggerAdapter };
   };
 
   beforeEach(() => jest.clearAllMocks());
 
   describe('Happy Path', () => {
     it('returns exists true when carer exists', async () => {
-      const { useCase, carerPort } = prepareSuiteCase();
-      carerPort.existsAny.mockResolvedValue(true);
+      const { useCase, cacheAdapter } = prepareSuiteCase();
+      cacheAdapter.get.mockResolvedValue(1);
 
       const response = await useCase.execute();
 
@@ -25,12 +28,12 @@ describe('[UseCase] - CheckCarerExistence', () => {
       if (response.success) {
         expect(response.details.exists).toBe(true);
       }
-      expect(carerPort.existsAny).toHaveBeenCalledTimes(1);
+      expect(cacheAdapter.get).toHaveBeenCalledWith(CACHE_KEY_ENUM.CARER);
     });
 
     it('returns exists false when no carer exists', async () => {
-      const { useCase, carerPort } = prepareSuiteCase();
-      carerPort.existsAny.mockResolvedValue(false);
+      const { useCase, cacheAdapter } = prepareSuiteCase();
+      cacheAdapter.get.mockResolvedValue(null);
 
       const response = await useCase.execute();
 
@@ -38,17 +41,17 @@ describe('[UseCase] - CheckCarerExistence', () => {
       if (response.success) {
         expect(response.details.exists).toBe(false);
       }
-      expect(carerPort.existsAny).toHaveBeenCalledTimes(1);
+      expect(cacheAdapter.get).toHaveBeenCalledWith(CACHE_KEY_ENUM.CARER);
     });
   });
 
   describe('Negative Path', () => {
     it('throws error when port fails', async () => {
-      const { useCase, carerPort } = prepareSuiteCase();
-      carerPort.existsAny.mockRejectedValue(new Error('Database error'));
+      const { useCase, cacheAdapter } = prepareSuiteCase();
+      cacheAdapter.get.mockRejectedValue(new Error('Database error'));
 
       await expect(useCase.execute()).rejects.toThrow('Database error');
-      expect(carerPort.existsAny).toHaveBeenCalledTimes(1);
+      expect(cacheAdapter.get).toHaveBeenCalledWith(CACHE_KEY_ENUM.CARER);
     });
   });
 });

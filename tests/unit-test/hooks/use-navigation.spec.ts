@@ -73,24 +73,12 @@ describe('[Hook] useNavigation', () => {
     );
   });
 
-  it('should call replaceTo on adapter when replaceTo is called', () => {
+  it('should call replaceTo with register home route on goToRegisterHome', () => {
     const { result } = renderHook(() =>
       useNavigation({ navigationAdapter: mockNavigationAdapter })
     );
 
-    result.current.replaceTo('/(tabs)/register');
-
-    expect(mockNavigationAdapter.replaceTo).toHaveBeenCalledWith(
-      '/(tabs)/register' satisfies Href
-    );
-  });
-
-  it('should call replaceTo with register home route on goToRegisterHomeReplace', () => {
-    const { result } = renderHook(() =>
-      useNavigation({ navigationAdapter: mockNavigationAdapter })
-    );
-
-    result.current.goToRegisterHomeReplace();
+    result.current.goToRegisterHome();
 
     expect(mockNavigationAdapter.replaceTo).toHaveBeenCalledWith(
       '/(tabs)/register' satisfies Href

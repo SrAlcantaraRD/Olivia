@@ -34,4 +34,34 @@ describe('[UseCase] - WipeLocalData', () => {
     expect(cacheAdapter.clearAll).toHaveBeenCalled();
     expect(secureStoreAdapter.clearAll).toHaveBeenCalled();
   });
+
+  it('handles cache clear error gracefully', async () => {
+    const { unit, cacheAdapter, loggerAdapter } = prepareSuiteCase();
+
+    cacheAdapter.clearAll.mockRejectedValue(new Error('Cache clear failed'));
+
+    // Act
+    const resp = await unit.execute();
+
+    // Assert
+    expect(resp.success).toBe(false);
+    expect(resp.message).toBe('common.error');
+    expect(loggerAdapter.error).toHaveBeenCalled();
+  });
+
+  it('handles secure store clear error gracefully', async () => {
+    const { unit, secureStoreAdapter, loggerAdapter } = prepareSuiteCase();
+
+    secureStoreAdapter.clearAll.mockRejectedValue(
+      new Error('Secure store clear failed')
+    );
+
+    // Act
+    const resp = await unit.execute();
+
+    // Assert
+    expect(resp.success).toBe(false);
+    expect(resp.message).toBe('common.error');
+    expect(loggerAdapter.error).toHaveBeenCalled();
+  });
 });

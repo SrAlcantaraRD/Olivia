@@ -5,13 +5,13 @@ import { SecureStoreCacheAdapter } from '@/adapter/expo-secure-store.cache-port.
 import { QrPortAdapter } from '@/adapter/minizlib.qr.adapter';
 import { ToastUINotifyPortAdapter } from '@/adapter/toast.notify-port.adapter';
 import { SQLiteCarerAdapter } from '@/database/adapter/sqlite.carer.adapter';
-import { SQLiteModuleFieldAdapter } from '@/database/adapter/sqlite.module-field.adapter';
 import { SQLiteModuleAdapter } from '@/database/adapter/sqlite.module.adapter';
+import { SQLiteModuleFieldAdapter } from '@/database/adapter/sqlite.module-field.adapter';
 import { SQLitePatientAdapter } from '@/database/adapter/sqlite.patient.adapter';
-import { SQLiteRecordFieldAdapter } from '@/database/adapter/sqlite.record-field.adapter';
 import { SQLiteRecordAdapter } from '@/database/adapter/sqlite.record.adapter';
-import { SQLiteSummaryModuleFieldAdapter } from '@/database/adapter/sqlite.summary-module-field.adapter';
+import { SQLiteRecordFieldAdapter } from '@/database/adapter/sqlite.record-field.adapter';
 import { SQLiteSummaryModuleAdapter } from '@/database/adapter/sqlite.summary-module.adapter';
+import { SQLiteSummaryModuleFieldAdapter } from '@/database/adapter/sqlite.summary-module-field.adapter';
 import type { ICarerPort } from '@/domain/carer/port/carer.port';
 import {
   BASE_LOGGER,
@@ -21,13 +21,13 @@ import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INavigationPort } from '@/domain/core/port/navigation.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { IQRPort } from '@/domain/core/port/qr.port';
-import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IModulePort } from '@/domain/module/port/module.port';
-import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
+import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { IRecordPort } from '@/domain/module/port/record.port';
+import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import type { IPatientPort } from '@/domain/patient/port/patient.port';
-import type { ISummaryModuleFieldPort } from '@/domain/summary/port/summary-module-field.port';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
+import type { ISummaryModuleFieldPort } from '@/domain/summary/port/summary-module-field.port';
 
 interface IAdapters {
   cacheAdapter: ICachePort;

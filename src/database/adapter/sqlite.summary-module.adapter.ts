@@ -10,6 +10,7 @@ import {
   type TAppDatabase,
 } from '@/database/config/database.config';
 import * as DB_SCHEMA from '@/database/schema';
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import { ERROR_CODE_ENUM } from '@/domain/core/enum/error-code.enum';
 import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 import { ErrorDatabaseDefault } from '@/domain/core/error/database-default.error';
@@ -46,7 +47,7 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
     const module = SQLiteModuleAdapter.toDomainEntity(entity);
 
     // 2. Get grouped data
-    const groupedData = await this.getGroupedRecordFieldsByModule({
+    const groupedData = await this.getGroupedRecordByModule({
       moduleId: module.id,
       period,
     });
@@ -57,6 +58,8 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
       period,
       groupedData,
     });
+
+    BASE_LOGGER.error({ statistics }); // --- IGNORE ---
 
     return {
       summaryModuleFieldList: [],
@@ -337,7 +340,7 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
     return { startDate, endDate };
   }
 
-  private async getGroupedRecordFieldsByModule(params: {
+  private async getGroupedRecordByModule(params: {
     moduleId: TID;
     period: SUMMARY_PERIOD_ENUM;
   }): Promise<TSummaryPeriodResult> {
@@ -347,7 +350,7 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
     const groupByClause = this.buildGroupByClause(period);
 
     const conditions = [
-      eq(DB_SCHEMA.MODULE_FIELD.moduleID, moduleId),
+      eq(DB_SCHEMA.RECORD.moduleID, moduleId),
       gte(DB_SCHEMA.RECORD.createdAt, startDate),
       lte(DB_SCHEMA.RECORD.createdAt, endDate),
     ];
@@ -358,15 +361,7 @@ export class SQLiteSummaryModuleAdapter implements ISummaryModulePort {
         count: count(),
         bucketTimestamp: sql<number>`MIN(${DB_SCHEMA.RECORD.createdAt})`,
       })
-      .from(DB_SCHEMA.RECORD_FIELD)
-      .innerJoin(
-        DB_SCHEMA.RECORD,
-        eq(DB_SCHEMA.RECORD_FIELD.recordID, DB_SCHEMA.RECORD.id)
-      )
-      .innerJoin(
-        DB_SCHEMA.MODULE_FIELD,
-        eq(DB_SCHEMA.RECORD_FIELD.fieldID, DB_SCHEMA.MODULE_FIELD.id)
-      )
+      .from(DB_SCHEMA.RECORD)
       .where(and(...conditions))
       .groupBy(groupByClause)
       .orderBy(sql`MIN(${DB_SCHEMA.RECORD.createdAt})`);

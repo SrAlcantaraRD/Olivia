@@ -45,8 +45,8 @@ describe('[Hook] - GetListModuleField', () => {
       const { execute, moduleFieldAdapter } = prepareSuiteCase();
       const moduleID = 123;
       const fields = [
-        mockModuleFieldEntity({ id: 1, moduleId: moduleID, title: 'Field1' }),
-        mockModuleFieldEntity({ id: 2, moduleId: moduleID, title: 'Field2' }),
+        mockModuleFieldEntity({ id: 1, moduleId: moduleID, code: 'Field1' }),
+        mockModuleFieldEntity({ id: 2, moduleId: moduleID, code: 'Field2' }),
       ];
       moduleFieldAdapter.getAllByModuleId.mockResolvedValue(fields);
 

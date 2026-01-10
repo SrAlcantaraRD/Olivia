@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
 import type { TModuleField } from '@/domain/module/entity/module-field.entity';
-import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { useGetListModuleField } from '@/domain/module/hook/get-list-module-field.hook';
 import type { IModuleFieldPort } from '@/domain/module/port/module-field.port';
 import type { ModuleWizardField } from '@/ui/components/organisms/module-wizard/module-field-wrapper.component';
@@ -23,9 +22,17 @@ export interface IModuleWizardAdapters {
 export interface IModuleWizardOptions {
   moduleID: number;
   initialValues: Record<number, string>;
-  onComplete?: (data: TRecordCreate) => void;
+  onComplete?: (data: Record<number, string>) => void;
   adapters: IModuleWizardAdapters;
   onGoBack?: () => void;
+}
+
+export function mapValuesToRecordFieldList(values: Record<number, string>) {
+  return Object.entries(values).map(([fieldId, value]) => ({
+    fieldID: Number(fieldId),
+    value,
+    recordID: -1,
+  }));
 }
 
 export function useModuleWizard(opts: IModuleWizardOptions) {
@@ -106,17 +113,11 @@ export function useModuleWizard(opts: IModuleWizardOptions) {
 
   const selectOptionAndNext = useCallback(
     (fieldId: number, value: string) => {
+      const nextValues = { ...values, [fieldId]: value };
       setFieldValue(fieldId, value);
       setTimeout(() => {
         if (currentStep + 1 >= totalSteps) {
-          const payload: TRecordCreate = {
-            moduleID,
-            carerID: 0,
-            synchronized: false,
-            recordFieldList: [{ fieldID: fieldId, value, recordID: -1 }],
-            createdAt: new Date(),
-          };
-          onComplete?.(payload);
+          onComplete?.(nextValues);
         } else {
           goToNextStep();
         }

@@ -540,7 +540,7 @@ export const caCA = Object.freeze({
     'Si us plau, espera mentre generem el paquet QR de sincronització.',
   'hook.generate-sync-qr.error-title': 'Error en generar',
   'hook.generate-sync-qr.error-description':
-    'No s\'ha pogut generar el codi QR de sincronització.',
+    "No s'ha pogut generar el codi QR de sincronització.",
   'hook.generate-sync-qr.success-title': 'QR generat',
   'hook.generate-sync-qr.success-description':
     'El QR de sincronització està llest per ser escanejat.',
@@ -549,10 +549,10 @@ export const caCA = Object.freeze({
     'Processant els registres del QR escanejat.',
   'hook.consume-sync-qr.error-title': 'Sincronització fallida',
   'hook.consume-sync-qr.error-description':
-    'No s\'ha pogut sincronitzar els registres. Torna-ho a provar.',
+    "No s'ha pogut sincronitzar els registres. Torna-ho a provar.",
   'hook.consume-sync-qr.success-title': 'Sincronització completada',
   'hook.consume-sync-qr.success-description':
-    'Els registres s\'han sincronitzat correctament.',
+    "Els registres s'han sincronitzat correctament.",
   'hook.secondary-carer.generate-invitation-qr.title':
     "Generant QR d'invitació",
   'hook.secondary-carer.generate-invitation-qr.description':
@@ -582,6 +582,10 @@ export const caCA = Object.freeze({
     'Registres sincronitzats correctament',
   'use-case.generate-record-synchronization-qr.success':
     'QR de sincronització de registres generat correctament',
+  'use-case.generate-record-synchronization-qr.invalid-request':
+    'Sol·licitud invàlida per generar QR de sincronització de registres',
+  'use-case.consume-record-synchronization-qr.invalid-request':
+    'Sol·licitud invàlida per consumir QR de sincronització de registres',
   'page.carer-detail.heading': 'Detalls del cuidador',
   'page.carer-detail.name-value': 'Nom: <bold>{{name}}</bold>',
   'page.carer-detail.ttl':
@@ -616,7 +620,7 @@ export const caCA = Object.freeze({
   'use-case.generate-invitation-qr-for-secondary-carer.generation-failed':
     'Fallada en generar QR de invitació',
   'use-case.create-record.carer-not-found-in-cache':
-    'No s\'ha trobat el cuidador a la memòria cau',
+    "No s'ha trobat el cuidador a la memòria cau",
   'use-case.create-carer.invalid-request':
     'Sol·licitud invàlida per crear cuidador',
   'use-case.delete-carer.invalid-request':

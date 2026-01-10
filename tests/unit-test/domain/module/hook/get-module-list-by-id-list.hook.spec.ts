@@ -4,11 +4,11 @@ import { act, renderHook } from '@testing-library/react-native';
 
 import type { IHookResponse } from '@/domain/core/interface/hook.interface';
 import { useListStore } from '@/domain/core/stores/list.store';
-import {
+import { useGetModuleListByIDList } from '@/domain/module/hook/get-module-list-by-id-list.hook';
+import type {
   TRequestModuleListByIDList,
   TResponseModuleListByIDList,
 } from '@/domain/module/use-case-schema/get-active-module-list-by-id-list.use-case-schema';
-import { useGetModuleListByIDList } from '@/domain/module/hook/get-module-list-by-id-list.hook';
 import { mockLoggerPort, mockNotifyPort } from '@/tests/mocks/core.port.mock';
 import { mockModuleEntity } from '@/tests/mocks/module.entity.mock';
 import { mockModulePort } from '@/tests/mocks/module.port.mock';

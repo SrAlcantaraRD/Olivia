@@ -1,9 +1,9 @@
-import { type TLoggerPort } from '@/domain/core/adapter/logger.adapter';
+import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { IBaseResponse } from '@/domain/core/interface/base-response.interface';
 import { BaseUseCase } from '@/domain/core/interface/base-use-case.interface';
 import type { ICachePort } from '@/domain/core/port/cache.port';
-import type { ISummaryModuleFieldPort } from '@/domain/summary/port/summary-module-field.port';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
+import type { ISummaryModuleFieldPort } from '@/domain/summary/port/summary-module-field.port';
 import {
   RequestGetSummaryModuleDetailByPeriodSchema,
   type TRequestGetSummaryModuleDetailByPeriod,

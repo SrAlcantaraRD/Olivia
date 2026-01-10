@@ -6,37 +6,44 @@ import type {
   TRecordCreate,
 } from '@/domain/module/entity/record.entity';
 import { CreateRecordUseCase } from '@/domain/module/use-case/create-record.use-case';
-import { mockLoggerPort } from '@/tests/mocks/core.port.mock';
 import {
+  mockCachePort,
+  mockLoggerPort,
   mockRecordCreate,
   mockRecordEntity,
-} from '@/tests/mocks/module-field.entity.mock';
-import {
   mockRecordFieldPort,
   mockRecordPort,
-} from '@/tests/mocks/module-field.port.mock';
+} from '@/tests/mocks';
 
 describe('[UseCase] - CreateRecord', () => {
   const prepareSuiteCase = () => {
-    // Arrange
     const loggerAdapter = mockLoggerPort();
     const recordAdapter = mockRecordPort();
     const recordFieldAdapter = mockRecordFieldPort();
+    const cacheAdapter = mockCachePort();
 
     const unit = new CreateRecordUseCase({
       loggerAdapter,
       recordAdapter,
       recordFieldAdapter,
+      cacheAdapter,
     });
 
-    return { unit, loggerAdapter, recordAdapter, recordFieldAdapter };
+    return {
+      unit,
+      loggerAdapter,
+      recordAdapter,
+      recordFieldAdapter,
+      cacheAdapter,
+    };
   };
 
   beforeEach(() => jest.clearAllMocks());
 
   describe('Happy Path', () => {
     it('creates record successfully when adapters succeed', async () => {
-      const { recordAdapter, recordFieldAdapter, unit } = prepareSuiteCase();
+      const { recordAdapter, recordFieldAdapter, cacheAdapter, unit } =
+        prepareSuiteCase();
 
       const mockRecord: TRecord = mockRecordEntity({
         status: STATUS_ENUM.ACTIVE,
@@ -48,8 +55,10 @@ describe('[UseCase] - CreateRecord', () => {
         synchronized: false,
       });
 
-      recordAdapter.create.mockResolvedValue(mockRecord);
-      recordFieldAdapter.batchCreate.mockResolvedValue([]);
+      const cachedCarerID = 10;
+      cacheAdapter.get.mockResolvedValue(cachedCarerID);
+      recordAdapter.upsert.mockResolvedValue(mockRecord);
+      recordFieldAdapter.batchUpsert.mockResolvedValue([]);
 
       // Act
       const resp = await unit.execute(payload);
@@ -61,7 +70,29 @@ describe('[UseCase] - CreateRecord', () => {
         throw new Error('Expected success response');
       }
       expect(resp.details).toEqual(mockRecord);
-      expect(recordAdapter.create).toHaveBeenCalledWith(payload);
+      expect(recordAdapter.upsert).toHaveBeenCalledWith({
+        ...payload,
+        carerID: cachedCarerID,
+      });
+    });
+
+    it('fails when carer is missing from cache', async () => {
+      const { unit, cacheAdapter } = prepareSuiteCase();
+      cacheAdapter.get.mockResolvedValue(null);
+
+      const response = await unit.execute(
+        mockRecordCreate({
+          moduleID: 1,
+          synchronized: false,
+          data: '{"field1":"value1"}',
+          recordFieldList: [],
+        })
+      );
+
+      expect(response.success).toBe(false);
+      expect(response.message).toBe(
+        'use-case.create-record.carer-not-found-in-cache'
+      );
     });
   });
 });

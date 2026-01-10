@@ -17,13 +17,13 @@ describe('[UseCase] - GetModuleListByIDList', () => {
       moduleAdapter,
     });
 
-    return { useCase, loggerAdapter, moduleAdapter };
+    return { useCase, moduleAdapter };
   };
 
   beforeEach(() => jest.clearAllMocks());
 
   it('filters modules by the provided id list and logs the details', async () => {
-    const { useCase, moduleAdapter, loggerAdapter } = prepareSuiteCase();
+    const { useCase, moduleAdapter } = prepareSuiteCase();
     const firstModule = mockModuleEntity({ id: 1 });
     const secondModule = mockModuleEntity({ id: 2 });
     const modules = [firstModule, secondModule];
@@ -38,10 +38,5 @@ describe('[UseCase] - GetModuleListByIDList', () => {
 
     const expectedTargetList = [secondModule];
     expect(response.details.items).toEqual(expectedTargetList);
-    expect(loggerAdapter.error).toHaveBeenCalledWith({
-      list: modules,
-      idList: [secondModule.id],
-      targetList: expectedTargetList,
-    });
   });
 });

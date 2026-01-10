@@ -1,41 +1,58 @@
-/// <reference types="jest" />
-
-import { describe, expect, it } from '@jest/globals';
-
-import { GetSummaryDetailUseCase } from '@/domain/summary/use-case/get-summary-detail.use-case';
-import { SUMMARY_DETAIL_TYPE_ENUM } from '@/domain/summary/enum/summary-detail-type.enum';
+import { BASE_SUMMARY_MODULE } from '@/domain/summary/entity/summary-module.entity';
 import { SUMMARY_PERIOD_ENUM } from '@/domain/summary/enum/summary-period.enum';
-import { mockLoggerPort } from '@/tests/mocks/core.port.mock';
-import { mockSummaryDetail } from '@/tests/mocks/summary.entity.mock';
-import { mockSummaryDetailPort } from '@/tests/mocks/summary.port.mock';
+import { GetSummaryModuleDetailByPeriodUseCase } from '@/domain/summary/use-case/get-summary-module-detail-by-period.use-case';
+import { mockCachePort, mockLoggerPort } from '@/tests/mocks/core.port.mock';
+import { mockSummaryModuleField } from '@/tests/mocks/summary.entity.mock';
+import {
+  mockSummaryModuleFieldPort,
+  mockSummaryModulePort,
+} from '@/tests/mocks/summary.port.mock';
 
-describe('[UseCase] - GetSummaryDetail', () => {
+describe('[UseCase] - GetSummaryModuleDetailByPeriod', () => {
   const prepareSuiteCase = () => {
-    const summaryDetailAdapter = mockSummaryDetailPort();
     const loggerAdapter = mockLoggerPort();
+    const cacheAdapter = mockCachePort();
+    const summaryModuleAdapter = mockSummaryModulePort();
+    const summaryModuleFieldAdapter = mockSummaryModuleFieldPort();
 
-    const useCase = new GetSummaryDetailUseCase({
+    const useCase = new GetSummaryModuleDetailByPeriodUseCase({
       loggerAdapter,
-      summaryDetailAdapter,
+      cacheAdapter,
+      summaryModuleAdapter,
+      summaryModuleFieldAdapter,
     });
 
-    return { useCase, summaryDetailAdapter };
+    return {
+      useCase,
+      summaryModuleAdapter,
+      summaryModuleFieldAdapter,
+    };
   };
+
+  const buildModuleDetail = () => ({
+    ...BASE_SUMMARY_MODULE,
+    metadata: {
+      ...BASE_SUMMARY_MODULE.metadata,
+      module: {
+        ...BASE_SUMMARY_MODULE.metadata.module,
+        id: 1,
+      },
+    },
+  });
 
   beforeEach(() => jest.clearAllMocks());
 
-  it('returns module detail when module type is requested with a module id', async () => {
-    const { useCase, summaryDetailAdapter } = prepareSuiteCase();
-    const expectedDetail = mockSummaryDetail({
-      type: SUMMARY_DETAIL_TYPE_ENUM.MODULE,
-    });
-    summaryDetailAdapter.getSummaryDetailByModule.mockResolvedValue(
-      expectedDetail
-    );
+  it('fetches module details and enriches fields', async () => {
+    const { useCase, summaryModuleAdapter, summaryModuleFieldAdapter } =
+      prepareSuiteCase();
+
+    const detail = buildModuleDetail();
+    const fields = [mockSummaryModuleField({ metadata: { moduleID: 1 } })];
+    summaryModuleAdapter.getDetails.mockResolvedValue(detail);
+    summaryModuleFieldAdapter.getByModuleID.mockResolvedValue(fields);
 
     const response = await useCase.execute({
-      type: SUMMARY_DETAIL_TYPE_ENUM.MODULE,
-      moduleId: 1,
+      moduleID: 1,
       period: SUMMARY_PERIOD_ENUM.WEEK,
     });
 
@@ -44,85 +61,15 @@ describe('[UseCase] - GetSummaryDetail', () => {
       throw new Error('Expected success response');
     }
 
-    expect(response.details).toEqual(expectedDetail);
-    expect(summaryDetailAdapter.getSummaryDetailByModule).toHaveBeenCalledWith({
-      moduleId: 1,
+    expect(response.details).toEqual(detail);
+    expect(response.details.summaryModuleFieldList).toEqual(fields);
+    expect(summaryModuleAdapter.getDetails).toHaveBeenCalledWith({
+      id: 1,
       period: SUMMARY_PERIOD_ENUM.WEEK,
     });
-  });
-
-  it('returns field detail when field type is requested with module and field ids', async () => {
-    const { useCase, summaryDetailAdapter } = prepareSuiteCase();
-    const expectedDetail = mockSummaryDetail({
-      type: SUMMARY_DETAIL_TYPE_ENUM.FIELD,
-      targetId: 'field-1',
+    expect(summaryModuleFieldAdapter.getByModuleID).toHaveBeenCalledWith({
+      moduleID: 1,
+      period: SUMMARY_PERIOD_ENUM.WEEK,
     });
-    summaryDetailAdapter.getSummaryDetailByField.mockResolvedValue(
-      expectedDetail
-    );
-
-    const response = await useCase.execute({
-      type: SUMMARY_DETAIL_TYPE_ENUM.FIELD,
-      moduleId: 1,
-      fieldId: 2,
-      period: SUMMARY_PERIOD_ENUM.MONTH,
-    });
-
-    expect(response.success).toBe(true);
-    if (!response.success) {
-      throw new Error('Expected success response');
-    }
-
-    expect(response.details).toEqual(expectedDetail);
-    expect(summaryDetailAdapter.getSummaryDetailByField).toHaveBeenCalledWith({
-      moduleId: 1,
-      fieldId: 2,
-      period: SUMMARY_PERIOD_ENUM.MONTH,
-    });
-  });
-
-  it('returns trend detail when trend type is requested with a trend id', async () => {
-    const { useCase, summaryDetailAdapter } = prepareSuiteCase();
-    const expectedDetail = mockSummaryDetail({
-      type: SUMMARY_DETAIL_TYPE_ENUM.TREND,
-      targetId: 'trend-1',
-    });
-    summaryDetailAdapter.getSummaryDetailByTrend.mockResolvedValue(
-      expectedDetail
-    );
-
-    const response = await useCase.execute({
-      type: SUMMARY_DETAIL_TYPE_ENUM.TREND,
-      trendId: 'trend-1',
-      period: SUMMARY_PERIOD_ENUM.YEAR,
-    });
-
-    expect(response.success).toBe(true);
-    if (!response.success) {
-      throw new Error('Expected success response');
-    }
-
-    expect(response.details).toEqual(expectedDetail);
-    expect(summaryDetailAdapter.getSummaryDetailByTrend).toHaveBeenCalledWith({
-      trendId: 'trend-1',
-      period: SUMMARY_PERIOD_ENUM.YEAR,
-    });
-  });
-
-  it('returns failure when required parameters are missing', async () => {
-    const { useCase, summaryDetailAdapter } = prepareSuiteCase();
-
-    const response = await useCase.execute({
-      type: SUMMARY_DETAIL_TYPE_ENUM.MODULE,
-      period: SUMMARY_PERIOD_ENUM.DAY,
-    });
-
-    expect(response.success).toBe(false);
-    expect(response.message).toBe('summary.detail.invalid-params');
-    expect(
-      summaryDetailAdapter.getSummaryDetailByModule
-    ).not.toHaveBeenCalled();
-    expect(summaryDetailAdapter.getSummaryDetailByField).not.toHaveBeenCalled();
-    expect(summaryDetailAdapter.getSummaryDetailByTrend).not.toHaveBeenCalled();
   });
 });

@@ -35,9 +35,13 @@ export class CreateRecordUseCase extends BaseUseCase<TRecordCreate, TRecord> {
       };
     }
 
+    const { createdAt, moduleID, recordFieldList } = data;
+
     const record = await this.adapters.recordAdapter.upsert({
       ...data,
       carerID,
+      createdAt,
+      moduleID,
     });
 
     this.adapters.loggerAdapter.info(`Record created with ID: ${record.id}`);
@@ -46,7 +50,7 @@ export class CreateRecordUseCase extends BaseUseCase<TRecordCreate, TRecord> {
 
     await this.adapters.recordFieldAdapter.batchUpsert(
       record.id,
-      data.recordFieldList,
+      recordFieldList,
       record.createdAt
     );
 

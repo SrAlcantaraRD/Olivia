@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
-import { ModuleFieldSchema } from '@/domain/module/entity/module-field.entity';
 import { ModuleSchema } from '@/domain/module/entity/module.entity';
+import { ModuleFieldSchema } from '@/domain/module/entity/module-field.entity';
 import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import { SummaryModuleFieldSchema } from '@/domain/summary/entity/summary-field.entity';
 import {

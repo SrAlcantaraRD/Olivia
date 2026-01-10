@@ -401,6 +401,10 @@ export const esES = Object.freeze({
     'Registros sincronizados correctamente',
   'use-case.generate-record-synchronization-qr.success':
     'QR de sincronización de registros generado correctamente',
+  'use-case.generate-record-synchronization-qr.invalid-request':
+    'Solicitud inválida para generar QR de sincronización de registros',
+  'use-case.consume-record-synchronization-qr.invalid-request':
+    'Solicitud inválida para consumir QR de sincronización de registros',
   'page.carer-detail.heading': 'Detalles del cuidador',
   'page.carer-detail.name-value': 'Nombre: <bold>{{name}}</bold>',
   'page.carer-detail.ttl':
@@ -692,7 +696,8 @@ export const esES = Object.freeze({
   'secondary-carer-setup.modules.title': 'Módulos activos',
   'secondary-carer-setup.modules.description':
     'Revisa los módulos a los que tendrás acceso.',
-  'secondary-carer-setup.modules.empty': 'No se han encontrado módulos activos.',
+  'secondary-carer-setup.modules.empty':
+    'No se han encontrado módulos activos.',
   'secondary-carer-setup.modules.note':
     'Podrás ver y contribuir en estos módulos de salud.',
   'secondary-carer-setup.summary.title': 'Revisa tu información',

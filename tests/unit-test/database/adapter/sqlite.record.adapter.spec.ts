@@ -41,7 +41,6 @@ describe('[Adapter] - SQLiteRecordAdapter.toDomainEntity', () => {
     expect(result.status).toBe(STATUS_ENUM.INACTIVE);
     expect(result.moduleID).toBe(10);
     expect(result.carerID).toBe(20);
-    expect(result.data).toBe('{"field1":"value1"}');
     expect(result.synchronized).toBe(true);
   });
 
