@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import type { TRecordCreate } from '@/domain/module/entity/record.entity';
+import type { TID } from '@/domain/core/schemas/id.schema';
 import { ModuleFieldSelectValuesFromJsonStringSchema } from '@/domain/module/schemas/module-field-values.schema';
 import { ScreenLayout } from '@/ui/components/layouts/screen.layout';
 import { Wizard } from '@/ui/components/molecules/wizard.molecule';
@@ -24,7 +24,7 @@ export function parseFieldValues(values: string | undefined): string[] {
 
 interface ModuleWizardProps {
   moduleID: number;
-  onComplete: (data: TRecordCreate) => void;
+  onComplete: (data: Record<TID, string>) => void;
   testID: string;
   adapters: IModuleWizardAdapters;
   onGoBack?: () => void;
@@ -79,21 +79,9 @@ export function ModuleWizard({
 
   const handleNext = () => {
     const lastIndex = wizardSteps.length - 1;
-    if (currentStep >= lastIndex) {
-      // Transform collected values into the domain create DTO
-      const payload: TRecordCreate = {
-        moduleID,
-        carerID: -1, // to be filled by backend
-        synchronized: false,
-        createdAt: new Date(),
-        recordFieldList: Object.entries(values).map(([fieldId, value]) => ({
-          fieldID: Number(fieldId),
-          value,
-          recordID: -1, // to be filled by backend
-        })),
-      } satisfies TRecordCreate;
 
-      onComplete(payload);
+    if (currentStep >= lastIndex) {
+      onComplete(values);
     } else {
       goToNextStep();
     }

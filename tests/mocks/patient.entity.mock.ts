@@ -7,25 +7,31 @@ import type {
 import { AUTONOMY_LEVEL_ENUM } from '@/domain/patient/enum/autonomy-level.enum';
 import { SEX_ENUM } from '@/domain/patient/enum/sex.enum';
 
-export const mockPatientEntity = (
-  overrides: Partial<TPatient> = {}
-): TPatient => ({
-  id: 1,
-  name: 'Jane Patient',
-  birthDate: 1700000000000,
-  sex: SEX_ENUM.FEMALE,
-  autonomyLevel: AUTONOMY_LEVEL_ENUM.LOW,
-  status: 1,
-  createdAt: new Date('2024-01-01T00:00:00.000Z'),
-  ...overrides,
-});
+export function mockPatient(overrides?: Partial<TPatient>): TPatient {
+  return {
+    id: 'test-patient-id',
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01'),
+    name: 'Test Patient',
+    birthDate: new Date('2000-01-01').getTime(),
+    sex: SEX_ENUM.FEMALE,
+    autonomyLevel: AUTONOMY_LEVEL_ENUM.MEDIUM,
+    ...overrides,
+  } satisfies TPatient;
+}
 
-export const mockPatientCreate = (
-  overrides: Partial<TPatientCreate> = {}
-): TPatientCreate => ({
-  name: 'Jane Patient',
-  birthDate: 1700000000000,
-  sex: SEX_ENUM.FEMALE,
-  autonomyLevel: AUTONOMY_LEVEL_ENUM.LOW,
-  ...overrides,
-});
+export function mockPatientCreate(
+  overrides?: Partial<TPatientCreate>
+): TPatientCreate {
+  return {
+    name: 'Test Patient',
+    birthDate: new Date('2000-01-01').getTime(),
+    sex: SEX_ENUM.FEMALE,
+    autonomyLevel: AUTONOMY_LEVEL_ENUM.MEDIUM,
+    ...overrides,
+  } satisfies TPatientCreate;
+}
+
+// Legacy exports for backward compatibility
+export const mockPatientEntity = mockPatient;
+export const mockPatientCreateLegacy = mockPatientCreate;

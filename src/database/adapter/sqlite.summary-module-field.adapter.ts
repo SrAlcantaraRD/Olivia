@@ -1,4 +1,13 @@
-import { subDays, subMonths, subWeeks, subYears } from 'date-fns';
+import {
+  addDays,
+  addHours,
+  addMonths,
+  addWeeks,
+  subDays,
+  subMonths,
+  subWeeks,
+  subYears,
+} from 'date-fns';
 import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
 import type { SQLiteColumn } from 'drizzle-orm/sqlite-core';
 
@@ -177,9 +186,7 @@ export class SQLiteSummaryModuleFieldAdapter
         for (let hour = 0; hour < 24; hour++) {
           const bucketKey = hour.toString().padStart(2, '0');
           const existing = results.find((r) => r.bucketKey === bucketKey);
-          const timestamp = new Date(
-            startDate.getTime() + hour * 60 * 60 * 1000
-          );
+          const timestamp = addHours(startDate, hour);
 
           buckets.push({
             label: `${bucketKey}:00`,
@@ -204,9 +211,7 @@ export class SQLiteSummaryModuleFieldAdapter
         for (let day = 0; day < 7; day++) {
           const bucketKey = day.toString();
           const existing = results.find((r) => r.bucketKey === bucketKey);
-          const timestamp = new Date(
-            startDate.getTime() + day * 24 * 60 * 60 * 1000
-          );
+          const timestamp = addDays(startDate, day);
 
           buckets.push({
             label: dayNames[day] ?? `Day ${day}`,
@@ -220,9 +225,7 @@ export class SQLiteSummaryModuleFieldAdapter
       case SUMMARY_PERIOD_ENUM.MONTH: {
         // 30 days
         for (let day = 0; day < 30; day++) {
-          const timestamp = new Date(
-            startDate.getTime() + day * 24 * 60 * 60 * 1000
-          );
+          const timestamp = addDays(startDate, day);
           const bucketKey = timestamp.toISOString().split('T')[0] ?? '';
           const existing = results.find((r) => r.bucketKey === bucketKey);
 
@@ -238,9 +241,7 @@ export class SQLiteSummaryModuleFieldAdapter
       case SUMMARY_PERIOD_ENUM.HALF_YEAR: {
         // 24 weeks
         for (let week = 0; week < 24; week++) {
-          const timestamp = new Date(
-            startDate.getTime() + week * 7 * 24 * 60 * 60 * 1000
-          );
+          const timestamp = addWeeks(startDate, week);
           const year = timestamp.getFullYear();
           // Simplified week calculation
           const weekNum = Math.floor(
@@ -278,7 +279,7 @@ export class SQLiteSummaryModuleFieldAdapter
         const currentYear = endDate.getFullYear();
 
         for (let month = 0; month < 12; month++) {
-          const timestamp = new Date(currentYear, month, 1);
+          const timestamp = addMonths(new Date(currentYear, 0, 1), month);
           const bucketKey = `${currentYear}-${(month + 1).toString().padStart(2, '0')}`;
           const existing = results.find((r) => r.bucketKey === bucketKey);
 
@@ -311,7 +312,11 @@ export class SQLiteSummaryModuleFieldAdapter
       case SUMMARY_PERIOD_ENUM.WEEK:
         return {
           period: SUMMARY_PERIOD_ENUM.WEEK,
-          buckets: buckets.map((b, i) => ({ ...b, dayOfWeek: i })),
+          buckets: buckets.map((b, i) => ({
+            ...b,
+            timestamp: b.timestamp,
+            dayOfWeek: i,
+          })),
           metadata,
         } satisfies TWeekSummaryResult;
 

@@ -90,12 +90,12 @@ describe('[Integration][Adapter] SQLiteRecordAdapter', () => {
       status: STATUS_ENUM.ACTIVE,
     });
 
-    const created = await adapter.create({
+    const created = await adapter.upsert({
       moduleID,
       carerID,
       data: '{"hello":"world"}',
       synchronized: false,
-      fieldList: [],
+      recordFieldList: [],
       createdAt: new Date(),
     });
 

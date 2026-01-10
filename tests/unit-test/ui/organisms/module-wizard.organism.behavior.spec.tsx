@@ -69,12 +69,7 @@ describe('[UI] ModuleWizard behavior', () => {
       expect(onComplete).toHaveBeenCalled();
     });
     expect(onComplete).toHaveBeenCalledWith({
-      moduleID: 1,
-      carerID: 0,
-      data: '{"1":"page.cic_register.volume.normal"}',
-      synced: false,
-      fieldList: [{ fieldID: 1, value: 'page.cic_register.volume.normal' }],
-      createdAt: expect.any(Date),
+      1: 'page.cic_register.volume.normal',
     });
 
     jest.useRealTimers();

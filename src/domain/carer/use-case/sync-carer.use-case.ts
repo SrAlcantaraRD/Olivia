@@ -13,7 +13,7 @@ export class SyncWithCarerUseCase extends BaseUseCase<
   TResponseSyncWithCarer
 > {
   constructor(
-    private readonly adapters: {
+    protected readonly adapters: {
       loggerAdapter: TLoggerPort;
       cacheAdapter: ICachePort;
     }

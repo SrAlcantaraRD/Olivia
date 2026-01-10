@@ -3,6 +3,7 @@
 import type { TLoggerPort } from '@/domain/core/adapter/logger.adapter';
 import type { ICachePort } from '@/domain/core/port/cache.port';
 import type { INotifyPort } from '@/domain/core/port/notify.port';
+import type { IQRPort } from '@/domain/core/port/qr.port';
 
 export function mockCachePort(
   overrides?: Partial<Record<keyof ICachePort, jest.Mock>>
@@ -72,4 +73,14 @@ export function mockLoggerPort(
     patchConsole: jest.fn(),
     ...overrides,
   } satisfies jest.Mocked<TLoggerPort>;
+}
+
+export function mockQRPort(
+  overrides?: Partial<Record<keyof IQRPort, jest.Mock>>
+): jest.Mocked<IQRPort> {
+  return {
+    packBundle: jest.fn(),
+    unpackBundle: jest.fn(),
+    ...overrides,
+  } satisfies jest.Mocked<IQRPort>;
 }

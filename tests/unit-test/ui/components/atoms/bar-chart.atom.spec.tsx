@@ -6,7 +6,7 @@ jest.mock('react-native-gifted-charts', () => ({
   LineChart: () => null,
 }));
 
-import { BarChartAtom } from '@/ui/components/atoms/bar-chart.atom';
+import { BarChartAtom } from '@/ui/components/atoms/chart.bar.atom';
 
 describe('BarChartAtom', () => {
   it('renders without crashing with values', () => {

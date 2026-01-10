@@ -2,6 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect } from 'react';
 
 import { useAdapters } from '@/adapter';
+import { BASE_LOGGER } from '@/domain/core/adapter/logger.adapter';
 import type { TID } from '@/domain/core/schemas/id.schema';
 import type { TRecordCreate } from '@/domain/module/entity/record.entity';
 import { useCreateRecord } from '@/domain/module/hook/create-record.hook';
@@ -43,8 +44,22 @@ export default function ExecuteRegister() {
     await executeGetModuleFieldList({ moduleID });
   };
 
-  const handleOnComplete = async (values: TRecordCreate) => {
-    const response = await executeCreateRecord(values);
+  const handleOnComplete = async (values: Record<TID, string>) => {
+    BASE_LOGGER.error({ executeCreateRecord: values });
+
+    const payload: TRecordCreate = {
+      moduleID: Number(moduleID),
+      carerID: 0,
+      synchronized: false,
+      recordFieldList: Object.entries(values).map(([fieldId, value]) => ({
+        fieldID: Number(fieldId),
+        value,
+        recordID: -1,
+      })),
+      createdAt: new Date(),
+    };
+
+    const response = await executeCreateRecord(payload);
 
     if (response?.success) {
       navigationAdapter.goBack();

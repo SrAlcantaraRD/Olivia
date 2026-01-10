@@ -10,8 +10,8 @@ import type { IBaseResponse } from '@/domain/core/interface/base-response.interf
 import type { IQRPort } from '@/domain/core/port/qr.port';
 import { WorkWithQRBaseUseCase } from '@/domain/module/abstract/work-with-qr.use-case-abstract';
 import type { TRecordFieldCreate } from '@/domain/module/entity/record-field.entity';
-import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import type { IRecordPort } from '@/domain/module/port/record.port';
+import type { IRecordFieldPort } from '@/domain/module/port/record-field.port';
 import {
   RequestConsumeRecordSynchronizationQRSchema,
   type TRequestConsumeRecordSynchronizationQR,
@@ -31,7 +31,7 @@ export class ConsumeRecordSynchronizationQRUseCase extends WorkWithQRBaseUseCase
     }
   ) {
     super(
-      'generate-record-synchronization-qr',
+      'consume-record-synchronization-qr',
       adapters.qrAdapter,
       adapters.loggerAdapter
     );
@@ -50,7 +50,7 @@ export class ConsumeRecordSynchronizationQRUseCase extends WorkWithQRBaseUseCase
 
       return {
         success: false,
-        message: 'use-case.delete-carer.invalid-request',
+        message: 'use-case.consume-record-synchronization-qr.invalid-request',
       };
     }
 

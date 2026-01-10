@@ -10,11 +10,12 @@ import type { INotifyPort } from '@/domain/core/port/notify.port';
 import { useListStore } from '@/domain/core/stores/list.store';
 import type { TSummaryModule } from '@/domain/summary/entity/summary-module.entity';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
+import { GetSummaryModuleListByPeriodUseCase } from '@/domain/summary/use-case/get-summary-module-list-by-period.use-case';
 import type {
   TRequestGetSummaryModuleListByPeriod,
   TResponseGetSummaryModuleListByPeriod,
 } from '@/domain/summary/use-case-schema/get-summary-module-list-by-period.use-case-schema';
-import { GetSummaryModuleListByPeriodUseCase } from '@/domain/summary/use-case/get-summary-module-list-by-period.use-case';
+
 export const useGetSummaryModuleListByPeriod = (params: {
   loggerAdapter: TLoggerPort;
   notifyAdapter: INotifyPort;
@@ -33,7 +34,8 @@ export const useGetSummaryModuleListByPeriod = (params: {
 
   const execute = useCallback(
     async (
-      data: TRequestGetSummaryModuleListByPeriod
+      data: TRequestGetSummaryModuleListByPeriod,
+      reload = false
     ): Promise<IHookResponse<TResponseGetSummaryModuleListByPeriod>> => {
       try {
         startLoading();

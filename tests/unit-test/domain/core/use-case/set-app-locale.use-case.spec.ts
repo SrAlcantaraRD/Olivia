@@ -1,52 +1,102 @@
-/// <reference types="jest" />
+import { describe, expect, it } from '@jest/globals';
 
 import { CACHE_KEY_ENUM } from '@/domain/core/constant/cache-key.constants';
-import { ELocaleCode } from '@/domain/core/enum/settings.enum';
 import { SetAppLocaleUseCase } from '@/domain/core/use-case/set-app-locale.use-case';
-import { mockCachePort, mockLoggerPort } from '@/tests/mocks/core.port.mock';
+import type { TRequestSetAppLocale } from '@/domain/core/use-case-schema/set-app-locale.use-case-schema';
+import { mockCachePort, mockLoggerPort } from '@/tests/mocks';
 
 describe('[UseCase] - SetAppLocale', () => {
   const prepareSuiteCase = () => {
     const loggerAdapter = mockLoggerPort();
     const cacheAdapter = mockCachePort();
 
-    const useCase = new SetAppLocaleUseCase(loggerAdapter, cacheAdapter);
+    const unit = new SetAppLocaleUseCase(loggerAdapter, cacheAdapter);
 
-    return { useCase, loggerAdapter, cacheAdapter };
+    return {
+      unit,
+      loggerAdapter,
+      cacheAdapter,
+    };
   };
 
   beforeEach(() => jest.clearAllMocks());
 
   describe('Happy Path', () => {
-    it('sets locale in cache successfully', async () => {
-      const { useCase, cacheAdapter } = prepareSuiteCase();
-      const locale = ELocaleCode.en_EN;
-      cacheAdapter.set.mockResolvedValue(undefined);
+    it('should set locale to English and return success', async () => {
+      const { unit, cacheAdapter } = prepareSuiteCase();
 
-      const response = await useCase.execute({ locale });
+      const request: TRequestSetAppLocale = {
+        locale: 'en-EN',
+      };
 
-      expect(response.success).toBe(true);
+      const result = await unit.execute(request);
+
+      expect(result.success).toBe(true);
+      expect(result.message).toBe('common.success');
+      expect(result.details).toBeUndefined();
       expect(cacheAdapter.set).toHaveBeenCalledWith(
         CACHE_KEY_ENUM.APP_LOCALE,
-        locale
+        'en-EN'
+      );
+    });
+
+    it('should set locale to Spanish and return success', async () => {
+      const { unit, cacheAdapter } = prepareSuiteCase();
+
+      const request: TRequestSetAppLocale = {
+        locale: 'es-ES',
+      };
+
+      const result = await unit.execute(request);
+
+      expect(result.success).toBe(true);
+      expect(result.message).toBe('common.success');
+      expect(result.details).toBeUndefined();
+      expect(cacheAdapter.set).toHaveBeenCalledWith(
+        CACHE_KEY_ENUM.APP_LOCALE,
+        'es-ES'
+      );
+    });
+
+    it('should set locale to Catalan and return success', async () => {
+      const { unit, cacheAdapter } = prepareSuiteCase();
+
+      const request: TRequestSetAppLocale = {
+        locale: 'ca-CA',
+      };
+
+      const result = await unit.execute(request);
+
+      expect(result.success).toBe(true);
+      expect(result.message).toBe('common.success');
+      expect(result.details).toBeUndefined();
+      expect(cacheAdapter.set).toHaveBeenCalledWith(
+        CACHE_KEY_ENUM.APP_LOCALE,
+        'ca-CA'
       );
     });
   });
 
-  describe('Negative Path', () => {
-    it('returns success false on cache error', async () => {
-      const { useCase, cacheAdapter } = prepareSuiteCase();
-      const locale = ELocaleCode.en_EN;
-      cacheAdapter.set.mockRejectedValue(new Error('Cache error'));
+  describe('Error Cases', () => {
+    it('should handle cache set error', async () => {
+      const { unit, cacheAdapter, loggerAdapter } = prepareSuiteCase();
 
-      const response = await useCase.execute({ locale });
+      const error = new Error('Cache set error');
+      cacheAdapter.set.mockRejectedValue(error);
 
-      expect(response.success).toBe(false);
-      expect(response.message).toBe('common.error');
-      expect(cacheAdapter.set).toHaveBeenCalledWith(
-        CACHE_KEY_ENUM.APP_LOCALE,
-        locale
-      );
+      const request: TRequestSetAppLocale = {
+        locale: 'en-EN',
+      };
+
+      const result = await unit.execute(request);
+
+      expect(result.success).toBe(false);
+      expect(result.message).toBe('common.error');
+      expect(loggerAdapter.error).toHaveBeenCalledWith({
+        useCase: 'set-app-locale',
+        message: 'SetAppLocaleUseCase',
+        details: error,
+      });
     });
   });
 });

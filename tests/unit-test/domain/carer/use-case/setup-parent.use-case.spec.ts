@@ -14,8 +14,10 @@ import { mockCarerPort } from '@/tests/mocks/carer.port.mock';
 import { mockCachePort, mockLoggerPort } from '@/tests/mocks/core.port.mock';
 import { mockModuleEntity } from '@/tests/mocks/module.entity.mock';
 import { mockModulePort } from '@/tests/mocks/module.port.mock';
-import { mockPatientCreate } from '@/tests/mocks/patient.dto.mock';
-import { mockPatientEntity } from '@/tests/mocks/patient.entity.mock';
+import {
+  mockPatientCreate,
+  mockPatientEntity,
+} from '@/tests/mocks/patient.entity.mock';
 import { mockPatientPort } from '@/tests/mocks/patient.port.mock';
 
 describe('[UseCase] - Setup Parent', () => {
@@ -84,7 +86,7 @@ describe('[UseCase] - Setup Parent', () => {
     expect(moduleAdapter.batchActivate).toHaveBeenCalledWith(moduleList);
     expect(cacheAdapter.set).toHaveBeenCalledWith(
       CACHE_KEY_ENUM.CARER,
-      createdCarer
+      createdCarer.id
     );
     expect(secureStoreAdapter.set).toHaveBeenCalledWith(
       CACHE_KEY_ENUM.CARER_PIN_HASH,
@@ -226,7 +228,7 @@ describe('[UseCase] - Setup Parent', () => {
     expect(moduleAdapter.batchActivate).toHaveBeenCalledWith(moduleList);
     expect(cacheAdapter.set).toHaveBeenCalledWith(
       CACHE_KEY_ENUM.CARER,
-      createdCarer
+      createdCarer.id
     );
     expect(secureStoreAdapter.set).not.toHaveBeenCalled();
   });
@@ -263,7 +265,7 @@ describe('[UseCase] - Setup Parent', () => {
     expect(moduleAdapter.batchActivate).toHaveBeenCalledWith(moduleList);
     expect(cacheAdapter.set).toHaveBeenCalledWith(
       CACHE_KEY_ENUM.CARER,
-      createdCarer
+      createdCarer.id
     );
     expect(secureStoreAdapter.set).toHaveBeenCalledWith(
       CACHE_KEY_ENUM.CARER_PIN_HASH,

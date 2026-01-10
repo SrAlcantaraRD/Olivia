@@ -2,10 +2,12 @@
 
 import { describe, expect, it } from '@jest/globals';
 
+import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 import { GetActiveModuleListUseCase } from '@/domain/module/use-case/get-active-module-list.use-case';
 import { mockLoggerPort } from '@/tests/mocks/core.port.mock';
 import { mockModuleEntity } from '@/tests/mocks/module.entity.mock';
 import { mockModulePort } from '@/tests/mocks/module.port.mock';
+import { mockModuleFieldEntity } from '@/tests/mocks/module-field.entity.mock';
 
 describe('[UseCase] - GetActiveModuleList', () => {
   const prepareSuiteCase = () => {
@@ -58,6 +60,36 @@ describe('[UseCase] - GetActiveModuleList', () => {
 
       expect(response.details.items).toEqual(expectedItems);
       expect(moduleAdapter.getAll).toHaveBeenCalled();
+    });
+
+    it('filters out inactive module fields when moduleFieldList is present', async () => {
+      const { unit, moduleAdapter } = prepareSuiteCase();
+      const activeField = mockModuleFieldEntity({ status: STATUS_ENUM.ACTIVE });
+      const inactiveField = mockModuleFieldEntity({
+        status: STATUS_ENUM.INACTIVE,
+      });
+      const moduleWithFields = mockModuleEntity({
+        id: 1,
+        isActive: true,
+        moduleFieldList: [activeField, inactiveField],
+      });
+      moduleAdapter.getAll.mockResolvedValue([moduleWithFields]);
+
+      // Act
+      const response = await unit.execute();
+
+      // Assert
+      expect(response.success).toBe(true);
+      if (!response.success) {
+        throw new Error('Expected success response');
+      }
+
+      expect(response.details.items).toEqual([
+        {
+          ...moduleWithFields,
+          fieldList: [activeField],
+        },
+      ]);
     });
   });
 });

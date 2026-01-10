@@ -685,6 +685,10 @@ export const enEN = Object.freeze({
     'Records synchronized successfully',
   'use-case.generate-record-synchronization-qr.success':
     'Record synchronization QR generated successfully',
+  'use-case.generate-record-synchronization-qr.invalid-request':
+    'Invalid request for generating record synchronization QR',
+  'use-case.consume-record-synchronization-qr.invalid-request':
+    'Invalid request for consuming record synchronization QR',
   'use-case.consume-record-synchronization-qr.invalid-bundle':
     'Invalid synchronization bundle provided',
 } as const);

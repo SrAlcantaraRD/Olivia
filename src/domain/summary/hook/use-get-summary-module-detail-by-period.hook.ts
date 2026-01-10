@@ -15,13 +15,13 @@ import {
   BASE_SUMMARY_MODULE,
   type TSummaryModule,
 } from '@/domain/summary/entity/summary-module.entity';
-import type { ISummaryModuleFieldPort } from '@/domain/summary/port/summary-module-field.port';
 import type { ISummaryModulePort } from '@/domain/summary/port/summary-module.port';
+import type { ISummaryModuleFieldPort } from '@/domain/summary/port/summary-module-field.port';
+import { GetSummaryModuleDetailByPeriodUseCase } from '@/domain/summary/use-case/get-summary-module-detail-by-period.use-case';
 import type {
   TRequestGetSummaryModuleDetailByPeriod,
   TResponseGetSummaryModuleDetailByPeriod,
 } from '@/domain/summary/use-case-schema/get-summary-module-detail-by-period.use-case-schema';
-import { GetSummaryModuleDetailByPeriodUseCase } from '@/domain/summary/use-case/get-summary-module-detail-by-period.use-case';
 
 export const useGetSummaryModuleDetailByPeriod = (params: {
   loggerAdapter: TLoggerPort;
@@ -56,7 +56,8 @@ export const useGetSummaryModuleDetailByPeriod = (params: {
 
   const execute = useCallback(
     async (
-      data: TRequestGetSummaryModuleDetailByPeriod
+      data: TRequestGetSummaryModuleDetailByPeriod,
+      reload = false
     ): Promise<IHookResponse<TResponseGetSummaryModuleDetailByPeriod>> => {
       const { moduleID, period } = data;
       const entryKey = `${moduleID}::${period}`;
@@ -65,7 +66,7 @@ export const useGetSummaryModuleDetailByPeriod = (params: {
 
       const cachedItem = getItem(entryKey);
 
-      if (wasLoaded(entryKey) && cachedItem) {
+      if (wasLoaded(entryKey) && cachedItem && !reload) {
         setItem(cachedItem);
 
         return { success: true, data: cachedItem };

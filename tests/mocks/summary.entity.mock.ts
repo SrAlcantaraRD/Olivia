@@ -1,21 +1,20 @@
 /// <reference types="jest" />
 
+import { MODULE_FIELD_TYPE_ENUM } from '@/domain/module/enum/module-field-type.enum';
 import { MODULE_KEY_ENUM } from '@/domain/module/enum/module-key.enum';
 import type { TSummaryDetail } from '@/domain/summary/entity/summary-detail.entity';
-import type { TSummaryHighlight } from '@/domain/summary/entity/summary-highlight.entity';
+import type { TSummaryModuleField } from '@/domain/summary/entity/summary-field.entity';
 import type { TSummaryModule } from '@/domain/summary/entity/summary-module.entity';
-import type { TSummaryPin } from '@/domain/summary/entity/summary-pin.entity';
-import type { TSummarySnapshot } from '@/domain/summary/entity/summary-snapshot.entity';
-import type { TSummaryTrend } from '@/domain/summary/entity/summary-trend.entity';
+import { SUMMARY_PERIOD_VALUES } from '@/domain/summary/entity/summary-period.entity';
+import { BASE_SUMMARY_STATISTICS } from '@/domain/summary/entity/summary-statistics.entity';
 import { SUMMARY_DETAIL_TYPE_ENUM } from '@/domain/summary/enum/summary-detail-type.enum';
-import { SUMMARY_PIN_TYPE_ENUM } from '@/domain/summary/enum/summary-pin-type.enum';
 
-const defaultSeriesPoint = { date: '2025-01-01T00:00:00Z', value: 1 };
+const defaultSeriesPoint = { date: '2024-01-01T00:00:00Z', value: 1 };
 
-export const mockSummaryDetail = (
-  overrides: Partial<TSummaryDetail> = {}
-): TSummaryDetail =>
-  ({
+export function mockSummaryDetail(
+  overrides?: Partial<TSummaryDetail>
+): TSummaryDetail {
+  return {
     type: SUMMARY_DETAIL_TYPE_ENUM.MODULE,
     targetId: 'module-1',
     titleKey: 'summary.detail.title',
@@ -26,64 +25,58 @@ export const mockSummaryDetail = (
     todayValue: 2,
     comparisonTextKey: 'summary.detail.comparison',
     projectionTextKey: 'summary.detail.projection',
+    fieldSummaries: [
+      {
+        id: 1,
+        code: 'field-1',
+        type: MODULE_FIELD_TYPE_ENUM.TEXT,
+        series: [1, 2, 3],
+        average: 2,
+        todayValue: 3,
+      },
+    ],
     ...overrides,
-  }) satisfies TSummaryDetail;
+  } satisfies TSummaryDetail;
+}
 
-export const mockSummaryHighlight = (
-  overrides: Partial<TSummaryHighlight> = {}
-): TSummaryHighlight =>
-  ({
-    id: 'highlight-1',
-    titleKey: 'summary.highlight.title',
-    descriptionKey: 'summary.highlight.description',
-    moduleId: overrides.moduleId ?? 'module-1',
-    fieldId: overrides.fieldId,
+export function mockSummaryModule(
+  overrides?: Partial<TSummaryModule>
+): TSummaryModule {
+  return {
+    groupedData: SUMMARY_PERIOD_VALUES,
+    metadata: {
+      module: {
+        id: 'test-module-id',
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
+        code: MODULE_KEY_ENUM.CIC,
+        description: 'Test module',
+        isActive: true,
+        name: 'Test Module',
+      },
+      moduleFieldList: [],
+    },
+    statistics: BASE_SUMMARY_STATISTICS,
+    summaryModuleFieldList: [],
     ...overrides,
-  }) satisfies TSummaryHighlight;
+  } satisfies TSummaryModule;
+}
 
-export const mockSummaryModule = (
-  overrides: Partial<TSummaryModule> = {}
-): TSummaryModule =>
-  ({
-    moduleId: 'module-1',
-    moduleKey: MODULE_KEY_ENUM.CIC,
-    todayCount: 5,
-    lastRecordedAt: '2025-12-01T00:00:00Z',
-    last7Days: [defaultSeriesPoint],
-    previousPeriodAverage: 3,
+export function mockSummaryModuleField(
+  overrides?: Partial<TSummaryModuleField>
+): TSummaryModuleField {
+  return {
+    id: 'field-1',
+    code: 'field-code',
+    type: MODULE_FIELD_TYPE_ENUM.TEXT,
+    param: 'param-value',
+    series: [defaultSeriesPoint],
+    average: 1.5,
+    todayValue: 2,
     ...overrides,
-  }) satisfies TSummaryModule;
+  } satisfies TSummaryModuleField;
+}
 
-export const mockSummaryPin = (
-  overrides: Partial<TSummaryPin> = {}
-): TSummaryPin =>
-  ({
-    type: SUMMARY_PIN_TYPE_ENUM.MODULE,
-    targetId: 'module-1',
-    order: 0,
-    pinnedAt: '2025-01-01T00:00:00Z',
-    ...overrides,
-  }) satisfies TSummaryPin;
-
-export const mockSummaryTrend = (
-  overrides: Partial<TSummaryTrend> = {}
-): TSummaryTrend =>
-  ({
-    id: 'trend-1',
-    titleKey: 'summary.trend.title',
-    descriptionKey: 'summary.trend.description',
-    moduleId: overrides.moduleId ?? 'module-1',
-    fieldId: overrides.fieldId,
-    ...overrides,
-  }) satisfies TSummaryTrend;
-
-export const mockSummarySnapshot = (
-  overrides: Partial<TSummarySnapshot> = {}
-): TSummarySnapshot =>
-  ({
-    modules: [mockSummaryModule()],
-    trends: [mockSummaryTrend()],
-    highlights: [mockSummaryHighlight()],
-    updatedAt: '2025-12-31T00:00:00Z',
-    ...overrides,
-  }) satisfies TSummarySnapshot;
+// Legacy exports for backward compatibility
+export const mockSummaryDetailLegacy = mockSummaryDetail;
+export const mockSummaryModuleLegacy = mockSummaryModule;

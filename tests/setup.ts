@@ -28,12 +28,32 @@ jest.mock('react-native-safe-area-context', () => ({
 }));
 
 // Mock de heroui-native
-jest.mock('heroui-native', () => ({
-  ...jest.requireActual('heroui-native'),
-  useThemeColor: jest.fn(() => '#000000'),
-  // HeroUINativeProvider: ({ children }: { children: React.ReactNode }) =>
-  //   children,
-}));
+jest.mock('heroui-native', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+
+  const StubComponent = ({ children, ...props }: Record<string, unknown>) =>
+    React.createElement(View, props, children);
+
+  return {
+    __esModule: true,
+    useThemeColor: jest.fn(() => '#000000'),
+    useGlobalAnimationSettings: jest.fn(() => ({
+      globalIsAllAnimationsDisabled: false,
+    })),
+    HeroUINativeProvider: ({ children }: { children?: React.ReactNode }) =>
+      React.createElement(React.Fragment, {}, children),
+    Avatar: StubComponent,
+    Chip: StubComponent,
+    Card: StubComponent,
+    Button: StubComponent,
+    Divider: StubComponent,
+    PressableFeedback: StubComponent,
+    TextField: StubComponent,
+    Spinner: StubComponent,
+    TypographySmall: StubComponent,
+  };
+});
 
 // Mock de react-native-reanimated
 jest.mock('react-native-reanimated', () => {
