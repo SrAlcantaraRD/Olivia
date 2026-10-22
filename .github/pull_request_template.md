@@ -19,9 +19,9 @@
 
 <!-- Commands you ran, platforms/devices covered, and relevant results. -->
 
-- [ ] `pnpm biome:check`
-- [ ] `pnpm typecheck`
-- [ ] `pnpm test`
+- [ ] `pnpm biome:check` (or `pnpm exec biome ci .`)
+- [ ] `pnpm typecheck` — currently fails on `main`; state any new or fixed errors
+- [ ] `pnpm test` — currently fails on `main`; state any new or fixed failures
 - [ ] Manual verification (describe)
 - [ ] E2E (describe configuration)
 

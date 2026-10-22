@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-format:
+    name: Lint and format (Biome)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Pinned: this release still reads pnpm.overrides from package.json, so
+      # the committed lockfile validates with --frozen-lockfile. See TESTING.md.
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.16.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # node-linker=hoisted in .npmrc is not read by newer pnpm releases; pass
+      # it explicitly so Jest resolves React Native through hoisted paths.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --node-linker=hoisted
+
+      - name: Check formatting and lint
+        run: pnpm exec biome ci .
+
+  types-and-tests:
+    name: Types and tests (advisory)
+    # Advisory while the existing typecheck and unit-test debt is repaired.
+    # See TESTING.md. Remove continue-on-error once both steps are green and
+    # make this job required in branch protection.
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.16.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --node-linker=hoisted
+
+      - name: Typecheck source and tests
+        run: pnpm typecheck
+
+      - name: Run unit and integration tests
+        run: pnpm test:ci
