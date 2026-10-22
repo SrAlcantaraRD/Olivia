@@ -1,4 +1,4 @@
-# Agent Guidelines for TFG Repository
+# Agent Guidelines for Olivia Repository
 
 ## Build Commands
 
@@ -159,8 +159,8 @@ export const useCreateCarer = () => {
 
 ### Security & Privacy
 - **Local-only design**: "Sin nube. Sin cuentas"
-- **SecureStore for sensitive data**: PIN hashes, auth tokens
-- **MMKV for cache**: Non-sensitive user preferences
+- **SecureStore for session values and preferences**: There is no PIN or token implementation yet; do not claim one
+- **MMKV adapter exists but is not wired**: the cache port currently uses SecureStore
 
 ## Tooling
 - **Package manager**: `pnpm` (required)

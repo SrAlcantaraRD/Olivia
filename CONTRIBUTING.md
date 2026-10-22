@@ -9,15 +9,19 @@ For security issues, **do not open a public issue** — follow [SECURITY.md](./S
 
 ## Before you start
 
-- Read the [README](./README.md) for the product overview and architecture.
+- Read the [README](./README.md) for the product overview, current limitations
+  and architecture.
 - Read [`.context/ai-rules.md`](./.context/ai-rules.md) for the non-negotiable
   engineering constraints.
-- Browse [`docs/`](./docs) for domain, database and UI documentation.
+- Browse the documentation index at [`docs/README.md`](./docs/README.md) for
+  domain, database and UI documentation (much of it is in Spanish).
+- Check [TESTING.md](./TESTING.md) for the current state of the test suite
+  before you assume a red check is your fault.
 - For anything non-trivial, open an issue first so we can agree on the approach.
 
 ## Requirements
 
-- **Node.js 24** (see `.nvmrc`; `nvm use` works)
+- **Node.js 24.11.0** (see `.nvmrc`; `nvm use` works)
 - **pnpm** (the only supported package manager — do not use npm or yarn)
 - Optional: Xcode (iOS) and/or Android Studio (Android) for native builds
 - Optional: an Expo account only if you build with EAS
@@ -29,7 +33,14 @@ pnpm install
 pnpm start          # Expo dev server
 pnpm ios            # iOS simulator
 pnpm android        # Android emulator
-pnpm web            # Web
+pnpm web            # Web target (native storage is not supported on web)
+```
+
+pnpm 12 ignores `node-linker=hoisted` in `.npmrc`. If Jest fails with
+`Cannot use import statement outside a module`, reinstall with:
+
+```bash
+pnpm install --node-linker=hoisted
 ```
 
 Database schema changes require a migration:
@@ -45,7 +56,13 @@ Run these before opening a pull request:
 ```bash
 pnpm biome:check    # format + lint (writes fixes)
 pnpm typecheck      # strict TypeScript, source and tests
-pnpm test           # Jest unit tests
+pnpm test           # Jest unit and integration tests
+```
+
+For a read-only check, the same one CI runs:
+
+```bash
+pnpm exec biome ci .
 ```
 
 Useful extras:
@@ -56,9 +73,22 @@ pnpm test:ci
 pnpm e2e:build:ios:debug && pnpm e2e:test:ios:debug
 ```
 
+### Current quality state
+
+- **Biome is green.** Keep it that way.
+- **`pnpm typecheck` and `pnpm test` currently fail on `main`** for reasons that
+  predate most contributions: a `react-test-renderer` version mismatch, two red
+  use-case suites, and test mocks that no longer match domain types. The full
+  breakdown and measured numbers are in [TESTING.md](./TESTING.md).
+- **CI gates lint.** Typecheck and tests run as an advisory job until that debt
+  is cleared. A red advisory job is expected; a red lint job is not.
+- **Do not add new failures.** If your change touches an area with existing
+  errors, fix those in the same area where practical, and state in the pull
+  request which checks you could and could not run.
+
 Git hooks run Biome and commit-message checks on commit, and a heavier check on
 push. If a hook fails because of an unrelated pre-existing problem, say so in
-the PR instead of silently bypassing it.
+the PR instead of silently bypassing it. See [HOOKS.md](./HOOKS.md).
 
 ## Architecture rules
 
@@ -124,11 +154,16 @@ This project handles health information, so the following is mandatory:
 
 - **Never** commit real patient data, names, dates of birth, identifiers,
   medical notes, or screenshots containing them.
-- Use synthetic/demo data in tests, fixtures, issues, PRs and screenshots.
+- Use synthetic/demo data in tests, fixtures, issues, PRs and screenshots. The
+  demo-data generator exists for this purpose.
 - **Never** commit secrets: `.env` files, API keys, tokens, keystores,
-  certificates or private keys. `.env*` files are git-ignored — keep it that way.
+  certificates or private keys. `.env`, `.env.local` and `.env*.local` are
+  git-ignored; keep it that way and add any new secret file pattern to
+  `.gitignore` before creating the file.
 - Do not add analytics, crash reporting or telemetry that sends data off-device
-  without prior discussion. The app is "Sin nube. Sin cuentas."
+  without prior discussion. The app is local-only: "Sin nube. Sin cuentas."
+- Do not add logging of record payloads or child-profile fields. See
+  [SECURITY.md](./SECURITY.md) for known logging and storage limitations.
 
 ## Reporting bugs and requesting features
 
