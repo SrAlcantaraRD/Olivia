@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "private": true,
   "version": "1.0.0",
+  "license": "MIT",
   "scripts": {
     "start": "expo start -c",
     "android": "expo start --android -c",

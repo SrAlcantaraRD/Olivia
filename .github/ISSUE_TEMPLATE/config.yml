@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/SrAlcantaraRD/Olivia/security/advisories/new
+    about: Report security issues privately. Do not open a public issue.
+  - name: Documentation and architecture
+    url: https://github.com/SrAlcantaraRD/Olivia/tree/main/docs
+    about: Read the product, domain, database and UI documentation first.

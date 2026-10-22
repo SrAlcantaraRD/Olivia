@@ -1,0 +1,68 @@
+name: Feature request
+description: Propose a new capability or an improvement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion. Please describe the problem first, then the
+        solution you have in mind.
+
+        Keep in mind that Olivia is intentionally **local-only**: features that
+        require accounts, cloud storage or telemetry need a strong justification.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user need or pain point does this address?
+      placeholder: "As a carer, I cannot ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe the behaviour you would like.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches, workarounds or related features.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options:
+        - Domain / use-cases
+        - Database / storage
+        - UI / accessibility
+        - QR synchronization
+        - Reports and summaries
+        - i18n / localization
+        - Tooling / CI
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Mockups, references or links. Use synthetic data in any screenshot.
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: This request is compatible with the local-only, no-accounts design (or I explained why not).
+          required: true

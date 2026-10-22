@@ -1,0 +1,95 @@
+name: Bug report
+description: Report a reproducible problem in Olivia
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+
+        **Do not include real patient data, personal health information,
+        credentials or screenshots containing them.** Use synthetic demo data.
+        For security vulnerabilities, use
+        [private reporting](https://github.com/SrAlcantaraRD/Olivia/security/advisories/new)
+        instead of opening an issue.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What went wrong, in one or two sentences?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Be specific; include the screen and the actions taken.
+      placeholder: |
+        1. Open ...
+        2. Tap ...
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Include error messages or logs after removing sensitive data.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options:
+        - iOS (simulator)
+        - iOS (physical device)
+        - Android (emulator)
+        - Android (physical device)
+        - Web
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: App version / commit
+      description: Version from the app, or the commit SHA you built.
+      placeholder: "1.0.0 (dc11b49)"
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Device and OS
+      placeholder: "iPhone 15, iOS 18.2 / Pixel 7, Android 15"
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Screenshots, recordings, related issues or anything else relevant.
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: This report contains no real patient data, personal information or secrets.
+          required: true
