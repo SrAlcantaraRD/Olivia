@@ -180,13 +180,11 @@ interface RecordFormProps {
 }
 Trade-off: Less ecosystem support than Redux.
 
-### Why React Query for server state?
+### State management
 
-- **Caching**: Automatic cache management and invalidation
-- **Background updates**: Refetch on window focus
-- **Optimistic updates**: Better perceived performance
-
-Trade-off: Additional dependency and learning curve.
+React Query is **not** used. Data loading goes through domain hooks and
+use-cases; Zustand stores hold shared state. Cacheable results use `ICachePort`.
+Any older text describing React Query is outdated.
 
 ### Why multi-step forms?
 

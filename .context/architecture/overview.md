@@ -6,7 +6,7 @@
 - **Architecture**: Clean Architecture + Hexagonal (Ports & Adapters)
 - **Persistence**: Local-first SQLite via Drizzle ORM (`drizzle-orm/expo-sqlite`)
 - **UI**: HeroUI Native wrapped by local Atomic Design components
-- **State**: React Query for async data fetching + Zustand stores for domain state
+- **State**: Zustand stores for shared domain state; data loading is done through domain hooks and use-cases (no React Query dependency)
 - **Validation**: Zod schemas for use-case requests/responses
 - **I18n**: `i18next` + `react-i18next` with typed keys
 - **Tooling**: pnpm, Biome (lint/format), Jest (unit), Detox (E2E)
@@ -83,7 +83,7 @@ flowchart LR
 ## Key architectural decisions (current)
 
 - **Local-first persistence**: No mandatory backend—SQLite is the source of truth.
-- **"Authentication" as local session**: Device-based session + optional PIN (see [auth/overview.md](../auth/overview.md)).
+- **"Authentication" as local session**: Device-based session, no PIN implementation yet (see [auth/overview.md](../auth/overview.md)).
 - **QR as sync primitive**: Cross-device sharing via compressed QR bundles (see [api/overview.md](../api/overview.md)).
 
 ## Performance considerations
@@ -91,12 +91,12 @@ flowchart LR
 - **SQLite queries**: Drizzle generates efficient SQL; indexes on common filters (status, created_at).
 - **Cache strategy**: SecureStore for sensitive data, MMKV for fast access.
 - **Bundle size**: Tree-shaking unused HeroUI components; lazy-load screens.
-- **Memory**: React Query caches API-like responses; Zustand stores are minimal.
+- **Memory**: Summary results and preferences are cached through `ICachePort`; Zustand stores are minimal.
 
 ## Security measures
 
 - **Data isolation**: All data local to device; no network calls unless user-initiated sync.
-- **Sensitive storage**: PIN hashes in SecureStore; QR payloads compressed but not encrypted.
+- **Sensitive storage**: session values, preferences and summary cache entries use SecureStore. QR payloads are compressed but neither encrypted nor signed. The SQLite database is not encrypted by the app.
 - **Input validation**: Zod schemas prevent malformed data from reaching DB.
 
 ## Decision history & trade-offs
@@ -117,9 +117,9 @@ Trade-off: More files and "plumbing" than a typical React Native app. For a smal
 
 Trade-off: Slightly higher bundle size than AsyncStorage, but worth it for data integrity.
 
-### Why React Query + Zustand?
+### Why Zustand?
 
-- **React Query**: Handles async data fetching, caching, and synchronization.
 - **Zustand**: Simple state for domain entities that need global access.
 
-Trade-off: Two state management libraries, but they serve different purposes (async vs sync state).
+Trade-off: global stores can hide data-flow; keep them limited to state that
+several screens genuinely share.

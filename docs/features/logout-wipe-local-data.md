@@ -3,7 +3,7 @@
 ## Resumen
 
 - **Descripción**: al confirmar "Borrar" en la pantalla de configuración, la app borra todos los datos locales del perfil en este dispositivo (cache, secure store y BBDD local). Es una acción irreversible.
-- **Wireframe**: [docs/wireframe-screens/settings/log-out.screen-wireframe.md](docs/wireframe-screens/settings/log-out.screen-wireframe.md)
+- **Wireframe**: [../wireframe-screens/settings/log-out.screen-wireframe.md](../wireframe-screens/settings/log-out.screen-wireframe.md)
 
 ## Flujo de la funcionalidad
 

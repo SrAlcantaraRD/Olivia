@@ -152,12 +152,10 @@ export class WipeLocalDataUseCase {
 
 ## PIN validation integration
 
-Optional PIN check for sensitive operations:
+**Not implemented.** There is no `ValidatePinUseCase`, no crypto/hash port and no
+PIN screen. `carer.pin_hash` and `CACHE_KEY_ENUM.CARER_PIN_HASH` exist, but new
+carers are created with an empty hash; access relies on the OS device lock.
 
-```typescript
-// src/domain/carer/use-case/validate-pin.use-case.ts
-export class ValidatePinUseCase {
-  async execute(pin: string) {
 - **Integration tests**: Test full flows with mocked adapters
 - **Session verification**: Check cache state after operations
 

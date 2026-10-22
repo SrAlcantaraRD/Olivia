@@ -12,12 +12,23 @@ This is a living registry. Items here are things the codebase already hints are 
 2. **Record creation uses placeholder IDs**
    - `ExecuteRegister` sets `carerID: 0` and record-field `recordID: -1` before persistence.
    - Risk: integrity issues or silent wrong attribution.
-   - See: [src/app/(tabs)/register/execute-register.tsx](../src/app/(tabs)/register/execute-register.tsx)
+   - See: [src/app/(tabs)/register/execute-register.tsx](<../src/app/(tabs)/register/execute-register.tsx>)
 
 3. **Storage strategy is inconsistent (MMKV exists but not used)**
    - `MMKVCacheAdapter` exists, but `cacheAdapter` currently points to SecureStore.
    - Risk: SecureStore is slower than MMKV for non-sensitive cache.
    - See: [src/adapter/index.ts](../src/adapter/index.ts), [src/adapter/mmkv.cache-port.adapter.ts](../src/adapter/mmkv.cache-port.adapter.ts)
+
+## Quality and privacy risks (2026-10 audit)
+
+- **Debug log contains the full parent-setup payload**
+  - `SetupParentUseCase` logs `JSON.stringify(request)` at debug level, including the child's name, birth date and optional diagnosis.
+  - `LOG_LEVEL` defaults to `4` (errors only), so it is normally suppressed, but lowering it writes the payload to the console or `logs.txt` in the app's document directory.
+  - Fix: log identifiers/counts only, and review the log level before any real-data use.
+  - See: [src/domain/carer/use-case/setup-parent.use-case.ts](../src/domain/carer/use-case/setup-parent.use-case.ts)
+
+- **No PIN/lock implementation**
+  - `pin_hash` exists in the schema and `CARER_PIN_HASH` in the cache, but no code sets or verifies a PIN; `.context/auth/overview.md` used to document a nonexistent `ValidatePinUseCase`. That document is now corrected.
 
 ## Medium impact
 
@@ -25,9 +36,11 @@ This is a living registry. Items here are things the codebase already hints are 
    - Some use-cases manually do `safeParse` and return `success:false` instead of throwing a domain error or using `BaseUseCase.parseRequest`.
    - Many TODOs ask for a wrapper to reduce duplication.
 
-5. **Typecheck is not green (tests/mocks drift)**
-   - `pnpm typecheck` currently fails mainly due to outdated tests/mocks that no longer match domain types.
-   - Keep new tests strict and aligned with domain types; prefer fixing drift incrementally when touching affected areas.
+5. **Quality gates are red and mostly unenforced**
+   - `pnpm typecheck` fails with 228 errors: 17 in source files (HeroUI Native API drift in `text-field.atom.tsx`, `card.atom.tsx`, `app-settings.tsx`, `carer-managment/index.tsx`) and 211 in tests (mocks out of sync with domain types). `tsconfig.json` includes `tests/**`, so `typecheck:src` cannot isolate source, and `typecheck` never reaches the test config.
+   - `pnpm test` does not start under the current pnpm-isolated install (`transformIgnorePatterns` assumes hoisted paths); with the install fixed, 55/79 suites and 291/300 tests pass, and coverage is 18.5% of statements. The 24 failing suites are: 17 `react-test-renderer` version mismatch, 4 Zod `.omit()`-on-refined-schema errors, 1 import of a missing `time-to-live.enum`, 2 suites with 9 assertion failures.
+   - CI (`.github/workflows/ci.yml`) gates Biome only; typecheck and tests are an advisory job until this is fixed.
+   - Details and reproductions: [TESTING.md](../TESTING.md).
 
 6. **DB drop strategy is “DROP TABLE all”**
    - `dropDatabase()` drops all tables; it’s used when migrations fail and for “wipe local data”.

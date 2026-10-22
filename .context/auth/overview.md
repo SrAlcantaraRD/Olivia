@@ -2,14 +2,14 @@
 
 ## What "auth" means here
 
-This project has **no remote authentication**. "Authentication" is a local concept for device session management and optional PIN protection.
+This project has **no remote authentication**. "Authentication" is a local concept for device session management. There is **no PIN or biometric lock implemented** today.
 
 ## Core concepts
 
 - **Primary carer**: The main user who sets up the device
 - **Session**: Existence of a `carerId` in local cache
-- **PIN**: Optional biometric/PIN protection for sensitive operations
-- **Secondary carers**: Temporary access via QR invitations
+- **PIN**: Planned only. `carer.pin_hash` and `CACHE_KEY_ENUM.CARER_PIN_HASH` exist, but new carers are created with an empty hash, no screen sets or verifies a PIN, and no lockout logic exists. Do not treat this as a security control.
+- **Secondary carers**: Temporary access via QR invitations. There is no server, revocation or per-record permission enforcement; the secondary device receives a local copy of the data.
 
 ## Session lifecycle
 
@@ -30,7 +30,10 @@ export class SetupParentUseCase {
 
     // Establish session
     await this.cachePort.set(CACHE_KEY_ENUM.CARER, carer.id);
-    await this.cachePort.set(CACHE_KEY_ENUM.CARER_PIN_HASH, request.pinHash);
+    // pinHash is stored only when non-empty (it currently always is empty)
+    if (carer.pinHash) {
+      await this.cachePort.set(CACHE_KEY_ENUM.CARER_PIN_HASH, carer.pinHash);
+    }
 
     return { carer, patient };
   }
@@ -38,7 +41,7 @@ export class SetupParentUseCase {
 ```
 
 - **Atomic setup**: All steps succeed or fail together
-- **Session keys**: `carerId` and optional `pinHash` stored in cache
+- **Session keys**: `carerId` in cache; `pinHash` in SecureStore only if non-empty
 
 ### Validation (splash guard)
 
@@ -120,41 +123,36 @@ export class WipeLocalDataUseCase {
 
 ## PIN protection
 
-Optional PIN for sensitive operations:
+**Not implemented.** There is no `ValidatePinUseCase`, no crypto/hash port and no
+PIN screen in the codebase. The only related artifacts are the `pin_hash` column
+in the `carer` table and the `CARER_PIN_HASH` cache key; `pinHash` is set to an
+empty string during onboarding and secondary-carer creation.
 
-```typescript
-// src/domain/carer/use-case/validate-pin.use-case.ts
-export class ValidatePinUseCase {
-  async execute(pin: string) {
-    const storedHash = await this.cachePort.get<string>(
-      CACHE_KEY_ENUM.CARER_PIN_HASH
-    );
+Before claiming PIN protection in the UI or documentation, the feature needs:
 
-    if (!storedHash) return { valid: true }; // No PIN set
-
-    const isValid = await this.cryptoPort.verifyHash(pin, storedHash);
-    return { valid: isValid };
-  }
-}
-```
-
-- **Optional**: No PIN required by default
-- **Crypto abstraction**: Uses port for hash verification
-- **Graceful fallback**: Missing PIN is valid
+- a hashing strategy and a dedicated port (no raw PIN storage);
+- a lock screen and lockout policy;
+- tests for wrong PIN, missing hash and upgrade/migration paths.
 
 ## Cache keys used
 
 ```typescript
 // src/domain/core/constant/cache-key.constants.ts
-export const CACHE_KEY_ENUM = {
-  CARER: 'carer',
-  CARER_PIN_HASH: 'carer_pin_hash',
-  SECONDARY_CARER_EXPIRES_AT: 'secondary_carer_expires_at',
-} as const;
+export const CACHE_KEY_ENUM = Object.freeze({
+  CARER: 'cache-carer',
+  CARER_PIN_HASH: 'cache-carer-pin-hash',
+  PATIENT: 'cache-patient',
+  MODULES: 'cache-modules',
+  APP_THEME: 'cache-app-theme',
+  APP_LOCALE: 'cache-app-locale',
+  REPORT_DISTRIBUTION: 'report_distribution',
+  SUMMARY_SNAPSHOT: 'summary_snapshot',
+  SECONDARY_CARER_EXPIRES_AT: 'secondary-carer',
+} as const);
 ```
 
 - **Typed enum**: Prevents typos in cache keys
-- **SecureStore**: All keys use secure storage adapter
+- **SecureStore**: All keys currently use the SecureStore adapter
 
 ## Flow diagrams
 
@@ -178,7 +176,7 @@ sequenceDiagram
   O->>UC: Execute setup
   UC->>DB: Create carer/patient
   UC->>DB: Activate modules
-  UC->>C: Set CARER + PIN_HASH
+  UC->>C: Set CARER (+ PIN_HASH if non-empty)
   UC-->>O: Success
   O->>S: Redirect to home
 ```
@@ -252,13 +250,15 @@ Trade-off: Cache clearing breaks sessions (mitigated by DB checks in critical pa
 ### Why destructive logout?
 
 - **Medical data privacy**: Complete local data removal
-- **Regulatory compliance**: No residual patient data
+- **Reduced residue**: Removes the app's local rows and cache (no compliance claim)
 
 Trade-off: No "undo" capability; users must re-setup everything.
 
-### Why optional PIN?
+### Why no PIN yet?
 
-- **Accessibility**: Not all users can remember PINs
-- **Progressive security**: Add protection as needed
+A PIN was planned but is not implemented. The current design relies on the
+device lock and app sandbox; see the known limitations in
+[SECURITY.md](../../SECURITY.md).
 
-Trade-off: No default protection; relies on device-level security.
+Trade-off: no in-app protection and no second factor; anyone with an unlocked
+device can open the app and read the records.

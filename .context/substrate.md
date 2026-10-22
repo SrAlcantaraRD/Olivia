@@ -10,7 +10,7 @@ If you’re about to implement a feature, refactor, or write tests: start here.
 - **Architecture**: Clean Architecture + Hexagonal (Ports & Adapters)
 - **Persistence**: Local-first SQLite via Drizzle ORM (`drizzle-orm/expo-sqlite`)
 - **UI**: HeroUI Native wrapped by local Atomic Design components (no direct HeroUI usage in screens)
-- **Data fetching/state**: React Query for async orchestration + some Zustand stores in domain
+- **Data fetching/state**: domain hooks + use-cases orchestrate async work; Zustand stores hold shared domain state (React Query is not a dependency)
 - **Validation**: Zod (use-case request/response schemas)
 - **I18n**: `i18next` + `react-i18next` with typed keys (no hardcoded strings in UI)
 

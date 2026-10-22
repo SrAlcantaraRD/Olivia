@@ -205,13 +205,12 @@ export function QRScanner() {
 
 Trade-off: Additional abstraction layer.
 
-### Why React Query for data fetching?
+### State and data fetching
 
-- **Caching**: Automatic cache management
-- **Background updates**: Refetch on focus/window focus
-- **Optimistic updates**: Better UX for mutations
-
-Trade-off: Additional dependency and learning curve.
+React Query is **not** a dependency of this project. Async work is orchestrated by
+domain hooks and use-cases, with Zustand stores for shared domain state and
+`ICachePort` for cached summary values. Any older text describing React Query is
+outdated.
 
 ### Why adapter context pattern?
 
