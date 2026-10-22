@@ -1,77 +1,89 @@
-# Git Hooks Configuration
+# Git hooks
 
-Este proyecto usa **Husky** para automatizar tareas en el flujo de trabajo de Git.
+The repository uses **Husky**. Hooks are installed by the `prepare` script when
+you run `pnpm install`.
 
-## 🎯 Hooks Configurados
+The hook files live in `.husky/` and are executable shell scripts.
 
-### Pre-commit
+## pre-commit
 
-Se ejecuta **antes** de cada commit:
-
-- ✅ Formatea el código con Biome (`biome:format`)
-- ✅ Ejecuta el linter con Biome (`biome:lint`)
-- ℹ️ Solo se ejecuta en archivos staged (modificados)
-
-### Commit-msg
-
-Valida el **formato del mensaje** de commit:
-
-- ✅ Debe seguir el formato de [Conventional Commits](https://www.conventionalcommits.org/)
-- ✅ Formato: `<type>(<scope>): <subject>`
-
-#### Tipos permitidos
-
-- `feat`: Nueva funcionalidad
-- `fix`: Corrección de bugs
-- `docs`: Cambios en documentación
-- `style`: Cambios de formato (no afectan el código)
-- `refactor`: Refactorización de código
-- `perf`: Mejoras de rendimiento
-- `test`: Añadir o modificar tests
-- `build`: Cambios en el sistema de build
-- `ci`: Cambios en CI/CD
-- `chore`: Tareas de mantenimiento
-- `revert`: Revertir commits anteriores
-
-#### Ejemplos válidos
-
-```bash
-git commit -m "feat(layout): añadir botón flotante en tab bar"
-git commit -m "fix(tabs): corregir efecto glass en iOS"
-git commit -m "docs(auth): add domain business logic"
-git commit -m "refactor(tabs): migrar a NativeTabs"
+```sh
+pnpm lint
+npx @biomejs/biome format --write
+npx @biomejs/biome check --write
+git update-index --again
 ```
 
-### Pre-push
+- `pnpm lint` runs `expo lint`.
+- Biome formats and fixes the working tree.
+- `git update-index --again` restages files that the hooks modified.
 
-Se ejecuta **antes** de hacer push:
+There is no `set -e` and no `|| exit 1`, so only the last command determines the
+hook's exit status. A failing lint or Biome step does not necessarily block the
+commit.
 
-- ✅ Ejecuta los tests unitarios (`pnpm test`)
-- ℹ️ Previene push si los tests fallan
+`lint-staged.config.js` exists, but no hook uses it today. The hook also runs
+Biome over the whole project rather than only staged files, contrary to older
+documentation.
 
-## 🚀 Comandos Útiles
+## commit-msg
+
+```sh
+pnpm dlx commitlint --edit $1
+```
+
+Commit messages must follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```text
+<type>(<optional scope>): <subject>
+```
+
+Allowed types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`,
+`build`, `ci`, `chore`, `revert`. Examples:
 
 ```bash
-# Formatear todo el código manualmente
-pnpm biome:format
+git commit -m "feat(module): add catheterization wizard step"
+git commit -m "fix(qr): reject payloads with mismatched versions"
+git commit -m "docs: correct the architecture links"
+```
 
-# Ejecutar linter manualmente
-pnpm biome:lint
+## pre-push
 
-# Ejecutar formato + lint
-pnpm biome:check
-
-# Ejecutar tests
+```sh
+pnpm typecheck
 pnpm test
+pnpm test:ci
+# then, if the release build is missing:
+pnpm e2e:build:ios
+pnpm e2e:test:ios
+```
 
-# Saltarse los hooks (NO RECOMENDADO)
-git commit --no-verify -m "mensaje"
+This is a heavy hook: it typechecks, runs the unit suite twice, and builds and
+runs the iOS release Detox suite when `ios/build/Build/Products/Release-iphonesimulator/TFG.app`
+is absent.
+
+The first two commands are also not guarded by `|| exit 1`; only `test:ci` and
+the E2E commands explicitly abort the push.
+
+**The hook currently blocks every push**, because `pnpm test:ci` fails on `main`
+(see [TESTING.md](TESTING.md)). Do not bypass it silently. Either fix the failure
+or use `git push --no-verify` deliberately and say so in the pull request
+description.
+
+## Bypassing (discouraged)
+
+```bash
+git commit --no-verify -m "chore: ..."
 git push --no-verify
 ```
 
-## 📝 Notas
+Skipping hooks is acceptable only for work-in-progress commits that will be
+cleaned up before review, or when a documented pre-existing failure is unrelated
+to the change.
 
-- Los hooks se instalan automáticamente al ejecutar `pnpm install` (gracias al script `prepare`)
-- Si necesitas modificar los hooks, edita los archivos en `.husky/`
-- Para modificar las reglas de commitlint, edita `commitlint.config.js`
-- Para modificar qué archivos procesa lint-staged, edita `lint-staged.config.js`
+## Configuration
+
+- Hook scripts: `.husky/`
+- Lint/format rules: `biome.json`
+- Commit rules: `commitlint.config.js`
+- Unused staged-file rules: `lint-staged.config.js`
