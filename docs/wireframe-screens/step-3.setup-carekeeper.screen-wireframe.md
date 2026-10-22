@@ -23,7 +23,7 @@ SETUP CUIDADOR - PANTALLA 2: "Confirmar Vinculación"
 +--------------------------------------------------+
 |   "Se encontró un paciente"                      |
 |                                                  |
-|   Nombre: Mateo                                  |
+|   Nombre: Menor                                  |
 |   Edad: 3 años                                   |
 |   Permisos: Solo registro / Completo             |
 |                                                  |
@@ -55,7 +55,7 @@ s
 +--------------------------------------------------+
 |   "Se encontró un paciente"                      |
 |                                                  |
-|   Nombre: Mateo                                  |
+|   Nombre: Menor                                  |
 |   Edad: 3 años                                   |
 |   Permisos: Solo registro / Completo             |
 |  ( < )                            ( Confirmar )  |  <-- Botónes redondos

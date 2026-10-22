@@ -120,8 +120,8 @@ SETUP PADRE - PANTALLA 5: "Resumen y Confirmación"
 |                                                  |
 |  Resumen                                         |
 |                                                  |
-|  Cuidador: Gabriel                               |
-|  Niño: Mateo (3 años)                            |
+|  Cuidador: Principal                               |
+|  Niño: Menor (3 años)                            |
 |  Módulos activos: CIC, Deposiciones              |
 |  Otros cuidadores: Abuela, Enfermera             |
 |                                                  |
@@ -253,8 +253,8 @@ SETUP PADRE - PANTALLA 5: "Resumen y Confirmación"
 |                                                  |
 |  Resumen                                         |
 |                                                  |
-|  Cuidador: Gabriel                               |
-|  Niño: Mateo (3 años)                            |
+|  Cuidador: Principal                               |
+|  Niño: Menor (3 años)                            |
 |  Módulos activos: CIC, Deposiciones              |
 |  Otros cuidadores: Abuela, Enfermera             |
 |                                                  |

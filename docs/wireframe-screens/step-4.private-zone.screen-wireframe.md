@@ -17,13 +17,13 @@ WIREFRAME – REPORTE (TAB 1)
 ==================================================
 
 +--------------------------------------------------+
-|  [logo]  Gabriel                           ⚙︎    |
+|  [logo]  Cuidador                           ⚙︎    |
 +--------------------------------------------------+
 |   ● Reporte     Registro     Configuración        |
 +--------------------------------------------------+
 
 | [ TARJETA DEL NIÑO ]                             |
-|  Mateo (3 años)                                   |
+|  Menor (3 años)                                   |
 |  Estado general: ● Verde                          |
 |  Último CIC: 10:42                                |
 |  Última deposición: ayer 18:05                    |
@@ -45,7 +45,7 @@ WIREFRAME – CONFIGURACIÓN (TAB 3)
 ==================================================
 
 +--------------------------------------------------+
-|  [logo]  Gabriel                           ⚙︎    |
+|  [logo]  Cuidador                           ⚙︎    |
 +--------------------------------------------------+
 |   Reporte     Registro     ● Configuración        |
 +--------------------------------------------------+
@@ -76,7 +76,7 @@ WIREFRAME – REGISTRO (DEFAULT TAB)
 ==================================================
 
 +--------------------------------------------------+
-|  [logo]  Gabriel                           ⚙︎    |
+|  [logo]  Cuidador                           ⚙︎    |
 +--------------------------------------------------+
 |                                                  |
 |   Reporte     ● Registro     Configuración       |
@@ -290,7 +290,7 @@ WIREFRAME – DETALLE DE REGISTRO
 WIREFRAME – PERFIL DEL PACIENTE
 
 +--------------------------------------------------+
-|  Mateo (3 años)                                  |
+|  Menor (3 años)                                  |
 |  [ < Volver ]                                    |
 +--------------------------------------------------+
 
@@ -323,7 +323,7 @@ WIREFRAME – CUIDADORES
 | Cuidadores vinculados                            |
 +--------------------------------------------------+
 
-| • Gabriel (Admin)                                |
+| • Cuidador principal (Admin)                                |
 | • Marta (Permisos completos)                     |
 | • Abuela Ana (Solo registro)                     |
 +--------------------------------------------------+
@@ -419,13 +419,13 @@ WIREFRAME – REPORTE (TAB 1)
 ==================================================
 
 +--------------------------------------------------+
-|  [logo]  Gabriel                           ⚙︎    |
+|  [logo]  Cuidador                           ⚙︎    |
 +--------------------------------------------------+
 |   ● Reporte     Registro     Configuración        |
 --------------------------------------------------+
 
 | [ TARJETA DEL NIÑO ]                             |
-|  Mateo (3 años)                                   |
+|  Menor (3 años)                                   |
 |  Estado general: ● Verde                          |
 |  Último CIC: 10:42                                |
 |  Última deposición: ayer 18:05                    |
@@ -447,7 +447,7 @@ WIREFRAME – CONFIGURACIÓN (TAB 3)
 ==================================================
 
 +--------------------------------------------------+
-|  [logo]  Gabriel                           ⚙︎    |
+|  [logo]  Cuidador                           ⚙︎    |
 +--------------------------------------------------+
 |   Reporte     Registro     ● Configuración        |
 --------------------------------------------------+
@@ -478,7 +478,7 @@ WIREFRAME – REGISTRO (DEFAULT TAB)
 ==================================================
 
 +--------------------------------------------------+
-|  [logo]  Gabriel                           ⚙︎    |
+|  [logo]  Cuidador                           ⚙︎    |
 +--------------------------------------------------+
 |                                                  |
 |   Reporte     ● Registro     Configuración       |
@@ -703,7 +703,7 @@ WIREFRAME – DETALLE DE REGISTRO
 WIREFRAME – PERFIL DEL PACIENTE
 
 +--------------------------------------------------+
-|  Mateo (3 años)                                  |
+|  Menor (3 años)                                  |
 |  [ < Volver ]                                    |
 +--------------------------------------------------+
 
@@ -737,7 +737,7 @@ WIREFRAME – CUIDADORES
 | Cuidadores vinculados                            |
 +--------------------------------------------------+
 
-| • Gabriel (Admin)                                |
+| • Cuidador principal (Admin)                                |
 | • Marta (Permisos completos)                     |
 | • Abuela Ana (Solo registro)                     |
 +--------------------------------------------------+

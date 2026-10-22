@@ -3,7 +3,7 @@ WIREFRAME – CONFIRMACIÓN DE BORRADO IRREVERSIBLE
 ==================================================
 
 +--------------------------------------------------+
-|  [logo]  Gabriel                           ⚙︎    |
+|  [logo]  Cuidador                           ⚙︎    |
 +--------------------------------------------------+
 |   ⚠️  Esta acción es irreversible                |
 |                                                  |
