@@ -23,7 +23,6 @@
         "backgroundImage": "./src/assets/images/android-icon-background.png",
         "monochromeImage": "./src/assets/images/android-icon-monochrome.png"
       },
-      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.gabriel_alcantara.TFG"
     },
@@ -60,7 +59,9 @@
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker",
+      "expo-status-bar"
     ],
     "experiments": {
       "typedRoutes": true,
