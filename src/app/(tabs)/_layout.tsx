@@ -1,10 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import {
-  createMaterialTopTabNavigator,
-  type MaterialTopTabBarProps,
-} from '@react-navigation/material-top-tabs';
 import { BlurView } from 'expo-blur';
-import { withLayoutContext } from 'expo-router';
+import { type MaterialTopTabBarProps, TopTabs } from 'expo-router/js-top-tabs';
 import { useThemeColor } from 'heroui-native';
 import { useTranslation } from 'react-i18next';
 import {
@@ -19,9 +15,11 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
-const { Navigator } = createMaterialTopTabNavigator();
-
-const MaterialTopTabs = withLayoutContext(Navigator);
+// expo-router v4+ key: land on the register tab when entering (tabs),
+// preserving the intent previously declared in the root layout.
+export const unstable_settings = {
+  anchor: 'register',
+};
 
 interface CustomTabBarProps extends MaterialTopTabBarProps {
   accentColor: string;
@@ -33,7 +31,8 @@ interface CustomTabBarProps extends MaterialTopTabBarProps {
 function CustomTabBar({
   state,
   descriptors,
-  navigation,
+  emitter,
+  navigateToTab,
   accentColor,
   mutedColor,
   backgroundColor,
@@ -68,14 +67,14 @@ function CustomTabBar({
           const isFocused = state.index === index;
 
           const onPress = () => {
-            const event = navigation.emit({
+            const event = emitter.emit({
               type: 'tabPress',
               target: route.key,
               canPreventDefault: true,
             });
 
             if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
+              navigateToTab(route.key);
             }
           };
 
@@ -115,7 +114,7 @@ export default function TabLayout() {
   const insets = useSafeAreaInsets();
 
   return (
-    <MaterialTopTabs
+    <TopTabs
       tabBarPosition="bottom"
       tabBar={(props) => (
         <CustomTabBar
@@ -133,64 +132,46 @@ export default function TabLayout() {
         animationEnabled: true,
       }}
     >
-      <MaterialTopTabs.Screen
+      <TopTabs.Screen
         name="summary"
         options={{
           title: t('tab.summary'),
-          tabBarIcon: ({
-            color,
-            focused,
-          }: {
-            color: string;
-            focused: boolean;
-          }) => (
+          tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? 'reader' : 'reader-outline'}
               size={24}
-              color={color}
+              color={focused ? accentColor : mutedColor}
             />
           ),
         }}
       />
-      <MaterialTopTabs.Screen
+      <TopTabs.Screen
         name="register"
         options={{
           title: t('tab.register'),
-          tabBarIcon: ({
-            color,
-            focused,
-          }: {
-            color: string;
-            focused: boolean;
-          }) => (
+          tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? 'add-circle' : 'add-circle-outline'}
               size={28}
-              color={color}
+              color={focused ? accentColor : mutedColor}
             />
           ),
         }}
       />
-      <MaterialTopTabs.Screen
+      <TopTabs.Screen
         name="settings"
         options={{
           title: t('tab.settings'),
-          tabBarIcon: ({
-            color,
-            focused,
-          }: {
-            color: string;
-            focused: boolean;
-          }) => (
+          tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? 'settings' : 'settings-outline'}
               size={24}
-              color={color}
+              color={focused ? accentColor : mutedColor}
             />
           ),
         }}
       />
-    </MaterialTopTabs>
+    </TopTabs>
   );
 }
 

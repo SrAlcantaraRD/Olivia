@@ -37,9 +37,10 @@ import { AppThemeProvider, useAppTheme } from '@/ui/themes/app-theme-context';
 import LogoDark from '../assets/logo-dark.png';
 import LogoLight from '../assets/logo-light.png';
 
-export const unstable_settings = {
-  initialRouteName: '(tabs)/register',
-};
+// The former `initialRouteName: '(tabs)/register'` here was invalid: anchor
+// must name a child of THIS layout (index | (onboarding) | (tabs)), and
+// expo-router 58 validates it at startup. The register-as-initial-tab intent
+// now lives in (tabs)/_layout.tsx as `anchor: 'register'`.
 
 configureReanimatedLogger({
   level: ReanimatedLogLevel.warn,
