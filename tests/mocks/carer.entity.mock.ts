@@ -2,17 +2,17 @@
 
 import type { TCarer, TCarerCreate } from '@/domain/carer/entity/carer.entity';
 import { CARER_TYPE_ENUM } from '@/domain/carer/enum/carer-type.enums';
+import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
 
 export function mockCarer(overrides?: Partial<TCarer>): TCarer {
   return {
     id: 1,
     createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-01'),
     name: 'Test Carer',
     type: CARER_TYPE_ENUM.ADMIN,
     isPrimary: true,
     pinHash: 'hashed-pin',
-    status: 1,
+    status: STATUS_ENUM.ACTIVE,
     ...overrides,
   } satisfies TCarer;
 }
@@ -31,7 +31,7 @@ export function mockCarerCreate(
 
 export function mockSecondaryCarer(overrides?: Partial<TCarer>): TCarer {
   return mockCarer({
-    id: 'secondary-carer-id',
+    id: 2,
     name: 'Secondary Carer',
     type: CARER_TYPE_ENUM.SECONDARY,
     isPrimary: false,

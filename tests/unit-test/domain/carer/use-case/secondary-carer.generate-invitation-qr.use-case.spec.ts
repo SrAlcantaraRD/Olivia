@@ -1,11 +1,16 @@
 /// <reference types="jest" />
 
 import { describe, expect, it } from '@jest/globals';
+import { addDays, addMonths, addWeeks, endOfDay } from 'date-fns';
 
+import type { TInviteSecondaryCarerQRPayload } from '@/domain/carer/dto/invite-secondary-carer.qr.dto';
 import { SecondaryCarerGenerateInvitationQRUseCase } from '@/domain/carer/use-case/secondary-carer.generate-invitation-qr.use-case';
+import { TIME_TO_LIVE } from '@/domain/core/constant/time-to-live.constants';
+import type { TQR } from '@/domain/core/dto/qr.dto';
+import { QR_BUNDLER_VERSION } from '@/domain/core/enum/qr.enum';
+import { QR_KEY } from '@/domain/core/enum/qr-key.enum';
 import { STATUS_ENUM } from '@/domain/core/enum/status.enum';
-import { TIME_TO_LIVE } from '@/domain/core/enum/time-to-live.enum';
-import { ErrorEntityNotFoundBy } from '@/domain/core/error/error-entity-not-found-by.error';
+import { ErrorEntityNotFoundBy } from '@/domain/core/error/entity-not-found-by.error';
 import { mockCarerEntity } from '@/tests/mocks/carer.entity.mock';
 import { mockCarerPort } from '@/tests/mocks/carer.port.mock';
 import {
@@ -13,7 +18,6 @@ import {
   mockLoggerPort,
   mockQRPort,
 } from '@/tests/mocks/core.port.mock';
-import { mockInviteSecondaryCarerQR } from '@/tests/mocks/invite-secondary-carer.qr.dto.mock';
 import { mockModule } from '@/tests/mocks/module.entity.mock';
 import { mockModulePort } from '@/tests/mocks/module.port.mock';
 import { mockModuleFieldEntity } from '@/tests/mocks/module-field.entity.mock';
@@ -45,6 +49,14 @@ describe('[UseCase] - SecondaryCarerGenerateInvitationQR', () => {
     };
   };
 
+  const getPackedPayload = (qrAdapter: ReturnType<typeof mockQRPort>) => {
+    const [packedBundle] = qrAdapter.packBundle.mock.calls[0] as [
+      TQR<TInviteSecondaryCarerQRPayload>,
+    ];
+
+    return packedBundle[QR_KEY.PAYLOAD];
+  };
+
   beforeEach(() => jest.clearAllMocks());
 
   describe('Happy Path', () => {
@@ -52,8 +64,7 @@ describe('[UseCase] - SecondaryCarerGenerateInvitationQR', () => {
       const { useCase, carerAdapter, qrAdapter, moduleAdapter } =
         prepareSuiteCase();
 
-      const carerID = 'test-carer-id';
-      const timeToLive = TIME_TO_LIVE.ONE_WEEK;
+      const carerID = 1;
       const carer = mockCarerEntity({ id: carerID, name: 'Test Carer' });
       const modules = [
         mockModule({
@@ -70,90 +81,93 @@ describe('[UseCase] - SecondaryCarerGenerateInvitationQR', () => {
           ],
         }),
       ];
-      const qrData = mockInviteSecondaryCarerQR();
       const qrBundle = mockQRBundle();
 
       carerAdapter.getByID.mockResolvedValue(carer);
       moduleAdapter.getAll.mockResolvedValue(modules);
-      qrAdapter.generateQRCode.mockReturnValue(qrData);
       qrAdapter.packBundle.mockResolvedValue(qrBundle);
 
-      const response = await useCase.execute({ carerID, timeToLive });
+      const response = await useCase.execute({
+        carerID,
+        timeToLive: TIME_TO_LIVE.ONE_WEEK,
+      });
 
       expect(response.success).toBe(true);
       expect(response.message).toBe('common.success');
-      expect(response.details).toEqual({
-        qrBundle,
-        qrData,
-      });
+      expect(response).toEqual(
+        expect.objectContaining({
+          details: expect.objectContaining({
+            qrBundle,
+            qrData: expect.objectContaining({
+              [QR_KEY.METADATA]: {
+                [QR_KEY.VERSION]: QR_BUNDLER_VERSION.V1,
+              },
+            }),
+          }),
+        })
+      );
 
       expect(carerAdapter.getByID).toHaveBeenCalledWith(carerID);
       expect(moduleAdapter.getAll).toHaveBeenCalled();
 
-      const expectedPayload = {
-        originCarerId: carer.id,
-        originCarerName: carer.name,
-        originCarerExpiresAt: expect.any(Date),
-        moduleList: [
-          {
-            moduleId: 1,
-            moduleFieldList: [1],
-          },
-          {
-            moduleId: 2,
-            moduleFieldList: [3],
-          },
-        ],
-      };
+      const payload = getPackedPayload(qrAdapter);
 
-      expect(qrAdapter.generateQRCode).toHaveBeenCalledWith(expectedPayload);
-      expect(qrAdapter.packBundle).toHaveBeenCalledWith(qrData);
+      expect(payload).toEqual({
+        [QR_KEY.ORIGIN_CARER_ID]: carer.id,
+        [QR_KEY.ORIGIN_CARER_NAME]: carer.name,
+        [QR_KEY.ORIGIN_CARER_EXPIRES_AT]: expect.any(Date),
+        [QR_KEY.MODULE_LIST]: [
+          { [QR_KEY.MODULE_ID]: 1, [QR_KEY.MODULE_FIELD_LIST]: [1] },
+          { [QR_KEY.MODULE_ID]: 2, [QR_KEY.MODULE_FIELD_LIST]: [3] },
+        ],
+      });
     });
 
     it('should calculate correct expiration date for different time-to-live values', async () => {
       const { useCase, carerAdapter, qrAdapter, moduleAdapter } =
         prepareSuiteCase();
 
-      const carerID = 'test-carer-id';
+      const carerID = 1;
       const carer = mockCarerEntity({ id: carerID });
       const modules = [mockModule({ id: 1, moduleFieldList: [] })];
-      const qrData = mockInviteSecondaryCarerQR();
       const qrBundle = mockQRBundle();
 
       carerAdapter.getByID.mockResolvedValue(carer);
       moduleAdapter.getAll.mockResolvedValue(modules);
-      qrAdapter.generateQRCode.mockReturnValue(qrData);
       qrAdapter.packBundle.mockResolvedValue(qrBundle);
 
-      // Test ONE_DAY
-      await useCase.execute({ carerID, timeToLive: TIME_TO_LIVE.ONE_DAY });
-      expect(qrAdapter.generateQRCode).toHaveBeenCalledWith(
-        expect.objectContaining({
-          originCarerExpiresAt: expect.any(Date),
-        })
-      );
+      const caseList: Array<{
+        timeToLive: TIME_TO_LIVE;
+        expected: Date;
+      }> = [
+        {
+          timeToLive: TIME_TO_LIVE.ONE_DAY,
+          expected: endOfDay(addDays(new Date(), 1)),
+        },
+        {
+          timeToLive: TIME_TO_LIVE.ONE_WEEK,
+          expected: endOfDay(addWeeks(new Date(), 1)),
+        },
+        {
+          timeToLive: TIME_TO_LIVE.ONE_MONTH,
+          expected: endOfDay(addMonths(new Date(), 1)),
+        },
+      ];
 
-      // Reset mocks
-      qrAdapter.generateQRCode.mockClear();
+      for (const { timeToLive, expected } of caseList) {
+        qrAdapter.packBundle.mockClear();
 
-      // Test ONE_WEEK
-      await useCase.execute({ carerID, timeToLive: TIME_TO_LIVE.ONE_WEEK });
-      expect(qrAdapter.generateQRCode).toHaveBeenCalledWith(
-        expect.objectContaining({
-          originCarerExpiresAt: expect.any(Date),
-        })
-      );
+        await useCase.execute({ carerID, timeToLive });
 
-      // Reset mocks
-      qrAdapter.generateQRCode.mockClear();
+        const payload = getPackedPayload(qrAdapter);
+        const expiresAt = payload[QR_KEY.ORIGIN_CARER_EXPIRES_AT];
 
-      // Test ONE_MONTH
-      await useCase.execute({ carerID, timeToLive: TIME_TO_LIVE.ONE_MONTH });
-      expect(qrAdapter.generateQRCode).toHaveBeenCalledWith(
-        expect.objectContaining({
-          originCarerExpiresAt: expect.any(Date),
-        })
-      );
+        // endOfDay pins hour/minute/second, so only the clock tick between the
+        // use-case's `new Date()` and this assertion may differ.
+        expect(Math.abs(expiresAt.getTime() - expected.getTime())).toBeLessThan(
+          5000
+        );
+      }
     });
   });
 
@@ -161,7 +175,7 @@ describe('[UseCase] - SecondaryCarerGenerateInvitationQR', () => {
     it('should throw error when carer is not found', async () => {
       const { useCase, carerAdapter } = prepareSuiteCase();
 
-      const carerID = 'non-existent-carer-id';
+      const carerID = 999;
       carerAdapter.getByID.mockResolvedValue(null);
 
       await expect(
@@ -175,8 +189,8 @@ describe('[UseCase] - SecondaryCarerGenerateInvitationQR', () => {
       const { useCase } = prepareSuiteCase();
 
       const response = await useCase.execute({
-        carerID: '',
-        timeToLive: 'INVALID_TIME' as any,
+        carerID: 0,
+        timeToLive: TIME_TO_LIVE.ONE_DAY,
       });
 
       expect(response.success).toBe(false);
@@ -185,47 +199,16 @@ describe('[UseCase] - SecondaryCarerGenerateInvitationQR', () => {
       );
     });
 
-    it('should return error when QR generation fails', async () => {
-      const { useCase, carerAdapter, qrAdapter, moduleAdapter } =
-        prepareSuiteCase();
-
-      const carerID = 'test-carer-id';
-      const carer = mockCarerEntity({ id: carerID });
-      const modules = [mockModule({ id: 1, moduleFieldList: [] })];
-
-      carerAdapter.getByID.mockResolvedValue(carer);
-      moduleAdapter.getAll.mockResolvedValue(modules);
-      qrAdapter.generateQRCode.mockImplementation(() => {
-        throw new Error('QR generation failed');
-      });
-
-      const response = await useCase.execute({
-        carerID,
-        timeToLive: TIME_TO_LIVE.ONE_DAY,
-      });
-
-      expect(response.success).toBe(false);
-      expect(response.message).toBe(
-        'use-case.generate-invitation-qr-for-secondary-carer.generation-failed'
-      );
-
-      expect(carerAdapter.getByID).toHaveBeenCalledWith(carerID);
-      expect(moduleAdapter.getAll).toHaveBeenCalled();
-      expect(qrAdapter.generateQRCode).toHaveBeenCalled();
-    });
-
     it('should return error when bundle packing fails', async () => {
       const { useCase, carerAdapter, qrAdapter, moduleAdapter } =
         prepareSuiteCase();
 
-      const carerID = 'test-carer-id';
+      const carerID = 1;
       const carer = mockCarerEntity({ id: carerID });
       const modules = [mockModule({ id: 1, moduleFieldList: [] })];
-      const qrData = mockInviteSecondaryCarerQR();
 
       carerAdapter.getByID.mockResolvedValue(carer);
       moduleAdapter.getAll.mockResolvedValue(modules);
-      qrAdapter.generateQRCode.mockReturnValue(qrData);
       qrAdapter.packBundle.mockRejectedValue(new Error('Packing failed'));
 
       const response = await useCase.execute({
@@ -240,8 +223,7 @@ describe('[UseCase] - SecondaryCarerGenerateInvitationQR', () => {
 
       expect(carerAdapter.getByID).toHaveBeenCalledWith(carerID);
       expect(moduleAdapter.getAll).toHaveBeenCalled();
-      expect(qrAdapter.generateQRCode).toHaveBeenCalled();
-      expect(qrAdapter.packBundle).toHaveBeenCalledWith(qrData);
+      expect(qrAdapter.packBundle).toHaveBeenCalled();
     });
   });
 });

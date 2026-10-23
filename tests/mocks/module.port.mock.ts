@@ -7,6 +7,7 @@ export function mockModulePort(
 ): jest.Mocked<IModulePort> {
   return {
     batchActivate: jest.fn(),
+    batchDeactivate: jest.fn(),
     getAll: jest.fn(),
     ...overrides,
   } satisfies jest.Mocked<IModulePort>;

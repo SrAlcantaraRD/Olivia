@@ -34,6 +34,9 @@ jest.mock('heroui-native', () => {
 
   const StubComponent = ({ children, ...props }: Record<string, unknown>) =>
     React.createElement(View, props, children);
+  const PressableFeedback = Object.assign(StubComponent, {
+    Ripple: StubComponent,
+  });
 
   return {
     __esModule: true,
@@ -48,8 +51,13 @@ jest.mock('heroui-native', () => {
     Card: StubComponent,
     Button: StubComponent,
     Divider: StubComponent,
-    PressableFeedback: StubComponent,
+    Separator: StubComponent,
+    PressableFeedback,
     TextField: StubComponent,
+    Input: StubComponent,
+    Label: StubComponent,
+    Description: StubComponent,
+    FieldError: StubComponent,
     Spinner: StubComponent,
     TypographySmall: StubComponent,
   };
