@@ -68,18 +68,17 @@ export const CardAtom = ({
 
   return (
     <PressableFeedback
-      feedbackVariant="ripple"
       className="rounded-lg relative shadow-2xs/10"
       onPress={handlerOnPress}
-      animation={{
-        ripple: {
+      testID={`${testID}.pressable`}
+    >
+      <PressableFeedback.Ripple
+        animation={{
           backgroundColor: { value: isLight ? accentColor : accentSoftColor },
           opacity: { value: [0, 0.4, 0] },
           progress: { baseDuration: 600 },
-        },
-      }}
-      testID={`${testID}.pressable`}
-    >
+        }}
+      />
       <Card
         {...props}
         testID={`${testID}.card`}

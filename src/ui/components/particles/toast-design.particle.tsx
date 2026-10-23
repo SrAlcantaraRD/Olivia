@@ -36,7 +36,7 @@ interface BaseToastProps {
 const AuraSVG = ({ color }: { color: string }) => {
   return (
     <View
-      style={[StyleSheet.absoluteFillObject]}
+      style={[StyleSheet.absoluteFill]}
       className="rounded-xl overflow-hidden"
     >
       <Svg width="100%" height="200%">

@@ -1,7 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
-import { TextField, useThemeColor } from 'heroui-native';
+import {
+  Description,
+  FieldError,
+  Input,
+  Label,
+  TextField,
+  useThemeColor,
+} from 'heroui-native';
 import { useTranslation } from 'react-i18next';
-import { Pressable, type TextInputProps } from 'react-native';
+import { Pressable, type TextInputProps, View } from 'react-native';
 import { withUniwind } from 'uniwind';
 
 import type { IconName } from '@/ui/components/atoms/icon.atom';
@@ -36,6 +43,7 @@ export const TextFieldAtom = ({
   endIcon,
   onPressStartIcon,
   onPressEndIcon,
+  onPress,
   ...inputProps
 }: TextFieldAtomProps) => {
   const { t } = useTranslation();
@@ -44,6 +52,20 @@ export const TextFieldAtom = ({
   const mutedColor = useThemeColor('muted');
   const inputBgColor = useThemeColor('background-secondary');
 
+  const renderInput = () => (
+    <Input
+      placeholder={placeholder ? t(placeholder) : undefined}
+      placeholderTextColor={mutedColor}
+      style={{
+        backgroundColor: inputBgColor,
+        color: foregroundColor,
+        paddingLeft: startIcon ? 36 : undefined,
+        paddingRight: endIcon ? 36 : undefined,
+      }}
+      {...inputProps}
+    />
+  );
+
   return (
     <TextField
       isRequired={isRequired}
@@ -51,54 +73,48 @@ export const TextFieldAtom = ({
       isDisabled={isDisabled}
     >
       {label && (
-        <TextField.Label>
+        <Label>
           <TextTranslation i18nKey={label} />
-        </TextField.Label>
+        </Label>
       )}
-      <TextField.Input
-        placeholder={placeholder ? t(placeholder) : undefined}
-        placeholderTextColor={mutedColor}
-        style={{
-          backgroundColor: inputBgColor,
-          color: foregroundColor,
-        }}
-        {...inputProps}
-      >
+      <View className="relative w-full">
+        {onPress ? (
+          <Pressable
+            onPress={onPress}
+            accessibilityRole="button"
+            className="w-full"
+          >
+            <View pointerEvents="none">{renderInput()}</View>
+          </Pressable>
+        ) : (
+          renderInput()
+        )}
         {startIcon && (
-          <TextField.InputStartContent>
-            <Pressable onPress={onPressStartIcon}>
-              <StyledIonicons
-                name={startIcon}
-                size={16}
-                className="text-muted"
-              />
-            </Pressable>
-          </TextField.InputStartContent>
+          <Pressable
+            onPress={onPressStartIcon}
+            className="absolute left-3 top-0 bottom-0 justify-center"
+          >
+            <StyledIonicons name={startIcon} size={16} className="text-muted" />
+          </Pressable>
         )}
         {endIcon && (
-          <TextField.InputEndContent>
-            <Pressable onPress={onPressEndIcon}>
-              <StyledIonicons name={endIcon} size={16} className="text-muted" />
-            </Pressable>
-          </TextField.InputEndContent>
+          <Pressable
+            onPress={onPressEndIcon}
+            className="absolute right-3 top-0 bottom-0 justify-center"
+          >
+            <StyledIonicons name={endIcon} size={16} className="text-muted" />
+          </Pressable>
         )}
-        {startIcon && endIcon && (
-          <TextField.InputEndContent>
-            <Pressable onPress={onPressEndIcon}>
-              <StyledIonicons name={endIcon} size={16} className="text-muted" />
-            </Pressable>
-          </TextField.InputEndContent>
-        )}
-      </TextField.Input>
+      </View>
       {description && !isInvalid && (
-        <TextField.Description>
+        <Description>
           <TextTranslation i18nKey={description} />
-        </TextField.Description>
+        </Description>
       )}
       {errorMessage && isInvalid && (
-        <TextField.ErrorMessage>
+        <FieldError>
           <TextTranslation i18nKey={errorMessage} />
-        </TextField.ErrorMessage>
+        </FieldError>
       )}
     </TextField>
   );

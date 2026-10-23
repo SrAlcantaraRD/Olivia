@@ -73,7 +73,10 @@ interface TypographyProps extends TextProps, ITextTranslationProps {
   testID: string;
 }
 
-const TypographyTitle = React.forwardRef<Text, TypographyProps>(
+const TypographyTitle = React.forwardRef<
+  React.ElementRef<typeof Text>,
+  TypographyProps
+>(
   (
     {
       className,
@@ -120,7 +123,10 @@ const TypographyTitle = React.forwardRef<Text, TypographyProps>(
 );
 TypographyTitle.displayName = 'TypographyTitle';
 
-const TypographySubtitle = React.forwardRef<Text, TypographyProps>(
+const TypographySubtitle = React.forwardRef<
+  React.ElementRef<typeof Text>,
+  TypographyProps
+>(
   (
     {
       className,
@@ -167,7 +173,10 @@ const TypographySubtitle = React.forwardRef<Text, TypographyProps>(
 );
 TypographySubtitle.displayName = 'TypographySubtitle';
 
-const TypographyHeading = React.forwardRef<Text, TypographyProps>(
+const TypographyHeading = React.forwardRef<
+  React.ElementRef<typeof Text>,
+  TypographyProps
+>(
   (
     {
       className,
@@ -214,7 +223,10 @@ const TypographyHeading = React.forwardRef<Text, TypographyProps>(
 );
 TypographyHeading.displayName = 'TypographyHeading';
 
-const TypographyParagraph = React.forwardRef<Text, TypographyProps>(
+const TypographyParagraph = React.forwardRef<
+  React.ElementRef<typeof Text>,
+  TypographyProps
+>(
   (
     {
       className,
@@ -262,7 +274,10 @@ const TypographyParagraph = React.forwardRef<Text, TypographyProps>(
 
 TypographyParagraph.displayName = 'TypographyParagraph';
 
-const TypographySmall = React.forwardRef<Text, TypographyProps>(
+const TypographySmall = React.forwardRef<
+  React.ElementRef<typeof Text>,
+  TypographyProps
+>(
   (
     {
       className,

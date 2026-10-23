@@ -1,4 +1,4 @@
-import { Divider } from 'heroui-native';
+import { Separator } from 'heroui-native';
 import { View } from 'react-native';
 
 import { useAdapters } from '@/adapter';
@@ -28,7 +28,7 @@ export default function AppSettingsScreen() {
           testID="page.app-settings.button.toggle-theme"
         />
 
-        <Divider className="my-2" />
+        <Separator className="my-2" />
 
         <RowAction
           iconName="globe"

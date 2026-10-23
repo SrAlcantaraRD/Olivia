@@ -1,5 +1,5 @@
 import { useFocusEffect } from 'expo-router';
-import { Divider } from 'heroui-native';
+import { Separator } from 'heroui-native';
 import { useCallback, useEffect, useMemo } from 'react';
 import { ScrollView, View } from 'react-native';
 
@@ -68,7 +68,7 @@ export default function CarerManagementScreen() {
             title="page.carer-management.create-secondary"
           />
 
-          <Divider className="my-2" />
+          <Separator className="my-2" />
 
           {sortedCarers.map((carer) => (
             <CarerCardOrganism
