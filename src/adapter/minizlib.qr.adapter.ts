@@ -29,7 +29,7 @@ export class QrPortAdapter implements IQRPort {
     try {
       const compressed = Buffer.from(bundle, this.BASE_CODE);
 
-      const decompressed = pako.inflate(compressed, { to: 'string' });
+      const decompressed = pako.inflate(compressed, { toText: true });
       const parsed = JSON.parse(decompressed) as TQR<T>;
 
       return parsed;
