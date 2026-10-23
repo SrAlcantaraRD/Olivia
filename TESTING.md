@@ -60,66 +60,99 @@ until they change.
 | Check | Result |
 | --- | --- |
 | Biome (`biome ci`) | Passes, 4 warnings |
-| `pnpm test` (repo config) | Fails to start: 0 of 79 suites run |
-| Jest with `.pnpm`-aware transform | 55 of 79 suites pass; 291 of 300 tests pass |
-| `pnpm typecheck` | Fails with 228 errors (17 in source, 211 in tests) |
-| Coverage (when suites run) | 18.5% statements, 6.8% branches, 13.4% functions, 18.8% lines |
+| `pnpm install --frozen-lockfile` | Passes with the hoisted layout |
+| `pnpm test` | 76 of 79 suites pass; 337 of 346 tests pass |
+| `pnpm typecheck` | Fails with 146 errors, all in tests (0 in source) |
+| `npx expo-doctor` | 18/18 checks pass |
+| iOS build / launch | Passes (Release, iPhone 17 simulator, iOS 26.5) |
+| Android build / launch | Passes (debug, `Medium_Phone` emulator, Android 17 / API 37) |
 | Detox E2E | Not executed in this environment |
-| Native app build / launch | Not attempted in this audit |
 
-### Why `pnpm test` fails to start
+### Install layout
 
-The installed `node_modules` is pnpm-isolated, so modules resolve through
-`node_modules/.pnpm/...`. The Jest `transformIgnorePatterns` regex in
-[jest.config.js](jest.config.js) assumes hoisted paths and therefore ignores
-React Native's ESM `jest/setup.js`:
-
-```text
-SyntaxError: Cannot use import statement outside a module
-```
-
-`.npmrc` requests `node-linker=hoisted`, but pnpm 12 ignores that setting
-(`pnpm config get node-linker` prints `undefined`). Until the setting moves to
-`pnpm-workspace.yaml` (`nodeLinker: hoisted`) or the regex is made `.pnpm`-aware,
-reinstall with:
+`pnpm-workspace.yaml` sets `nodeLinker: hoisted` and keeps the dependency
+`overrides`, which pnpm 12 no longer reads from `.npmrc` or `package.json#pnpm`.
+Jest's `transformIgnorePatterns` assumes hoisted paths, so install with:
 
 ```bash
-pnpm install --node-linker=hoisted
+pnpm install --frozen-lockfile
 ```
 
-The CI workflow uses the same flag.
+The CI workflow passes `--node-linker=hoisted` explicitly; the committed lockfile
+installs with pnpm 12.14.0 and with the pnpm 10.16.1 version pinned in CI.
 
-### Remaining failures after the install fix
+### Remaining failures
 
-**Suite failures.** The 24 failing suites break down as follows:
+**Suite failures (3).**
 
-- **17 suites: `react-test-renderer` mismatch.** The dev dependency is `^19.3.1`
-  while React is `19.1.0`; React Native Testing Library refuses to run.
-- **4 suites: Zod `.omit()` on refined schemas.** `omitAuditColumns()` in
-  `src/domain/core/entity/base-dto.entity.ts` calls `.omit()` on a schema that
-  contains refinements, which Zod 4.6 rejects. This also loads through summary
-  entities, so it is a source-level incompatibility, not just a test problem.
 - **1 suite: missing module.**
   `secondary-carer.generate-invitation-qr.use-case.spec.ts` imports
   `@/domain/core/enum/time-to-live.enum`, which does not exist.
-- **2 suites: 9 assertion failures.** `sync-carer.use-case.spec.ts` and
+- **2 suites: 9 failing tests.** `sync-carer.use-case.spec.ts` and
   `secondary-carer.consume-invitation-qr.use-case.spec.ts` expect old response
   messages and mock methods (`getByName`) that the use-cases no longer use.
 
-**Typecheck failures (228).**
-
-- **Source-level errors (17).** HeroUI Native API drift: `Divider` is no longer
-  exported (`app-settings.tsx`, `carer-managment/index.tsx`), `TextField` parts
-  (`Description`, `ErrorMessage`, `Input`, `InputEndContent`) and the `ripple`
-  prop on `PressableFeedback` no longer exist in the installed version
-  (`text-field.atom.tsx`, `card.atom.tsx`).
-- **Test type drift (211).** Mocks no longer match domain entities.
-  `tsconfig.json` includes `tests/**`, so `pnpm typecheck:src` reports them too
-  and cannot currently serve as a source-only check; `pnpm typecheck` stops at
-  the source config and never reaches `typecheck:tests`.
+**Typecheck failures (146).** All are test mocks that no longer match domain
+entities. `tsconfig.json` includes `tests/**`, so `pnpm typecheck:src` reports
+them too and cannot currently serve as a source-only check.
 
 **E2E.** The parent-setup Detox flow taps `module-cic`, which does not exist in
 the current module step, so it would fail even with a working native build.
+
+## Native builds
+
+Native folders are git-ignored and generated locally:
+
+```bash
+npx expo prebuild --platform all
+```
+
+The native toolchain is coupled through a small set of packages that must move
+together:
+
+- **MMKV / Nitro SDK.** `react-native-mmkv` 4.3.2 depends on
+  `react-native-nitro-modules` and declares it as a peer with `*`. The committed
+  lockfile resolves MMKV with `react-native-nitro-modules@0.35.10`.
+- **Reanimated / Worklets.** `react-native-reanimated` 4.1.7 declares
+  `react-native-worklets` as a peer in the `0.5 - 0.8` range; the committed
+  lockfile resolves `react-native-worklets@0.5.1`.
+
+If either side of those pairs is changed in `package.json`, the lockfile and the
+native build must be re-verified together. Do not change MMKV, Nitro SDK,
+Reanimated or Worklets in isolation and assume the rest still holds.
+
+With Xcode 27, pods that declare deployment targets below 15.0 (SDWebImage 9.0,
+ReachabilitySwift 12.0, RNSVG filters 12.4) fail the simulator build. The verified
+build used:
+
+```bash
+LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 pod install   # in ios/
+
+xcodebuild -workspace ios/TFG.xcworkspace -scheme TFG \
+  -configuration Release -sdk iphonesimulator \
+  -destination "platform=iOS Simulator,id=<UDID>" \
+  -derivedDataPath /tmp/olivia-ios-dd \
+  IPHONEOS_DEPLOYMENT_TARGET=15.1 CODE_SIGNING_ALLOWED=NO build
+
+xcrun simctl boot <UDID>
+xcrun simctl install <UDID> /tmp/olivia-ios-dd/Build/Products/Release-iphonesimulator/TFG.app
+xcrun simctl launch <UDID> com.gabriel-alcantara.TFG
+```
+
+`npx expo run:ios` requires `Simulator.app`, which may be absent on Xcode 27
+installs; the commands above work without it.
+
+For Android, set `JAVA_HOME` to Android Studio's JBR and `ANDROID_HOME` to the SDK:
+
+```bash
+JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home" \
+ANDROID_HOME="$HOME/Library/Android/sdk" \
+npx expo run:android --device Medium_Phone --port 8082
+```
+
+Both builds were verified on 22 October 2026 against the current dependency set;
+the iOS app rendered its welcome screen and Android reached the onboarding role
+selection.
 
 Coverage thresholds in `jest.config.js` are all `0`. Older documentation claimed
 70%; that threshold was never enforced. Raise it only after the suite is green

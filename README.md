@@ -217,25 +217,19 @@ Useful scripts:
 | `pnpm db:generate` | Generate a Drizzle migration from schema changes |
 | `pnpm e2e:build:ios:debug` / `e2e:test:ios:debug` | Detox build and run (iOS) |
 
-### Known install issue: pnpm 12 ignores `.npmrc` node-linker
+### Install layout
 
-`.npmrc` requests `node-linker=hoisted`, but pnpm 12 does not read that setting
-from `.npmrc` (`pnpm config get node-linker` returns `undefined`). The repository's
-Jest `transformIgnorePatterns` assumes hoisted paths, so with an isolated install
-every Jest suite fails with:
-
-```text
-SyntaxError: Cannot use import statement outside a module
-```
-
-Until the configuration is moved to `pnpm-workspace.yaml` (`nodeLinker: hoisted`)
-or the Jest pattern is made `.pnpm`-aware, reinstall with:
+`pnpm-workspace.yaml` sets `nodeLinker: hoisted` and holds the dependency
+`overrides` that pnpm 12 no longer reads from `package.json#pnpm`. Jest's
+`transformIgnorePatterns` assumes hoisted paths, so install through pnpm as
+usual:
 
 ```bash
-pnpm install --node-linker=hoisted
+pnpm install --frozen-lockfile
 ```
 
-The CI workflow passes the same flag.
+The CI workflow still passes `--node-linker=hoisted` explicitly; the committed
+lockfile installs with both pnpm 12 and the pnpm 10 version pinned in CI.
 
 ### Database changes
 
@@ -248,6 +242,41 @@ pnpm db:generate
 Existing migrations under `src/database/migrations/` include the base schema and
 the seeded CIC module and fields.
 
+### Native builds
+
+Native projects are generated and git-ignored:
+
+```bash
+npx expo prebuild --platform all
+```
+
+The native toolchain is coupled through a small set of packages that must move
+together:
+
+- **MMKV / Nitro SDK.** `react-native-mmkv` 4.3.2 depends on
+  `react-native-nitro-modules` and declares it as a peer with `*`. The committed
+  lockfile resolves MMKV with `react-native-nitro-modules@0.35.10`.
+- **Reanimated / Worklets.** `react-native-reanimated` 4.1.7 declares
+  `react-native-worklets` as a peer in the `0.5 - 0.8` range; the committed
+  lockfile resolves `react-native-worklets@0.5.1`.
+
+If either side of those pairs is changed in `package.json`, the lockfile and the
+native build must be re-verified together. Do not change MMKV, Nitro SDK,
+Reanimated or Worklets in isolation and assume the rest still holds.
+
+The cache port has an unused MMKV adapter, but the app-level persistence path
+currently uses SecureStore; see `.context/ai-rules.md`.
+
+- **Xcode 27 rejects pods whose deployment target is below 15.0** (for example
+  SDWebImage 9.0, ReachabilitySwift 12.0 and RNSVG filters 12.4). Build the
+  simulator target with `IPHONEOS_DEPLOYMENT_TARGET=15.1`, or clamp those targets
+  in the generated Podfile. `ios/` is regenerated, so keep the workaround in
+  tooling rather than only in the workspace.
+
+`npx expo run:ios` also requires `Simulator.app`; when it is not installed, build
+with `xcodebuild` and install with `simctl install` / `simctl launch`. The
+exact commands used for the verified builds are in [TESTING.md](TESTING.md).
+
 ## Testing
 
 The project uses Jest with React Native Testing Library for unit and integration
@@ -259,39 +288,32 @@ pnpm test:coverage
 pnpm exec biome ci .   # read-only format and lint check, as CI runs it
 ```
 
-**Measured state (22 October 2026, local macOS, Node 25.8.1, pnpm 12.14.0):**
+**Measured state (22 October 2026, local macOS, Node 25.8.1, pnpm 12.14.0, Xcode 27.1):**
 
 | Check | Result |
 | --- | --- |
 | `pnpm exec biome ci .` | Passes with 4 warnings (`noExplicitAny`) |
-| `pnpm test` as configured | 0 of 79 suites run; install-layout error above |
-| Jest with `.pnpm`-aware transform | 55 of 79 suites pass, 291 of 300 tests pass |
-| `pnpm typecheck` | Fails: 228 errors while checking source (17 in source files, 211 in tests) |
-| Coverage (when tests run) | 18.5% statements, 6.8% branches, 13.4% functions, 18.8% lines |
-| Detox E2E | Not run in this environment; requires a native build |
-| App build / launch | Not run in this audit (no simulator or device used) |
+| `pnpm install --frozen-lockfile` | Passes; hoisted layout from `pnpm-workspace.yaml` |
+| `pnpm test` | 76 of 79 suites pass; 337 of 346 tests pass |
+| `pnpm typecheck` | Fails: 146 errors, all in tests (0 in `src`) |
+| `npx expo-doctor` | 18/18 checks pass |
+| iOS release build | Builds and launches on iPhone 17 simulator (iOS 26.5) |
+| Android debug build | Builds and launches on `Medium_Phone` emulator (Android 17, API 37) |
+| Detox E2E | Not run; the parent-setup flow still references a missing `module-cic` test ID |
 
-Known test failures (24 suites):
+Coverage has not been re-measured since the dependency update; the last recorded
+value was 18.5% statements.
 
-- 17 suites: `react-test-renderer` is pinned to `^19.3.1` while React is
-  `19.1.0`, so React Native Testing Library rejects the mismatch.
-- 4 suites: Zod 4.6 rejects `.omit()` on schemas with refinements in
-  `base-dto.entity.ts` (a source-level incompatibility).
+Known test failures (3 suites, 9 tests):
+
 - 1 suite imports a module that does not exist
   (`@/domain/core/enum/time-to-live.enum`).
 - 2 use-case suites (`sync-carer`, `secondary-carer.consume-invitation-qr`)
-  have assertion/response drift and account for the 9 failing tests.
+  still expect old response messages and a `getByName` mock method.
 
-The Detox parent-setup flow also references a `module-cic` test ID that does not
-exist in the UI.
-
-Known typecheck failures (228 errors):
-
-- 17 are in source files: HeroUI Native API drift (`Divider` no longer exported,
-  `TextField` subcomponents, the `ripple` prop).
-- 211 are test mocks that no longer match domain types. `tsconfig.json` includes
-  `tests/**`, so `pnpm typecheck:src` reports them too, and `pnpm typecheck`
-  stops there before running the test config.
+Known typecheck failures (146 errors): all are test mocks that no longer match
+domain types. `tsconfig.json` includes `tests/**`, so `pnpm typecheck:src`
+reports them too.
 
 Jest coverage thresholds are currently all `0`, despite older docs claiming 70%.
 Do not report the suite as green until these items are fixed.
@@ -320,15 +342,14 @@ reporting vulnerabilities, see [SECURITY.md](SECURITY.md).
 ## Status and roadmap
 
 **Current state:** the core local flows are implemented (onboarding, records,
-summaries, caregiver management, QR sharing, themes and three languages), but the
-native app was not built or launched in this audit, and the project is
-pre-release with the quality debt above.
+summaries, caregiver management, QR sharing, themes and three languages). The
+native app builds and launches on iOS and Android simulators (verified 22
+October 2026), but the project is still pre-release with the quality debt above.
 
 Near-term, in rough order:
 
-1. Make the quality gates honest and green: fix the install/transform issue,
-   align `react-test-renderer`, repair the two failing use-case suites, resolve
-   test type drift, and raise coverage deliberately.
+1. Make the quality gates honest and green: repair the three failing use-case
+   suites, resolve test type drift, and raise coverage deliberately.
 2. Add CI gates (lint is gated today; typecheck and tests are advisory until
    fixed) and a documented release checklist.
 3. Review logging and data-at-rest protections before any real family data is

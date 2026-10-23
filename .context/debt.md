@@ -17,6 +17,9 @@ This is a living registry. Items here are things the codebase already hints are 
 3. **Storage strategy is inconsistent (MMKV exists but not used)**
    - `MMKVCacheAdapter` exists, but `cacheAdapter` currently points to SecureStore.
    - Risk: SecureStore is slower than MMKV for non-sensitive cache.
+   - `react-native-mmkv` is pinned to `4.1.0`: 4.1.1+ needs Nitro 0.32+ APIs that
+     `react-native-nitro-modules` 0.31.10 does not provide, and native builds fail.
+     If MMKV is wired in, bump both packages together.
    - See: [src/adapter/index.ts](../src/adapter/index.ts), [src/adapter/mmkv.cache-port.adapter.ts](../src/adapter/mmkv.cache-port.adapter.ts)
 
 ## Quality and privacy risks (2026-10 audit)
@@ -37,8 +40,8 @@ This is a living registry. Items here are things the codebase already hints are 
    - Many TODOs ask for a wrapper to reduce duplication.
 
 5. **Quality gates are red and mostly unenforced**
-   - `pnpm typecheck` fails with 228 errors: 17 in source files (HeroUI Native API drift in `text-field.atom.tsx`, `card.atom.tsx`, `app-settings.tsx`, `carer-managment/index.tsx`) and 211 in tests (mocks out of sync with domain types). `tsconfig.json` includes `tests/**`, so `typecheck:src` cannot isolate source, and `typecheck` never reaches the test config.
-   - `pnpm test` does not start under the current pnpm-isolated install (`transformIgnorePatterns` assumes hoisted paths); with the install fixed, 55/79 suites and 291/300 tests pass, and coverage is 18.5% of statements. The 24 failing suites are: 17 `react-test-renderer` version mismatch, 4 Zod `.omit()`-on-refined-schema errors, 1 import of a missing `time-to-live.enum`, 2 suites with 9 assertion failures.
+   - `pnpm typecheck` fails with 146 errors, all in test mocks; source has 0 errors. `tsconfig.json` includes `tests/**`, so `typecheck:src` cannot isolate source.
+   - `pnpm test`: 76/79 suites and 337/346 tests pass. The 3 failing suites: 1 imports the missing `time-to-live.enum`; `sync-carer` and `secondary-carer.consume-invitation-qr` expect old mock methods (`getByName`) and response messages.
    - CI (`.github/workflows/ci.yml`) gates Biome only; typecheck and tests are an advisory job until this is fixed.
    - Details and reproductions: [TESTING.md](../TESTING.md).
 

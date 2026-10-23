@@ -36,12 +36,15 @@ pnpm android        # Android emulator
 pnpm web            # Web target (native storage is not supported on web)
 ```
 
-pnpm 12 ignores `node-linker=hoisted` in `.npmrc`. If Jest fails with
-`Cannot use import statement outside a module`, reinstall with:
+`pnpm-workspace.yaml` sets the hoisted linker and the dependency overrides pnpm
+12 no longer reads from `.npmrc` or `package.json#pnpm`. Install with:
 
 ```bash
-pnpm install --node-linker=hoisted
+pnpm install --frozen-lockfile
 ```
+
+If Jest fails with `Cannot use import statement outside a module`, the install
+was not hoisted; re-run the command above before debugging the tests.
 
 Database schema changes require a migration:
 
